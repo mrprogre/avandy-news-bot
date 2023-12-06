@@ -122,7 +122,7 @@ public class Search {
                 allNewsToSave.add(allNewsRow);
             }
 
-            if (allNewsToSave.size() > 0 && !TelegramBot.test) {
+            if (allNewsToSave.size() > 0) {
                 allNewsRepository.saveAll(allNewsToSave);
             }
 
