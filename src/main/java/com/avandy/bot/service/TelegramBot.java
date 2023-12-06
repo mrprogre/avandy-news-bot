@@ -4,6 +4,7 @@ import com.avandy.bot.config.BotConfig;
 import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
+import com.avandy.bot.utils.InlineKeyboards;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Timestamp;
@@ -111,7 +110,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             String firstName = update.getMessage().getChat().getFirstName();
             log.warn(firstName + ": [" + messageText + "]");
 
-            if  (messageText.startsWith("/send-feedback")) {
+            if (messageText.startsWith("/send-feedback")) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
                 sendFeedback(chatId, feedback);
                 prefix = "";
@@ -384,28 +383,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         return messageText.substring(messageText.indexOf(" ")).trim().toLowerCase();
     }
 
-    private void cancelButton(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton cancelButton = new InlineKeyboardButton();
-        cancelButton.setText("Отменить");
-        cancelButton.setCallbackData("CANCEL");
-
-
-        rowInLine.add(cancelButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
     private void initSearchButtons(long chatId) {
         showSearchAllButtons(chatId, getTextForAllSearch(chatId));
         showKeywordButtonsForSearch(chatId, getKeywordButtonsText(chatId));
@@ -448,155 +425,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         );
     }
 
-    private void getSettingsButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-        boolean isOn = settingsRepository.getSchedulerOnOffByChatId(chatId).equals("on");
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton periodButton = new InlineKeyboardButton();
-        periodButton.setText("1. Инт");
-        periodButton.setCallbackData("SET_PERIOD");
-
-        InlineKeyboardButton periodAllButton = new InlineKeyboardButton();
-        periodAllButton.setText("2. Инт");
-        periodAllButton.setCallbackData("SET_PERIOD_ALL");
-
-        InlineKeyboardButton autoButton = new InlineKeyboardButton();
-        autoButton.setText("3. Авто");
-        autoButton.setCallbackData("SET_SCHEDULER");
-
-        InlineKeyboardButton findButton = new InlineKeyboardButton();
-        findButton.setText("» » »");
-        findButton.setCallbackData("START_SEARCH");
-
-        rowInLine.add(0, periodButton);
-        rowInLine.add(1, periodAllButton);
-        rowInLine.add(2, autoButton);
-
-        InlineKeyboardButton startButton;
-        if (isOn) {
-            startButton = new InlineKeyboardButton();
-            startButton.setText("4. Старт");
-            startButton.setCallbackData("SCHEDULER_START");
-            rowInLine.add(3, startButton);
-            rowInLine.add(4, findButton);
-        } else {
-            rowInLine.add(3, findButton);
-        }
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void nextButton(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton nextButton = new InlineKeyboardButton();
-        nextButton.setText("» » »");
-        nextButton.setCallbackData("START_SEARCH");
-
-        rowInLine.add(nextButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void infoButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, """
-                <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
-                <b>Почта</b>: rps_project@mail.ru
-                <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""");
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton sendDevButton = new InlineKeyboardButton();
-        sendDevButton.setText("Предложить идею");
-        sendDevButton.setCallbackData("FEEDBACK");
-
-        InlineKeyboardButton nextButton = new InlineKeyboardButton();
-        nextButton.setText("» » »");
-        nextButton.setCallbackData("START_SEARCH");
-
-        rowInLine.add(sendDevButton);
-        rowInLine.add(nextButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void nextButtonAfterKeywordsSearch(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton listButton = new InlineKeyboardButton();
-        listButton.setText("Ключевые слова");
-        listButton.setCallbackData("LIST_KEYWORDS");
-
-        InlineKeyboardButton nextButton = new InlineKeyboardButton();
-        nextButton.setText("» » »");
-        nextButton.setCallbackData("START_SEARCH");
-
-        rowInLine.add(listButton);
-        rowInLine.add(nextButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void nextButtonAfterAllSearch(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton listButton = new InlineKeyboardButton();
-        listButton.setText("Исключить слова");
-        listButton.setCallbackData("EXCLUDE");
-
-        InlineKeyboardButton nextButton = new InlineKeyboardButton();
-        nextButton.setText("» » »");
-        nextButton.setCallbackData("START_SEARCH");
-
-        rowInLine.add(listButton);
-        rowInLine.add(nextButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
     private void getKeywordsList(long chatId) {
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
         if (!keywordsByChatId.isEmpty()) {
@@ -630,162 +458,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void showExcludedButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton deleteButton = new InlineKeyboardButton();
-        deleteButton.setText("Удалить");
-        deleteButton.setCallbackData("DELETE_EXCLUDED");
-
-        InlineKeyboardButton addButton = new InlineKeyboardButton();
-        addButton.setText("Добавить");
-        addButton.setCallbackData("EXCLUDE");
-
-        InlineKeyboardButton nextButton = new InlineKeyboardButton();
-        nextButton.setText("Поиск");
-        nextButton.setCallbackData("FIND_ALL");
-
-        rowInLine.add(deleteButton);
-        rowInLine.add(addButton);
-        rowInLine.add(nextButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showExcludeButton(long chatId) {
-        SendMessage message = prepareMessage(chatId, "» слова-исключения не заданы");
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton addButton = new InlineKeyboardButton();
-        addButton.setText("Добавить");
-        addButton.setCallbackData("EXCLUDE");
-
-        rowInLine.add(addButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showSearchAllButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton excludeButton = new InlineKeyboardButton();
-        excludeButton.setText("Исключения");
-        excludeButton.setCallbackData("LIST_EXCLUDED");
-
-        InlineKeyboardButton findButton = new InlineKeyboardButton();
-        findButton.setText("Поиск");
-        findButton.setCallbackData("FIND_ALL");
-
-        rowInLine.add(excludeButton);
-        rowInLine.add(findButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showKeywordButtonsForSearch(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton listButton = new InlineKeyboardButton();
-        listButton.setText("Ключевые слова");
-        listButton.setCallbackData("LIST_KEYWORDS");
-
-        InlineKeyboardButton showButton = new InlineKeyboardButton();
-        showButton.setText("Поиск");
-        showButton.setCallbackData("FIND_BY_KEYWORDS");
-
-        rowInLine.add(listButton);
-        rowInLine.add(showButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showKeywordButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton deleteButton = new InlineKeyboardButton();
-        deleteButton.setText("Удалить");
-        deleteButton.setCallbackData("DELETE");
-
-        InlineKeyboardButton addButton = new InlineKeyboardButton();
-        addButton.setText("Добавить");
-        addButton.setCallbackData("ADD");
-
-        InlineKeyboardButton showButton = new InlineKeyboardButton();
-        showButton.setText("Поиск");
-        showButton.setCallbackData("FIND_BY_KEYWORDS");
-
-        rowInLine.add(deleteButton);
-        rowInLine.add(addButton);
-        rowInLine.add(showButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showAddKeywordsButton(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton addButton = new InlineKeyboardButton();
-        addButton.setText("Добавить");
-        addButton.setCallbackData("ADD");
-
-        rowInLine.add(addButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
     private static String parseMessageText(String messageText) {
         return messageText.substring(messageText.indexOf(" "))
                 .replaceAll(" ", "")
@@ -807,7 +479,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private static SendMessage prepareMessage(long chatId, String textToSend) {
+    public static SendMessage prepareMessage(long chatId, String textToSend) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(textToSend);
@@ -837,230 +509,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     }
 
-    private void showYesNoOnStart(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-        InlineKeyboardButton yesButton = new InlineKeyboardButton();
-        yesButton.setText("Да");
-        yesButton.setCallbackData("YES_BUTTON");
-
-        InlineKeyboardButton noButton = new InlineKeyboardButton();
-        noButton.setText("Нет");
-        noButton.setCallbackData("NO_BUTTON");
-
-        rowInLine.add(noButton);
-        rowInLine.add(yesButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showTodoButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-        InlineKeyboardButton delButton = new InlineKeyboardButton();
-        delButton.setText("Удалить");
-        delButton.setCallbackData("TODO_DEL");
-
-        InlineKeyboardButton addButton = new InlineKeyboardButton();
-        addButton.setText("Добавить");
-        addButton.setCallbackData("TODO_ADD");
-
-        InlineKeyboardButton listButton = new InlineKeyboardButton();
-        listButton.setText("Список");
-        listButton.setCallbackData("TODO_LIST");
-
-        rowInLine.add(delButton);
-        rowInLine.add(addButton);
-        rowInLine.add(listButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showTodoAddButton(long chatId) {
-        SendMessage message = prepareMessage(chatId, "<b>Список задач пуст</b>");
-        message.enableHtml(true);
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton addButton = new InlineKeyboardButton();
-        addButton.setText("Добавить");
-        addButton.setCallbackData("TODO_ADD");
-
-        rowInLine.add(addButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showYesNoOnDeleteUser(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Подтверждаете удаление пользователя?");
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton yesButton = new InlineKeyboardButton();
-        yesButton.setText("Да");
-        yesButton.setCallbackData("DELETE_YES");
-
-        InlineKeyboardButton noButton = new InlineKeyboardButton();
-        noButton.setText("Нет");
-        noButton.setCallbackData("DELETE_NO");
-
-        rowInLine.add(yesButton);
-        rowInLine.add(noButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void getNumbersForKeywordsPeriodButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Выберите глубину поиска в часах");
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton button1 = new InlineKeyboardButton();
-        button1.setText("1");
-        button1.setCallbackData("BUTTON_1");
-
-        InlineKeyboardButton button2 = new InlineKeyboardButton();
-        button2.setText("2");
-        button2.setCallbackData("BUTTON_2");
-
-        InlineKeyboardButton button4 = new InlineKeyboardButton();
-        button4.setText("4");
-        button4.setCallbackData("BUTTON_4");
-
-        InlineKeyboardButton button12 = new InlineKeyboardButton();
-        button12.setText("12");
-        button12.setCallbackData("BUTTON_12");
-
-        InlineKeyboardButton button24 = new InlineKeyboardButton();
-        button24.setText("24");
-        button24.setCallbackData("BUTTON_24");
-
-        InlineKeyboardButton button48 = new InlineKeyboardButton();
-        button48.setText("48");
-        button48.setCallbackData("BUTTON_48");
-
-        InlineKeyboardButton button72 = new InlineKeyboardButton();
-        button72.setText("72");
-        button72.setCallbackData("BUTTON_72");
-
-        rowInLine.add(button1);
-        rowInLine.add(button2);
-        rowInLine.add(button4);
-        rowInLine.add(button12);
-        rowInLine.add(button24);
-        rowInLine.add(button48);
-        rowInLine.add(button72);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void getNumbersForAllPeriodButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Выберите глубину поиска в часах");
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-
-        InlineKeyboardButton button1 = new InlineKeyboardButton();
-        button1.setText("1");
-        button1.setCallbackData("BUTTON_1_ALL");
-
-        InlineKeyboardButton button2 = new InlineKeyboardButton();
-        button2.setText("2");
-        button2.setCallbackData("BUTTON_2_ALL");
-
-        InlineKeyboardButton button4 = new InlineKeyboardButton();
-        button4.setText("4");
-        button4.setCallbackData("BUTTON_4_ALL");
-
-        InlineKeyboardButton button6 = new InlineKeyboardButton();
-        button6.setText("6");
-        button6.setCallbackData("BUTTON_6_ALL");
-
-        InlineKeyboardButton button8 = new InlineKeyboardButton();
-        button8.setText("8");
-        button8.setCallbackData("BUTTON_8_ALL");
-
-        InlineKeyboardButton button12 = new InlineKeyboardButton();
-        button12.setText("12");
-        button12.setCallbackData("BUTTON_12_ALL");
-
-        InlineKeyboardButton button24 = new InlineKeyboardButton();
-        button24.setText("24");
-        button24.setCallbackData("BUTTON_24_ALL");
-
-        rowInLine.add(button1);
-        rowInLine.add(button2);
-        rowInLine.add(button4);
-        rowInLine.add(button6);
-        rowInLine.add(button8);
-        rowInLine.add(button12);
-        rowInLine.add(button24);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
-    private void showOnOffScheduler(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Автопоиск");
-
-        InlineKeyboardMarkup markupInLine = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
-        InlineKeyboardButton yesButton = new InlineKeyboardButton();
-        yesButton.setText("On");
-        yesButton.setCallbackData("SCHEDULER_ON");
-
-        InlineKeyboardButton noButton = new InlineKeyboardButton();
-        noButton.setText("Off");
-        noButton.setCallbackData("SCHEDULER_OFF");
-
-        rowInLine.add(noButton);
-        rowInLine.add(yesButton);
-
-        rowsInLine.add(rowInLine);
-        markupInLine.setKeyboard(rowsInLine);
-        message.setReplyMarkup(markupInLine);
-
-        executeMessage(message);
-    }
-
     private void sendMessage(long chatId, String textToSend) {
         SendMessage message = prepareMessage(chatId, textToSend);
         message.enableHtml(true);
@@ -1068,7 +516,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    private void executeMessage(SendMessage message) {
+    protected void executeMessage(SendMessage message) {
         try {
             execute(message);
         } catch (TelegramApiException e) {
@@ -1249,4 +697,248 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
     }
+
+    public void showOnOffScheduler(long chatId) {
+        SendMessage message = prepareMessage(chatId, "Автопоиск");
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("SCHEDULER_OFF", "Off");
+        buttons.put("SCHEDULER_ON", "On");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void showYesNoOnStart(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("NO_BUTTON", "Нет");
+        buttons.put("YES_BUTTON", "Да");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void showTodoButtons(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("TODO_DEL", "Удалить");
+        buttons.put("TODO_ADD", "Добавить");
+        buttons.put("TODO_LIST", "Список");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void showTodoAddButton(long chatId) {
+        SendMessage message = prepareMessage(chatId, "<b>Список задач пуст</b>");
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("TODO_ADD", "Добавить");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void showYesNoOnDeleteUser(long chatId) {
+        SendMessage message = prepareMessage(chatId, "Подтверждаете удаление пользователя?");
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("DELETE_YES", "Да");
+        buttons.put("DELETE_NO", "Нет");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void getNumbersForKeywordsPeriodButtons(long chatId) {
+        SendMessage message = prepareMessage(chatId, "Выберите глубину поиска в часах");
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("BUTTON_1", "1");
+        buttons.put("BUTTON_2", "2");
+        buttons.put("BUTTON_4", "4");
+        buttons.put("BUTTON_12", "12");
+        buttons.put("BUTTON_24", "24");
+        buttons.put("BUTTON_48", "48");
+        buttons.put("BUTTON_72", "72");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void getNumbersForAllPeriodButtons(long chatId) {
+        SendMessage message = prepareMessage(chatId, "Выберите глубину поиска в часах");
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("BUTTON_1_ALL", "1");
+        buttons.put("BUTTON_2_ALL", "2");
+        buttons.put("BUTTON_4_ALL", "4");
+        buttons.put("BUTTON_6_ALL", "6");
+        buttons.put("BUTTON_8_ALL", "8");
+        buttons.put("BUTTON_12_ALL", "12");
+        buttons.put("BUTTON_24_ALL", "24");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void cancelButton(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("CANCEL", "Отменить");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void showExcludedButtons(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("DELETE_EXCLUDED", "Удалить");
+        buttons.put("EXCLUDE", "Добавить");
+        buttons.put("FIND_ALL", "Поиск");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void showExcludeButton(long chatId) {
+        SendMessage message = prepareMessage(chatId, "» слова-исключения не заданы");
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("EXCLUDE", "Добавить");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void showSearchAllButtons(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("LIST_EXCLUDED", "Исключения");
+        buttons.put("FIND_ALL", "Поиск");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void showKeywordButtonsForSearch(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("LIST_KEYWORDS", "Ключевые слова");
+        buttons.put("FIND_BY_KEYWORDS", "Поиск");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void showKeywordButtons(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("DELETE", "Удалить");
+        buttons.put("ADD", "Добавить");
+        buttons.put("FIND_BY_KEYWORDS", "Поиск");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void showAddKeywordsButton(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("ADD", "Добавить");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void getSettingsButtons(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+        boolean isOn = settingsRepository.getSchedulerOnOffByChatId(chatId).equals("on");
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("SET_PERIOD", "1. Инт");
+        buttons.put("SET_PERIOD_ALL", "2. Инт");
+        buttons.put("SET_SCHEDULER", "3. Авто");
+
+        if (isOn) {
+            buttons.put("SCHEDULER_START", "4. Старт");
+            buttons.put("START_SEARCH", "» » »");
+        } else {
+            buttons.put("START_SEARCH", "» » »");
+        }
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void nextButton(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("START_SEARCH", "» » »");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void infoButtons(long chatId) {
+        SendMessage message = prepareMessage(chatId, """
+                <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
+                <b>Почта</b>: rps_project@mail.ru
+                <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""");
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("FEEDBACK", "Предложить идею");
+        buttons.put("START_SEARCH", "» » »");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void nextButtonAfterKeywordsSearch(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("LIST_KEYWORDS", "Ключевые слова");
+        buttons.put("START_SEARCH", "» » »");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void nextButtonAfterAllSearch(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("EXCLUDE", "Исключить слова");
+        buttons.put("START_SEARCH", "» » »");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
 }
