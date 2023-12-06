@@ -111,17 +111,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             String firstName = update.getMessage().getChat().getFirstName();
             log.warn(firstName + ": [" + messageText + "]");
 
-            /* Команды параметрами */
-            // send message to all users
-            if (messageText.contains("/send") && messageText.charAt(5) == ' ' && messageText.length() > 6
-                    && config.getBotOwner() == chatId) {
-                String textToSend = messageText.substring(messageText.indexOf(" "));
-                Iterable<User> users = userRepository.findAllActiveUsers();
-                for (User user : users) {
-                    sendMessage(user.getChatId(), textToSend);
-                }
-
-            } else if (messageText.startsWith("/send-feedback")) {
+            if  (messageText.startsWith("/send-feedback")) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
                 sendFeedback(chatId, feedback);
                 prefix = "";
