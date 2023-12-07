@@ -173,9 +173,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             } else if (messageText.startsWith("Поиск общий")) {
                 new Thread(() -> findAllNews(chatId)).start();
-            }
-
-            else {
+            } else {
                 /* Команды без параметров */
                 switch (messageText) {
                     case "/start" -> startActions(update, chatId);
@@ -403,9 +401,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void getKeywordsList(long chatId) {
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
+
         if (!keywordsByChatId.isEmpty()) {
             String text = "<b>Список ключевых слов</b>\n" +
-                    keywordRepository.findKeywordsByChatId(chatId)
+                    keywordsByChatId
                             .toString()
                             .replace("[", "")
                             .replace("]", "");
