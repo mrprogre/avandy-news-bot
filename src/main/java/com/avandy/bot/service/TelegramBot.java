@@ -840,8 +840,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
-        buttons.put("SET_PERIOD", "1. Интервал (ключевые)");
-        buttons.put("SET_PERIOD_ALL", "2. Интервал (общий)");
+        buttons.put("SET_PERIOD", "1. Интервал");
+        buttons.put("SET_PERIOD_ALL", "2. Интервал");
         buttons2.put("SET_SCHEDULER", "3. Автопоиск");
 
         if (isOn) {
