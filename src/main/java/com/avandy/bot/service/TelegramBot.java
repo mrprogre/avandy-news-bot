@@ -20,6 +20,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Timestamp;
@@ -166,7 +168,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.error(e.getMessage());
                 }
 
-            } else {
+            } else if (messageText.startsWith("Поиск по словам")) {
+                new Thread(() -> findNewsByKeywords(chatId)).start();
+
+            } else if (messageText.startsWith("Поиск общий")) {
+                new Thread(() -> findAllNews(chatId)).start();
+            }
+
+            else {
                 /* Команды без параметров */
                 switch (messageText) {
                     case "/start" -> startActions(update, chatId);
@@ -351,12 +360,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void startActions(Update update, long chatId) {
         saveUserToDatabase(update.getMessage());
-
         String userFirstname = update.getMessage().getChat().getFirstName();
 
         String hello = EmojiParser.parseToUnicode("Здравствуй, " + userFirstname + "! :blush: \n" +
-                "Я могу найти для тебя нужную информацию и отсеять много ненужной! Продолжим?");
-        showYesNoOnStart(chatId, hello);
+                "Я могу найти для тебя важную информацию и отсеять много лишней!");
+
+        getReplyKeywordWithSearch(chatId, hello);
+        showYesNoOnStart(chatId, "Продолжим?");
     }
 
     private static String prepareTextToSave(String messageText) {
@@ -902,6 +912,26 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put(Text.START_SEARCH, Text.NEXT_ICON);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    private void getReplyKeywordWithSearch(long chatId, String textToSend) {
+        SendMessage message = new SendMessage();
+        message.setChatId(String.valueOf(chatId));
+        message.setText(textToSend);
+
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        keyboardMarkup.setResizeKeyboard(true);
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+
+        KeyboardRow row = new KeyboardRow();
+        row.add("Поиск общий");
+        row.add("Поиск по словам");
+
+        keyboardRows.add(row);
+        keyboardMarkup.setKeyboard(keyboardRows);
+        message.setReplyMarkup(keyboardMarkup);
         executeMessage(message);
     }
 
