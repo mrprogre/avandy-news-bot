@@ -1,5 +1,6 @@
 package com.avandy.bot.utils;
 
+import com.avandy.bot.model.Settings;
 import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
@@ -11,6 +12,7 @@ public class Text {
     public static final String ADD_RUS = "Добавить";
 
     public static final String UPDATE_PERIOD_CHANGED = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
+    public static final String SCHEDULER_CHANGED = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
     public static final String HEADLINES_NOT_FOUND = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
     public static final String SET_UP_KEYWORDS = "» ключевые слова не заданы";
 
@@ -31,4 +33,20 @@ public class Text {
             На данном этапе мы добавим <b>ключевые слова</b>. Нажми кнопку "Добавить".""";
 
     public static final String NO_BUTTON_TEXT = EmojiParser.parseToUnicode("Good buy! \uD83D\uDC4B");
+
+    public static String getString(String userFirstname) {
+        return EmojiParser.parseToUnicode("Здравствуй, " + userFirstname + "! :blush: \n" +
+                "Я могу найти для тебя важную информацию и отсеять много лишней!");
+    }
+
+    public static String getSettingsText(Settings x, String scheduler) {
+        return "<b>Настройки</b>\n" +
+                "- - - - - -\n" +
+                "<b>1. Интервал</b> поиска (<b>ключевые слова</b>): минус <b>" + x.getPeriod() + "</b>\n" +
+                "<b>2. Интервал</b> поиска (<b>все новости</b>): минус <b>" + x.getPeriodAll() + "</b>\n" +
+                "<b>3. Автопоиск</b> по ключевым словам: <b>" + x.getScheduler() + "</b>\n" +
+                scheduler +
+                "- - - - - -\n" +
+                "Параметры меняются после нажатия на кнопки";
+    }
 }

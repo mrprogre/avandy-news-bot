@@ -230,17 +230,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "SET_SCHEDULER" -> showOnOffScheduler(chatId);
                 case "SCHEDULER_ON" -> {
                     settingsRepository.updateScheduler("on", chatId);
-                    sendMessage(chatId, EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️"));
+                    sendMessage(chatId, Text.SCHEDULER_CHANGED);
                     getSettings(chatId);
                 }
                 case "SCHEDULER_OFF" -> {
                     settingsRepository.updateScheduler("off", chatId);
-                    sendMessage(chatId, EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️"));
+                    sendMessage(chatId, Text.SCHEDULER_CHANGED);
                     getSettings(chatId);
                 }
                 case "SCHEDULER_START" -> {
                     prefix = "/update-start ";
-                    //getNumbersButtons(chatId);
                     cancelButton(chatId, "Введите время старта автопоиска (число 0-23)");
                 }
 
@@ -360,12 +359,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void startActions(Update update, long chatId) {
         saveUserToDatabase(update.getMessage());
-        String userFirstname = update.getMessage().getChat().getFirstName();
-
-        String hello = EmojiParser.parseToUnicode("Здравствуй, " + userFirstname + "! :blush: \n" +
-                "Я могу найти для тебя важную информацию и отсеять много лишней!");
-
-        getReplyKeywordWithSearch(chatId, hello);
+        getReplyKeywordWithSearch(chatId, Text.getString(update.getMessage().getChat().getFirstName()));
         showYesNoOnStart(chatId, "Продолжим?");
     }
 
@@ -400,15 +394,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                                 "Часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>\n";
                     }
 
-                    String text = "<b>Настройки</b>\n" +
-                            "- - - - - -\n" +
-                            "<b>1. Интервал</b> поиска (<b>ключевые слова</b>): минус <b>" + x.getPeriod() + "</b>\n" +
-                            "<b>2. Интервал</b> поиска (<b>все новости</b>): минус <b>" + x.getPeriodAll() + "</b>\n" +
-                            "<b>3. Автопоиск</b> по ключевым словам: <b>" + x.getScheduler() + "</b>\n" +
-                            schedSettings +
-                            "- - - - - -\n" +
-                            "Параметры меняются после нажатия на кнопки";
-
+                    String text = Text.getSettingsText(x, schedSettings);
                     getSettingsButtons(chatId, text);
                 },
                 () -> sendMessage(chatId, "Настройки не обнаружены")
