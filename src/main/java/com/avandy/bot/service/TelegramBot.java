@@ -845,7 +845,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons2.put("SET_SCHEDULER", "3. Автопоиск");
 
         if (isOn) {
-            buttons2.put("SCHEDULER_START", "4. Старт поиска");
+            buttons2.put("SCHEDULER_START", "4. Старт");
             buttons2.put(Text.START_SEARCH, Text.NEXT_ICON);
         } else {
             buttons2.put(Text.START_SEARCH, Text.NEXT_ICON);
