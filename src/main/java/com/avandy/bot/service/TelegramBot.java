@@ -839,18 +839,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         boolean isOn = settingsRepository.getSchedulerOnOffByChatId(chatId).equals("on");
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("SET_PERIOD", "1. Инт");
-        buttons.put("SET_PERIOD_ALL", "2. Инт");
-        buttons.put("SET_SCHEDULER", "3. Авто");
+        Map<String, String> buttons2 = new LinkedHashMap<>();
+        buttons.put("SET_PERIOD", "1. Интервал (ключевые)");
+        buttons.put("SET_PERIOD_ALL", "2. Интервал (общий)");
+        buttons2.put("SET_SCHEDULER", "3. Автопоиск");
 
         if (isOn) {
-            buttons.put("SCHEDULER_START", "4. Старт");
-            buttons.put(Text.START_SEARCH, Text.NEXT_ICON);
+            buttons2.put("SCHEDULER_START", "4. Старт поиска");
+            buttons2.put(Text.START_SEARCH, Text.NEXT_ICON);
         } else {
-            buttons.put(Text.START_SEARCH, Text.NEXT_ICON);
+            buttons2.put(Text.START_SEARCH, Text.NEXT_ICON);
         }
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons, buttons2));
         executeMessage(message);
     }
 

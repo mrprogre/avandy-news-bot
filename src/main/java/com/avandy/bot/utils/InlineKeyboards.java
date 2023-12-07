@@ -14,19 +14,40 @@ public class InlineKeyboards {
     public static InlineKeyboardMarkup inlineKeyboardMaker(Map<String, String> buttons) {
         InlineKeyboardMarkup inlineKeyboardAbout = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine1 = new ArrayList<>();
+        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
 
         //создаем кнопки
+        setButtons(buttons, rowInLine);
+        rowsInLine.add(rowInLine);
+        inlineKeyboardAbout.setKeyboard(rowsInLine);
+
+        return inlineKeyboardAbout;
+    }
+
+    public static InlineKeyboardMarkup inlineKeyboardMaker(Map<String, String> buttons1, Map<String, String> buttons2) {
+        InlineKeyboardMarkup inlineKeyboardAbout = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
+        List<InlineKeyboardButton> rowInLine1 = new ArrayList<>();
+        List<InlineKeyboardButton> rowInLine2 = new ArrayList<>();
+
+        // создаем первый этаж
+        setButtons(buttons1, rowInLine1);
+        // создаем второй этаж
+        setButtons(buttons2, rowInLine2);
+
+        rowsInLine.add(rowInLine1);
+        rowsInLine.add(rowInLine2);
+        inlineKeyboardAbout.setKeyboard(rowsInLine);
+        return inlineKeyboardAbout;
+    }
+
+    private static void setButtons(Map<String, String> buttons, List<InlineKeyboardButton> rowInLine) {
         for (Map.Entry<String, String> item : buttons.entrySet()) {
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(item.getValue());
             button.setCallbackData(item.getKey());
-            rowInLine1.add(button);
+            rowInLine.add(button);
         }
-        rowsInLine.add(rowInLine1);
-        inlineKeyboardAbout.setKeyboard(rowsInLine);
-
-        return inlineKeyboardAbout;
     }
 
 }
