@@ -565,29 +565,28 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, "» поиск всех новостей");
         Set<Headline> headlines = search.start(chatId, "show-all", "all");
 
-        int counterForReduce = 1;
+        int counterParts = 1;
         int showAllCounter = 1;
         if (headlines.size() > 0) {
-            // пока уберём и выведем кол-во новостей
+            StringJoiner joiner = new StringJoiner("\n\n");
             for (Headline headline : headlines) {
 
-                sendMessage(chatId,
-                        showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
-                                Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                                headline.getTitle() + " " +
-                                "<a href=\"" + headline.getLink() + "\">link</a>"
-                );
+                joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() + " " +
+                        "<a href=\"" + headline.getLink() + "\">link</a>");
 
                 // Reducing the number of messages per second
-                if (counterForReduce == 10) {
-                    try {
-                        Thread.sleep(1200);
-                        counterForReduce = 1;
-                    } catch (InterruptedException e) {
-                        log.error(Common.ERROR_TEXT + e.getMessage());
-                    }
+                if (counterParts == 10) {
+                    sendMessage(chatId, String.valueOf(joiner));
+                    joiner = new StringJoiner("\n\n");
+                    counterParts = 0;
                 }
-                counterForReduce++;
+                counterParts++;
+            }
+
+            if (counterParts != 0) {
+                sendMessage(chatId, String.valueOf(joiner));
             }
 
             String text = "Найдено <b>" + Search.totalNewsCounter + "</b> " +
