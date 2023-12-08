@@ -576,7 +576,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>");
 
-                // Reducing the number of messages per second
                 if (counterParts == 10) {
                     sendMessage(chatId, String.valueOf(joiner));
                     joiner = new StringJoiner("\n\n");
