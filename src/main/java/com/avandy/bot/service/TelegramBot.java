@@ -636,7 +636,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 nextButtonAfterKeywordsSearch(chatId, text);
             }
         }
-        isAutoSearch.set(false);
     }
 
     private void sendFeedback(long chatId, String text) {
@@ -658,6 +657,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 findNewsByKeywords(setting.getChatId());
             }
         }
+        isAutoSearch.set(false);
     }
 
     public void showOnOffScheduler(long chatId) {
