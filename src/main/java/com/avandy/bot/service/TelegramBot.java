@@ -568,7 +568,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int counterParts = 1;
         int showAllCounter = 1;
         if (headlines.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n\n");
+            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
             for (Headline headline : headlines) {
 
                 joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
@@ -578,7 +578,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 if (counterParts == 10) {
                     sendMessage(chatId, String.valueOf(joiner));
-                    joiner = new StringJoiner("\n\n");
+                    joiner = new StringJoiner("\n- - - - - -\n");
                     counterParts = 0;
                 }
                 counterParts++;
@@ -610,8 +610,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Search
-        Set<Headline> headlines = search.start(chatId, "show",
-                "keywords");
+        Set<Headline> headlines = search.start(chatId, "show","keywords");
 
         int showCounter = 1;
         if (headlines.size() > 0) {

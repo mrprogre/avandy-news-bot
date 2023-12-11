@@ -72,11 +72,12 @@ public class Search {
                                     }
                                 }
                             }
+
                             /* KEYWORDS SEARCH */
                         } else if (searchType.equals("keywords")) {
-                            for (Keyword keyword : keywords) {
-                                settings.ifPresent(value -> periodInMinutes = Common.timeMapper(value.getPeriod()));
+                            settings.ifPresent(value -> periodInMinutes = Common.timeMapper(value.getPeriod()));
 
+                            for (Keyword keyword : keywords) {
                                 if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase())
                                         && title.length() > 15) {
                                     int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
@@ -96,6 +97,7 @@ public class Search {
                                 }
                             }
                         }
+
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage());
