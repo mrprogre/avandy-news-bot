@@ -612,14 +612,26 @@ public class TelegramBot extends TelegramLongPollingBot {
         // Search
         Set<Headline> headlines = search.start(chatId, "show","keywords");
 
+        int counterParts = 1;
         int showCounter = 1;
         if (headlines.size() > 0) {
+            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
             for (Headline headline : headlines) {
-                sendMessage(chatId, showCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                joiner.add(showCounter++ + ". <b>" + headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
                         headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>"
-                );
+                        "<a href=\"" + headline.getLink() + "\">link</a>");
+
+                if (counterParts == 10) {
+                    sendMessage(chatId, String.valueOf(joiner));
+                    joiner = new StringJoiner("\n- - - - - -\n");
+                    counterParts = 0;
+                }
+                counterParts++;
+            }
+
+            if (counterParts != 0) {
+                sendMessage(chatId, String.valueOf(joiner));
             }
 
             String text = "Найдено: <b>" + Search.filteredNewsCounter + "</b>";
