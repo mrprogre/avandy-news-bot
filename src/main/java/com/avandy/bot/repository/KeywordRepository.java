@@ -15,12 +15,12 @@ public interface KeywordRepository extends CrudRepository<Keyword, Long> {
     @Query(value = "SELECT keyword FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
     List<String> findKeywordsByChatId(Long chatId);
 
-    @Query(value = "SELECT count(keyword) FROM keywords WHERE keyword = :keyword", nativeQuery = true)
+    @Query(value = "SELECT count(keyword) FROM keywords WHERE lower(keyword) = lower(:keyword)", nativeQuery = true)
     int isKeywordExists(String keyword);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "DELETE FROM keywords WHERE chat_id = :chatId AND keyword = :word", nativeQuery = true)
+    @Query(value = "DELETE FROM keywords WHERE chat_id = :chatId AND lower(keyword) = lower(:word)", nativeQuery = true)
     void deleteKeywordByChatId(Long chatId, String word);
 
     @Query(value = "SELECT count(keyword) FROM keywords WHERE chat_id = :chatId", nativeQuery = true)

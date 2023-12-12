@@ -25,21 +25,21 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE settings SET period = :value WHERE chat_id = :chatId", nativeQuery = true)
+    @Query(value = "UPDATE settings SET period = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
     void updatePeriod(String value, long chatId);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE settings SET period_all = :value WHERE chat_id = :chatId", nativeQuery = true)
+    @Query(value = "UPDATE settings SET period_all = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
     void updatePeriodAll(String value, long chatId);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE settings SET start = :value WHERE chat_id = :chatId", nativeQuery = true)
+    @Query(value = "UPDATE settings SET start = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
     void updateStart(LocalTime value, long chatId);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE settings SET scheduler = :value WHERE chat_id = :chatId", nativeQuery = true)
+    @Query(value = "UPDATE settings SET scheduler = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
     void updateScheduler(String value, long chatId);
 }
