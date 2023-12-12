@@ -206,7 +206,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
                 case "DELETE_EXCLUDED" -> {
                     prefix = "/remove-excluded ";
-                    cancelButton(chatId, "Введите слова для удаления из исключений (разделять запятой).\n" +
+                    cancelButton(chatId, "Введите слова для удаления из исключений (разделять запятой)\n" +
                             "* - удалить всё");
                 }
 
@@ -219,8 +219,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
                 case "DELETE" -> {
                     prefix = "/remove-keywords ";
-                    cancelButton(chatId, "Введите слова для удаления (разделять запятой).\n" +
-                            "* - удалить всё.");
+                    cancelButton(chatId, "Введите слова для удаления (разделять запятой)\n" +
+                            "* - удалить всё");
                 }
 
                 /* SETTINGS */
