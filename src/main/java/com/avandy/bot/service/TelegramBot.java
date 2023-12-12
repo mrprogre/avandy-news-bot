@@ -494,6 +494,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Keyword word;
         for (String keyword : keywords) {
+            keyword = keyword.toLowerCase();
             if (!(keyword.length() <= 2)) {
                 if (!keywordsByChatId.contains(keyword)) {
                     word = new Keyword();
@@ -532,6 +533,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Excluded excluded;
         for (String word : list) {
+            word = word.toLowerCase();
             if (!(word.length() <= 2)) {
                 if (!excludedByChatId.contains(word)) {
                     excluded = new Excluded();

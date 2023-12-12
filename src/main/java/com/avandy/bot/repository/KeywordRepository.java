@@ -9,14 +9,17 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface KeywordRepository extends CrudRepository<Keyword, Long> {
-    @Query(value = "SELECT id, chat_id, keyword FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
+    @Query(value = "SELECT id, chat_id, lower(keyword) FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
     List<Keyword> findAllByChatId(Long chatId);
 
-    @Query(value = "SELECT keyword FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
+    @Query(value = "SELECT lower(keyword) FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
     List<String> findKeywordsByChatId(Long chatId);
 
     @Query(value = "SELECT count(keyword) FROM keywords WHERE lower(keyword) = lower(:keyword)", nativeQuery = true)
     int isKeywordExists(String keyword);
+
+    @Query(value = "SELECT count(keyword) FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
+    int getKeywordsCountByChatId(Long chatId);
 
     @Transactional
     @Modifying(clearAutomatically = true)
@@ -27,7 +30,4 @@ public interface KeywordRepository extends CrudRepository<Keyword, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "DELETE FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
     void deleteAllKeywordsByChatId(Long chatId);
-
-    @Query(value = "SELECT count(keyword) FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
-    int getKeywordsCountByChatId(Long chatId);
 }
