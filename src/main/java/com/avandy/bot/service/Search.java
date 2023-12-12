@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -40,8 +39,8 @@ public class Search {
         List<Keyword> keywords = keywordRepository.findAllByChatId(chatId);
         List<String> allExcludedByChatId = excludedRepository.findExcludedByChatId(chatId);
         List<String> allNewsHash = allNewsRepository.findAllNewsHashByChatId(chatId);
-        Set<AllNews> allNewsToSave = ConcurrentHashMap.newKeySet();
-        SortedSet<Headline> headlinesToShow = Collections.synchronizedSortedSet(new TreeSet<>());
+        Set<AllNews> allNewsToSave = new HashSet<>();
+        Set<Headline> headlinesToShow = new TreeSet<>();
 
         try {
             Iterable<RssList> sources = rssRepository.findAllActiveRss();
