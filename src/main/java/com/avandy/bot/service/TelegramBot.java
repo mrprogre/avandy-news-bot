@@ -177,13 +177,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* Команды без параметров */
                 switch (messageText) {
                     case "/start" -> startActions(update, chatId);
-                    case "/find" -> initSearchButtons(chatId);
-                    case "/info" -> new Thread(() -> infoButtons(chatId)).start();
-                    case "/delete" -> showYesNoOnDeleteUser(chatId);
-                    case "/keywords" -> new Thread(() -> getKeywordsList(chatId)).start();
-                    case "/rss" -> new Thread(() -> getRssList(chatId)).start();
-                    case "/excluded" -> new Thread(() -> getExcludedList(chatId)).start();
                     case "/settings" -> new Thread(() -> getSettings(chatId)).start();
+                    case "/info" -> new Thread(() -> infoButtons(chatId)).start();
+                    case "/find" -> initSearchButtons(chatId);
+                    case "/delete" -> showYesNoOnDeleteUser(chatId);
+                    case "/keywords" -> getKeywordsList(chatId);
+                    case "/rss" -> getRssList(chatId);
+                    case "/excluded" -> getExcludedList(chatId);
                     default -> sendMessage(chatId, "Данная команда не существует");
                 }
             }
