@@ -494,17 +494,35 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Keyword word;
         for (String keyword : keywords) {
-            if (!keywordsByChatId.contains(keyword)) {
-                word = new Keyword();
-                word.setChatId(chatId);
-                word.setKeyword(keyword);
-                keywordRepository.save(word);
-                counter++;
+            if (!(keyword.length() <= 2)) {
+                if (!keywordsByChatId.contains(keyword)) {
+                    word = new Keyword();
+                    word.setChatId(chatId);
+                    word.setKeyword(keyword);
+
+                    try {
+                        keywordRepository.save(word);
+                        counter++;
+                    } catch (Exception e) {
+                        if (e.getMessage().contains("ui_keywords_chat_id_link")) {
+                            log.info(Text.WORD_IS_EXISTS + keyword);
+                        }
+                    }
+
+                } else {
+                    sendMessage(chatId, Text.WORD_IS_EXISTS + keyword);
+                }
             } else {
-                sendMessage(chatId, "Слово <b>" + keyword + "</b> уже есть в списке");
+                sendMessage(chatId, Text.MIN_WORD_LENGTH);
             }
+
         }
-        sendMessage(chatId, EmojiParser.parseToUnicode("Добавлено ключевых слов - " + counter + " ✔️"));
+        if (counter != 0) {
+            sendMessage(chatId, EmojiParser.parseToUnicode("Добавлено ключевых слов - " + counter + " ✔️"));
+        } else {
+            sendMessage(chatId, "Ключевые слова не добавлены");
+        }
+
         prefix = "";
     }
 
@@ -514,17 +532,35 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Excluded excluded;
         for (String word : list) {
-            if (!excludedByChatId.contains(word)) {
-                excluded = new Excluded();
-                excluded.setChatId(chatId);
-                excluded.setWord(word);
-                excludedRepository.save(excluded);
-                counter++;
+            if (!(word.length() <= 2)) {
+                if (!excludedByChatId.contains(word)) {
+                    excluded = new Excluded();
+                    excluded.setChatId(chatId);
+                    excluded.setWord(word);
+
+                    try {
+                        excludedRepository.save(excluded);
+                        counter++;
+                    } catch (Exception e) {
+                        if (e.getMessage().contains("ui_excluded")) {
+                            log.info(Text.WORD_IS_EXISTS + word);
+                        }
+                    }
+
+                } else {
+                    sendMessage(chatId, Text.WORD_IS_EXISTS + word);
+                }
             } else {
-                sendMessage(chatId, "Слово <b>" + word + "</b> уже есть в списке");
+                sendMessage(chatId, Text.MIN_WORD_LENGTH);
             }
         }
-        sendMessage(chatId, EmojiParser.parseToUnicode("Добавлено слов-исключений - " + counter + " ✔️"));
+
+        if (counter != 0) {
+            sendMessage(chatId, EmojiParser.parseToUnicode("Добавлено слов-исключений - " + counter + " ✔️"));
+        } else {
+            sendMessage(chatId, "Ключевые слова не добавлены");
+        }
+
         prefix = "";
     }
 
@@ -532,7 +568,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String keyword : keywords) {
             if (keyword.equals("*")) {
                 keywordRepository.deleteAllKeywordsByChatId(chatId);
-                sendMessage(chatId, "Удалены все ключевые слова ❌");
+                sendMessage(chatId, Text.DELETE_ALL_KEYWORDS);
                 break;
             }
 
@@ -548,9 +584,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void delExcluded(long chatId, String[] excluded) {
         for (String exclude : excluded) {
-            if(exclude.equals("*")) {
+            if (exclude.equals("*")) {
                 excludedRepository.deleteAllExcludedByChatId(chatId);
-                sendMessage(chatId, "Удалены все слова-исключения ❌");
+                sendMessage(chatId, Text.DELETE_ALL_EXCLUDED);
                 break;
             }
 
@@ -624,7 +660,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Search
-        Set<Headline> headlines = search.start(chatId, "show","keywords");
+        Set<Headline> headlines = search.start(chatId, "show", "keywords");
 
         int counterParts = 1;
         int showCounter = 1;

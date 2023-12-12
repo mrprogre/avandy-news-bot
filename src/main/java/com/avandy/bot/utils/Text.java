@@ -15,6 +15,12 @@ public class Text {
     public static final String SCHEDULER_CHANGED = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
     public static final String HEADLINES_NOT_FOUND = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
     public static final String SET_UP_KEYWORDS = "» ключевые слова не заданы";
+    public static final String MIN_WORD_LENGTH = "Длина слова должна быть более 2 символов";
+    public static final String DELETE_ALL_KEYWORDS = "Удалены все ключевые слова ❌";
+    public static final String DELETE_ALL_EXCLUDED = "Удалены все слова-исключения ❌";
+    public static final String WORD_IS_EXISTS = "Слово уже есть в списке: ";
+
+
 
     public static final String INFO = """
             <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
