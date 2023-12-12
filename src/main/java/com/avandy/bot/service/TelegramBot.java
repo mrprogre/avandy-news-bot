@@ -206,7 +206,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
                 case "DELETE_EXCLUDED" -> {
                     prefix = "/remove-excluded ";
-                    cancelButton(chatId, "Введите слова для удаления из исключений (разделять запятой)");
+                    cancelButton(chatId, "Введите слова для удаления из исключений (разделять запятой). * - удалить всё");
                 }
 
                 /* KEYWORDS */
@@ -218,7 +218,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
                 case "DELETE" -> {
                     prefix = "/remove-keywords ";
-                    cancelButton(chatId, "Введите слова для удаления (разделять запятой)");
+                    cancelButton(chatId, "Введите слова для удаления (разделять запятой). * - удалить всё");
                 }
 
                 /* SETTINGS */
@@ -528,6 +528,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void delKeyword(long chatId, String[] keywords) {
         for (String keyword : keywords) {
+            if (keyword.equals("*")) {
+                keywordRepository.deleteAllKeywordsByChatId(chatId);
+                sendMessage(chatId, "Удалены все ключевые слова ❌");
+                break;
+            }
+
             if (keywordRepository.isKeywordExists(keyword) > 0) {
                 keywordRepository.deleteKeywordByChatId(chatId, keyword);
                 sendMessage(chatId, EmojiParser.parseToUnicode("Удалено слово - " + keyword + " ❌"));
@@ -540,6 +546,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void delExcluded(long chatId, String[] excluded) {
         for (String exclude : excluded) {
+            if(exclude.equals("*")) {
+                excludedRepository.deleteAllExcludedByChatId(chatId);
+                sendMessage(chatId, "Удалены все слова-исключения ❌");
+                break;
+            }
+
             if (excludedRepository.isWordExists(exclude) > 0) {
                 excludedRepository.deleteExcludedByChatId(chatId, exclude);
                 sendMessage(chatId, EmojiParser.parseToUnicode("Удалено слово - " + exclude + " ❌"));

@@ -23,6 +23,11 @@ public interface KeywordRepository extends CrudRepository<Keyword, Long> {
     @Query(value = "DELETE FROM keywords WHERE chat_id = :chatId AND lower(keyword) = lower(:word)", nativeQuery = true)
     void deleteKeywordByChatId(Long chatId, String word);
 
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "DELETE FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
+    void deleteAllKeywordsByChatId(Long chatId);
+
     @Query(value = "SELECT count(keyword) FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
     int getKeywordsCountByChatId(Long chatId);
 }

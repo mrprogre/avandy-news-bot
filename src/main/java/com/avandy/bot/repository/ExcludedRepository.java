@@ -26,4 +26,9 @@ public interface ExcludedRepository extends CrudRepository<Excluded, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "DELETE FROM excluded WHERE chat_id = :chatId AND lower(word) = lower(:word)", nativeQuery = true)
     void deleteExcludedByChatId(Long chatId, String word);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "DELETE FROM excluded WHERE chat_id = :chatId", nativeQuery = true)
+    void deleteAllExcludedByChatId(Long chatId);
 }
