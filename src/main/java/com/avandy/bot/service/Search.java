@@ -22,16 +22,18 @@ public class Search {
     private final RssRepository rssRepository;
     private final AllNewsRepository allNewsRepository;
     private final ExcludedRepository excludedRepository;
+    private final NewsListRepository newsListRepository;
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
                   RssRepository rssRepository, AllNewsRepository allNewsRepository,
-                  ExcludedRepository excludedRepository) {
+                  ExcludedRepository excludedRepository, NewsListRepository newsListRepository) {
         this.settingsRepository = settingsRepository;
         this.keywordRepository = keywordRepository;
         this.rssRepository = rssRepository;
         this.allNewsRepository = allNewsRepository;
         this.excludedRepository = excludedRepository;
+        this.newsListRepository = newsListRepository;
     }
 
     public Set<Headline> start(Long chatId, String mode, String searchType) {
@@ -41,6 +43,8 @@ public class Search {
         List<String> allNewsHash = allNewsRepository.findAllNewsHashByChatId(chatId);
         Set<AllNews> allNewsToSave = new HashSet<>();
         Set<Headline> headlinesToShow = new TreeSet<>();
+        Set<NewsList> newsList = new LinkedHashSet<>();
+        LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
 
         try {
             Iterable<RssList> sources = rssRepository.findAllActiveRss();
@@ -49,9 +53,21 @@ public class Search {
                 try {
                     for (SyndEntry message : new Parser().parseFeed(source.getLink()).getEntries()) {
                         String sourceRss = source.getSource();
-                        String title = message.getTitle();
+                        String title = message.getTitle().trim();
+                        String titleHash = Common.getHash(title);
                         Date pubDate = message.getPublishedDate();
                         String link = message.getLink();
+
+                        // Save all headlines
+                        if (!newsListAllHash.contains(titleHash)) {
+                            newsList.add(NewsList.builder()
+                                    .source(sourceRss)
+                                    .title(title)
+                                    .titleHash(titleHash)
+                                    .link(link)
+                                    .pubDate(pubDate)
+                                    .build());
+                        }
 
                         /* ALL NEWS SEARCH */
                         if (searchType.equals("all")) {
@@ -61,7 +77,6 @@ public class Search {
                                 int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
                                 if (dateDiff != 0) {
                                     if (mode.equals("show-all")) {
-                                        String titleHash = Common.getHash(title);
                                         Headline headlineRow = new Headline(sourceRss, title, link, pubDate,
                                                 chatId, 4, titleHash);
 
@@ -83,7 +98,6 @@ public class Search {
 
                                     if (dateDiff != 0) {
                                         if (mode.equals("show")) {
-                                            String titleHash = Common.getHash(title);
                                             Headline headlineRow = new Headline(sourceRss, title, link, pubDate,
                                                     chatId, 2, titleHash);
 
@@ -102,6 +116,8 @@ public class Search {
                     log.error(e.getMessage());
                 }
             }
+
+            newsListRepository.saveAll(newsList);
 
             totalNewsCounter = headlinesToShow.size();
 
