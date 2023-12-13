@@ -390,8 +390,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                     String schedSettings = "";
 
                     if (x.getScheduler().equals("on")) {
-                        schedSettings = "<b>4. Старт</b> автопоиска: <b>" + x.getStart() + "</b>\n" +
-                                "Часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>\n";
+                        String text;
+                        if (x.getPeriod().equals("1h")) {
+                            text = " (запуск каждый час)\n";
+                        } else if (x.getPeriod().equals("2h")) {
+                            text = " (запуск каждые 2 часа)\n";
+                        } else {
+                            text = "\nЧасы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>\n";
+                        }
+
+                        schedSettings = "<b>4. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
                     }
 
                     String text = Text.getSettingsText(x, schedSettings);
@@ -662,7 +670,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Search
-        Set<Headline> headlines = search.start(chatId,"keywords");
+        Set<Headline> headlines = search.start(chatId, "keywords");
 
         int counterParts = 1;
         int showCounter = 1;
