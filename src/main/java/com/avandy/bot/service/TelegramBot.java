@@ -714,7 +714,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Scheduled(cron = "${cron.scheduler}")
     private void autoSearchByKeywords() {
-        int counter;
         Integer hourNow = LocalTime.now().getHour();
         isAutoSearch.set(true);
         List<Settings> usersSettings = settingsRepository.findAllByScheduler();
@@ -723,7 +722,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             List<Integer> timeToExecute = Common.getTimeToExecute(setting.getStart(), setting.getPeriod());
 
             if (timeToExecute.contains(hourNow)) {
-                counter = findNewsByKeywords(setting.getChatId());
+                int counter = findNewsByKeywords(setting.getChatId());
                 log.warn("Scheduler: " + setting.getChatId() + ", найдено " + counter);
             }
         }
