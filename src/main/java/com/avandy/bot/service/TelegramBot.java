@@ -242,6 +242,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                     prefix = "/update-start ";
                     cancelButton(chatId, "Введите время старта автопоиска (число 0-23)");
                 }
+                case "SET_EXCLUDED" -> showOnOffExcluded(chatId);
+                case "EXCLUDED_ON" -> {
+                    settingsRepository.updateExcluded("on", chatId);
+                    sendMessage(chatId, Text.EXCLUDED_CHANGED);
+                    getSettings(chatId);
+                }
+                case "EXCLUDED_OFF" -> {
+                    settingsRepository.updateExcluded("off", chatId);
+                    sendMessage(chatId, Text.EXCLUDED_CHANGED);
+                    getSettings(chatId);
+                }
 
                 case "TODO_LIST" -> getTodoList(chatId);
                 case "TODO_ADD" -> {
@@ -399,7 +410,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                             text = "\nЧасы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>\n";
                         }
 
-                        schedSettings = "<b>4. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
+                        schedSettings = "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
                     }
 
                     String text = Text.getSettingsText(x, schedSettings);
@@ -617,6 +628,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setPeriodAll("1h");
         settings.setScheduler("on");
         settings.setStart(LocalTime.of(14, 0));
+        settings.setExcluded("on");
         settingsRepository.save(settings);
         prefix = "";
     }
@@ -735,6 +747,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("SCHEDULER_OFF", "Off");
         buttons.put("SCHEDULER_ON", "On");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void showOnOffExcluded(long chatId) {
+        SendMessage message = prepareMessage(chatId, "Исключение заголовков");
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("EXCLUDED_OFF", "Off");
+        buttons.put("EXCLUDED_ON", "On");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -908,18 +931,20 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons3 = new LinkedHashMap<>();
         buttons.put("SET_PERIOD", "1. Интервал");
         buttons.put("SET_PERIOD_ALL", "2. Интервал");
         buttons2.put("SET_SCHEDULER", "3. Автопоиск");
+        buttons2.put("SET_EXCLUDED", "4. Исключение");
 
         if (isOn) {
-            buttons2.put("SCHEDULER_START", "4. Старт");
-            buttons2.put(Text.START_SEARCH, Text.NEXT_ICON);
+            buttons3.put("SCHEDULER_START", "5. Старт");
+            buttons3.put(Text.START_SEARCH, Text.NEXT_ICON);
         } else {
-            buttons2.put(Text.START_SEARCH, Text.NEXT_ICON);
+            buttons3.put(Text.START_SEARCH, Text.NEXT_ICON);
         }
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons, buttons2));
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons, buttons2, buttons3));
         executeMessage(message);
     }
 

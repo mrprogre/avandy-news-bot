@@ -20,6 +20,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Query(value = "SELECT scheduler FROM settings WHERE chat_id = :chatId", nativeQuery = true)
     String getSchedulerOnOffByChatId(long chatId);
 
+    @Query(value = "SELECT excluded FROM settings WHERE chat_id = :chatId", nativeQuery = true)
+    String getExcludedOnOffByChatId(long chatId);
+
     @Query(value = "FROM settings WHERE scheduler = 'on'")
     List<Settings> findAllByScheduler();
 
@@ -42,4 +45,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE settings SET scheduler = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
     void updateScheduler(String value, long chatId);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE settings SET excluded = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
+    void updateExcluded(String value, long chatId);
 }

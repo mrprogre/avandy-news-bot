@@ -18,4 +18,5 @@ public class Settings {
     private String period;
     private String periodAll;
     private LocalTime start;
+    private String excluded;
 }

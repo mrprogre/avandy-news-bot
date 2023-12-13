@@ -134,13 +134,15 @@ public class Search {
         }
 
         totalNewsCounter = headlinesToShow.size();
+
         // remove titles contains excluded words
-        if (searchType.equals("all")) {
+        if (searchType.equals("all") && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
             for (String word : allExcludedByChatId) {
                 headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(word.toLowerCase()));
             }
         }
         filteredNewsCounter = headlinesToShow.size();
+
 
         AllNews allNewsRow;
         for (Headline line : headlinesToShow) {

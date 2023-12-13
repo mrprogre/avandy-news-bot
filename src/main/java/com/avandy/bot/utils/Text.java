@@ -13,6 +13,7 @@ public class Text {
 
     public static final String UPDATE_PERIOD_CHANGED = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
     public static final String SCHEDULER_CHANGED = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
+    public static final String EXCLUDED_CHANGED = EmojiParser.parseToUnicode("Режим исключения заголовков переключён ✔️");
     public static final String HEADLINES_NOT_FOUND = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
     public static final String SET_UP_KEYWORDS = "» ключевые слова не заданы";
     public static final String MIN_WORD_LENGTH = "Длина слова должна быть более 2 символов";
@@ -51,6 +52,7 @@ public class Text {
                 "<b>1. Интервал</b> поиска (<b>ключевые слова</b>): минус <b>" + x.getPeriod() + "</b>\n" +
                 "<b>2. Интервал</b> поиска (<b>все новости</b>): минус <b>" + x.getPeriodAll() + "</b>\n" +
                 "<b>3. Автопоиск</b> по ключевым словам: <b>" + x.getScheduler() + "</b>\n" +
+                "<b>4. Исключение</b> заголовков: <b>" + x.getExcluded() + "</b>\n" +
                 scheduler +
                 "- - - - - -\n" +
                 "Параметры меняются после нажатия на кнопки";

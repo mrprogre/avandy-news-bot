@@ -25,10 +25,11 @@ create table if not exists users
 create table if not exists settings
 (
     chat_id    bigint,
-    period     varchar(8) default '12h',
-    period_all varchar(8) default '1h',
-    scheduler  varchar(3) default 'on',
+    period     varchar(8) default '12h'::text,
+    period_all varchar(8) default '1h'::text,
+    scheduler  varchar(3) default 'on'::text,
     start      time       default '14:00'::time,
+    excluded   varchar(3) default 'on'::text,
     constraint fk_settings_chat_id foreign key (chat_id) references users (chat_id) on delete cascade
 );
 
