@@ -659,14 +659,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     }
 
-    private void findNewsByKeywords(long chatId) {
+    private int findNewsByKeywords(long chatId) {
         if (!isAutoSearch.get()) {
             sendMessage(chatId, "» поиск по ключевым словам");
         }
 
         if (keywordRepository.findKeywordsByChatId(chatId).isEmpty()) {
             showAddKeywordsButton(chatId, Text.SET_UP_KEYWORDS);
-            return;
+            return 0;
         }
 
         // Search
@@ -705,25 +705,26 @@ public class TelegramBot extends TelegramLongPollingBot {
                 nextButtonAfterKeywordsSearch(chatId, text);
             }
         }
+        return Search.filteredNewsCounter;
     }
 
     private void sendFeedback(long chatId, String text) {
         sendMessage(1254981379, "<b>Message</b> from " + chatId + "\n" + text);
     }
 
-    //@Scheduled(fixedRate = 1, timeUnit = TimeUnit.HOURS)
     @Scheduled(cron = "${cron.scheduler}")
     private void autoSearchByKeywords() {
+        int counter;
         Integer hourNow = LocalTime.now().getHour();
         isAutoSearch.set(true);
         List<Settings> usersSettings = settingsRepository.findAllByScheduler();
 
         for (Settings setting : usersSettings) {
-            log.warn("Scheduler: " + setting.getChatId());
             List<Integer> timeToExecute = Common.getTimeToExecute(setting.getStart(), setting.getPeriod());
 
             if (timeToExecute.contains(hourNow)) {
-                findNewsByKeywords(setting.getChatId());
+                counter = findNewsByKeywords(setting.getChatId());
+                log.warn("Scheduler: " + setting.getChatId() + ", найдено " + counter);
             }
         }
         isAutoSearch.set(false);
