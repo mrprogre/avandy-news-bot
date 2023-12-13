@@ -7,6 +7,7 @@ import com.avandy.bot.utils.Parser;
 import com.rometools.rome.feed.synd.SyndEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,6 +35,45 @@ public class Search {
         this.allNewsRepository = allNewsRepository;
         this.excludedRepository = excludedRepository;
         this.newsListRepository = newsListRepository;
+    }
+
+    @Scheduled(cron = "0 */5 * * * ?")
+    //@Scheduled(fixedRate = 300000) // 300000 ms = 5 minutes
+    public void downloadNewsByPeriodFromDatabase() {
+        Set<NewsList> newsList = new LinkedHashSet<>();
+        LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
+
+        try {
+            Iterable<RssList> sources = rssRepository.findAllActiveRss();
+
+            for (RssList source : sources) {
+                try {
+                    for (SyndEntry message : new Parser().parseFeed(source.getLink()).getEntries()) {
+                        String sourceRss = source.getSource();
+                        String title = message.getTitle().trim();
+                        String titleHash = Common.getHash(title);
+                        Date pubDate = message.getPublishedDate();
+                        String link = message.getLink();
+
+                        if (!newsListAllHash.contains(titleHash)) {
+                            newsList.add(NewsList.builder()
+                                    .source(sourceRss)
+                                    .title(title)
+                                    .titleHash(titleHash)
+                                    .link(link)
+                                    .pubDate(pubDate)
+                                    .build());
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+            }
+            newsListRepository.saveAll(newsList);
+            log.warn("Сохранено новостей - {}", newsList.size());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     public Set<Headline> start(Long chatId, String mode, String searchType) {
@@ -73,8 +113,6 @@ public class Search {
                         if (searchType.equals("all")) {
                             if (title.length() > 15) {
                                 settings.ifPresent(value -> periodInMinutes = Common.timeMapper(value.getPeriodAll()));
-                                //TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodInMinutes + " minutes");
-                                //log.warn("newsListByPeriod = " + newsListByPeriod.size());
 
                                 int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
                                 if (dateDiff != 0) {
