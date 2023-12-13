@@ -38,8 +38,8 @@ public class Search {
     }
 
     @Scheduled(cron = "0 */5 * * * ?")
-    //@Scheduled(fixedRate = 300000) // 300000 ms = 5 minutes
     public void downloadNewsByPeriodFromDatabase() {
+        long start = System.currentTimeMillis();
         Set<NewsList> newsList = new LinkedHashSet<>();
         LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
 
@@ -70,10 +70,11 @@ public class Search {
                 }
             }
             newsListRepository.saveAll(newsList);
-            log.warn("Сохранено новостей - {}", newsList.size());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        long searchTime = System.currentTimeMillis() - start;
+        log.warn("Сохранено новостей - {} за {} мс", newsList.size(), searchTime);
     }
 
     public Set<Headline> start(Long chatId, String mode, String searchType) {
