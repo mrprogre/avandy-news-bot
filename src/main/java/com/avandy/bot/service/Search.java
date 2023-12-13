@@ -118,8 +118,7 @@ public class Search {
                 /* KEYWORDS SEARCH */
             } else if (searchType.equals("keywords")) {
                 for (Keyword keyword : keywords) {
-                    if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase())
-                            && title.length() > 15) {
+                    if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase()) && title.length() > 15) {
                         int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
 
                         if (dateDiff != 0) {
