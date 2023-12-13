@@ -952,7 +952,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put(Text.LIST_KEYWORDS, Text.LIST_KEYWORDS_RUS);
-        buttons.put(Text.START_SEARCH, Text.NEXT_ICON);
+        buttons.put("FIND_BY_KEYWORDS", "Искать снова");
+        //buttons.put(Text.START_SEARCH, Text.NEXT_ICON);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -964,7 +965,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("EXCLUDE", "Исключить слова");
-        buttons.put(Text.START_SEARCH, Text.NEXT_ICON);
+        buttons.put("FIND_ALL", "Искать снова");
+        //buttons.put(Text.START_SEARCH, Text.NEXT_ICON);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
