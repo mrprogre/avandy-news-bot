@@ -32,7 +32,7 @@ public class CommonTest {
 
     @Test
     public void dateToShowFormatChangeTest() {
-        assertEquals(Common.dateToShowFormatChange("Mon Nov 27 18:06:36 MSK 2023"), "18:06 27.11");
+        assertEquals(Common.dateToShowFormatChange("2023-12-13 14:39:06.0"), "14:39 13.12");
     }
 
     @Test

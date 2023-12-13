@@ -68,29 +68,10 @@ public class Common {
         }
     }
 
-
-    // Input: Mon Nov 27 18:06:36 MSK 2023
-    // Output: 11:41 27.11
+    // Input: 2023-12-13 13:39:06.0
+    // Output: 13:39 13.12
     public static String dateToShowFormatChange(String input) {
-        String output = "";
-        String month = input.substring(4, 7);
-
-        switch (month) {
-            case "Jan" -> output = "01";
-            case "Feb" -> output = "02";
-            case "Mar" -> output = "03";
-            case "Apr" -> output = "04";
-            case "May" -> output = "05";
-            case "Jun" -> output = "06";
-            case "Jul" -> output = "07";
-            case "Aug" -> output = "08";
-            case "Sep" -> output = "09";
-            case "Oct" -> output = "10";
-            case "Nov" -> output = "11";
-            case "Dec" -> output = "12";
-        }
-
-        return input.substring(11, 16) + " " + input.substring(8, 10) + "." + output;
+        return input.substring(11, 16) + " " + input.substring(8, 10) + "." + input.substring(5, 7);
     }
 
     public static boolean isValidEmailAddress(String email) {
