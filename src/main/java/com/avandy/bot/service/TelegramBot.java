@@ -723,7 +723,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (timeToExecute.contains(hourNow)) {
                 int counter = findNewsByKeywords(setting.getChatId());
-                log.warn("Scheduler: " + setting.getChatId() + ", найдено " + counter);
+                if (counter > 0) log.warn("Scheduler: " + setting.getChatId() + ", найдено " + counter);
             }
         }
         isAutoSearch.set(false);
