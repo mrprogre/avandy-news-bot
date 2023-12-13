@@ -84,8 +84,6 @@ public class Search {
         List<String> allNewsHash = allNewsRepository.findAllNewsHashByChatId(chatId);
         Set<AllNews> allNewsToSave = new HashSet<>();
         Set<Headline> headlinesToShow = new TreeSet<>();
-        Set<NewsList> newsList = new LinkedHashSet<>();
-        LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
 
         try {
             Iterable<RssList> sources = rssRepository.findAllActiveRss();
@@ -98,17 +96,6 @@ public class Search {
                         String titleHash = Common.getHash(title);
                         Date pubDate = message.getPublishedDate();
                         String link = message.getLink();
-
-                        // Save all headlines
-                        if (!newsListAllHash.contains(titleHash)) {
-                            newsList.add(NewsList.builder()
-                                    .source(sourceRss)
-                                    .title(title)
-                                    .titleHash(titleHash)
-                                    .link(link)
-                                    .pubDate(pubDate)
-                                    .build());
-                        }
 
                         /* ALL NEWS SEARCH */
                         if (searchType.equals("all")) {
@@ -157,8 +144,6 @@ public class Search {
                     log.error(e.getMessage());
                 }
             }
-
-            newsListRepository.saveAll(newsList);
 
             totalNewsCounter = headlinesToShow.size();
 
