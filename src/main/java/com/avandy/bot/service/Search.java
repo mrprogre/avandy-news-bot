@@ -74,7 +74,7 @@ public class Search {
             log.error(e.getMessage());
         }
         long searchTime = System.currentTimeMillis() - start;
-        log.warn("Сохранено новостей - {} за {} мс", newsList.size(), searchTime);
+        log.warn("Сохранено новостей - {} за {} ms", newsList.size(), searchTime);
     }
 
     public Set<Headline> start(Long chatId, String mode, String searchType) {
