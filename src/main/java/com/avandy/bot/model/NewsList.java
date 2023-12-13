@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "news_list")
-public class NewsList {
+public class NewsList implements Comparable<NewsList> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,5 +38,10 @@ public class NewsList {
     @Override
     public int hashCode() {
         return Objects.hash(titleHash);
+    }
+
+    @Override
+    public int compareTo(NewsList n) {
+        return n.getPubDate().compareTo(pubDate);
     }
 }

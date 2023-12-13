@@ -73,6 +73,8 @@ public class Search {
                         if (searchType.equals("all")) {
                             if (title.length() > 15) {
                                 settings.ifPresent(value -> periodInMinutes = Common.timeMapper(value.getPeriodAll()));
+                                //TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodInMinutes + " minutes");
+                                //log.warn("newsListByPeriod = " + newsListByPeriod.size());
 
                                 int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
                                 if (dateDiff != 0) {
