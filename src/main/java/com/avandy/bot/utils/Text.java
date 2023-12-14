@@ -4,13 +4,22 @@ import com.avandy.bot.model.Settings;
 import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
+    public static final String INFO_RUS = "Информация";
+    public static final String SETTINGS_RUS = "Настройки";
+    public static final String LIST_KEYWORDS_RUS = "Ключевые слова";
+    public static final String FIND_RUS = "Выбор вида поиска";
+    public static final String LIST_EXCLUDED_RUS = "Слова исключения";
+    public static final String LIST_RSS_RUS = "Источники RSS";
+    public static final String LIST_TODO_RUS = "Список задач";
+    public static final String START_RUS = "Запуск бота";
+    public static final String DELETE_USER_RUS = "Удалить данные пользователя";
+
     public static final String START_SEARCH = "START_SEARCH";
     public static final String NEXT_ICON = "» » »";
     public static final String LIST_KEYWORDS = "LIST_KEYWORDS";
-    public static final String LIST_KEYWORDS_RUS = "Ключевые слова";
     public static final String ADD = "ADD";
     public static final String ADD_RUS = "Добавить";
-
+    public static final String FIND_AGAIN_RUS = "Искать снова";
     public static final String UPDATE_PERIOD_CHANGED = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
     public static final String SCHEDULER_CHANGED = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
     public static final String EXCLUDED_CHANGED = EmojiParser.parseToUnicode("Режим исключения заголовков переключён ✔️");
@@ -20,7 +29,6 @@ public class Text {
     public static final String DELETE_ALL_KEYWORDS = "Удалены все ключевые слова ❌";
     public static final String DELETE_ALL_EXCLUDED = "Удалены все слова-исключения ❌";
     public static final String WORD_IS_EXISTS = "Слово уже есть в списке: ";
-
 
 
     public static final String INFO = """
