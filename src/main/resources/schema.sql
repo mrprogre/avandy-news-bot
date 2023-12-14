@@ -6,7 +6,7 @@ create table if not exists rss_list
     link      varchar(512),
     is_active integer default 1,
     position  INTEGER default 100,
-    add_date  timestamp,
+    add_date  timestamp default current_timestamp::timestamp,
     country   varchar(128),
     constraint ui_rss_list_chat_id_link unique (chat_id, link)
 );
