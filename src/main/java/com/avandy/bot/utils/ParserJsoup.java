@@ -7,7 +7,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +26,7 @@ public class ParserJsoup {
 
         try {
             Document document = Jsoup.connect(url)
-                    .timeout(3000)
+                    .timeout(3600)
                     .get();
 
             Elements news = document.getElementsByTag("item");
@@ -45,8 +47,10 @@ public class ParserJsoup {
                 message.setPubDate(pubDate);
                 messages.add(message);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error(e.getMessage());
+        } catch (ParseException e) {
+            log.error("ParseException: " + e.getMessage());
         }
         return messages;
     }
