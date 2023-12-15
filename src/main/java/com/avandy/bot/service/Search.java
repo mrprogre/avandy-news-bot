@@ -38,7 +38,7 @@ public class Search {
         this.newsListRepository = newsListRepository;
     }
 
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void scheduler() {
         long start = System.currentTimeMillis();
 
