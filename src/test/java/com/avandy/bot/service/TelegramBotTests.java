@@ -85,7 +85,7 @@ public class TelegramBotTests {
                 .contains("Источники новостей");
 
         verify(rssRepository, times(1))
-                .findAllActiveRss();
+                .findAllActiveSources();
     }
 
     @Test

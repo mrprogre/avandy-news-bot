@@ -360,7 +360,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void getRssList(long chatId) {
-        Iterable<RssList> sources = rssRepository.findAllActiveRss();
+        Iterable<RssList> sources = rssRepository.findAllActiveSources();
 
         StringJoiner joiner = new StringJoiner(", ");
         for (RssList item : sources) {
