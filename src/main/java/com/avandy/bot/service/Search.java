@@ -4,6 +4,7 @@ import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
 import com.avandy.bot.utils.Parser;
+import com.avandy.bot.utils.ParserJsoup;
 import com.rometools.rome.feed.synd.SyndEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,19 @@ public class Search {
         this.newsListRepository = newsListRepository;
     }
 
-    @Scheduled(cron = "0 */5 * * * ?")
-    public void downloadNewsByPeriodFromDatabase() {
+    @Scheduled(cron = "0 */1 * * * ?")
+    public void scheduler() {
         long start = System.currentTimeMillis();
+
+        int countRome = downloadNewsByRome();
+        int countJsoup = downloadNewsByJsoup();
+
+        long searchTime = System.currentTimeMillis() - start;
+        log.warn("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
+                countRome, countJsoup, searchTime);
+    }
+
+    public int downloadNewsByRome() {
         Set<NewsList> newsList = new LinkedHashSet<>();
         LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
 
@@ -73,8 +84,44 @@ public class Search {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        long searchTime = System.currentTimeMillis() - start;
-        log.warn("Сохранено новостей - {} за {} ms", newsList.size(), searchTime);
+        return newsList.size();
+    }
+
+    public int downloadNewsByJsoup() {
+        Set<NewsList> newsList = new LinkedHashSet<>();
+        LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
+
+        try {
+            Iterable<RssList> sources = rssRepository.findAllActiveNoRss();
+
+            for (RssList source : sources) {
+                try {
+                    for (Message message : new ParserJsoup().parse(source.getLink())) {
+                        String sourceRss = source.getSource();
+                        String title = message.getTitle().trim();
+                        String titleHash = Common.getHash(title);
+                        Date pubDate = message.getPubDate();
+                        String link = message.getLink();
+
+                        if (!newsListAllHash.contains(titleHash)) {
+                            newsList.add(NewsList.builder()
+                                    .source(sourceRss)
+                                    .title(title)
+                                    .titleHash(titleHash)
+                                    .link(link)
+                                    .pubDate(pubDate)
+                                    .build());
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+            }
+            newsListRepository.saveAll(newsList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return newsList.size();
     }
 
     public Set<Headline> start(Long chatId, String searchType) {

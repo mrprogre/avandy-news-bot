@@ -23,4 +23,6 @@ public class RssList {
     private Timestamp addDate;
     @Size(max = 128)
     private String country;
+    @Size(max = 8)
+    private String parserType;
 }

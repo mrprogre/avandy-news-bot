@@ -32,6 +32,12 @@ INSERT INTO rss_list (chat_id, source, link, is_active, position, country) VALUE
 INSERT INTO rss_list (chat_id, source, link, is_active, position, country) VALUES (1254981379, 'The Independent', 'http://www.independent.co.uk/rss', 0, 100, 'UK');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, country) VALUES (1254981379, 'Mail.ру', 'https://news.mail.ru/rss/90/', 1, 1, 'Russia');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, country) VALUES (1254981379, '3D News', 'https://3dnews.ru/hardware-news/rss', 1, 100, 'Russia');
+INSERT INTO rss_list (chat_id, source, link, is_active, position, country) VALUES (1254981379, 'Tass', 'https://tass.ru/rss/v2.xml?sections=MjU%3D', 1, 100, 'Russia');
+INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'Актуальные новости', 'https://news2.ru/rss.php', 1, 100, 'Russia', 'no-rss');
+INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'Взгляд', 'https://vz.ru/rss.xml', 1, 100, 'Russia', 'no-rss');
+INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'Metro', 'https://www.metronews.ru/services/materials/press/yandex/', 1, 100, 'Russia', 'no-rss');
+INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'АМИ Trend', 'https://ru.trend.az/rss/trend_all_ru.rss', 1, 100, 'Russia', 'no-rss');
+-- INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, '', '', 1, 100, 'Russia', 'no-rss');
 
 --
 -- DELETE FROM excluded;
