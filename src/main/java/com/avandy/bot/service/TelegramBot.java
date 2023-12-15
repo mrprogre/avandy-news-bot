@@ -487,7 +487,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (userRepository.isUserExistsByChatId(message.getChatId()) == 0) {
             userRepository.save(user);
-            log.warn("New user saved: " + user);
+            log.warn("* * * * * * ДОБАВЛЕН НОВЫЙ ПОЛЬЗОВАТЕЛЬ: {} * * * * * *", user);
             addSettings(message.getChatId());
         }
 
