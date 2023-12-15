@@ -30,6 +30,5 @@ INSERT INTO rss_list (chat_id, source, link, is_active, position, country) VALUE
 INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'Актуальные новости', 'https://news2.ru/rss.php', 1, 100, 'Russia', 'no-rss');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'Взгляд', 'https://vz.ru/rss.xml', 1, 100, 'Russia', 'no-rss');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'Metro', 'https://www.metronews.ru/services/materials/press/yandex/', 1, 100, 'Russia', 'no-rss');
-INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'АМИ Trend', 'https://ru.trend.az/rss/trend_all_ru.rss', 1, 100, 'Russia', 'no-rss');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, 'РИА Новости', 'https://ria.ru/export/rss2/index.xml', 1, 100, 'Russia', 'no-rss');
 -- INSERT INTO rss_list (chat_id, source, link, is_active, position, country, parser_type) VALUES (1254981379, '', '', 1, 100, 'Russia', 'no-rss');
