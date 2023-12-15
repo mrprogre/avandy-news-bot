@@ -152,15 +152,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getKeywordsList(chatId);
 
             } else if (messageText.startsWith("/update-start")) {
+                int start = Integer.parseInt(prepareTextToSave(messageText).replaceAll("\\D+", ""));
                 try {
-                    int start = Integer.parseInt(prepareTextToSave(messageText).replaceAll("\\D+", ""));
 
                     if (start < 0 || start > 23) {
                         sendMessage(chatId, "Указано некорректное время. " +
                                 "Должна быть цифра от 0 до 23 включительно");
                         prefix = "/update-start ";
                     } else {
-                        settingsRepository.updateStart(LocalTime.of(start, 0), chatId);
+                        settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
                         sendMessage(chatId, EmojiParser.parseToUnicode("Время старта автопоиска установлено ✔️"));
                         getSettings(chatId);
                         prefix = "";
