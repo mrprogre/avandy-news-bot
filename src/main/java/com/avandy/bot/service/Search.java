@@ -53,36 +53,31 @@ public class Search {
     public int downloadNewsByRome() {
         Set<NewsList> newsList = new LinkedHashSet<>();
         LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
+        Iterable<RssList> sources = rssRepository.findAllActiveRss();
 
         try {
-            Iterable<RssList> sources = rssRepository.findAllActiveRss();
-
             for (RssList source : sources) {
-                try {
-                    for (SyndEntry message : new Parser().parseFeed(source.getLink()).getEntries()) {
-                        String sourceRss = source.getSource();
-                        String title = message.getTitle().trim();
-                        String titleHash = Common.getHash(title);
-                        Date pubDate = message.getPublishedDate();
-                        String link = message.getLink();
+                for (SyndEntry message : new Parser().parseFeed(source.getLink()).getEntries()) {
+                    String sourceRss = source.getSource();
+                    String title = message.getTitle().trim();
+                    String titleHash = Common.getHash(title);
+                    Date pubDate = message.getPublishedDate();
+                    String link = message.getLink();
 
-                        if (!newsListAllHash.contains(titleHash)) {
-                            newsList.add(NewsList.builder()
-                                    .source(sourceRss)
-                                    .title(title)
-                                    .titleHash(titleHash)
-                                    .link(link)
-                                    .pubDate(pubDate)
-                                    .build());
-                        }
+                    if (!newsListAllHash.contains(titleHash)) {
+                        newsList.add(NewsList.builder()
+                                .source(sourceRss)
+                                .title(title)
+                                .titleHash(titleHash)
+                                .link(link)
+                                .pubDate(pubDate)
+                                .build());
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
             }
             newsListRepository.saveAll(newsList);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + "\n downloadNewsBy Rome");
         }
         return newsList.size();
     }
@@ -90,36 +85,32 @@ public class Search {
     public int downloadNewsByJsoup() {
         Set<NewsList> newsList = new LinkedHashSet<>();
         LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
+        Iterable<RssList> sources = rssRepository.findAllActiveNoRss();
 
         try {
-            Iterable<RssList> sources = rssRepository.findAllActiveNoRss();
 
             for (RssList source : sources) {
-                try {
-                    for (Message message : new ParserJsoup().parse(source.getLink())) {
-                        String sourceRss = source.getSource();
-                        String title = message.getTitle().trim();
-                        String titleHash = Common.getHash(title);
-                        Date pubDate = message.getPubDate();
-                        String link = message.getLink();
+                for (Message message : new ParserJsoup().parse(source.getLink())) {
+                    String sourceRss = source.getSource();
+                    String title = message.getTitle().trim();
+                    String titleHash = Common.getHash(title);
+                    Date pubDate = message.getPubDate();
+                    String link = message.getLink();
 
-                        if (!newsListAllHash.contains(titleHash)) {
-                            newsList.add(NewsList.builder()
-                                    .source(sourceRss)
-                                    .title(title)
-                                    .titleHash(titleHash)
-                                    .link(link)
-                                    .pubDate(pubDate)
-                                    .build());
-                        }
+                    if (!newsListAllHash.contains(titleHash)) {
+                        newsList.add(NewsList.builder()
+                                .source(sourceRss)
+                                .title(title)
+                                .titleHash(titleHash)
+                                .link(link)
+                                .pubDate(pubDate)
+                                .build());
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
                 }
             }
             newsListRepository.saveAll(newsList);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + "\n downloadNewsBy Jsoup");
         }
         return newsList.size();
     }
