@@ -725,18 +725,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(1254981379, "<b>Message</b> from " + chatId + "\n" + text);
     }
 
-    @Scheduled(cron = "${cron.scheduler}")
+    @Scheduled(cron = "${cron.search.keywords}")
     private void autoSearchByKeywords() {
         Integer hourNow = LocalTime.now().getHour();
         isAutoSearch.set(true);
-        List<Settings> usersSettings = settingsRepository.findAllByScheduler();
 
+        List<Settings> usersSettings = settingsRepository.findAllByScheduler();
         for (Settings setting : usersSettings) {
             List<Integer> timeToExecute = Common.getTimeToExecute(setting.getStart(), setting.getPeriod());
+            String username = userRepository.findNameByChatId(setting.getChatId());
 
             if (timeToExecute.contains(hourNow)) {
                 int counter = findNewsByKeywords(setting.getChatId());
-                if (counter > 0) log.warn("Scheduler: " + setting.getChatId() + ", найдено " + counter);
+                if (counter > 0) log.warn("Автопоиск ключевых слов. Пользователь: {}, найдено {}", username, counter);
             }
         }
         isAutoSearch.set(false);
