@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,8 @@ public class ParserJsoup {
                 message.setPubDate(pubDate);
                 messages.add(message);
             }
+        } catch (SocketTimeoutException e) {
+            log.info("Read timeout: " + url + " " + e.getMessage());
         } catch (IOException e) {
             log.error(e.getMessage());
         } catch (ParseException e) {
