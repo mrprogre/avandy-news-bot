@@ -46,8 +46,10 @@ public class Search {
         int countJsoup = downloadNewsByJsoup();
 
         long searchTime = System.currentTimeMillis() - start;
-        log.warn("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
-                countRome, countJsoup, searchTime);
+        if (countRome > 0 && countJsoup > 0) {
+            log.warn("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
+                    countRome, countJsoup, searchTime);
+        }
     }
 
     public int downloadNewsByRome() {
