@@ -49,7 +49,7 @@ public class ParserJsoup {
                 messages.add(message);
             }
         } catch (SocketTimeoutException e) {
-            log.info("Read timeout: " + url + " " + e.getMessage());
+            log.error("Read timeout: " + url + " " + e.getMessage());
         } catch (IOException e) {
             log.error(e.getMessage());
         } catch (ParseException e) {

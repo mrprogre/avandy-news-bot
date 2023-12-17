@@ -6,6 +6,7 @@ import com.avandy.bot.utils.Common;
 import com.avandy.bot.utils.Parser;
 import com.avandy.bot.utils.ParserJsoup;
 import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.io.FeedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -78,8 +79,10 @@ public class Search {
                 }
             }
             newsListRepository.saveAll(newsList);
+        } catch (FeedException f) {
+            log.warn(f.getMessage() + "\ndownloadNewsBy Rome FeedException\n sources: " + sources);
         } catch (Exception e) {
-            log.error(e.getMessage() + "\n downloadNewsBy Rome");
+            log.error(e.getMessage() + "\ndownloadNewsBy Rome Exception\n sources: " + sources);
         }
         return newsList.size();
     }
