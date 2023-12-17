@@ -9,6 +9,7 @@ import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -725,8 +726,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(1254981379, "<b>Message</b> from " + chatId + "\n" + text);
     }
 
+    @Async
     @Scheduled(cron = "${cron.search.keywords}")
-    private void autoSearchByKeywords() {
+    protected void autoSearchByKeywords() {
         Integer hourNow = LocalTime.now().getHour();
         isAutoSearch.set(true);
 
