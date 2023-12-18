@@ -157,10 +157,11 @@ public class Search {
                 if (title.length() > 15) {
                     int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
                     if (dateDiff != 0) {
-                        Headline ror = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);
+                        Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);
 
+                        headlinesForTopTen.add(row);
                         if (!allNewsHash.contains(titleHash)) {
-                            headlinesToShow.add(ror);
+                            headlinesToShow.add(row);
                         }
                     }
                 }
@@ -181,9 +182,6 @@ public class Search {
                 }
             }
         }
-
-        // для топ 10 должны видеть полную картину дня без удаления заголовков
-        headlinesForTopTen.addAll(headlinesToShow);
 
         totalNewsCounter = headlinesToShow.size();
         // remove titles contains excluded words

@@ -507,3 +507,12 @@ INSERT INTO top_ten_excluded (word) VALUES ('Шойгу');
 INSERT INTO top_ten_excluded (word) VALUES ('2024');
 INSERT INTO top_ten_excluded (word) VALUES ('для');
 INSERT INTO top_ten_excluded (word) VALUES ('что');
+INSERT INTO top_ten_excluded (word) VALUES ('без');
+INSERT INTO top_ten_excluded (word) VALUES ('год');
+INSERT INTO top_ten_excluded (word) VALUES ('под');
+INSERT INTO top_ten_excluded (word) VALUES ('его');
+INSERT INTO top_ten_excluded (word) VALUES ('лет');
+INSERT INTO top_ten_excluded (word) VALUES ('при');
+INSERT INTO top_ten_excluded (word) VALUES ('заявил,');
+INSERT INTO top_ten_excluded (word) VALUES ('млн');
+
