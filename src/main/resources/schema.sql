@@ -87,3 +87,12 @@ create table if not exists news_list
     add_date   timestamp default current_timestamp::timestamp,
     constraint ui_news_list unique (title_hash)
 );
+
+create table if not exists top_ten_excluded
+(
+    id       serial,
+    word     varchar(32),
+    user_id  bigint,
+    add_date timestamp default current_timestamp::timestamp,
+    constraint ui_top_ten_excluded unique (word)
+);

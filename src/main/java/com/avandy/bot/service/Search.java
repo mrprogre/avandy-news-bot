@@ -190,7 +190,6 @@ public class Search {
         }
         filteredNewsCounter = headlinesToShow.size();
 
-
         AllNews allNewsRow;
         for (Headline line : headlinesToShow) {
             allNewsRow = new AllNews();
