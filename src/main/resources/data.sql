@@ -505,3 +505,5 @@ INSERT INTO top_ten_excluded (word) VALUES ('школьной');
 INSERT INTO top_ten_excluded (word) VALUES ('заранее');
 INSERT INTO top_ten_excluded (word) VALUES ('Шойгу');
 INSERT INTO top_ten_excluded (word) VALUES ('2024');
+INSERT INTO top_ten_excluded (word) VALUES ('для');
+INSERT INTO top_ten_excluded (word) VALUES ('что');
