@@ -26,7 +26,7 @@ public class Search {
     private final AllNewsRepository allNewsRepository;
     private final ExcludedRepository excludedRepository;
     private final NewsListRepository newsListRepository;
-    public static Set<Headline> headlinesToTopTen = new TreeSet<>();
+    public static Set<Headline> headlinesForTopTen;
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
@@ -132,6 +132,7 @@ public class Search {
         Set<AllNews> allNewsToSave = new HashSet<>();
         Set<Headline> headlinesToShow = new TreeSet<>();
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
+        headlinesForTopTen = new TreeSet<>();
 
         if (searchType.equals("all")) {
             settings.ifPresentOrElse(value -> periodInMinutes = Common.timeMapper(value.getPeriodAll()),
@@ -182,7 +183,7 @@ public class Search {
         }
 
         // для топ 10 должны видеть полную картину дня без удаления заголовков
-        headlinesToTopTen.addAll(headlinesToShow);
+        headlinesForTopTen.addAll(headlinesToShow);
 
         totalNewsCounter = headlinesToShow.size();
         // remove titles contains excluded words
