@@ -738,7 +738,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             for (String s : topTen) {
                 stringBuilder.append(s);
             }
-            sendMessage(chatId, "<b>Top 10</b>\n" + stringBuilder);
+            sendMessage(chatId, "<b>Топ 10 слов за " + settingsRepository.getPeriodAllByChatId(chatId) +
+                    "</b>\n" + stringBuilder);
         }
     }
 
