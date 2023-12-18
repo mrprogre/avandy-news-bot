@@ -12,7 +12,7 @@ public class Text {
     public static final String LIST_RSS_RUS = "Источники RSS";
     public static final String LIST_TODO_RUS = "Список задач";
     public static final String START_RUS = "Запуск бота";
-    public static final String DELETE_USER_RUS = "Удалить данные пользователя";
+    //public static final String DELETE_USER_RUS = "Удалить данные пользователя";
 
     public static final String START_SEARCH = "START_SEARCH";
     public static final String NEXT_ICON = "» » »";
@@ -56,11 +56,19 @@ public class Text {
 
     public static String getSettingsText(Settings x, String scheduler) {
         return "<b>Настройки</b>\n" +
+                "<b>1. Интервал</b>: <b>-" + x.getPeriod() + "</b>\n" +
+                "Глубина поиска новостей по <b>ключевым словам</b> от текущего момента минус интервал" + "\n" +
                 "- - - - - -\n" +
-                "<b>1. Интервал</b> поиска (<b>ключевые слова</b>): минус <b>" + x.getPeriod() + "</b>\n" +
-                "<b>2. Интервал</b> поиска (<b>все новости</b>): минус <b>" + x.getPeriodAll() + "</b>\n" +
-                "<b>3. Автопоиск</b> по ключевым словам: <b>" + x.getScheduler() + "</b>\n" +
-                "<b>4. Исключение</b> заголовков: <b>" + x.getExcluded() + "</b>\n" +
+                "<b>2. Интервал</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
+                "Глубина поиска <b>всех новостей</b> от текущего момента минус интервал" + "\n" +
+                "- - - - - -\n" +
+                "<b>3. Автопоиск: " + x.getScheduler() + "</b>\n" +
+                "Автоматический запуск поиска по <b>ключевым словам</b> за период, указанный в п.1, и с частотой, указанной в п.5" + "\n" +
+                "- - - - - -\n" +
+                "<b>4. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
+                "<b>on</b> - исключение новостей, которые содержат слова-исключения\n" +
+                "<b>off</b> - показывать все новости без исключения\n" +
+                "- - - - - -\n" +
                 scheduler +
                 "- - - - - -\n" +
                 "Параметры меняются после нажатия на кнопки";

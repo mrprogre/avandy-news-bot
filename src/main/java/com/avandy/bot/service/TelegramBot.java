@@ -646,7 +646,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Set<Headline> headlines = search.start(chatId, "all");
 
         // Show top ten
-        List<String> topTen = getTopTen(headlines);
+        List<String> topTen = getTopTen();
         showTopTen(chatId, topTen);
 
         int counterParts = 1;
@@ -697,7 +697,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Set<Headline> headlines = search.start(chatId, "keywords");
 
         // Show top ten
-        List<String> topTen = getTopTen(headlines);
+        List<String> topTen = getTopTen();
         showTopTen(chatId, topTen);
 
         int counterParts = 1;
@@ -1046,10 +1046,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Top 10 words by search period
-    private List<String> getTopTen(Set<Headline> headlines) {
+    private List<String> getTopTen() {
         Map<String, Integer> wordsCount = new HashMap<>();
 
-        for (Headline headline : headlines) {
+        for (Headline headline : Search.headlinesToTopTen) {
             String[] substr = headline.getTitle().split(" ");
             for (String s : substr) {
                 if (s.length() > 2) {
