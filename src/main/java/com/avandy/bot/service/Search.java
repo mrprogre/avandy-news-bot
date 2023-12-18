@@ -80,9 +80,13 @@ public class Search {
             }
             newsListRepository.saveAll(newsList);
         } catch (FeedException f) {
-            log.warn(f.getMessage() + "\ndownloadNewsBy Rome FeedException\n sources: " + sources);
+            if (f.getMessage().contains("Invalid XML")) {
+                log.info("downloadNewsByRome FeedException: " + f.getMessage());
+            } else {
+                log.warn("downloadNewsByRome FeedException: " + f.getMessage());
+            }
         } catch (Exception e) {
-            log.error(e.getMessage() + "\ndownloadNewsBy Rome Exception\n sources: " + sources);
+            log.error("downloadNewsByRome Exception: " + e.getMessage());
         }
         return newsList.size();
     }
