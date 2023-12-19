@@ -438,14 +438,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                     String schedSettings = "";
 
                     if (x.getScheduler().equals("on")) {
-                        String text;
-                        if (x.getPeriod().equals("1h")) {
-                            text = " (запуск каждый час)\n";
-                        } else if (x.getPeriod().equals("2h")) {
-                            text = " (запуск каждые 2 часа)\n";
-                        } else {
-                            text = " (часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
-                        }
+                        String text = switch (x.getPeriod()) {
+                            case "1h" -> " (запуск каждый час)\n";
+                            case "2h" -> " (запуск каждые 2 часа)\n";
+                            case "24h", "48h", "72h" -> " (запуск один раз в сутки)\n";
+                            default ->
+                                    " (часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
+                        };
 
                         schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
                     }
