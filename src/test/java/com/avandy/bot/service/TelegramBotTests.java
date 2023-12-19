@@ -113,7 +113,7 @@ public class TelegramBotTests {
         verify(keywordRepository, times(3))
                 .save(any());
         assertThat(actual.get(0).getText())
-                .contains("Добавлено ключевых слов - 3");
+                .contains("Добавлено слов - 3 ✔");
     }
 
     @Test
