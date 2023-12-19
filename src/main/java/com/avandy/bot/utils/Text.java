@@ -8,7 +8,7 @@ public class Text {
     public static final String SETTINGS_RUS = "Настройки";
     public static final String LIST_KEYWORDS_RUS = "Ключевые слова";
     public static final String FIND_RUS = "Выбор вида поиска";
-    public static final String TOP_10_RUS = "Топ 10 слов за период";
+    public static final String TOP_10_RUS = "Топ слов за период";
     public static final String LIST_EXCLUDED_RUS = "Слова исключения";
     public static final String LIST_RSS_RUS = "Источники RSS";
     public static final String LIST_TODO_RUS = "Список задач";

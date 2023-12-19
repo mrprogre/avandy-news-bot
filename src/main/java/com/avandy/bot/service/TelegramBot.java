@@ -58,7 +58,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/excluded", LIST_EXCLUDED_RUS));
         listOfCommands.add(new BotCommand("/keywords", LIST_KEYWORDS_RUS));
         listOfCommands.add(new BotCommand("/find", FIND_RUS));
-        listOfCommands.add(new BotCommand("/top10", TOP_10_RUS));
+        listOfCommands.add(new BotCommand("/top" + TOP_TEN_SHOW_LIMIT, TOP_10_RUS));
         listOfCommands.add(new BotCommand("/rss", LIST_RSS_RUS));
         listOfCommands.add(new BotCommand("/todo", LIST_TODO_RUS));
         listOfCommands.add(new BotCommand("/info", INFO_RUS));
@@ -195,7 +195,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (messageText.startsWith("Поиск по словам")) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
-            } else if (messageText.startsWith("Топ 10")) {
+            } else if (messageText.startsWith("Топ " + TOP_TEN_SHOW_LIMIT)) {
                 showTopTen(chatId);
 
             } else if (messageText.startsWith("Поиск общий")) {
@@ -209,7 +209,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/find" -> initSearchButtons(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/keywords" -> getKeywordsList(chatId);
-                    case "/top10" -> showTopTen(chatId);
+                    case "/top" + TOP_TEN_SHOW_LIMIT -> showTopTen(chatId);
                     case "/rss" -> getRssList(chatId);
                     case "/excluded" -> getExcludedList(chatId);
                     default -> sendMessage(chatId, "Данная команда не существует");
@@ -324,13 +324,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "NO_BUTTON" -> sendMessage(chatId, NO_BUTTON_TEXT);
                 case "DELETE_YES" -> removeUser(chatId);
 
-                case "ADD_TOP10" -> {
+                case "ADD_TOP" -> {
                     prefix = "/addtop10 ";
                     cancelButton(chatId, "Введите слово (если несколько - через запятую)");
                 }
-                case "LIST_TOP10" -> getTopTenWordsList(chatId);
-                case "GET_TOP10" -> showTopTen(chatId);
-                case "DELETE_TOP10" -> {
+                case "LIST_TOP" -> getTopTenWordsList(chatId);
+                case "GET_TOP" -> showTopTen(chatId);
+                case "DELETE_TOP" -> {
                     prefix = "/remove-top-ten ";
                     cancelButton(chatId, "Введите слова для удаления (разделять запятой)");
                 }
@@ -1102,7 +1102,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
         row.add("Поиск общий");
         row.add("Поиск по словам");
-        row.add("Топ 10");
+        row.add("Топ " + TOP_TEN_SHOW_LIMIT);
 
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
@@ -1115,9 +1115,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("ADD_TOP10", DEL_RUS);
-        buttons.put("LIST_TOP10", "Список");
-        buttons.put("GET_TOP10", "Топ 10");
+        buttons.put("ADD_TOP", DEL_RUS);
+        buttons.put("LIST_TOP", "Список");
+        buttons.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1128,9 +1128,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("DELETE_TOP10", DEL_RUS);
-        buttons.put("ADD_TOP10", ADD_RUS);
-        buttons.put("GET_TOP10", "Топ 10");
+        buttons.put("DELETE_TOP", DEL_RUS);
+        buttons.put("ADD_TOP", ADD_RUS);
+        buttons.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
