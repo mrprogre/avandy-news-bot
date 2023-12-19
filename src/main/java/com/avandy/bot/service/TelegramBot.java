@@ -732,7 +732,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void showTopTen(long chatId) {
         // init
-        search.start(chatId, "all");
+        search.start(chatId, "top10");
 
         List<String> topTen = getTopTen();
         if (topTen.size() > 0) {

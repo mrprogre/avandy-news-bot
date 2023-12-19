@@ -134,12 +134,12 @@ public class Search {
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         headlinesForTopTen = new TreeSet<>();
 
-        if (searchType.equals("all")) {
-            settings.ifPresentOrElse(value -> periodInMinutes = Common.timeMapper(value.getPeriodAll()),
-                    () -> periodInMinutes = 60);
-        } else if (searchType.equals("keywords")) {
+        if (searchType.equals("keywords")) {
             settings.ifPresentOrElse(value -> periodInMinutes = Common.timeMapper(value.getPeriod()),
                     () -> periodInMinutes = 1440);
+        } else {
+            settings.ifPresentOrElse(value -> periodInMinutes = Common.timeMapper(value.getPeriodAll()),
+                    () -> periodInMinutes = 60);
         }
 
         // find news by period
@@ -153,31 +153,40 @@ public class Search {
             String link = news.getLink();
 
             /* ALL NEWS SEARCH */
-            if (searchType.equals("all")) {
-                if (title.length() > 15) {
-                    int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
-                    if (dateDiff != 0) {
-                        Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);
-
-                        headlinesForTopTen.add(row);
-                        if (!allNewsHash.contains(titleHash)) {
-                            headlinesToShow.add(row);
-                        }
-                    }
-                }
-                /* KEYWORDS SEARCH */
-            } else if (searchType.equals("keywords")) {
-                for (Keyword keyword : keywords) {
-                    if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase()) && title.length() > 15) {
+            switch (searchType) {
+                case "all" -> {
+                    if (title.length() > 15) {
                         int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
-
                         if (dateDiff != 0) {
-                            Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 2, titleHash);
+                            Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);
 
                             if (!allNewsHash.contains(titleHash)) {
                                 headlinesToShow.add(row);
                             }
                         }
+                    }
+                }
+                /* KEYWORDS SEARCH */
+                case "keywords" -> {
+                    for (Keyword keyword : keywords) {
+                        if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase()) && title.length() > 15) {
+                            int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
+
+                            if (dateDiff != 0) {
+                                Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 2, titleHash);
+
+                                if (!allNewsHash.contains(titleHash)) {
+                                    headlinesToShow.add(row);
+                                }
+                            }
+                        }
+                    }
+                }
+                case "top10" -> {
+                    int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
+                    if (dateDiff != 0) {
+                        Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);
+                        headlinesForTopTen.add(row);
                     }
                 }
             }

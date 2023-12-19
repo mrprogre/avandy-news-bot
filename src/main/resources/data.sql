@@ -516,4 +516,6 @@ INSERT INTO top_ten_excluded (word) VALUES ('при');
 INSERT INTO top_ten_excluded (word) VALUES ('заявил,');
 INSERT INTO top_ten_excluded (word) VALUES ('млн');
 INSERT INTO top_ten_excluded (word) VALUES ('все');
+INSERT INTO top_ten_excluded (word) VALUES ('чем');
+INSERT INTO top_ten_excluded (word) VALUES ('как');
 
