@@ -55,6 +55,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/excluded", LIST_EXCLUDED_RUS));
         listOfCommands.add(new BotCommand("/keywords", LIST_KEYWORDS_RUS));
         listOfCommands.add(new BotCommand("/find", FIND_RUS));
+        listOfCommands.add(new BotCommand("/top10", TOP_10_RUS));
         listOfCommands.add(new BotCommand("/rss", LIST_RSS_RUS));
         listOfCommands.add(new BotCommand("/todo", LIST_TODO_RUS));
         listOfCommands.add(new BotCommand("/info", INFO_RUS));
@@ -190,6 +191,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/find" -> initSearchButtons(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/keywords" -> getKeywordsList(chatId);
+                    case "/top10" -> showTopTen(chatId);
                     case "/rss" -> getRssList(chatId);
                     case "/excluded" -> getExcludedList(chatId);
                     default -> sendMessage(chatId, "Данная команда не существует");
@@ -418,7 +420,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                             text = " (часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
                         }
 
-                        schedSettings = "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
+                        schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
                     }
 
                     String text = getSettingsText(x, schedSettings);
@@ -645,10 +647,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, "» поиск всех новостей");
         Set<Headline> headlines = search.start(chatId, "all");
 
-        // Show top ten
-        List<String> topTen = getTopTen();
-        showTopTen(chatId, topTen);
-
         int counterParts = 1;
         int showAllCounter = 1;
         if (headlines.size() > 0) {
@@ -732,7 +730,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         return Search.filteredNewsCounter;
     }
 
-    private void showTopTen(long chatId, List<String> topTen) {
+    private void showTopTen(long chatId) {
+        // init
+        search.start(chatId, "all");
+
+        List<String> topTen = getTopTen();
         if (topTen.size() > 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : topTen) {
