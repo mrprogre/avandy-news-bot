@@ -34,6 +34,7 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
+    public static final int TOP_TEN_LIMIT = 60;
     private final BotConfig config;
     private Search search;
     private UserRepository userRepository;
@@ -324,7 +325,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void getTopTenWordsList(long chatId) {
         sendMessage(chatId, topTenRepository.findAllExcludedFromTopTenByChatId(chatId)
                 .stream()
-                .limit(30)
+                .limit(TOP_TEN_LIMIT)
                 .toList()
                 .toString()
                 .replace("[", "")
@@ -1105,7 +1106,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Удаление исключённых слов из мап для анализа
-        List<String> excludedWordsFromAnalysis = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+        Set<String> excludedWordsFromAnalysis = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
         for (String word : excludedWordsFromAnalysis) {
             wordsCount.remove(word);
         }
