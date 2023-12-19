@@ -34,7 +34,8 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
-    public static final int TOP_TEN_LIMIT = 60;
+    public static final int TOP_TEN_SHOW_LIMIT = 20;
+    public static final int TOP_TEN_LIST_LIMIT = 60;
     private final BotConfig config;
     private Search search;
     private UserRepository userRepository;
@@ -803,8 +804,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             for (String s : topTen) {
                 stringBuilder.append(s);
             }
-            showTopTenButtons(chatId, "<b>Топ 10 слов за " + settingsRepository.getPeriodAllByChatId(chatId) +
-                    "</b>\n" + stringBuilder);
+            showTopTenButtons(chatId, "<b>Топ " + TOP_TEN_SHOW_LIMIT + " слов за " +
+                    settingsRepository.getPeriodAllByChatId(chatId) + "</b>\n" + stringBuilder);
         }
     }
 
@@ -1135,9 +1136,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void getTopTenWordsList(long chatId) {
-        showTopTenListButtons(chatId, "<b>Список удалённого из Топ 10</b>\n" +
+        showTopTenListButtons(chatId, "<b>Список удалённого из Топ " + TOP_TEN_SHOW_LIMIT + "</b>\n" +
                 topTenRepository.findAllExcludedFromTopTenByChatId(chatId).stream()
-                        .limit(TOP_TEN_LIMIT)
+                        .limit(TOP_TEN_LIST_LIMIT)
                         .toList()
                         .toString()
                         .replace("[", "")
@@ -1166,7 +1167,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return wordsCount.entrySet().stream()
                 .filter(x -> x.getValue() > 3)
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .limit(10)
+                .limit(TOP_TEN_SHOW_LIMIT)
                 .map(x -> {
                     String format;
                     int length = x.getValue().toString().length();
