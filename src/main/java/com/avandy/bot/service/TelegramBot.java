@@ -131,12 +131,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getTodoList(chatId);
                 prefix = "";
 
-            } else if (messageText.startsWith("/addtop10") && messageText.length() > 9 && messageText.charAt(9) == ' ') {
-                addTop10(messageText, chatId);
-                showTopTen(chatId);
-                prefix = "";
-
-            } else if (messageText.startsWith("/deltodo") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
+           } else if (messageText.startsWith("/deltodo") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
                 deleteTodo(messageText, chatId);
                 getTodoList(chatId);
                 prefix = "";
@@ -152,6 +147,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String[] words = exclude.split(",");
                 addExclude(chatId, words);
                 getExcludedList(chatId);
+
+            } else if (messageText.startsWith("/addtop10") && messageText.length() > 9 && messageText.charAt(9) == ' ') {
+                String exclude = parseMessageText(messageText);
+                String[] words = exclude.split(",");
+                addTopTen(chatId, words);
+                showTopTen(chatId);
 
             } else if (messageText.startsWith("/remove-excluded")) {
                 String keywords = parseMessageText(messageText);
@@ -385,17 +386,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void addTop10(String messageText, long chatId) {
-        String[] texts = messageText
-                .substring(messageText.indexOf(" "))
-                .split(",");
-
-        for (String text : texts) {
-            topTenRepository.save(new TopTenExcluded(chatId, text.trim()));
-        }
-        sendMessage(chatId, DELETE_FROM_TOP_10);
-    }
-
     private void removeUser(long chatId) {
         log.warn("User {} deleted account", userRepository.findById(chatId));
         userRepository.deleteById(chatId);
@@ -552,6 +542,46 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    private void addTopTen(long chatId, String[] words) {
+        int counter = 0;
+        Set<String> topTenWordsByChatId = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+
+        TopTenExcluded topTenExcluded;
+        for (String word : words) {
+            word = word.toLowerCase();
+
+            if (!(word.length() <= 2)) {
+                if (!topTenWordsByChatId.contains(word)) {
+                    topTenExcluded = new TopTenExcluded();
+                    topTenExcluded.setUserId(chatId);
+                    topTenExcluded.setWord(word);
+
+                    try {
+                        topTenRepository.save(topTenExcluded);
+                        counter++;
+                    } catch (Exception e) {
+                        if (e.getMessage().contains("ui_top_ten_excluded")) {
+                            log.info(WORD_IS_EXISTS + word);
+                        }
+                    }
+
+                } else {
+                    sendMessage(chatId, WORD_IS_EXISTS + word);
+                }
+            } else {
+                sendMessage(chatId, MIN_WORD_LENGTH);
+            }
+
+        }
+        if (counter != 0) {
+            sendMessage(chatId, EmojiParser.parseToUnicode(WORDS_ADDED + counter + " ✔️"));
+        } else {
+            sendMessage(chatId, WORDS_IS_NOT_ADD);
+        }
+
+        prefix = "";
+    }
+
     private void addKeyword(long chatId, String[] keywords) {
         int counter = 0;
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
@@ -580,14 +610,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else {
                 sendMessage(chatId, MIN_WORD_LENGTH);
             }
-
         }
         if (counter != 0) {
-            sendMessage(chatId, EmojiParser.parseToUnicode("Добавлено ключевых слов - " + counter + " ✔️"));
+            sendMessage(chatId, EmojiParser.parseToUnicode(WORDS_ADDED + counter + " ✔️"));
         } else {
-            sendMessage(chatId, "Ключевые слова не добавлены");
+            sendMessage(chatId, WORDS_IS_NOT_ADD);
         }
-
         prefix = "";
     }
 
@@ -624,7 +652,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (counter != 0) {
             sendMessage(chatId, EmojiParser.parseToUnicode("Добавлено слов-исключений - " + counter + " ✔️"));
         } else {
-            sendMessage(chatId, "Ключевые слова не добавлены");
+            sendMessage(chatId, WORDS_IS_NOT_ADD);
         }
 
         prefix = "";
