@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TopTenRepository extends JpaRepository<TopTenExcluded, Long> {
 
-    @Query(value = "SELECT lower(word) as word FROM top_ten_excluded", nativeQuery = true)
+    @Query(value = "SELECT lower(word) as word FROM top_ten_excluded ORDER BY id DESC", nativeQuery = true)
     List<String> findAllExcludedFromTopTen();
 
 }

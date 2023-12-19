@@ -130,6 +130,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getTodoList(chatId);
                 prefix = "";
 
+            } else if (messageText.startsWith("/addtop10") && messageText.length() > 9 && messageText.charAt(9) == ' ') {
+                addTop10(messageText, chatId);
+                showTopTen(chatId);
+                prefix = "";
+
             } else if (messageText.startsWith("/deltodo") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
                 deleteTodo(messageText, chatId);
                 getTodoList(chatId);
@@ -305,6 +310,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "YES_BUTTON" -> showAddKeywordsButton(chatId, YES_BUTTON_TEXT);
                 case "NO_BUTTON" -> sendMessage(chatId, NO_BUTTON_TEXT);
                 case "DELETE_YES" -> removeUser(chatId);
+
+                case "ADD_TOP10" -> {
+                    prefix = "/addtop10 ";
+                    cancelButton(chatId, "Введите слово (если несколько - через запятую)");
+                }
+                case "LIST_TOP10" -> sendMessage(chatId, topTenRepository.findAllExcludedFromTopTen().stream()
+                        .limit(30).toList().toString());
+                case "GET_TOP10" -> showTopTen(chatId);
             }
         }
     }
@@ -359,6 +372,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             showTodoAddButton(chatId);
         }
+    }
+
+    private void addTop10(String messageText, long chatId) {
+        String[] texts = messageText
+                .substring(messageText.indexOf(" "))
+                .split(",");
+
+        for (String text : texts) {
+            topTenRepository.save(new TopTenExcluded(text.trim()));
+        }
+        sendMessage(chatId, DELETE_FROM_TOP_10);
     }
 
     private void removeUser(long chatId) {
@@ -740,7 +764,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             for (String s : topTen) {
                 stringBuilder.append(s);
             }
-            sendMessage(chatId, "<b>Топ 10 слов за " + settingsRepository.getPeriodAllByChatId(chatId) +
+            showTopTenButtons(chatId, "<b>Топ 10 слов за " + settingsRepository.getPeriodAllByChatId(chatId) +
                     "</b>\n" + stringBuilder);
         }
     }
@@ -972,6 +996,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons, buttons2, buttons3));
+        executeMessage(message);
+    }
+
+    private void showTopTenButtons(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("ADD_TOP10", "Удалить");
+        buttons.put("LIST_TOP10", "Список");
+        buttons.put("GET_TOP10", "Топ 10");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
     }
 

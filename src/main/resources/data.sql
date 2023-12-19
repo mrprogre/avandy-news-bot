@@ -518,4 +518,6 @@ INSERT INTO top_ten_excluded (word) VALUES ('млн');
 INSERT INTO top_ten_excluded (word) VALUES ('все');
 INSERT INTO top_ten_excluded (word) VALUES ('чем');
 INSERT INTO top_ten_excluded (word) VALUES ('как');
+INSERT INTO top_ten_excluded (word) VALUES ('над');
+INSERT INTO top_ten_excluded (word) VALUES ('2014');
 

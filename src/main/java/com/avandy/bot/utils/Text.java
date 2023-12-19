@@ -22,6 +22,7 @@ public class Text {
     public static final String ADD_RUS = "Добавить";
     public static final String FIND_AGAIN_RUS = "Искать снова";
     public static final String UPDATE_PERIOD_CHANGED = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
+    public static final String DELETE_FROM_TOP_10 = EmojiParser.parseToUnicode("Исключено из Топ 10 ✔️");
     public static final String SCHEDULER_CHANGED = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
     public static final String EXCLUDED_CHANGED = EmojiParser.parseToUnicode("Режим исключения заголовков переключён ✔️");
     public static final String HEADLINES_NOT_FOUND = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
