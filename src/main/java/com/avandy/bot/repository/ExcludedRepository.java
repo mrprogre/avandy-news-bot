@@ -13,8 +13,9 @@ public interface ExcludedRepository extends CrudRepository<Excluded, Long> {
     @Query(value = "SELECT lower(word) as word FROM excluded WHERE chat_id = :chatId", nativeQuery = true)
     List<String> findExcludedByChatId(Long chatId);
 
-    @Query(value = "SELECT lower(word) as word FROM excluded WHERE chat_id = :chatId ORDER BY id DESC LIMIT 30", nativeQuery = true)
-    List<String> findExcludedByChatIdLimit(Long chatId);
+    @Query(value = "SELECT lower(word) as word FROM excluded WHERE chat_id = :chatId ORDER BY id DESC LIMIT :limit",
+            nativeQuery = true)
+    List<String> findExcludedByChatIdLimit(Long chatId, int limit);
 
     @Query(value = "SELECT count(word) FROM excluded WHERE chat_id = :chatId", nativeQuery = true)
     int getExcludedCountByChatId(Long chatId);

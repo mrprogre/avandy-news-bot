@@ -36,6 +36,7 @@ import static com.avandy.bot.utils.Text.*;
 public class TelegramBot extends TelegramLongPollingBot {
     public static final int TOP_TEN_SHOW_LIMIT = 20;
     public static final int TOP_TEN_LIST_LIMIT = 60;
+    public static final int EXCLUDED_LIMIT = 100;
     private final BotConfig config;
     private Search search;
     private UserRepository userRepository;
@@ -476,8 +477,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<String> excludedByChatId = excludedRepository.findExcludedByChatId(chatId);
         if (excludedByChatId.size() >= 400) {
             sendMessage(chatId, "Количество слов-исключений <b>" + excludedByChatId.size() +
-                    "</b>\nПокажу последние <b>30</b>");
-            excludedByChatId = excludedRepository.findExcludedByChatIdLimit(chatId);
+                    "</b>\nПокажу последние <b>" + EXCLUDED_LIMIT + "</b>");
+            excludedByChatId = excludedRepository.findExcludedByChatIdLimit(chatId, EXCLUDED_LIMIT);
         }
 
         if (!excludedByChatId.isEmpty()) {
