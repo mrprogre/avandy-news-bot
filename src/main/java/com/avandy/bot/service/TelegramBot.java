@@ -193,6 +193,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (messageText.startsWith("Поиск по словам")) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
+            } else if (messageText.startsWith("Топ 10")) {
+                showTopTen(chatId);
+
             } else if (messageText.startsWith("Поиск общий")) {
                 new Thread(() -> findAllNews(chatId)).start();
             } else {
@@ -1098,6 +1101,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
         row.add("Поиск общий");
         row.add("Поиск по словам");
+        row.add("Топ 10");
 
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
