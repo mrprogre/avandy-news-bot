@@ -14,9 +14,11 @@ public class TopTenExcluded {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long userId;
     private String word;
 
-    public TopTenExcluded(String word) {
+    public TopTenExcluded(Long userId, String word) {
+        this.userId = userId;
         this.word = word;
     }
 }

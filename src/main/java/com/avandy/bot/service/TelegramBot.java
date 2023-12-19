@@ -315,11 +315,21 @@ public class TelegramBot extends TelegramLongPollingBot {
                     prefix = "/addtop10 ";
                     cancelButton(chatId, "Введите слово (если несколько - через запятую)");
                 }
-                case "LIST_TOP10" -> sendMessage(chatId, topTenRepository.findAllExcludedFromTopTen().stream()
-                        .limit(30).toList().toString());
+                case "LIST_TOP10" -> getTopTenWordsList(chatId);
                 case "GET_TOP10" -> showTopTen(chatId);
             }
         }
+    }
+
+    private void getTopTenWordsList(long chatId) {
+        sendMessage(chatId, topTenRepository.findAllExcludedFromTopTenByChatId(chatId)
+                .stream()
+                .limit(30)
+                .toList()
+                .toString()
+                .replace("[", "")
+                .replace("]", "")
+        );
     }
 
     private void updatePeriod(int period, long chatId) {
@@ -380,7 +390,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 .split(",");
 
         for (String text : texts) {
-            topTenRepository.save(new TopTenExcluded(text.trim()));
+            topTenRepository.save(new TopTenExcluded(chatId, text.trim()));
         }
         sendMessage(chatId, DELETE_FROM_TOP_10);
     }
@@ -758,7 +768,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         // init
         search.start(chatId, "top10");
 
-        List<String> topTen = getTopTen();
+        List<String> topTen = getTopTen(chatId);
         if (topTen.size() > 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : topTen) {
@@ -1082,7 +1092,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Top 10 words by search period
-    private List<String> getTopTen() {
+    private List<String> getTopTen(long chatId) {
         Map<String, Integer> wordsCount = new HashMap<>();
 
         for (Headline headline : Search.headlinesForTopTen) {
@@ -1095,7 +1105,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Удаление исключённых слов из мап для анализа
-        List<String> excludedWordsFromAnalysis = topTenRepository.findAllExcludedFromTopTen();
+        List<String> excludedWordsFromAnalysis = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
         for (String word : excludedWordsFromAnalysis) {
             wordsCount.remove(word);
         }
