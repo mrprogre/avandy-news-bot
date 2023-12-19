@@ -20,6 +20,7 @@ public class Text {
     public static final String LIST_KEYWORDS = "LIST_KEYWORDS";
     public static final String ADD = "ADD";
     public static final String ADD_RUS = "Добавить";
+    public static final String DEL_RUS = "Удалить";
     public static final String FIND_AGAIN_RUS = "Искать снова";
     public static final String UPDATE_PERIOD_CHANGED = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
     public static final String SCHEDULER_CHANGED = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");

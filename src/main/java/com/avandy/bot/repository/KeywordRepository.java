@@ -15,8 +15,9 @@ public interface KeywordRepository extends CrudRepository<Keyword, Long> {
     @Query(value = "SELECT lower(keyword) as keyword FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
     List<String> findKeywordsByChatId(Long chatId);
 
-    @Query(value = "SELECT count(keyword) FROM keywords WHERE lower(keyword) = lower(:keyword)", nativeQuery = true)
-    int isKeywordExists(String keyword);
+    @Query(value = "SELECT count(keyword) FROM keywords WHERE lower(keyword) = lower(:keyword) and chat_id = :chatId",
+            nativeQuery = true)
+    int isKeywordExists(Long chatId, String keyword);
 
     @Query(value = "SELECT count(keyword) FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
     int getKeywordsCountByChatId(Long chatId);
