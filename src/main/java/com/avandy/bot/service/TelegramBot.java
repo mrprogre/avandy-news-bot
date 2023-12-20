@@ -47,6 +47,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private TodoRepository todoRepository;
     private TopTenRepository topTenRepository;
     public static AtomicBoolean isAutoSearch = new AtomicBoolean(false);
+    private static StringBuilder stringBuilder;
     static String prefix = "";
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
@@ -151,10 +152,37 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getExcludedList(chatId);
 
             } else if (messageText.startsWith("/addtop") && messageText.length() > 7 && messageText.charAt(7) == ' ') {
-                String exclude = parseMessageText(messageText);
-                String[] words = exclude.split(",");
-                addTopTen(chatId, words);
-                showTopTen(chatId);
+                ArrayList<String> words = new ArrayList<>();
+                String tops = parseMessageText(messageText);
+                String[] nums = tops.split(",");
+
+                try {
+                    String[] split = stringBuilder.toString().split("\n");
+
+                    for (String num : nums) {
+                        int numInt = Integer.parseInt(num);
+
+                        for (String row : split) {
+                            int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
+                            String rowToAdd = row
+                                    .replaceAll("\\d", "")
+                                    .replaceAll("\\s", "")
+                                    .replaceAll("\\.", "");
+
+                            if (numInt == rowNum) {
+                                words.add(rowToAdd);
+                            }
+                        }
+                    }
+                    addTopTen(chatId, words);
+                    showTopTen(chatId);
+                } catch (NumberFormatException n) {
+                    sendMessage(chatId, "Допустимы только цифры или запятые");
+                    prefix = "";
+                } catch (NullPointerException npe) {
+                    sendMessage(chatId, "Сначала необходимо запустить поиск слов /top" + TOP_TEN_SHOW_LIMIT);
+                    prefix = "";
+                }
 
             } else if (messageText.startsWith("/remove-excluded")) {
                 String keywords = parseMessageText(messageText);
@@ -285,11 +313,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "TODO_LIST" -> getTodoList(chatId);
                 case "TODO_ADD" -> {
                     prefix = "/addtodo ";
-                    cancelButton(chatId, "Введите задачу (если несколько - через точку запятую)");
+                    cancelButton(chatId, "Введите задачу (если несколько, то через точку запятую)");
                 }
                 case "TODO_DEL" -> {
                     prefix = "/deltodo ";
-                    cancelButton(chatId, "Введите номер задачи (если несколько - через запятую)");
+                    cancelButton(chatId, "Введите номер задачи (если несколько, то через запятую)");
                 }
 
                 case "FEEDBACK" -> {
@@ -326,7 +354,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 case "ADD_TOP" -> {
                     prefix = "/addtop ";
-                    cancelButton(chatId, "Введите слово (если несколько - через запятую)");
+                    cancelButton(chatId, "Введите порядковый номер слова для удаления из топа " +
+                            "(если их несколько, то разделяйте запятыми)");
                 }
                 case "LIST_TOP" -> getTopTenWordsList(chatId);
                 case "GET_TOP" -> showTopTen(chatId);
@@ -545,7 +574,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void addTopTen(long chatId, String[] words) {
+    private void addTopTen(long chatId, ArrayList<String> words) {
         int counter = 0;
         Set<String> topTenWordsByChatId = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
 
@@ -1103,7 +1132,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void getTopTenWordsList(long chatId) {
         showTopTenListButtons(chatId, "<b>Список удалённого из Топ " + TOP_TEN_SHOW_LIMIT + "</b> " +
-                "(крайние " +TOP_TEN_LIST_LIMIT + " слов)\n" +
+                "(крайние " + TOP_TEN_LIST_LIMIT + " слов)\n" +
                 topTenRepository.findAllExcludedFromTopTenByChatId(chatId).stream()
                         .limit(TOP_TEN_LIST_LIMIT)
                         .toList()
@@ -1120,7 +1149,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         List<String> topTen = getTopTen(chatId);
         if (topTen.size() > 0) {
-            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder = new StringBuilder();
             String point = ".     ";
 
             for (String s : topTen) {
