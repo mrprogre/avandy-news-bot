@@ -1165,7 +1165,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private List<String> getTopTen(long chatId) {
         Map<String, Integer> wordsCount = new HashMap<>();
 
-        for (Headline headline : Search.headlinesForTopTen) {
+        for (Headline headline : Search.headlinesTopTen) {
             String[] substr = headline.getTitle().replace(",", "").toLowerCase().split(" ");
             for (String word : substr) {
                 if (word.length() > 2) {

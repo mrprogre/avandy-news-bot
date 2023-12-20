@@ -26,7 +26,7 @@ public class Search {
     private final ShowedNewsRepository showedNewsRepository;
     private final ExcludedRepository excludedRepository;
     private final NewsListRepository newsListRepository;
-    public static Set<Headline> headlinesForTopTen;
+    public static Set<Headline> headlinesTopTen;
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
@@ -132,7 +132,7 @@ public class Search {
         Set<ShowedNews> showedNewsToSave = new HashSet<>();
         Set<Headline> headlinesToShow = new TreeSet<>();
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
-        headlinesForTopTen = new TreeSet<>();
+        headlinesTopTen = new TreeSet<>();
 
         if (searchType.equals("keywords")) {
             settings.ifPresentOrElse(value -> periodInMinutes = Common.timeMapper(value.getPeriod()),
@@ -146,74 +146,64 @@ public class Search {
         TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodInMinutes + " minutes");
 
         for (NewsList news : newsListByPeriod) {
-            String sourceRss = news.getSource();
+            String rss = news.getSource();
             String title = news.getTitle().trim();
-            String titleHash = Common.getHash(title);
+            String hash = Common.getHash(title);
             Date pubDate = news.getPubDate();
             String link = news.getLink();
 
-            /* ALL NEWS SEARCH */
-            switch (searchType) {
-                case "all" -> {
-                    if (title.length() > 15) {
-                        int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
-                        if (dateDiff != 0) {
-                            Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);
+            if (Common.compareDates(new Date(), pubDate, periodInMinutes) != 0) {
 
-                            if (!showedNewsHash.contains(titleHash)) {
-                                headlinesToShow.add(row);
+                /* ALL NEWS SEARCH */
+                switch (searchType) {
+                    case "all" -> {
+                        if (title.length() > 15) {
+                            if (!showedNewsHash.contains(hash)) {
+                                headlinesToShow.add(
+                                        new Headline(rss, title, link, pubDate, chatId, 4, hash)
+                                );
                             }
                         }
                     }
-                }
-                /* KEYWORDS SEARCH */
-                case "keywords" -> {
-                    for (Keyword keyword : keywords) {
-                        if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase()) && title.length() > 15) {
-                            int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
 
-                            if (dateDiff != 0) {
-                                Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 2, titleHash);
-
-                                if (!showedNewsHash.contains(titleHash)) {
-                                    headlinesToShow.add(row);
+                    /* KEYWORDS SEARCH */
+                    case "keywords" -> {
+                        for (Keyword keyword : keywords) {
+                            if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase()) && title.length() > 15) {
+                                if (!showedNewsHash.contains(hash)) {
+                                    headlinesToShow.add(new Headline(rss, title, link, pubDate, chatId, 2, hash));
                                 }
                             }
                         }
                     }
-                }
-                case "top" -> {
-                    int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
-                    if (dateDiff != 0) {
-                        Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);
-                        headlinesForTopTen.add(row);
-                    }
+
+                    /* TOP TEN */
+                    case "top" -> headlinesTopTen.add(new Headline(rss, title, link, pubDate, chatId, -1, hash));
                 }
             }
-        }
 
-        totalNewsCounter = headlinesToShow.size();
-        // remove titles contains excluded words
-        if (searchType.equals("all") && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
-            for (String word : allExcludedByChatId) {
-                headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(word.toLowerCase()));
+            totalNewsCounter = headlinesToShow.size();
+            // remove titles contains excluded words
+            if (searchType.equals("all") && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
+                for (String word : allExcludedByChatId) {
+                    headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(word.toLowerCase()));
+                }
+            }
+            filteredNewsCounter = headlinesToShow.size();
+
+            ShowedNews showedNewsRow;
+            for (Headline line : headlinesToShow) {
+                showedNewsRow = new ShowedNews();
+                showedNewsRow.setChatId(line.getChatId());
+                showedNewsRow.setType(line.getType());
+                showedNewsRow.setTitleHash(line.getTitleHash());
+                showedNewsToSave.add(showedNewsRow);
+            }
+
+            if (showedNewsToSave.size() > 0) {
+                showedNewsRepository.saveAll(showedNewsToSave);
             }
         }
-        filteredNewsCounter = headlinesToShow.size();
-
-        ShowedNews showedNewsRow;
-        for (Headline line : headlinesToShow) {
-            showedNewsRow = new ShowedNews();
-            showedNewsRow.setChatId(line.getChatId());
-            showedNewsRow.setType(line.getType());
-            showedNewsRow.setTitleHash(line.getTitleHash());
-            showedNewsToSave.add(showedNewsRow);
-        }
-
-        if (showedNewsToSave.size() > 0) {
-            showedNewsRepository.saveAll(showedNewsToSave);
-        }
-
         return headlinesToShow;
     }
 
