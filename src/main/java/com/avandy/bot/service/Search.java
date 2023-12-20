@@ -23,19 +23,19 @@ public class Search {
     private final SettingsRepository settingsRepository;
     private final KeywordRepository keywordRepository;
     private final RssRepository rssRepository;
-    private final AllNewsRepository allNewsRepository;
+    private final ShowedNewsRepository showedNewsRepository;
     private final ExcludedRepository excludedRepository;
     private final NewsListRepository newsListRepository;
     public static Set<Headline> headlinesForTopTen;
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
-                  RssRepository rssRepository, AllNewsRepository allNewsRepository,
+                  RssRepository rssRepository, ShowedNewsRepository showedNewsRepository,
                   ExcludedRepository excludedRepository, NewsListRepository newsListRepository) {
         this.settingsRepository = settingsRepository;
         this.keywordRepository = keywordRepository;
         this.rssRepository = rssRepository;
-        this.allNewsRepository = allNewsRepository;
+        this.showedNewsRepository = showedNewsRepository;
         this.excludedRepository = excludedRepository;
         this.newsListRepository = newsListRepository;
     }
@@ -128,8 +128,8 @@ public class Search {
     public Set<Headline> start(Long chatId, String searchType) {
         List<Keyword> keywords = keywordRepository.findAllByChatId(chatId);
         List<String> allExcludedByChatId = excludedRepository.findExcludedByChatId(chatId);
-        List<String> allNewsHash = allNewsRepository.findAllNewsHashByChatId(chatId);
-        Set<AllNews> allNewsToSave = new HashSet<>();
+        List<String> showedNewsHash = showedNewsRepository.findShowedNewsHashByChatId(chatId);
+        Set<ShowedNews> showedNewsToSave = new HashSet<>();
         Set<Headline> headlinesToShow = new TreeSet<>();
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         headlinesForTopTen = new TreeSet<>();
@@ -160,7 +160,7 @@ public class Search {
                         if (dateDiff != 0) {
                             Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);
 
-                            if (!allNewsHash.contains(titleHash)) {
+                            if (!showedNewsHash.contains(titleHash)) {
                                 headlinesToShow.add(row);
                             }
                         }
@@ -175,7 +175,7 @@ public class Search {
                             if (dateDiff != 0) {
                                 Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 2, titleHash);
 
-                                if (!allNewsHash.contains(titleHash)) {
+                                if (!showedNewsHash.contains(titleHash)) {
                                     headlinesToShow.add(row);
                                 }
                             }
@@ -201,17 +201,17 @@ public class Search {
         }
         filteredNewsCounter = headlinesToShow.size();
 
-        AllNews allNewsRow;
+        ShowedNews showedNewsRow;
         for (Headline line : headlinesToShow) {
-            allNewsRow = new AllNews();
-            allNewsRow.setChatId(line.getChatId());
-            allNewsRow.setType(line.getType());
-            allNewsRow.setTitleHash(line.getTitleHash());
-            allNewsToSave.add(allNewsRow);
+            showedNewsRow = new ShowedNews();
+            showedNewsRow.setChatId(line.getChatId());
+            showedNewsRow.setType(line.getType());
+            showedNewsRow.setTitleHash(line.getTitleHash());
+            showedNewsToSave.add(showedNewsRow);
         }
 
-        if (allNewsToSave.size() > 0) {
-            allNewsRepository.saveAll(allNewsToSave);
+        if (showedNewsToSave.size() > 0) {
+            showedNewsRepository.saveAll(showedNewsToSave);
         }
 
         return headlinesToShow;
