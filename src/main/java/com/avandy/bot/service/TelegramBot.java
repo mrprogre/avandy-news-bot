@@ -794,21 +794,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         return Search.filteredNewsCounter;
     }
 
-    private void showTopTen(long chatId) {
-        // init
-        search.start(chatId, "top");
-
-        List<String> topTen = getTopTen(chatId);
-        if (topTen.size() > 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String s : topTen) {
-                stringBuilder.append(s);
-            }
-            showTopTenButtons(chatId, "<b>Топ " + TOP_TEN_SHOW_LIMIT + " слов за " +
-                    settingsRepository.getPeriodAllByChatId(chatId) + "</b>\n" + stringBuilder);
-        }
-    }
-
     private void sendFeedback(long chatId, String text) {
         sendMessage(1254981379, "<b>Message</b> from " + chatId + "\n" + text);
     }
@@ -1126,6 +1111,21 @@ public class TelegramBot extends TelegramLongPollingBot {
                         .replace("[", "")
                         .replace("]", "")
         );
+    }
+
+    private void showTopTen(long chatId) {
+        // init
+        search.start(chatId, "top");
+
+        List<String> topTen = getTopTen(chatId);
+        if (topTen.size() > 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String s : topTen) {
+                stringBuilder.append(s);
+            }
+            showTopTenButtons(chatId, "<b>Топ " + TOP_TEN_SHOW_LIMIT + " слов за " +
+                    settingsRepository.getPeriodAllByChatId(chatId) + "</b>\n" + stringBuilder);
+        }
     }
 
     private List<String> getTopTen(long chatId) {
