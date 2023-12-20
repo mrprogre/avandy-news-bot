@@ -182,7 +182,7 @@ public class Search {
                         }
                     }
                 }
-                case "top10" -> {
+                case "top" -> {
                     int dateDiff = Common.compareDates(new Date(), pubDate, periodInMinutes);
                     if (dateDiff != 0) {
                         Headline row = new Headline(sourceRss, title, link, pubDate, chatId, 4, titleHash);

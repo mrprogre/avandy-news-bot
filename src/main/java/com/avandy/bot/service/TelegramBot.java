@@ -796,7 +796,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void showTopTen(long chatId) {
         // init
-        search.start(chatId, "top10");
+        search.start(chatId, "top");
 
         List<String> topTen = getTopTen(chatId);
         if (topTen.size() > 0) {
@@ -1117,7 +1117,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void getTopTenWordsList(long chatId) {
-        showTopTenListButtons(chatId, "<b>Список удалённого из Топ " + TOP_TEN_SHOW_LIMIT + "</b>\n" +
+        showTopTenListButtons(chatId, "<b>Список удалённого из Топ " + TOP_TEN_SHOW_LIMIT + "</b> " +
+                "(крайние " +TOP_TEN_LIST_LIMIT + " слов)\n" +
                 topTenRepository.findAllExcludedFromTopTenByChatId(chatId).stream()
                         .limit(TOP_TEN_LIST_LIMIT)
                         .toList()
