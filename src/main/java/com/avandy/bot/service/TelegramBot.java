@@ -1115,14 +1115,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void showTopTen(long chatId) {
         // init
+        int x = 1;
         search.start(chatId, "top");
 
         List<String> topTen = getTopTen(chatId);
         if (topTen.size() > 0) {
             StringBuilder stringBuilder = new StringBuilder();
+            String point = ".     ";
+
             for (String s : topTen) {
-                stringBuilder.append(s);
+                if (x >= 10) point = ".   ";
+                stringBuilder.append(x++).append(point).append(s);
             }
+
             showTopTenButtons(chatId, "<b>Топ " + TOP_TEN_SHOW_LIMIT + " слов за " +
                     settingsRepository.getPeriodAllByChatId(chatId) + "</b>\n" + stringBuilder);
         }
@@ -1154,11 +1159,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     String format;
                     int length = x.getValue().toString().length();
                     if (length == 1) {
-                        format = "%-7d %s";
-                    } else if (length == 2) {
                         format = "%-6d %s";
-                    } else {
+                    } else if (length == 2) {
                         format = "%-5d %s";
+                    } else {
+                        format = "%-4d %s";
                     }
                     return String.format(format, x.getValue(), x.getKey()) + "\n";
                 })
