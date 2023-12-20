@@ -13,7 +13,7 @@ public class Text {
     public static final String LIST_RSS_RUS = "Источники RSS";
     public static final String LIST_TODO_RUS = "Список задач";
     public static final String START_RUS = "Запуск бота";
-    //public static final String DELETE_USER_RUS = "Удалить данные пользователя";
+    public static final String DELETE_USER_RUS = "Удалить данные пользователя";
 
     public static final String START_SEARCH = "START_SEARCH";
     public static final String NEXT_ICON = "» » »";
