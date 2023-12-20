@@ -150,8 +150,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 addExclude(chatId, words);
                 getExcludedList(chatId);
 
-            } else if (messageText.startsWith("/addtop") && messageText.length() > 9 && messageText.charAt(9) == ' ') {
-                String exclude = parseMessageText(messageText).replaceAll("[^\\da-zA-Zа-яёА-ЯЁ-]", "");
+            } else if (messageText.startsWith("/addtop") && messageText.length() > 7 && messageText.charAt(7) == ' ') {
+                String exclude = parseMessageText(messageText);
                 String[] words = exclude.split(",");
                 addTopTen(chatId, words);
                 showTopTen(chatId);
@@ -1131,10 +1131,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, Integer> wordsCount = new HashMap<>();
 
         for (Headline headline : Search.headlinesForTopTen) {
-            String[] substr = headline.getTitle().split(" ");
-            for (String s : substr) {
-                if (s.length() > 2) {
-                    wordsCount.put(s.toLowerCase(), wordsCount.getOrDefault(s, 0) + 1);
+            String[] substr = headline.getTitle().replace(",", "").toLowerCase().split(" ");
+            for (String word : substr) {
+                if (word.length() > 2) {
+                    wordsCount.put(word, wordsCount.getOrDefault(word, 0) + 1);
                 }
             }
         }
