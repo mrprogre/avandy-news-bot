@@ -150,8 +150,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 addExclude(chatId, words);
                 getExcludedList(chatId);
 
-            } else if (messageText.startsWith("/addtop10") && messageText.length() > 9 && messageText.charAt(9) == ' ') {
-                String exclude = parseMessageText(messageText);
+            } else if (messageText.startsWith("/addtop") && messageText.length() > 9 && messageText.charAt(9) == ' ') {
+                String exclude = parseMessageText(messageText).replaceAll("[^\\da-zA-Zа-яёА-ЯЁ-]", "");
                 String[] words = exclude.split(",");
                 addTopTen(chatId, words);
                 showTopTen(chatId);
@@ -325,7 +325,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "DELETE_YES" -> removeUser(chatId);
 
                 case "ADD_TOP" -> {
-                    prefix = "/addtop10 ";
+                    prefix = "/addtop ";
                     cancelButton(chatId, "Введите слово (если несколько - через запятую)");
                 }
                 case "LIST_TOP" -> getTopTenWordsList(chatId);
@@ -551,7 +551,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         TopTenExcluded topTenExcluded;
         for (String word : words) {
-            word = word.toLowerCase();
 
             if (!(word.length() <= 2)) {
                 if (!topTenWordsByChatId.contains(word)) {
