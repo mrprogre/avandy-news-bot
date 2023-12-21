@@ -201,7 +201,13 @@ public class Search {
             }
 
             if (showedNewsToSave.size() > 0) {
-                showedNewsRepository.saveAll(showedNewsToSave);
+                try {
+                    showedNewsRepository.saveAll(showedNewsToSave);
+                } catch (Exception e) {
+                    if (e.getMessage().contains("ui_showed_news")) {
+                        log.warn(e.getMessage());
+                    }
+                }
             }
         }
         return headlinesToShow;
