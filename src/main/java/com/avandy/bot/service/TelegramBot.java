@@ -437,7 +437,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void startActions(Update update, long chatId) {
-        saveUserToDatabase(update.getMessage());
+        addUser(update.getMessage());
         getReplyKeywordWithSearch(chatId, getString(update.getMessage().getChat().getFirstName()));
         showYesNoOnStart(chatId, "Продолжим?");
     }
@@ -541,7 +541,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return config.getBotName();
     }
 
-    private void saveUserToDatabase(Message message) {
+    private void addUser(Message message) {
         Chat chat = message.getChat();
         User user = new User();
         user.setChatId(message.getChatId());
@@ -727,7 +727,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addSettings(long chatId) {
         Settings settings = new Settings();
         settings.setChatId(chatId);
-        settings.setPeriod("72h");
+        settings.setPeriod("12h");
         settings.setPeriodAll("1h");
         settings.setScheduler("on");
         settings.setStart(LocalTime.of(14, 0));

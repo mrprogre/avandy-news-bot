@@ -96,5 +96,5 @@ create table if not exists top_ten_excluded
     word     varchar(32),
     user_id  bigint,
     add_date timestamp default current_timestamp::timestamp,
-    constraint ui_top_ten_excluded unique (word)
+    constraint ui_top_ten_excluded unique (word, user_id)
 );
