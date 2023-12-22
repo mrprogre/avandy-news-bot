@@ -6,7 +6,8 @@ import com.vdurmont.emoji.EmojiParser;
 public class Text {
     public static String greetingText, letsStartText, noText, yesText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText, listTodoText,
-            startText, deleteUserText, addText, delText, findAgainText, excludeWordText, findText, excludedText;
+            startText, deleteUserText, addText, delText, findAgainText, excludeWordText, findText, excludedText,
+            updateTopText;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -32,6 +33,7 @@ public class Text {
             excludeWordText = "Исключить слова";
             findText = "Поиск";
             excludedText = "Исключённое";
+            updateTopText = "Обновить топ";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -54,6 +56,7 @@ public class Text {
             excludeWordText = "Exclude word";
             findText = "Search";
             excludedText = "Excluded";
+            updateTopText = "Update top";
         }
     }
 
