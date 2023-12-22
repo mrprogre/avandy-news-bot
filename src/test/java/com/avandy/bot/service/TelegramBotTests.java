@@ -1,6 +1,7 @@
 package com.avandy.bot.service;
 
 import com.avandy.bot.repository.*;
+import com.avandy.bot.utils.Text;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -82,7 +83,7 @@ public class TelegramBotTests {
 
         List<SendMessage> actual = argumentCaptor.getAllValues();
         assertThat(actual.get(0).getText())
-                .contains("Источники новостей");
+                .contains(Text.rssSourcesText);
 
         verify(rssRepository, times(1))
                 .findAllActiveSources();
