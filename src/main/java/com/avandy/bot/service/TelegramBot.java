@@ -34,91 +34,86 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
-    public static String interfaceLanguage;
     public static final int TOP_TEN_SHOW_LIMIT = 20;
     public static final int TOP_TEN_LIST_LIMIT = 60;
     public static final int EXCLUDED_LIMIT = 100;
     private final BotConfig config;
-    private Search search;
-    private UserRepository userRepository;
-    private KeywordRepository keywordRepository;
-    private SettingsRepository settingsRepository;
-    private ExcludedRepository excludedRepository;
-    private RssRepository rssRepository;
-    private TodoRepository todoRepository;
-    private TopTenRepository topTenRepository;
+    private final Search search;
+    private final UserRepository userRepository;
+    private final KeywordRepository keywordRepository;
+    private final SettingsRepository settingsRepository;
+    private final ExcludedRepository excludedRepository;
+    private final RssRepository rssRepository;
+    private final TodoRepository todoRepository;
+    private final TopTenRepository topTenRepository;
     public static AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private static StringBuilder stringBuilder;
     static String prefix = "";
 
-    public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
+    @Autowired
+    public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config, Search search,
+                       UserRepository userRepository, KeywordRepository keywordRepository,
+                       SettingsRepository settingsRepository, ExcludedRepository excludedRepository,
+                       RssRepository rssRepository, TodoRepository todoRepository, TopTenRepository topTenRepository) {
         super(botToken);
         this.config = config;
-
-        List<BotCommand> listOfCommands = new LinkedList<>();
-        listOfCommands.add(new BotCommand("/settings", SETTINGS_RUS));
-        listOfCommands.add(new BotCommand("/excluded", LIST_EXCLUDED_RUS));
-        listOfCommands.add(new BotCommand("/keywords", LIST_KEYWORDS_RUS));
-        listOfCommands.add(new BotCommand("/find", FIND_RUS));
-        listOfCommands.add(new BotCommand("/top" + TOP_TEN_SHOW_LIMIT, TOP_20_RUS));
-        listOfCommands.add(new BotCommand("/rss", LIST_RSS_RUS));
-        listOfCommands.add(new BotCommand("/todo", LIST_TODO_RUS));
-        listOfCommands.add(new BotCommand("/info", INFO_RUS));
-        listOfCommands.add(new BotCommand("/delete", DELETE_USER_RUS));
-        listOfCommands.add(new BotCommand("/start", START_RUS));
-
-        try {
-            this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
-        } catch (TelegramApiException e) {
-            log.error(Common.ERROR_TEXT + e.getMessage());
-        }
-    }
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setConsoleSearch(Search search) {
         this.search = search;
-    }
-
-    @Autowired
-    public void setKeywordRepository(KeywordRepository keywordRepository) {
+        this.userRepository = userRepository;
         this.keywordRepository = keywordRepository;
-    }
-
-    @Autowired
-    public void setSettingsRepository(SettingsRepository settingsRepository) {
         this.settingsRepository = settingsRepository;
-    }
-
-    @Autowired
-    public void setExcludedRepository(ExcludedRepository excludedRepository) {
         this.excludedRepository = excludedRepository;
-    }
-
-    @Autowired
-    public void setRssRepository(RssRepository rssRepository) {
         this.rssRepository = rssRepository;
-    }
-
-    @Autowired
-    public void setTopTenRepository(TopTenRepository topTenRepository) {
+        this.todoRepository = todoRepository;
         this.topTenRepository = topTenRepository;
     }
 
-    @Autowired
-    public void setTodoRepository(TodoRepository todoRepository) {
-        this.todoRepository = todoRepository;
-    }
+//    @Autowired
+//    public void setUserRepository(UserRepository userRepository) {
+//        this.userRepository = userRepository;
+//    }
+//
+//    @Autowired
+//    public void setConsoleSearch(Search search) {
+//        this.search = search;
+//    }
+//
+//    @Autowired
+//    public void setKeywordRepository(KeywordRepository keywordRepository) {
+//        this.keywordRepository = keywordRepository;
+//    }
+//
+//    @Autowired
+//    public void setSettingsRepository(SettingsRepository settingsRepository) {
+//        this.settingsRepository = settingsRepository;
+//    }
+//
+//    @Autowired
+//    public void setExcludedRepository(ExcludedRepository excludedRepository) {
+//        this.excludedRepository = excludedRepository;
+//    }
+//
+//    @Autowired
+//    public void setRssRepository(RssRepository rssRepository) {
+//        this.rssRepository = rssRepository;
+//    }
+//
+//    @Autowired
+//    public void setTopTenRepository(TopTenRepository topTenRepository) {
+//        this.topTenRepository = topTenRepository;
+//    }
+//
+//    @Autowired
+//    public void setTodoRepository(TodoRepository todoRepository) {
+//        this.todoRepository = todoRepository;
+//    }
 
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = prefix + update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
+            setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+
             String firstName = update.getMessage().getChat().getFirstName();
             log.warn(firstName + ": [" + messageText + "]");
 
@@ -280,7 +275,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getCallbackQuery().getMessage().getChatId();
 
             switch (callbackData) {
-                case START_SEARCH, "DELETE_NO" -> initSearchButtons(chatId);
+                case "START_SEARCH", "DELETE_NO" -> initSearchButtons(chatId);
 
                 /* FULL SEARCH */
                 case "FIND_ALL" -> new Thread(() -> findAllNews(chatId)).start();
@@ -299,8 +294,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 /* KEYWORDS */
                 case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatId)).start();
-                case LIST_KEYWORDS -> new Thread(() -> getKeywordsList(chatId)).start();
-                case ADD -> {
+                case "LIST_KEYWORDS" -> new Thread(() -> getKeywordsList(chatId)).start();
+                case "ADD" -> {
                     prefix = "/add-keywords ";
                     cancelButton(chatId, "Введите ключевые слова (разделять запятой)");
                 }
@@ -363,13 +358,17 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 case "RU_BUTTON" -> {
                     setLang(chatId, "ru");
-                    getReplyKeywordWithSearch(chatId, getString());
-                    showYesNoOnStart(chatId, LETS_START);
+                    setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+                    getReplyKeywordWithSearch(chatId, greetingText);
+                    showYesNoOnStart(chatId, letsStartText);
+                    createMenuCommands();
                 }
                 case "EN_BUTTON" -> {
                     setLang(chatId, "en");
-                    getReplyKeywordWithSearch(chatId, getString());
-                    showYesNoOnStart(chatId, LETS_START);
+                    setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+                    getReplyKeywordWithSearch(chatId, greetingText);
+                    showYesNoOnStart(chatId, letsStartText);
+                    createMenuCommands();
                 }
 
                 // Обновление периода поиска по ключевым словам
@@ -410,6 +409,26 @@ public class TelegramBot extends TelegramLongPollingBot {
                     cancelButton(chatId, "Введите слова для удаления (разделять запятой)");
                 }
             }
+        }
+    }
+
+    private void createMenuCommands() {
+        List<BotCommand> listOfCommands = new LinkedList<>();
+        listOfCommands.add(new BotCommand("/settings", settingText));
+        listOfCommands.add(new BotCommand("/excluded", listExcludedText));
+        listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
+        listOfCommands.add(new BotCommand("/find", findSelectText));
+        listOfCommands.add(new BotCommand("/top" + TOP_TEN_SHOW_LIMIT, top20Text));
+        listOfCommands.add(new BotCommand("/rss", listRssText));
+        listOfCommands.add(new BotCommand("/todo", listTodoText));
+        listOfCommands.add(new BotCommand("/info", infoText));
+        listOfCommands.add(new BotCommand("/delete", deleteUserText));
+        listOfCommands.add(new BotCommand("/start", startText));
+
+        try {
+            this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
+        } catch (TelegramApiException e) {
+            log.error(Common.ERROR_TEXT + e.getMessage());
         }
     }
 
@@ -485,6 +504,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void startActions(Update update, long chatId) {
         addUser(update.getMessage());
         showLangButtons(chatId, "Choose your language");
+        setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
     }
 
     private static String prepareTextToSave(String messageText) {
@@ -934,8 +954,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId, text);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("NO_BUTTON", "Нет");
-        buttons.put("YES_BUTTON", "Да");
+        buttons.put("NO_BUTTON", noText);
+        buttons.put("YES_BUTTON", yesText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -957,8 +977,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("TODO_DEL", DEL_RUS);
-        buttons.put("TODO_ADD", ADD_RUS);
+        buttons.put("TODO_DEL", delText);
+        buttons.put("TODO_ADD", addText);
         buttons.put("TODO_LIST", "Список");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
@@ -970,7 +990,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("TODO_ADD", ADD_RUS);
+        buttons.put("TODO_ADD", addText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -980,8 +1000,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId, "Подтверждаете удаление пользователя?");
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("DELETE_YES", "Да");
-        buttons.put("DELETE_NO", "Нет");
+        buttons.put("DELETE_YES", yesText);
+        buttons.put("DELETE_NO", noText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1035,9 +1055,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("DELETE_EXCLUDED", DEL_RUS);
-        buttons.put("EXCLUDE", ADD_RUS);
-        buttons.put("FIND_ALL", "Поиск");
+        buttons.put("DELETE_EXCLUDED", delText);
+        buttons.put("EXCLUDE", addText);
+        buttons.put("FIND_ALL", findText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1048,7 +1068,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("EXCLUDE", ADD_RUS);
+        buttons.put("EXCLUDE", addText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1059,8 +1079,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("LIST_EXCLUDED", "Исключения");
-        buttons.put("FIND_ALL", "Поиск");
+        buttons.put("LIST_EXCLUDED", excludedText);
+        buttons.put("FIND_ALL", findText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1071,8 +1091,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put(LIST_KEYWORDS, LIST_KEYWORDS_RUS);
-        buttons.put("FIND_BY_KEYWORDS", "Поиск");
+        buttons.put("LIST_KEYWORDS", listKeywordsText);
+        buttons.put("FIND_BY_KEYWORDS", findText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1083,9 +1103,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("DELETE", DEL_RUS);
-        buttons.put(ADD, ADD_RUS);
-        buttons.put("FIND_BY_KEYWORDS", "Поиск");
+        buttons.put("DELETE", delText);
+        buttons.put("ADD", addText);
+        buttons.put("FIND_BY_KEYWORDS", findText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1096,7 +1116,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put(ADD, ADD_RUS);
+        buttons.put("ADD", addText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1117,9 +1137,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (isOn) {
             buttons3.put("SCHEDULER_START", "5. Старт");
-            buttons3.put(START_SEARCH, NEXT_ICON);
+            buttons3.put("START_SEARCH", "» » »");
         } else {
-            buttons3.put(START_SEARCH, NEXT_ICON);
+            buttons3.put("START_SEARCH", "» » »");
         }
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons, buttons2, buttons3));
@@ -1131,7 +1151,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put(START_SEARCH, NEXT_ICON);
+        buttons.put("START_SEARCH", "» » »");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1143,7 +1163,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("FEEDBACK", "Предложить идею");
-        buttons.put(START_SEARCH, NEXT_ICON);
+        buttons.put("START_SEARCH", "» » »");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1154,9 +1174,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put(LIST_KEYWORDS, LIST_KEYWORDS_RUS);
-        buttons.put("FIND_BY_KEYWORDS", FIND_AGAIN_RUS);
-        //buttons.put(START_SEARCH, NEXT_ICON);
+        buttons.put("LIST_KEYWORDS", listKeywordsText);
+        buttons.put("FIND_BY_KEYWORDS", findAgainText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1167,9 +1186,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("EXCLUDE", "Исключить слова");
-        buttons.put("FIND_ALL", FIND_AGAIN_RUS);
-        //buttons.put(START_SEARCH, NEXT_ICON);
+        buttons.put("EXCLUDE", excludeWordText);
+        buttons.put("FIND_ALL", findAgainText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1229,8 +1247,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
 
-        buttons.put("DELETE_TOP", DEL_RUS);
-        buttons.put("ADD_TOP", ADD_RUS);
+        buttons.put("DELETE_TOP", delText);
+        buttons.put("ADD_TOP", addText);
         buttons.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
@@ -1338,7 +1356,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void setLang(long chatId, String lang) {
-        interfaceLanguage = lang;
+        setInterfaceLanguage(lang);
         settingsRepository.updateLanguage(lang, chatId);
     }
 

@@ -23,6 +23,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Query(value = "SELECT excluded FROM settings WHERE chat_id = :chatId", nativeQuery = true)
     String getExcludedOnOffByChatId(long chatId);
 
+    @Query(value = "SELECT lang FROM settings WHERE chat_id = :chatId", nativeQuery = true)
+    String getLangByChatId(long chatId);
+
     @Query(value = "FROM settings WHERE scheduler = 'on'")
     List<Settings> findAllByScheduler();
 

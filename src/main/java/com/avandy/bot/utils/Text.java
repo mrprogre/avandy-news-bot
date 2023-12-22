@@ -1,30 +1,62 @@
 package com.avandy.bot.utils;
 
 import com.avandy.bot.model.Settings;
-import com.avandy.bot.service.TelegramBot;
 import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
-    public static final String LETS_START = "Продолжим?";
+    public static String greetingText, letsStartText, noText, yesText,
+            infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText, listTodoText,
+            startText, deleteUserText, addText, delText, findAgainText, excludeWordText, findText, excludedText;
 
-    public static final String INFO_RUS = "Информация";
-    public static final String SETTINGS_RUS = "Настройки";
-    public static final String LIST_KEYWORDS_RUS = "Ключевые слова";
-    public static final String FIND_RUS = "Выбор вида поиска";
-    public static final String TOP_20_RUS = "Топ 20 слов за период";
-    public static final String LIST_EXCLUDED_RUS = "Слова исключения";
-    public static final String LIST_RSS_RUS = "Источники RSS";
-    public static final String LIST_TODO_RUS = "Список задач";
-    public static final String START_RUS = "Запуск бота";
-    public static final String DELETE_USER_RUS = "Удалить данные пользователя";
+    public static void setInterfaceLanguage(String lang) {
 
-    public static final String START_SEARCH = "START_SEARCH";
-    public static final String NEXT_ICON = "» » »";
-    public static final String LIST_KEYWORDS = "LIST_KEYWORDS";
-    public static final String ADD = "ADD";
-    public static final String ADD_RUS = "Добавить";
-    public static final String DEL_RUS = "Удалить";
-    public static final String FIND_AGAIN_RUS = "Искать снова";
+        if (lang != null && lang.equals("ru")) {
+            greetingText = EmojiParser.parseToUnicode("Здравствуй! :blush: \n" +
+                    "Я могу найти для тебя важную информацию и отсеять много лишней!");
+            letsStartText = "Продолжим?";
+            noText = "Нет";
+            yesText = "Да";
+            infoText = "Информация";
+            settingText = "Настройки";
+            listKeywordsText = "Ключевые слова";
+            findSelectText = "Выбор вида поиска";
+            top20Text = "Топ 20 слов за период";
+            listExcludedText = "Слова исключения";
+            listRssText = "Источники RSS";
+            listTodoText = "Список задач";
+            startText = "Запуск бота";
+            deleteUserText = "Удалить данные пользователя";
+            addText = "Добавить";
+            delText = "Удалить";
+            findAgainText = "Искать снова";
+            excludeWordText = "Исключить слова";
+            findText = "Поиск";
+            excludedText = "Исключённое";
+        } else {
+            greetingText = EmojiParser.parseToUnicode("Hello! :blush: \n" +
+                    "I can find important information for you and hide a lot of unnecessary information!");
+            letsStartText = "Continue?";
+            noText = "No";
+            yesText = "Yes";
+            infoText = "Information";
+            settingText = "Settings";
+            listKeywordsText = "Keywords";
+            findSelectText = "Selecting a search type";
+            top20Text = "Top 20 words for the period";
+            listExcludedText = "Excluded words";
+            listRssText = "RSS sources";
+            listTodoText = "Task manager";
+            startText = "Bot start";
+            deleteUserText = "Delete user data";
+            addText = "Add";
+            delText = "Delete";
+            findAgainText = "Find again";
+            excludeWordText = "Exclude word";
+            findText = "Search";
+            excludedText = "Excluded";
+        }
+    }
+
     public static final String UPDATE_PERIOD_CHANGED = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
     public static final String SCHEDULER_CHANGED = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
     public static final String EXCLUDED_CHANGED = EmojiParser.parseToUnicode("Режим исключения заголовков переключён ✔️");
@@ -36,7 +68,6 @@ public class Text {
     public static final String WORD_IS_EXISTS = "Слово уже есть в списке: ";
     public static final String WORDS_IS_NOT_ADD = "Слова не добавлены";
     public static final String WORDS_ADDED = "Добавлено слов - ";
-
 
     public static final String INFO = """
             <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
@@ -55,16 +86,6 @@ public class Text {
             На данном этапе мы добавим <b>ключевые слова</b>. Нажми кнопку "Добавить".""";
 
     public static final String NO_BUTTON_TEXT = EmojiParser.parseToUnicode("Good buy! \uD83D\uDC4B");
-
-    public static String getString() {
-        if (TelegramBot.interfaceLanguage.equals("ru")) {
-            return EmojiParser.parseToUnicode("Здравствуй! :blush: \n" +
-                    "Я могу найти для тебя важную информацию и отсеять много лишней!");
-        } else {
-            return EmojiParser.parseToUnicode("Hello! :blush: \n" +
-                    "I can find important information for you and hide a lot of unnecessary information!");
-        }
-    }
 
     public static String getSettingsText(Settings x, String scheduler) {
         return "<b>Настройки</b>\n" +
