@@ -38,33 +38,61 @@ public class TelegramBot extends TelegramLongPollingBot {
     public static final int TOP_TEN_LIST_LIMIT = 60;
     public static final int EXCLUDED_LIMIT = 100;
     private final BotConfig config;
-    private final Search search;
-    private final UserRepository userRepository;
-    private final KeywordRepository keywordRepository;
-    private final SettingsRepository settingsRepository;
-    private final ExcludedRepository excludedRepository;
-    private final RssRepository rssRepository;
-    private final TodoRepository todoRepository;
-    private final TopTenRepository topTenRepository;
+    private Search search;
+    private UserRepository userRepository;
+    private KeywordRepository keywordRepository;
+    private SettingsRepository settingsRepository;
+    private ExcludedRepository excludedRepository;
+    private RssRepository rssRepository;
+    private TodoRepository todoRepository;
+    private TopTenRepository topTenRepository;
     public static AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private static StringBuilder stringBuilder;
     static String prefix = "";
 
-    @Autowired
-    public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config, Search search,
-                       UserRepository userRepository, KeywordRepository keywordRepository,
-                       SettingsRepository settingsRepository, ExcludedRepository excludedRepository,
-                       RssRepository rssRepository, TodoRepository todoRepository, TopTenRepository topTenRepository) {
+    public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
         super(botToken);
         this.config = config;
-        this.search = search;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setConsoleSearch(Search search) {
+        this.search = search;
+    }
+
+    @Autowired
+    public void setKeywordRepository(KeywordRepository keywordRepository) {
         this.keywordRepository = keywordRepository;
+    }
+
+    @Autowired
+    public void setSettingsRepository(SettingsRepository settingsRepository) {
         this.settingsRepository = settingsRepository;
+    }
+
+    @Autowired
+    public void setExcludedRepository(ExcludedRepository excludedRepository) {
         this.excludedRepository = excludedRepository;
+    }
+
+    @Autowired
+    public void setRssRepository(RssRepository rssRepository) {
         this.rssRepository = rssRepository;
-        this.todoRepository = todoRepository;
+    }
+
+    @Autowired
+    public void setTopTenRepository(TopTenRepository topTenRepository) {
         this.topTenRepository = topTenRepository;
+    }
+
+    @Autowired
+    public void setTodoRepository(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
     }
 
     @Override
