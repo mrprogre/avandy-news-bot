@@ -60,13 +60,13 @@ public class TelegramBotTests {
     public void startTest() throws TelegramApiException {
         update.getMessage().setText("/start");
         bot.onUpdateReceived(update);
-        verify(bot, new Times(2)).execute(argumentCaptor.capture());
+        verify(bot, new Times(1)).execute(argumentCaptor.capture());
 
         List<SendMessage> actual = argumentCaptor.getAllValues();
         assertThat(actual.get(0).getChatId())
                 .isEqualTo(update.getMessage().getChatId().toString());
         assertThat(actual.get(0).getText())
-                .contains("Здравствуй");
+                .contains("Choose your language");
 
         verify(userRepository, times(1))
                 .isUserExistsByChatId(update.getMessage().getChatId());
