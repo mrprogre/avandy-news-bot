@@ -67,46 +67,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.topTenRepository = topTenRepository;
     }
 
-//    @Autowired
-//    public void setUserRepository(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-//
-//    @Autowired
-//    public void setConsoleSearch(Search search) {
-//        this.search = search;
-//    }
-//
-//    @Autowired
-//    public void setKeywordRepository(KeywordRepository keywordRepository) {
-//        this.keywordRepository = keywordRepository;
-//    }
-//
-//    @Autowired
-//    public void setSettingsRepository(SettingsRepository settingsRepository) {
-//        this.settingsRepository = settingsRepository;
-//    }
-//
-//    @Autowired
-//    public void setExcludedRepository(ExcludedRepository excludedRepository) {
-//        this.excludedRepository = excludedRepository;
-//    }
-//
-//    @Autowired
-//    public void setRssRepository(RssRepository rssRepository) {
-//        this.rssRepository = rssRepository;
-//    }
-//
-//    @Autowired
-//    public void setTopTenRepository(TopTenRepository topTenRepository) {
-//        this.topTenRepository = topTenRepository;
-//    }
-//
-//    @Autowired
-//    public void setTodoRepository(TodoRepository todoRepository) {
-//        this.todoRepository = todoRepository;
-//    }
-
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
