@@ -7,12 +7,12 @@ public class Text {
     public static String greetingText, letsStartText, noText, yesText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText, listTodoText,
             startText, deleteUserText, addText, delText, findAgainText, excludeWordText, findText, excludedText,
-            updateTopText;
+            updateTopText, undefinedCommandText;
 
     public static void setInterfaceLanguage(String lang) {
 
         if (lang != null && lang.equals("ru")) {
-            greetingText = EmojiParser.parseToUnicode("Здравствуй! :blush: \n" +
+            greetingText = EmojiParser.parseToUnicode("Здравствуй, %s! :blush: \n" +
                     "Я могу найти для тебя важную информацию и отсеять много лишней!");
             letsStartText = "Продолжим?";
             noText = "Нет";
@@ -34,8 +34,9 @@ public class Text {
             findText = "Поиск";
             excludedText = "Исключённое";
             updateTopText = "Обновить топ";
+            undefinedCommandText = "Данная команда не существует";
         } else {
-            greetingText = EmojiParser.parseToUnicode("Hello! :blush: \n" +
+            greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
             letsStartText = "Continue?";
             noText = "No";
@@ -57,6 +58,7 @@ public class Text {
             findText = "Search";
             excludedText = "Excluded";
             updateTopText = "Update top";
+            undefinedCommandText = "Command does not exist";
         }
     }
 

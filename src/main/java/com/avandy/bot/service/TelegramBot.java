@@ -254,7 +254,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/top" + TOP_TEN_SHOW_LIMIT -> showTopTen(chatId);
                     case "/rss" -> getRssList(chatId);
                     case "/excluded" -> getExcludedList(chatId);
-                    default -> sendMessage(chatId, "Данная команда не существует");
+                    default -> sendMessage(chatId, undefinedCommandText);
                 }
             }
             /* CALLBACK DATA */
@@ -347,14 +347,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "RU_BUTTON" -> {
                     setLang(chatId, "ru");
                     setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-                    getReplyKeywordWithSearch(chatId, greetingText);
+                    getReplyKeywordWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
                     showYesNoOnStart(chatId, letsStartText);
                     createMenuCommands();
                 }
                 case "EN_BUTTON" -> {
                     setLang(chatId, "en");
                     setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-                    getReplyKeywordWithSearch(chatId, greetingText);
+                    getReplyKeywordWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
                     showYesNoOnStart(chatId, letsStartText);
                     createMenuCommands();
                 }
@@ -1181,10 +1181,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    private void getReplyKeywordWithSearch(long chatId, String textToSend) {
+    private void getReplyKeywordWithSearch(long chatId, String textToSend, String firstName) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
-        message.setText(textToSend);
+        message.setText(String.format(textToSend, firstName));
 
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);
