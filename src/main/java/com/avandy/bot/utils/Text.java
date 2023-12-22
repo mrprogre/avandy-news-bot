@@ -16,7 +16,8 @@ public class Text {
             addInListText, delFromListText, removeAllText, inputSchedulerStart, addTodoText, delTodoText,
             sendMessageForDevText, actionCanceledText, delFromTopInstText, findByWordFromTopInstText,
             removeFromTopTenListText, taskDeletedText, taskAddedText, taskListText, rssSourcesText,
-            searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText;
+            searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
+            foundNewsText, excludedNewsText;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -104,6 +105,8 @@ public class Text {
             keywordSearchText = "Поиск по <b>ключевым словам</b>";
             keywordSearch2Text = "ключевых слов";
             cancelButtonText = "Отменить";
+            foundNewsText = "Найдено";
+            excludedNewsText = "исключено";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -166,7 +169,7 @@ public class Text {
             allowNumberText = "Only one digit is allowed";
             startSearchBeforeText = "First you need to run a word search /top20";
             incorrectTimeText = "The time specified is incorrect. Must be a number from 0 to 23 inclusive";
-            keywordsSearchText = "Search by words";
+            keywordsSearchText = "Keywords";
             fullSearchText = "Full search";
             addInListText = "Enter words to add to the list (separated by comma)";
             delFromListText = "Enter words to remove from the list (separated by comma)";
@@ -188,6 +191,8 @@ public class Text {
             keywordSearchText = "Search by <b>keywords</b>";
             keywordSearch2Text = "keywords";
             cancelButtonText = "Cancel";
+            foundNewsText = "Found";
+            excludedNewsText = "excluded";
         }
     }
 
@@ -231,7 +236,7 @@ public class Text {
                     default ->
                             " (start time: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search: <b>" + x.getStart() + "</b>" + text;
+                schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
             }
 
             return "<b>Settings</b>\n" +

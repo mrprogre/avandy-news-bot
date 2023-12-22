@@ -799,8 +799,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, String.valueOf(joiner));
             }
 
-            String text = "Найдено <b>" + Search.totalNewsCounter + "</b> " +
-                    "(исключено <b>" + (Search.totalNewsCounter - headlines.size()) + "</b>)";
+            String text = foundNewsText + " <b>" + Search.totalNewsCounter + "</b> (" + excludedNewsText +
+                    " <b>" + (Search.totalNewsCounter - headlines.size()) + "</b>)";
 
             nextButtonAfterAllSearch(chatId, text);
         } else {
@@ -845,7 +845,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, String.valueOf(joiner));
             }
 
-            String text = "Найдено: <b>" + Search.filteredNewsCounter + "</b>";
+            String text = foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b>";
 
             if (!isAutoSearch.get()) {
                 nextButtonAfterKeywordsSearch(chatId, text);
@@ -885,7 +885,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, String.valueOf(joiner));
             }
 
-            String text = "Найдено: <b>" + Search.filteredNewsCounter + "</b>";
+            String text = foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b>";
 
             showTopTenButton(chatId, text);
         } else {
