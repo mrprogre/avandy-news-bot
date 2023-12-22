@@ -45,4 +45,4 @@ https://t.me/AvandyNewsBot
 
 **/start**      - you can start again after deleting user information
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/c72aef82-db3d-4711-b38a-6d86e790ff5a)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/1f1c3e50-1dd6-4c30-b037-4f4425d9c864)
