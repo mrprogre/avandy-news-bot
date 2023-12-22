@@ -164,7 +164,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, "Допустимы только цифры или запятые");
                     prefix = "";
                 } catch (NullPointerException npe) {
-                    sendMessage(chatId, "Сначала необходимо запустить поиск слов /top" + TOP_TEN_SHOW_LIMIT);
+                    sendMessage(chatId, "Сначала необходимо запустить поиск слов /top20");
                     prefix = "";
                 }
 
@@ -194,7 +194,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, "Допустима только одна цифра");
                     prefix = "";
                 } catch (NullPointerException npe) {
-                    sendMessage(chatId, "Сначала необходимо запустить поиск слов /top" + TOP_TEN_SHOW_LIMIT);
+                    sendMessage(chatId, "Сначала необходимо запустить поиск слов /top20");
                     prefix = "";
                 }
 
@@ -237,7 +237,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (messageText.startsWith("Поиск по словам")) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
-            } else if (messageText.startsWith("Топ " + TOP_TEN_SHOW_LIMIT)) {
+            } else if (messageText.startsWith("Top 20")) {
                 showTopTen(chatId);
 
             } else if (messageText.startsWith("Поиск общий")) {
@@ -251,7 +251,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/find" -> initSearchButtons(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/keywords" -> getKeywordsList(chatId);
-                    case "/top" + TOP_TEN_SHOW_LIMIT -> showTopTen(chatId);
+                    case "/top20" -> showTopTen(chatId);
                     case "/rss" -> getRssList(chatId);
                     case "/excluded" -> getExcludedList(chatId);
                     default -> sendMessage(chatId, undefinedCommandText);
@@ -377,8 +377,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "BUTTON_12_ALL" -> updatePeriodAll(12, chatId);
                 case "BUTTON_24_ALL" -> updatePeriodAll(24, chatId);
 
-                case "YES_BUTTON" -> showAddKeywordsButton(chatId, YES_BUTTON_TEXT);
-                case "NO_BUTTON" -> sendMessage(chatId, NO_BUTTON_TEXT);
+                case "YES_BUTTON" -> showAddKeywordsButton(chatId, yesButtonText);
+                case "NO_BUTTON" -> sendMessage(chatId, buyButtonText);
                 case "DELETE_YES" -> removeUser(chatId);
 
                 case "ADD_TOP" -> {
@@ -406,7 +406,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/excluded", listExcludedText));
         listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
         listOfCommands.add(new BotCommand("/find", findSelectText));
-        listOfCommands.add(new BotCommand("/top" + TOP_TEN_SHOW_LIMIT, top20Text));
+        listOfCommands.add(new BotCommand("/top20", top20Text));
         listOfCommands.add(new BotCommand("/rss", listRssText));
         listOfCommands.add(new BotCommand("/todo", listTodoText));
         listOfCommands.add(new BotCommand("/info", infoText));
@@ -475,7 +475,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void removeUser(long chatId) {
         log.warn("User {} deleted account", userRepository.findById(chatId));
         userRepository.deleteById(chatId);
-        String text = EmojiParser.parseToUnicode("Пока! \uD83D\uDC4B");
+        String text = buyButtonText;
         sendMessage(chatId, text);
     }
 
@@ -517,23 +517,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void getSettings(long chatId) {
         Optional<Settings> sets = settingsRepository.findById(chatId).stream().findFirst();
+        String lang = settingsRepository.getLangByChatId(chatId);
 
         sets.ifPresentOrElse(x -> {
-                    String schedSettings = "";
-
-                    if (x.getScheduler().equals("on")) {
-                        String text = switch (x.getPeriod()) {
-                            case "1h" -> " (запуск каждый час)\n";
-                            case "2h" -> " (запуск каждые 2 часа)\n";
-                            case "24h", "48h", "72h" -> " (запуск один раз в сутки)\n";
-                            default ->
-                                    " (часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
-                        };
-
-                        schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
-                    }
-
-                    String text = getSettingsText(x, schedSettings);
+                    String text = getSettingsText(x, lang);
                     getSettingsButtons(chatId, text);
                 },
                 () -> sendMessage(chatId, "Настройки не обнаружены")
@@ -1118,13 +1105,13 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
-        buttons.put("SET_PERIOD", "1. Интервал");
-        buttons.put("SET_PERIOD_ALL", "2. Интервал");
-        buttons2.put("SET_SCHEDULER", "3. Автопоиск");
-        buttons2.put("SET_EXCLUDED", "4. Исключение");
+        buttons.put("SET_PERIOD", "1. " + intervalText);
+        buttons.put("SET_PERIOD_ALL", "2. " + intervalText);
+        buttons2.put("SET_SCHEDULER", "3. " + autoSearchText);
+        buttons2.put("SET_EXCLUDED", "4. " + exclusionText);
 
         if (isOn) {
-            buttons3.put("SCHEDULER_START", "5. Старт");
+            buttons3.put("SCHEDULER_START", "5. " + startSettingsText);
             buttons3.put("START_SEARCH", "» » »");
         } else {
             buttons3.put("START_SEARCH", "» » »");
@@ -1194,7 +1181,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
         row.add("Поиск общий");
         row.add("Поиск по словам");
-        row.add("Топ " + TOP_TEN_SHOW_LIMIT);
+        row.add("Top 20");
 
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
@@ -1210,9 +1197,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
 
-        buttons1.put("LIST_TOP", "Список удалённого");
-        buttons1.put("ADD_TOP", "Удалить из топа");
-        buttons2.put("WORD_SEARCH", "Поиск по позиции");
+        buttons1.put("LIST_TOP", excludedListText);
+        buttons1.put("ADD_TOP", delFromTopText);
+        buttons2.put("WORD_SEARCH", searchByTopWordText);
         buttons2.put("GET_TOP", updateTopText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null));
@@ -1237,14 +1224,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         buttons.put("DELETE_TOP", delText);
         buttons.put("ADD_TOP", addText);
-        buttons.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
+        buttons.put("GET_TOP", "Top 20");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
     }
 
     private void getTopTenWordsList(long chatId) {
-        showTopTenListButtons(chatId, "<b>Список удалённого из Топ " + TOP_TEN_SHOW_LIMIT + "</b> " +
+        showTopTenListButtons(chatId, "<b>Список удалённого из Top 20</b> " +
                 "(крайние " + TOP_TEN_LIST_LIMIT + " слов)\n" +
                 topTenRepository.findAllExcludedFromTopTenByChatId(chatId).stream()
                         .limit(TOP_TEN_LIST_LIMIT)
@@ -1270,7 +1257,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 stringBuilder.append(x++).append(point).append(s);
             }
 
-            showTopTenButtons(chatId, "<b>Топ " + TOP_TEN_SHOW_LIMIT + " слов за " +
+            showTopTenButtons(chatId, "<b>Top 20 слов за " +
                     settingsRepository.getPeriodAllByChatId(chatId) + "</b>\n" + stringBuilder);
         }
     }

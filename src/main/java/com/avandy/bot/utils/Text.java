@@ -9,7 +9,9 @@ public class Text {
             startText, deleteUserText, addText, delText, findAgainText, excludeWordText, findText, excludedText,
             updateTopText, undefinedCommandText, changeIntervalText, schedulerChangedText, excludedChangedText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllKeywordsText, deleteAllExcludedText,
-            wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText;
+            wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText,
+            yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
+            excludedListText, delFromTopText, searchByTopWordText;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -23,7 +25,7 @@ public class Text {
             settingText = "Настройки";
             listKeywordsText = "Ключевые слова";
             findSelectText = "Выбор вида поиска";
-            top20Text = "Топ 20 слов за период";
+            top20Text = "Top 20 слов за период";
             listExcludedText = "Слова исключения";
             listRssText = "Источники RSS";
             listTodoText = "Список задач";
@@ -50,9 +52,26 @@ public class Text {
             wordsIsNotAddedText = "Слова не добавлены";
             wordsAddedText = "Добавлено слов - ";
             aboutDeveloperText = """
-            <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
-            <b>Почта</b>: rps_project@mail.ru
-            <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
+                    <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
+                    <b>Почта</b>: rps_project@mail.ru
+                    <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
+            yesButtonText = """
+                    Первое, что нужно сделать, - это добавить <b>ключевые слова</b>.
+                    Если интересуют новости, связанные с ипотекой, к примеру, то надо добавить слово <b>ипотек</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b> и т.д.
+                    - - - - - -
+                    Второе - добавить через меню <b>слова-исключения</b> для полного поиска, чтобы не читать новости типа: "Как правильно красить ресницы". Просто добавь <b>ресниц</b> в исключения и таких заголовков больше не увидишь!
+                    - - - - - -
+                    Добавлять можно как одно слово, так и несколько через запятую.
+                    - - - - - -
+                    На данном этапе мы добавим <b>ключевые слова</b>. Нажми кнопку "Добавить".""";
+            buyButtonText = EmojiParser.parseToUnicode("Пока, друг! \uD83D\uDC4B");
+            intervalText = "Интервал";
+            autoSearchText = "Автопоиск";
+            exclusionText = "Исключение";
+            startSettingsText = "Старт";
+            excludedListText = "Список удалённого";
+            delFromTopText = "Удалить из топа";
+            searchByTopWordText = "Поиск по позиции";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -90,41 +109,90 @@ public class Text {
             wordsIsNotAddedText = "No words added";
             wordsAddedText = "Added words - ";
             aboutDeveloperText = """
-            <b>Developer</b>: <a href="https://github.com/mrprogre">mrprogre</a>
-            <b>E-mail</b>: rps_project@mail.ru
-            <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
-
+                    <b>Developer</b>: <a href="https://github.com/mrprogre">mrprogre</a>
+                    <b>E-mail</b>: rps_project@mail.ru
+                    <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
+            yesButtonText = """
+                    The first thing to do is add <b>keywords</b>.
+                    If you are interested in news related to taxes, for example, then you need to add the word <b>tax</b> to get all the headlines containing: <b>tax, taxes</b>, etc.
+                    - - - - - -
+                    The second is to add <b>exception words</b> through the menu for a complete search, so as not to read news like: “How to dye eyelashes correctly.” Just add <b>eyelashes</b> to the exceptions and you won’t see such headlines anymore!
+                    - - - - - -
+                    You can add one word or several separated by commas.
+                    - - - - - -
+                    At this point we will add <b>keywords</b>. Click the "Add" button.""";
+            buyButtonText = EmojiParser.parseToUnicode("Good buy! \uD83D\uDC4B");
+            intervalText = "Interval";
+            autoSearchText = "Auto search";
+            exclusionText = "News exclusion";
+            startSettingsText = "Start";
+            excludedListText = "List of deleted";
+            delFromTopText = "Remove from Top 20";
+            searchByTopWordText = "Search by position";
         }
     }
 
-    public static final String YES_BUTTON_TEXT = """
-            Первое, что нужно сделать, - это добавить <b>ключевые слова</b>.
-            Если интересуют новости, связанные с ипотекой, к примеру, то надо добавить слово <b>ипотек</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b> и т.д.
-            - - - - - -
-            Второе - добавить через меню <b>слова-исключения</b> для полного поиска, чтобы не читать новости типа: "Как правильно красить ресницы". Просто добавь <b>ресниц</b> в исключения и таких заголовков больше не увидишь!
-            - - - - - -
-            Добавлять можно как одно слово, так и несколько через запятую.
-            - - - - - -
-            На данном этапе мы добавим <b>ключевые слова</b>. Нажми кнопку "Добавить".""";
+    public static String getSettingsText(Settings x, String lang) {
+        if (lang.equals("ru")) {
+            String schedSettings = "";
+            if (x.getScheduler().equals("on")) {
+                String text = switch (x.getPeriod()) {
+                    case "1h" -> " (запуск каждый час)\n";
+                    case "2h" -> " (запуск каждые 2 часа)\n";
+                    case "24h", "48h", "72h" -> " (запуск один раз в сутки)\n";
+                    default ->
+                            " (часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
+                };
+                schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
+            }
 
-    public static final String NO_BUTTON_TEXT = EmojiParser.parseToUnicode("Good buy! \uD83D\uDC4B");
+            return "<b>Настройки</b>\n" +
+                    "<b>1. Интервал</b>: <b>-" + x.getPeriod() + "</b>\n" +
+                    "Глубина поиска новостей по <b>ключевым словам</b> (интервал поиска равен текущему моменту минус глубина в часах)" + "\n" +
+                    "- - - - - -\n" +
+                    "<b>2. Интервал</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
+                    "Глубина поиска <b>всех новостей</b> и слов для <b>Top 20</b>" + "\n" +
+                    "- - - - - -\n" +
+                    "<b>3. Автопоиск: " + x.getScheduler() + "</b>\n" +
+                    "Автоматический запуск поиска по <b>ключевым словам</b> за период, указанный в п.1, с частотой в п.5" + "\n" +
+                    "- - - - - -\n" +
+                    "<b>4. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "<b>on</b> - исключение новостей, которые содержат слова-исключения\n" +
+                    "<b>off</b> - показывать все новости без исключения\n" +
+                    schedSettings +
+                    "- - - - - -\n" +
+                    "Параметры меняются после нажатия на кнопки";
+        } else {
+            String schedSettings = "";
+            if (x.getScheduler().equals("on")) {
+                String text = switch (x.getPeriod()) {
+                    case "1h" -> " (launch every hour)\n";
+                    case "2h" -> " (launch every 2 hours)\n";
+                    case "24h", "48h", "72h" -> " (launch once a day)\n";
+                    default ->
+                            " (start time: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
+                };
+                schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search: <b>" + x.getStart() + "</b>" + text;
+            }
 
-    public static String getSettingsText(Settings x, String scheduler) {
-        return "<b>Настройки</b>\n" +
-                "<b>1. Интервал</b>: <b>-" + x.getPeriod() + "</b>\n" +
-                "Глубина поиска новостей по <b>ключевым словам</b> (интервал поиска равен текущему моменту минус глубина в часах)" + "\n" +
-                "- - - - - -\n" +
-                "<b>2. Интервал</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
-                "Глубина поиска <b>всех новостей</b> и слов для <b>Топ 20</b>" + "\n" +
-                "- - - - - -\n" +
-                "<b>3. Автопоиск: " + x.getScheduler() + "</b>\n" +
-                "Автоматический запуск поиска по <b>ключевым словам</b> за период, указанный в п.1, с частотой в п.5" + "\n" +
-                "- - - - - -\n" +
-                "<b>4. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
-                "<b>on</b> - исключение новостей, которые содержат слова-исключения\n" +
-                "<b>off</b> - показывать все новости без исключения\n" +
-                scheduler +
-                "- - - - - -\n" +
-                "Параметры меняются после нажатия на кнопки";
+            return "<b>Settings</b>\n" +
+                    "<b>1. Interval</b>: <b>-" + x.getPeriod() + "</b>\n" +
+                    "Depth of news search by <b>keywords</b> (search interval is equal to the current moment minus the depth in hours)" + "\n" +
+                    "- - - - - -\n" +
+                    "<b>2. Interval</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
+                    "Search depth for <b>all news</b> and words for <b>Top 20</b>" + "\n" +
+                    "- - - - - -\n" +
+                    "<b>3. Auto search: " + x.getScheduler() + "</b>\n" +
+                    "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
+                    "- - - - - -\n" +
+                    "<b>4. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "<b>on</b> - excluding news that contains exception words\n" +
+                    "<b>off</b> - show all news without filter\n" +
+                    schedSettings +
+                    "- - - - - -\n" +
+                    "Parameters change after pressing buttons";
+        }
     }
+
+
 }
