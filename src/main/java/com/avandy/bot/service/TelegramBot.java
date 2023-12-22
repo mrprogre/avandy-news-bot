@@ -1324,6 +1324,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         prefix = "";
     }
 
+    private void setLang(long chatId, String lang) {
+        setInterfaceLanguage(lang);
+        settingsRepository.updateLanguage(lang, chatId);
+    }
+
     @Async
     @Scheduled(cron = "${cron.search.keywords}")
     protected void autoSearchByKeywords() {
@@ -1341,11 +1346,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
         isAutoSearch.set(false);
-    }
-
-    private void setLang(long chatId, String lang) {
-        setInterfaceLanguage(lang);
-        settingsRepository.updateLanguage(lang, chatId);
     }
 
 }
