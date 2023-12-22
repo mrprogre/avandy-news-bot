@@ -226,7 +226,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         prefix = "/update-start ";
                     } else {
                         settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
-                        sendMessage(chatId, EmojiParser.parseToUnicode("Время старта автопоиска установлено ✔️"));
+                        sendMessage(chatId, startTimeChangedText);
                         getSettings(chatId);
                         prefix = "";
                     }
@@ -300,12 +300,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "SET_SCHEDULER" -> showOnOffScheduler(chatId);
                 case "SCHEDULER_ON" -> {
                     settingsRepository.updateScheduler("on", chatId);
-                    sendMessage(chatId, SCHEDULER_CHANGED);
+                    sendMessage(chatId, schedulerChangedText);
                     getSettings(chatId);
                 }
                 case "SCHEDULER_OFF" -> {
                     settingsRepository.updateScheduler("off", chatId);
-                    sendMessage(chatId, SCHEDULER_CHANGED);
+                    sendMessage(chatId, schedulerChangedText);
                     getSettings(chatId);
                 }
                 case "SCHEDULER_START" -> {
@@ -315,12 +315,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "SET_EXCLUDED" -> showOnOffExcluded(chatId);
                 case "EXCLUDED_ON" -> {
                     settingsRepository.updateExcluded("on", chatId);
-                    sendMessage(chatId, EXCLUDED_CHANGED);
+                    sendMessage(chatId, excludedChangedText);
                     getSettings(chatId);
                 }
                 case "EXCLUDED_OFF" -> {
                     settingsRepository.updateExcluded("off", chatId);
-                    sendMessage(chatId, EXCLUDED_CHANGED);
+                    sendMessage(chatId, excludedChangedText);
                     getSettings(chatId);
                 }
 
@@ -422,13 +422,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void updatePeriod(int period, long chatId) {
         settingsRepository.updatePeriod(period + "h", chatId);
-        sendMessage(chatId, UPDATE_PERIOD_CHANGED);
+        sendMessage(chatId, changeIntervalText);
         getSettings(chatId);
     }
 
     private void updatePeriodAll(int period, long chatId) {
         settingsRepository.updatePeriodAll(period + "h", chatId);
-        sendMessage(chatId, UPDATE_PERIOD_CHANGED);
+        sendMessage(chatId, changeIntervalText);
         getSettings(chatId);
     }
 
@@ -645,22 +645,22 @@ public class TelegramBot extends TelegramLongPollingBot {
                         counter++;
                     } catch (Exception e) {
                         if (e.getMessage().contains("ui_top_ten_excluded")) {
-                            log.info(WORD_IS_EXISTS + word);
+                            log.info(wordIsExistsText + word);
                         }
                     }
 
                 } else {
-                    sendMessage(chatId, WORD_IS_EXISTS + word);
+                    sendMessage(chatId, wordIsExistsText + word);
                 }
             } else {
-                sendMessage(chatId, MIN_WORD_LENGTH);
+                sendMessage(chatId, minWordLengthText);
             }
 
         }
         if (counter != 0) {
-            sendMessage(chatId, EmojiParser.parseToUnicode(WORDS_ADDED + counter + " ✔️"));
+            sendMessage(chatId, EmojiParser.parseToUnicode(wordsAddedText + counter + " ✔️"));
         } else {
-            sendMessage(chatId, WORDS_IS_NOT_ADD);
+            sendMessage(chatId, wordsIsNotAddedText);
         }
         prefix = "";
     }
@@ -683,21 +683,21 @@ public class TelegramBot extends TelegramLongPollingBot {
                         counter++;
                     } catch (Exception e) {
                         if (e.getMessage().contains("ui_keywords_chat_id_link")) {
-                            log.info(WORD_IS_EXISTS + keyword);
+                            log.info(wordIsExistsText + keyword);
                         }
                     }
 
                 } else {
-                    sendMessage(chatId, WORD_IS_EXISTS + keyword);
+                    sendMessage(chatId, wordIsExistsText + keyword);
                 }
             } else {
-                sendMessage(chatId, MIN_WORD_LENGTH);
+                sendMessage(chatId, minWordLengthText);
             }
         }
         if (counter != 0) {
-            sendMessage(chatId, EmojiParser.parseToUnicode(WORDS_ADDED + counter + " ✔️"));
+            sendMessage(chatId, EmojiParser.parseToUnicode(wordsAddedText + counter + " ✔️"));
         } else {
-            sendMessage(chatId, WORDS_IS_NOT_ADD);
+            sendMessage(chatId, wordsIsNotAddedText);
         }
         prefix = "";
     }
@@ -720,22 +720,22 @@ public class TelegramBot extends TelegramLongPollingBot {
                         counter++;
                     } catch (Exception e) {
                         if (e.getMessage().contains("ui_excluded")) {
-                            log.info(WORD_IS_EXISTS + word);
+                            log.info(wordIsExistsText + word);
                         }
                     }
 
                 } else {
-                    sendMessage(chatId, WORD_IS_EXISTS + word);
+                    sendMessage(chatId, wordIsExistsText + word);
                 }
             } else {
-                sendMessage(chatId, MIN_WORD_LENGTH);
+                sendMessage(chatId, minWordLengthText);
             }
         }
 
         if (counter != 0) {
             sendMessage(chatId, EmojiParser.parseToUnicode("Добавлено слов-исключений - " + counter + " ✔️"));
         } else {
-            sendMessage(chatId, WORDS_IS_NOT_ADD);
+            sendMessage(chatId, wordsIsNotAddedText);
         }
 
         prefix = "";
@@ -745,7 +745,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String keyword : keywords) {
             if (keyword.equals("*")) {
                 keywordRepository.deleteAllKeywordsByChatId(chatId);
-                sendMessage(chatId, DELETE_ALL_KEYWORDS);
+                sendMessage(chatId, deleteAllKeywordsText);
                 break;
             }
 
@@ -763,7 +763,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String exclude : excluded) {
             if (exclude.equals("*")) {
                 excludedRepository.deleteAllExcludedByChatId(chatId);
-                sendMessage(chatId, DELETE_ALL_EXCLUDED);
+                sendMessage(chatId, deleteAllExcludedText);
                 break;
             }
 
@@ -822,7 +822,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             nextButtonAfterAllSearch(chatId, text);
         } else {
-            String text = EmojiParser.parseToUnicode(HEADLINES_NOT_FOUND);
+            String text = EmojiParser.parseToUnicode(headlinesNotFound);
             nextButtonAfterAllSearch(chatId, text);
         }
 
@@ -834,7 +834,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (keywordRepository.findKeywordsByChatId(chatId).isEmpty()) {
-            showAddKeywordsButton(chatId, SET_UP_KEYWORDS);
+            showAddKeywordsButton(chatId, setupKeywordsText);
             return 0;
         }
 
@@ -870,7 +870,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         } else {
             if (!isAutoSearch.get()) {
-                String text = EmojiParser.parseToUnicode(HEADLINES_NOT_FOUND);
+                String text = EmojiParser.parseToUnicode(headlinesNotFound);
                 nextButtonAfterKeywordsSearch(chatId, text);
             }
         }
@@ -907,7 +907,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             showTopTenButton(chatId, text);
         } else {
-            String text = EmojiParser.parseToUnicode(HEADLINES_NOT_FOUND);
+            String text = EmojiParser.parseToUnicode(headlinesNotFound);
             showTopTenButton(chatId, text);
         }
     }
@@ -1146,7 +1146,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void infoButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, INFO);
+        SendMessage message = prepareMessage(chatId, aboutDeveloperText);
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();

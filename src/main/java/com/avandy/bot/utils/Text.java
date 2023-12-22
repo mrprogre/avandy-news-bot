@@ -7,7 +7,9 @@ public class Text {
     public static String greetingText, letsStartText, noText, yesText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText, listTodoText,
             startText, deleteUserText, addText, delText, findAgainText, excludeWordText, findText, excludedText,
-            updateTopText, undefinedCommandText;
+            updateTopText, undefinedCommandText, changeIntervalText, schedulerChangedText, excludedChangedText,
+            headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllKeywordsText, deleteAllExcludedText,
+            wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -35,6 +37,22 @@ public class Text {
             excludedText = "Исключённое";
             updateTopText = "Обновить топ";
             undefinedCommandText = "Данная команда не существует";
+            changeIntervalText = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
+            schedulerChangedText = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
+            excludedChangedText = EmojiParser.parseToUnicode("Режим исключения заголовков переключён ✔️");
+            startTimeChangedText = "Время старта автопоиска установлено ✔️";
+            headlinesNotFound = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
+            setupKeywordsText = "» ключевые слова не заданы";
+            minWordLengthText = "Длина слова должна быть более 2 символов";
+            deleteAllKeywordsText = "Удалены все ключевые слова ❌";
+            deleteAllExcludedText = "Удалены все слова-исключения ❌";
+            wordIsExistsText = "Слово уже есть в списке: ";
+            wordsIsNotAddedText = "Слова не добавлены";
+            wordsAddedText = "Добавлено слов - ";
+            aboutDeveloperText = """
+            <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
+            <b>Почта</b>: rps_project@mail.ru
+            <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -59,26 +77,25 @@ public class Text {
             excludedText = "Excluded";
             updateTopText = "Update top";
             undefinedCommandText = "Command does not exist";
+            changeIntervalText = EmojiParser.parseToUnicode("Search interval changed ✔️");
+            schedulerChangedText = EmojiParser.parseToUnicode("Auto search mode switched ✔️");
+            excludedChangedText = EmojiParser.parseToUnicode("Header exclusion mode switched ✔️");
+            startTimeChangedText = EmojiParser.parseToUnicode("Auto search start time is set ✔️");
+            headlinesNotFound = EmojiParser.parseToUnicode("» no news headlines found \uD83D\uDCA4");
+            setupKeywordsText = "» no keywords specified";
+            minWordLengthText = "Word length must be more than 2 characters";
+            deleteAllKeywordsText = "All keywords removed ❌";
+            deleteAllExcludedText = "All exception words removed ❌";
+            wordIsExistsText = "The word is already on the list: ";
+            wordsIsNotAddedText = "No words added";
+            wordsAddedText = "Added words - ";
+            aboutDeveloperText = """
+            <b>Developer</b>: <a href="https://github.com/mrprogre">mrprogre</a>
+            <b>E-mail</b>: rps_project@mail.ru
+            <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
+
         }
     }
-
-    public static final String UPDATE_PERIOD_CHANGED = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
-    public static final String SCHEDULER_CHANGED = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
-    public static final String EXCLUDED_CHANGED = EmojiParser.parseToUnicode("Режим исключения заголовков переключён ✔️");
-    public static final String HEADLINES_NOT_FOUND = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
-    public static final String SET_UP_KEYWORDS = "» ключевые слова не заданы";
-    public static final String MIN_WORD_LENGTH = "Длина слова должна быть более 2 символов";
-    public static final String DELETE_ALL_KEYWORDS = "Удалены все ключевые слова ❌";
-    public static final String DELETE_ALL_EXCLUDED = "Удалены все слова-исключения ❌";
-    public static final String WORD_IS_EXISTS = "Слово уже есть в списке: ";
-    public static final String WORDS_IS_NOT_ADD = "Слова не добавлены";
-    public static final String WORDS_ADDED = "Добавлено слов - ";
-
-    public static final String INFO = """
-            <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
-            <b>Почта</b>: rps_project@mail.ru
-            <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
-
 
     public static final String YES_BUTTON_TEXT = """
             Первое, что нужно сделать, - это добавить <b>ключевые слова</b>.
