@@ -17,7 +17,7 @@ import java.util.*;
 @Slf4j
 @Service
 public class Search {
-    private int periodInMinutes = 1440;
+    private int periodMinutes = 1440;
     public static int totalNewsCounter;
     public static int filteredNewsCounter;
     private final SettingsRepository settingsRepository;
@@ -50,15 +50,15 @@ public class Search {
         headlinesTopTen = new TreeSet<>();
 
         if (searchType.equals("keywords")) {
-            settings.ifPresentOrElse(value -> periodInMinutes = Common.timeMapper(value.getPeriod()),
-                    () -> periodInMinutes = 1440);
+            settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriod()),
+                    () -> periodMinutes = 1440);
         } else {
-            settings.ifPresentOrElse(value -> periodInMinutes = Common.timeMapper(value.getPeriodAll()),
-                    () -> periodInMinutes = 60);
+            settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodAll()),
+                    () -> periodMinutes = 60);
         }
 
         // find news by period
-        TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodInMinutes + " minutes");
+        TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodMinutes + " minutes");
 
         for (NewsList news : newsListByPeriod) {
             String rss = news.getSource();
@@ -67,7 +67,7 @@ public class Search {
             Date date = news.getPubDate();
             String link = news.getLink();
 
-            int dateDiff = Common.compareDates(new Date(), date, periodInMinutes);
+            int dateDiff = Common.compareDates(new Date(), date, periodMinutes);
             switch (searchType) {
 
                 /* ALL NEWS SEARCH */
@@ -105,6 +105,24 @@ public class Search {
             }
         }
 
+        /* SEARCH BY ONE WORD FROM TOP */
+        if (!searchType.equals("all") && !searchType.equals("keywords") && !searchType.equals("top")) {
+            TreeSet<NewsList> newsListByPeriodAndWord =
+                    newsListRepository.getNewsListByPeriodAndWord(periodMinutes + " minutes", searchType);
+
+            for (NewsList news : newsListByPeriodAndWord) {
+                String rss = news.getSource();
+                String title = news.getTitle().trim();
+                String hash = Common.getHash(title);
+                Date date = news.getPubDate();
+                String link = news.getLink();
+
+                int dateDiff = Common.compareDates(new Date(), date, periodMinutes);
+                if (dateDiff != 0) {
+                    headlinesToShow.add(new Headline(rss, title, link, date, chatId, -1, hash));
+                }
+            }
+        }
 
         totalNewsCounter = headlinesToShow.size();
         // remove titles contains excluded words

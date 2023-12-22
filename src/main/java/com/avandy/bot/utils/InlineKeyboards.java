@@ -38,20 +38,24 @@ public class InlineKeyboards {
                                                            Map<String, String> buttons3) {
         InlineKeyboardMarkup inlineKeyboardAbout = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine1 = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine2 = new ArrayList<>();
-        List<InlineKeyboardButton> rowInLine3 = new ArrayList<>();
 
         // создаем первый этаж
+        List<InlineKeyboardButton> rowInLine1 = new ArrayList<>();
         setButtons(buttons1, rowInLine1);
-        // создаем второй этаж
-        setButtons(buttons2, rowInLine2);
-        // создаем третий этаж
-        setButtons(buttons3, rowInLine3);
-
         rowsInLine.add(rowInLine1);
+
+        // создаем второй этаж
+        List<InlineKeyboardButton> rowInLine2 = new ArrayList<>();
+        setButtons(buttons2, rowInLine2);
         rowsInLine.add(rowInLine2);
-        rowsInLine.add(rowInLine3);
+
+        // создаем третий этаж
+        if (buttons3 != null) {
+            List<InlineKeyboardButton> rowInLine3 = new ArrayList<>();
+            setButtons(buttons3, rowInLine3);
+            rowsInLine.add(rowInLine3);
+        }
+
         inlineKeyboardAbout.setKeyboard(rowsInLine);
         return inlineKeyboardAbout;
     }

@@ -184,6 +184,36 @@ public class TelegramBot extends TelegramLongPollingBot {
                     prefix = "";
                 }
 
+            } else if (messageText.startsWith("/findtop") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
+                String word = "empty";
+                int wordNum = Integer.parseInt(parseMessageText(messageText));
+
+                try {
+                    String[] split = stringBuilder.toString().split("\n");
+
+                    for (String row : split) {
+                        int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
+                        String keyword = row
+                                .replaceAll("\\d", "")
+                                .replaceAll("\\s", "")
+                                .replaceAll("\\.", "");
+
+                        if (wordNum == rowNum) {
+                            log.warn("keyword = " + keyword);
+                            word = keyword;
+                        }
+                    }
+
+                    wordSearch(chatId, word);
+                    prefix = "";
+                } catch (NumberFormatException n) {
+                    sendMessage(chatId, "Допустима только одна цифра");
+                    prefix = "";
+                } catch (NullPointerException npe) {
+                    sendMessage(chatId, "Сначала необходимо запустить поиск слов /top" + TOP_TEN_SHOW_LIMIT);
+                    prefix = "";
+                }
+
             } else if (messageText.startsWith("/remove-excluded")) {
                 String keywords = parseMessageText(messageText);
                 String[] words = keywords.split(",");
@@ -359,6 +389,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
                 case "LIST_TOP" -> getTopTenWordsList(chatId);
                 case "GET_TOP" -> showTopTen(chatId);
+                case "WORD_SEARCH" -> {
+                    prefix = "/findtop ";
+                    cancelButton(chatId, "Введите порядковый номер слова для поиска содержащих его новостей");
+                }
                 case "DELETE_TOP" -> {
                     prefix = "/remove-top-ten ";
                     cancelButton(chatId, "Введите слова для удаления (разделять запятой)");
@@ -823,6 +857,41 @@ public class TelegramBot extends TelegramLongPollingBot {
         return Search.filteredNewsCounter;
     }
 
+
+    private void wordSearch(long chatId, String word) {
+        Set<Headline> headlines = search.start(chatId, word);
+
+        int counterParts = 1;
+        int showCounter = 1;
+        if (headlines.size() > 0) {
+            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+            for (Headline headline : headlines) {
+                joiner.add(showCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() + " " +
+                        "<a href=\"" + headline.getLink() + "\">link</a>");
+
+                if (counterParts == 10) {
+                    sendMessage(chatId, String.valueOf(joiner));
+                    joiner = new StringJoiner("\n- - - - - -\n");
+                    counterParts = 0;
+                }
+                counterParts++;
+            }
+
+            if (counterParts != 0) {
+                sendMessage(chatId, String.valueOf(joiner));
+            }
+
+            String text = "Найдено: <b>" + Search.filteredNewsCounter + "</b>";
+
+            showTopTenButton(chatId, text);
+        } else {
+            String text = EmojiParser.parseToUnicode(HEADLINES_NOT_FOUND);
+            showTopTenButton(chatId, text);
+        }
+    }
+
     private void sendFeedback(long chatId, String text) {
         sendMessage(1254981379, "<b>Message</b> from " + chatId + "\n" + text);
     }
@@ -1104,24 +1173,39 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
+    // Показать топ слов за период
     private void showTopTenButtons(long chatId, String text) {
         SendMessage message = prepareMessage(chatId, text);
         message.enableHtml(true);
 
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("ADD_TOP", DEL_RUS);
-        buttons.put("LIST_TOP", "Список");
-        buttons.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
 
+        buttons1.put("ADD_TOP", "Удалить из топа");
+        buttons1.put("LIST_TOP", "Список удалённого");
+        buttons2.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
+        buttons2.put("WORD_SEARCH", "Поиск по номеру");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null));
+        executeMessage(message);
+    }
+
+    private void showTopTenButton(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+        message.enableHtml(true);
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
     }
 
+    // Список удалённых слов из топа
     private void showTopTenListButtons(long chatId, String text) {
         SendMessage message = prepareMessage(chatId, text);
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
+
         buttons.put("DELETE_TOP", DEL_RUS);
         buttons.put("ADD_TOP", ADD_RUS);
         buttons.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
