@@ -1183,7 +1183,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         buttons1.put("ADD_TOP", "Удалить из топа");
         buttons1.put("LIST_TOP", "Список удалённого");
-        buttons2.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
+        buttons2.put("GET_TOP", "Обновить топ");
         buttons2.put("WORD_SEARCH", "Поиск по номеру");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null));
@@ -1194,7 +1194,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId, text);
         message.enableHtml(true);
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("GET_TOP", "Топ " + TOP_TEN_SHOW_LIMIT);
+        buttons.put("GET_TOP", "Обновить топ");
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
     }
