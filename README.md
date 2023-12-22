@@ -1,9 +1,11 @@
 # Avandy News Bot
 
 News RSS aggregator with powerful filtering of unnecessary information 
-and headline search by keywords in any language of the World. 
+and headline search by keywords in any language of the World.
 
-### Command
+https://t.me/AvandyNewsBot
+
+### Commands
 
 **/settings**   - setting search intervals and enabling auto search
 
