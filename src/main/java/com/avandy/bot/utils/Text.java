@@ -16,7 +16,7 @@ public class Text {
             addInListText, delFromListText, removeAllText, inputSchedulerStart, addTodoText, delTodoText,
             sendMessageForDevText, actionCanceledText, delFromTopInstText, findByWordFromTopInstText,
             removeFromTopTenListText, taskDeletedText, taskAddedText, taskListText, rssSourcesText,
-            searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text;
+            searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -103,6 +103,7 @@ public class Text {
             searchWithFilter2Text = "слов-исключений";
             keywordSearchText = "Поиск по <b>ключевым словам</b>";
             keywordSearch2Text = "ключевых слов";
+            cancelButtonText = "Отменить";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -186,6 +187,7 @@ public class Text {
             searchWithFilter2Text = "excluded words";
             keywordSearchText = "Search by <b>keywords</b>";
             keywordSearch2Text = "keywords";
+            cancelButtonText = "Cancel";
         }
     }
 
