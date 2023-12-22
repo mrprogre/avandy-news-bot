@@ -8,7 +8,7 @@ public class Text {
     public static final String SETTINGS_RUS = "Настройки";
     public static final String LIST_KEYWORDS_RUS = "Ключевые слова";
     public static final String FIND_RUS = "Выбор вида поиска";
-    public static final String TOP_10_RUS = "Топ слов за период";
+    public static final String TOP_20_RUS = "Топ 20 слов за период";
     public static final String LIST_EXCLUDED_RUS = "Слова исключения";
     public static final String LIST_RSS_RUS = "Источники RSS";
     public static final String LIST_TODO_RUS = "Список задач";
@@ -64,7 +64,7 @@ public class Text {
                 "Глубина поиска новостей по <b>ключевым словам</b> (интервал поиска равен текущему моменту минус глубина в часах)" + "\n" +
                 "- - - - - -\n" +
                 "<b>2. Интервал</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
-                "Глубина поиска <b>всех новостей</b> и слов для <b>Топ 10</b>" + "\n" +
+                "Глубина поиска <b>всех новостей</b> и слов для <b>Топ 20</b>" + "\n" +
                 "- - - - - -\n" +
                 "<b>3. Автопоиск: " + x.getScheduler() + "</b>\n" +
                 "Автоматический запуск поиска по <b>ключевым словам</b> за период, указанный в п.1, с частотой в п.5" + "\n" +

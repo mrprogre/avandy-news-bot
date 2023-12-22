@@ -59,7 +59,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/excluded", LIST_EXCLUDED_RUS));
         listOfCommands.add(new BotCommand("/keywords", LIST_KEYWORDS_RUS));
         listOfCommands.add(new BotCommand("/find", FIND_RUS));
-        listOfCommands.add(new BotCommand("/top" + TOP_TEN_SHOW_LIMIT, TOP_10_RUS));
+        listOfCommands.add(new BotCommand("/top" + TOP_TEN_SHOW_LIMIT, TOP_20_RUS));
         listOfCommands.add(new BotCommand("/rss", LIST_RSS_RUS));
         listOfCommands.add(new BotCommand("/todo", LIST_TODO_RUS));
         listOfCommands.add(new BotCommand("/info", INFO_RUS));
