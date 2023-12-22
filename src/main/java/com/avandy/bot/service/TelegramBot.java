@@ -161,10 +161,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     addTopTen(chatId, words);
                     showTopTen(chatId);
                 } catch (NumberFormatException n) {
-                    sendMessage(chatId, "Допустимы только цифры или запятые");
+                    sendMessage(chatId, allowCommasAndNumbersText);
                     prefix = "";
                 } catch (NullPointerException npe) {
-                    sendMessage(chatId, "Сначала необходимо запустить поиск слов /top20");
+                    sendMessage(chatId, startSearchBeforeText);
                     prefix = "";
                 }
 
@@ -191,10 +191,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     wordSearch(chatId, word);
                     prefix = "";
                 } catch (NumberFormatException n) {
-                    sendMessage(chatId, "Допустима только одна цифра");
+                    sendMessage(chatId, allowNumberText);
                     prefix = "";
                 } catch (NullPointerException npe) {
-                    sendMessage(chatId, "Сначала необходимо запустить поиск слов /top20");
+                    sendMessage(chatId, startSearchBeforeText);
                     prefix = "";
                 }
 
@@ -221,8 +221,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 try {
 
                     if (start < 0 || start > 23) {
-                        sendMessage(chatId, "Указано некорректное время. " +
-                                "Должна быть цифра от 0 до 23 включительно");
+                        sendMessage(chatId, incorrectTimeText);
                         prefix = "/update-start ";
                     } else {
                         settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
@@ -234,13 +233,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.error(e.getMessage());
                 }
 
-            } else if (messageText.startsWith("Поиск по словам")) {
+            } else if (messageText.startsWith(keywordsSearchText)) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
             } else if (messageText.startsWith("Top 20")) {
                 showTopTen(chatId);
 
-            } else if (messageText.startsWith("Поиск общий")) {
+            } else if (messageText.startsWith(fullSearchText)) {
                 new Thread(() -> findAllNews(chatId)).start();
             } else {
                 /* Команды без параметров */
@@ -272,12 +271,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "LIST_EXCLUDED" -> new Thread(() -> getExcludedList(chatId)).start();
                 case "EXCLUDE" -> {
                     prefix = "/add-excluded ";
-                    cancelButton(chatId, "Введите слова для добавления в исключения (разделять запятой)");
+                    cancelButton(chatId, addInListText);
                 }
                 case "DELETE_EXCLUDED" -> {
                     prefix = "/remove-excluded ";
-                    cancelButton(chatId, "Введите слова для удаления из исключений (разделять запятой)\n" +
-                            "* - удалить всё");
+                    cancelButton(chatId, delFromListText + "\n* - " + removeAllText);
                 }
 
                 /* KEYWORDS */
@@ -285,12 +283,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "LIST_KEYWORDS" -> new Thread(() -> getKeywordsList(chatId)).start();
                 case "ADD" -> {
                     prefix = "/add-keywords ";
-                    cancelButton(chatId, "Введите ключевые слова (разделять запятой)");
+                    cancelButton(chatId, addInListText);
                 }
                 case "DELETE" -> {
                     prefix = "/remove-keywords ";
-                    cancelButton(chatId, "Введите слова для удаления (разделять запятой)\n" +
-                            "* - удалить всё");
+                    cancelButton(chatId, delFromListText + "\n* - " + removeAllText);
                 }
 
                 /* SETTINGS */
@@ -310,7 +307,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
                 case "SCHEDULER_START" -> {
                     prefix = "/update-start ";
-                    cancelButton(chatId, "Введите время старта автопоиска (число 0-23)");
+                    cancelButton(chatId, inputSchedulerStart);
                 }
                 case "SET_EXCLUDED" -> showOnOffExcluded(chatId);
                 case "EXCLUDED_ON" -> {
@@ -327,21 +324,21 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "TODO_LIST" -> getTodoList(chatId);
                 case "TODO_ADD" -> {
                     prefix = "/addtodo ";
-                    cancelButton(chatId, "Введите задачу (если несколько, то через точку запятую)");
+                    cancelButton(chatId, addTodoText);
                 }
                 case "TODO_DEL" -> {
                     prefix = "/deltodo ";
-                    cancelButton(chatId, "Введите номер задачи (если несколько, то через запятую)");
+                    cancelButton(chatId, delTodoText);
                 }
 
                 case "FEEDBACK" -> {
                     prefix = "/send-feedback ";
-                    cancelButton(chatId, "Напишите свои предложения разработчику");
+                    cancelButton(chatId, sendMessageForDevText);
                 }
 
                 case "CANCEL" -> {
                     prefix = "";
-                    nextButton(chatId, "Действие отменено");
+                    nextButton(chatId, actionCanceledText);
                 }
 
                 case "RU_BUTTON" -> {
@@ -383,18 +380,17 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 case "ADD_TOP" -> {
                     prefix = "/addtop ";
-                    cancelButton(chatId, "Введите порядковый номер слова для удаления из топа " +
-                            "(если их несколько, то разделяйте запятыми)");
+                    cancelButton(chatId, delFromTopInstText);
                 }
                 case "LIST_TOP" -> getTopTenWordsList(chatId);
                 case "GET_TOP" -> showTopTen(chatId);
                 case "WORD_SEARCH" -> {
                     prefix = "/findtop ";
-                    cancelButton(chatId, "Введите порядковый номер слова для поиска содержащих его новостей");
+                    cancelButton(chatId, findByWordFromTopInstText);
                 }
                 case "DELETE_TOP" -> {
                     prefix = "/remove-top-ten ";
-                    cancelButton(chatId, "Введите слова для удаления (разделять запятой)");
+                    cancelButton(chatId, removeFromTopTenListText);
                 }
             }
         }
@@ -443,7 +439,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 todoRepository.deleteById(idToDel);
             }
         }
-        sendMessage(chatId, "Задачи удалены");
+        sendMessage(chatId, taskDeletedText);
     }
 
     private void addTodo(String messageText, long chatId) {
@@ -454,7 +450,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String text : texts) {
             todoRepository.save(new Todo(chatId, text.trim()));
         }
-        sendMessage(chatId, "Список задач дополнен");
+        sendMessage(chatId, taskAddedText);
     }
 
     private void getTodoList(long chatId) {
@@ -463,9 +459,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (todoList.size() > 0) {
             StringJoiner joiner = new StringJoiner("\n");
             for (Todo item : todoList) {
-                joiner.add(item.getId() + ". " + item.getText() + " (добавлена " + item.getAddDate() + ")");
+                joiner.add(item.getId() + ". " + item.getText() + " [" + item.getAddDate() + "]");
             }
-            showTodoButtons(chatId, "<b>Список задач</b>\n" + joiner);
+            showTodoButtons(chatId, "<b>" + taskListText + "</b>\n" + joiner);
 
         } else {
             showTodoAddButton(chatId);
@@ -486,7 +482,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (RssList item : sources) {
             joiner.add(item.getSource());
         }
-        nextButton(chatId, "<b>Источники новостей</b>\n" + joiner);
+        nextButton(chatId, "<b>" + rssSourcesText + "</b>\n" + joiner);
     }
 
     private void startActions(Update update, long chatId) {
@@ -505,14 +501,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private String getTextForAllSearch(long chatId) {
-        return "Поиск: <b>общий с фильтрацией</b>\n[период: текущее время минус <b>" + settingsRepository.getPeriodAllByChatId(chatId) +
-                "</b>, слов-исключений - <b>" + excludedRepository.getExcludedCountByChatId(chatId) + "</b>]";
+        return searchWithFilterText + " [<b>" + settingsRepository.getPeriodAllByChatId(chatId) + "</b>, " +
+                searchWithFilter2Text + " - <b>" + excludedRepository.getExcludedCountByChatId(chatId) + "</b>]";
     }
 
     private String getKeywordButtonsText(long chatId) {
-        return "Поиск: <b>по ключевым словам</b>\n[период: текущее время минус <b>" +
-                settingsRepository.getPeriodByChatId(chatId) +
-                "</b>, ключевых слов - <b>" + keywordRepository.getKeywordsCountByChatId(chatId) + "</b>]";
+        return keywordSearchText + " [<b>" + settingsRepository.getPeriodByChatId(chatId) + "</b>, " +
+                keywordSearch2Text + " - <b>" + keywordRepository.getKeywordsCountByChatId(chatId) + "</b>]";
     }
 
     private void getSettings(long chatId) {
@@ -1179,8 +1174,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<KeyboardRow> keyboardRows = new ArrayList<>();
 
         KeyboardRow row = new KeyboardRow();
-        row.add("Поиск общий");
-        row.add("Поиск по словам");
+        row.add(fullSearchText);
+        row.add(keywordsSearchText);
         row.add("Top 20");
 
         keyboardRows.add(row);
@@ -1257,7 +1252,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 stringBuilder.append(x++).append(point).append(s);
             }
 
-            showTopTenButtons(chatId, "<b>Top 20 слов за " +
+            showTopTenButtons(chatId, "<b>" + top20ByPeriodText +
                     settingsRepository.getPeriodAllByChatId(chatId) + "</b>\n" + stringBuilder);
         }
     }

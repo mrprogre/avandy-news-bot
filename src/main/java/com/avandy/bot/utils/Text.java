@@ -11,7 +11,12 @@ public class Text {
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllKeywordsText, deleteAllExcludedText,
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
-            excludedListText, delFromTopText, searchByTopWordText;
+            excludedListText, delFromTopText, searchByTopWordText, top20ByPeriodText, allowCommasAndNumbersText,
+            allowNumberText, startSearchBeforeText, incorrectTimeText, keywordsSearchText, fullSearchText,
+            addInListText, delFromListText, removeAllText, inputSchedulerStart, addTodoText, delTodoText,
+            sendMessageForDevText, actionCanceledText, delFromTopInstText, findByWordFromTopInstText,
+            removeFromTopTenListText, taskDeletedText, taskAddedText, taskListText, rssSourcesText,
+            searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -72,6 +77,32 @@ public class Text {
             excludedListText = "Список удалённого";
             delFromTopText = "Удалить из топа";
             searchByTopWordText = "Поиск по позиции";
+            top20ByPeriodText = "Top 20 слов за ";
+            allowCommasAndNumbersText = "Допустимы только цифры или запятые";
+            allowNumberText = "Допустима только одна цифра";
+            startSearchBeforeText = "Сначала необходимо запустить поиск слов /top20";
+            incorrectTimeText = "Указано некорректное время. Должна быть цифра от 0 до 23 включительно";
+            keywordsSearchText = "Поиск по словам";
+            fullSearchText = "Поиск общий";
+            addInListText = "Введите слова для добавления в список (разделять запятой)";
+            delFromListText = "Введите слова для удаления из списка (разделять запятой)";
+            removeAllText = "удалить всё";
+            inputSchedulerStart = "Введите время старта автопоиска (число 0-23)";
+            addTodoText = "Введите задачу (разделять точкой запятой)";
+            delTodoText = "Введите номер задачи (разделять запятой)";
+            sendMessageForDevText = "Напишите свои предложения разработчику";
+            actionCanceledText = "Действие отменено";
+            delFromTopInstText = "Введите порядковый номер слова для удаления из топа (разделять запятой)";
+            findByWordFromTopInstText = "Введите порядковый номер слова для поиска содержащих его новостей";
+            removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
+            taskDeletedText = "Задачи удалены";
+            taskAddedText = "Список задач дополнен";
+            taskListText = "Список задач";
+            rssSourcesText = "Источники новостей";
+            searchWithFilterText = "Полный поиск <b>с фильтрацией</b>";
+            searchWithFilter2Text = "слов-исключений";
+            keywordSearchText = "Поиск по <b>ключевым словам</b>";
+            keywordSearch2Text = "ключевых слов";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -129,6 +160,32 @@ public class Text {
             excludedListText = "List of deleted";
             delFromTopText = "Remove from Top 20";
             searchByTopWordText = "Search by position";
+            top20ByPeriodText = "Top 20 words in ";
+            allowCommasAndNumbersText = "Only numbers or commas are allowed";
+            allowNumberText = "Only one digit is allowed";
+            startSearchBeforeText = "First you need to run a word search /top20";
+            incorrectTimeText = "The time specified is incorrect. Must be a number from 0 to 23 inclusive";
+            keywordsSearchText = "Search by words";
+            fullSearchText = "Full search";
+            addInListText = "Enter words to add to the list (separated by comma)";
+            delFromListText = "Enter words to remove from the list (separated by comma)";
+            removeAllText = "delete all";
+            inputSchedulerStart = "Enter the auto search start time (number 0-23)";
+            addTodoText = "Enter task (separated by comma)";
+            delTodoText = "Enter task number (separated by comma)";
+            sendMessageForDevText = "Write your suggestions to the developer";
+            actionCanceledText = "Action cancelled";
+            delFromTopInstText = "Enter the serial number of the word to remove from the top (separate by comma)";
+            findByWordFromTopInstText = "Enter the serial number of a word to search for news containing it";
+            removeFromTopTenListText = "Enter words to delete (separated by comma)";
+            taskDeletedText = "Tasks deleted";
+            taskAddedText = "The task list has been added";
+            taskListText = "Tasks list";
+            rssSourcesText = "News sources";
+            searchWithFilterText = "Full search <b>with filtering</b>";
+            searchWithFilter2Text = "excluded words";
+            keywordSearchText = "Search by <b>keywords</b>";
+            keywordSearch2Text = "keywords";
         }
     }
 
