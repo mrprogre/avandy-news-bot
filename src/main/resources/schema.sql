@@ -4,9 +4,9 @@ create table if not exists rss_list
     chat_id     bigint,
     source      varchar(64),
     link        varchar(512),
-    is_active   integer   default 1,
-    position    INTEGER   default 100,
-    add_date    timestamp default current_timestamp::timestamp,
+    is_active   integer    default 1,
+    position    INTEGER    default 100,
+    add_date    timestamp  default current_timestamp::timestamp,
     country     varchar(128),
     parser_type varchar(8) default 'rss'::character varying,
     constraint ui_rss_list_chat_id_link unique (chat_id, link)
@@ -31,6 +31,7 @@ create table if not exists settings
     scheduler  varchar(3) default 'on'::character varying,
     start      time       default '14:00'::time,
     excluded   varchar(3) default 'on'::character varying,
+    lang       varchar(2) default 'ru'::character varying,
     constraint fk_settings_chat_id foreign key (chat_id) references users (chat_id) on delete cascade
 );
 

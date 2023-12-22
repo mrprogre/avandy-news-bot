@@ -1,9 +1,12 @@
 package com.avandy.bot.utils;
 
 import com.avandy.bot.model.Settings;
+import com.avandy.bot.service.TelegramBot;
 import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
+    public static final String LETS_START = "Продолжим?";
+
     public static final String INFO_RUS = "Информация";
     public static final String SETTINGS_RUS = "Настройки";
     public static final String LIST_KEYWORDS_RUS = "Ключевые слова";
@@ -53,9 +56,14 @@ public class Text {
 
     public static final String NO_BUTTON_TEXT = EmojiParser.parseToUnicode("Good buy! \uD83D\uDC4B");
 
-    public static String getString(String userFirstname) {
-        return EmojiParser.parseToUnicode("Здравствуй, " + userFirstname + "! :blush: \n" +
-                "Я могу найти для тебя важную информацию и отсеять много лишней!");
+    public static String getString() {
+        if (TelegramBot.interfaceLanguage.equals("ru")) {
+            return EmojiParser.parseToUnicode("Здравствуй! :blush: \n" +
+                    "Я могу найти для тебя важную информацию и отсеять много лишней!");
+        } else {
+            return EmojiParser.parseToUnicode("Hello! :blush: \n" +
+                    "I can find important information for you and hide a lot of unnecessary information!");
+        }
     }
 
     public static String getSettingsText(Settings x, String scheduler) {

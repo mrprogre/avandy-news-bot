@@ -19,4 +19,6 @@ public class Settings {
     private String periodAll;
     private LocalTime start;
     private String excluded;
+    @Size(max = 2)
+    private String lang;
 }

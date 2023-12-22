@@ -50,4 +50,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE settings SET excluded = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
     void updateExcluded(String value, long chatId);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE settings SET lang = :value WHERE chat_id = :chatId", nativeQuery = true)
+    void updateLanguage(String value, long chatId);
 }

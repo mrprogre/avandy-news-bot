@@ -34,6 +34,7 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
+    public static String interfaceLanguage;
     public static final int TOP_TEN_SHOW_LIMIT = 20;
     public static final int TOP_TEN_LIST_LIMIT = 60;
     public static final int EXCLUDED_LIMIT = 100;
@@ -360,6 +361,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                     nextButton(chatId, "Действие отменено");
                 }
 
+                case "RU_BUTTON" -> {
+                    setLang(chatId, "ru");
+                    getReplyKeywordWithSearch(chatId, getString());
+                    showYesNoOnStart(chatId, LETS_START);
+                }
+                case "EN_BUTTON" -> {
+                    setLang(chatId, "en");
+                    getReplyKeywordWithSearch(chatId, getString());
+                    showYesNoOnStart(chatId, LETS_START);
+                }
+
                 // Обновление периода поиска по ключевым словам
                 case "BUTTON_1" -> updatePeriod(1, chatId);
                 case "BUTTON_2" -> updatePeriod(2, chatId);
@@ -472,8 +484,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void startActions(Update update, long chatId) {
         addUser(update.getMessage());
-        getReplyKeywordWithSearch(chatId, getString(update.getMessage().getChat().getFirstName()));
-        showYesNoOnStart(chatId, "Продолжим?");
+        showLangButtons(chatId, "Choose your language");
     }
 
     private static String prepareTextToSave(String messageText) {
@@ -766,6 +777,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setScheduler("on");
         settings.setStart(LocalTime.of(14, 0));
         settings.setExcluded("on");
+        settings.setLang("ru");
         settingsRepository.save(settings);
         prefix = "";
     }
@@ -924,6 +936,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("NO_BUTTON", "Нет");
         buttons.put("YES_BUTTON", "Да");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void showLangButtons(long chatId, String text) {
+        SendMessage message = prepareMessage(chatId, text);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("RU_BUTTON", "rus");
+        buttons.put("EN_BUTTON", "eng");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1312,6 +1335,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
         isAutoSearch.set(false);
+    }
+
+    private void setLang(long chatId, String lang) {
+        interfaceLanguage = lang;
+        settingsRepository.updateLanguage(lang, chatId);
     }
 
 }
