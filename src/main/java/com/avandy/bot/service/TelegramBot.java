@@ -159,13 +159,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                         for (String row : split) {
                             int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                            String rowToAdd = row
-                                    .replaceAll("\\d", "")
-                                    .replaceAll("\\s", "")
-                                    .replaceAll("\\.", "");
+                            row = row.replaceAll("\\s", "");
+                            row = row.substring(row.indexOf(".") + 1, row.indexOf("["));
 
                             if (numInt == rowNum) {
-                                words.add(rowToAdd);
+                                words.add(row);
                             }
                         }
                     }
@@ -1288,18 +1286,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 .filter(x -> x.getValue() > 3)
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .limit(TOP_TEN_SHOW_LIMIT)
-                .map(x -> {
-                    String format;
-                    int length = x.getValue().toString().length();
-                    if (length == 1) {
-                        format = "%-6d %s";
-                    } else if (length == 2) {
-                        format = "%-5d %s";
-                    } else {
-                        format = "%-4d %s";
-                    }
-                    return String.format(format, x.getValue(), x.getKey()) + "\n";
-                })
+                .map(x -> String.format("%s [<b>%d</b>]", x.getKey(), x.getValue()) + "\n")
                 .toList();
     }
 
