@@ -110,7 +110,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendFeedback(chatId, feedback);
                 prefix = "";
 
-            } else if (messageText.equals("/todo")) {
+                // Send to all from bot owner
+            } else if (messageText.startsWith("/send-all") && config.getBotOwner() == chatId
+                    && messageText.contains(" ")) {
+                String textToSend = messageText.substring(messageText.indexOf(" "));
+                Iterable<User> users = userRepository.findAll();
+                for (User user: users){
+                    sendMessage(user.getChatId(), textToSend);
+                }
+            }
+
+            else if (messageText.equals("/todo")) {
                 getTodoList(chatId);
 
             } else if (messageText.startsWith("/addtodo") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
@@ -250,7 +260,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/find" -> initSearchButtons(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/keywords" -> getKeywordsList(chatId);
-                    case "/top20" -> showTopTen(chatId);
+                    case "/top" -> showTopTen(chatId);
                     case "/rss" -> getRssList(chatId);
                     case "/excluded" -> getExcludedList(chatId);
                     default -> sendMessage(chatId, undefinedCommandText);
@@ -402,7 +412,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/excluded", listExcludedText));
         listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
         listOfCommands.add(new BotCommand("/find", findSelectText));
-        listOfCommands.add(new BotCommand("/top20", top20Text));
+        listOfCommands.add(new BotCommand("/top", top20Text));
         listOfCommands.add(new BotCommand("/rss", listRssText));
         listOfCommands.add(new BotCommand("/todo", listTodoText));
         listOfCommands.add(new BotCommand("/info", infoText));

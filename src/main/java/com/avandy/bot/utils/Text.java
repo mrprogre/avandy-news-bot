@@ -36,7 +36,7 @@ public class Text {
             listKeywordsText = "Ключевые слова";
             findSelectText = "Выбор вида поиска";
             top20Text = "Top 20 слов за период";
-            listExcludedText = "Слова исключения";
+            listExcludedText = "Слова-исключения";
             listRssText = "Источники RSS";
             listTodoText = "Список задач";
             startText = "Запуск бота";
@@ -47,7 +47,7 @@ public class Text {
             excludeWordText = "Исключить слова";
             findText = "Поиск";
             excludedText = "Исключённое";
-            updateTopText = "Обновить топ";
+            updateTopText = "Обновить";
             undefinedCommandText = "Данная команда не существует";
             changeIntervalText = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
             schedulerChangedText = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
@@ -85,7 +85,7 @@ public class Text {
             top20ByPeriodText = "Top 20 слов за ";
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
             allowNumberText = "Допустима только одна цифра";
-            startSearchBeforeText = "Сначала необходимо запустить поиск слов /top20";
+            startSearchBeforeText = "Сначала необходимо запустить поиск слов /top";
             incorrectTimeText = "Указано некорректное время. Должна быть цифра от 0 до 23 включительно";
             keywordsSearchText = "Поиск по словам";
             fullSearchText = "Поиск общий";
@@ -150,7 +150,6 @@ public class Text {
             excludeWordText = "Exclude word";
             findText = "Search";
             excludedText = "Excluded";
-            updateTopText = "Update top";
             undefinedCommandText = "Command does not exist";
             changeIntervalText = EmojiParser.parseToUnicode("Search interval changed ✔️");
             schedulerChangedText = EmojiParser.parseToUnicode("Auto search mode switched ✔️");
@@ -183,12 +182,13 @@ public class Text {
             exclusionText = "News exclusion";
             startSettingsText = "Start";
             excludedListText = "List of deleted";
-            delFromTopText = "Remove from Top 20";
-            searchByTopWordText = "Search by position";
+            delFromTopText = "Delete";
+            searchByTopWordText = "Search by number";
+            updateTopText = "Update top";
             top20ByPeriodText = "Top 20 words in ";
             allowCommasAndNumbersText = "Only numbers or commas are allowed";
             allowNumberText = "Only one digit is allowed";
-            startSearchBeforeText = "First you need to run a word search /top20";
+            startSearchBeforeText = "First you need to run a word search /top";
             incorrectTimeText = "The time specified is incorrect. Must be a number from 0 to 23 inclusive";
             keywordsSearchText = "Keywords";
             fullSearchText = "Full search";
@@ -208,7 +208,7 @@ public class Text {
             taskListText = "Tasks";
             rssSourcesText = "News sources";
             searchWithFilterText = "Full search <b>with filtering</b>";
-            searchWithFilter2Text = "excluded words";
+            searchWithFilter2Text = "excluding terms";
             keywordSearchText = "Search by <b>keywords</b>";
             keywordSearch2Text = "keywords";
             cancelButtonText = "Cancel";
@@ -217,7 +217,7 @@ public class Text {
             settingsNotFoundText = "Settings not found";
             keywordsListText = "List of keywords";
             keywordsNotSetText = "» keywords not specified";
-            excludedWordsNotSetText = "» no exception words specified";
+            excludedWordsNotSetText = "» no excluding terms specified";
             excludedCountText = "Number of exception words";
             exclusionWordsText = "Exception words";
             addedExceptionWordsText = "Added exception words";
@@ -226,7 +226,7 @@ public class Text {
             listText = "List";
             listTodoIsEmptyText = "The task list is empty";
             confirmDeletedUserText = "Do you confirm deleting the user?";
-            chooseSearchDepthText = "Select search depth in hours";
+            chooseSearchDepthText = "Select search time in hours";
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of removed from Top 20";
             searchByKeywordsStartText = "» search by keywords";
@@ -279,10 +279,10 @@ public class Text {
 
             return "<b>Settings</b>\n" +
                     "<b>1. Interval</b>: <b>-" + x.getPeriod() + "</b>\n" +
-                    "Depth of news search by <b>keywords</b> (search interval is equal to the current moment minus the depth in hours)" + "\n" +
+                    "Search time of news search by <b>keywords</b> (search interval is equal to the current moment minus hours)" + "\n" +
                     "- - - - - -\n" +
                     "<b>2. Interval</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
-                    "Search depth for <b>all news</b> and words for <b>Top 20</b>" + "\n" +
+                    "Search time for <b>all news</b> and words for <b>Top 20</b>" + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Auto search: " + x.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
