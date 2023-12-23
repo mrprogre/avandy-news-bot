@@ -20,7 +20,8 @@ public class Text {
             foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText, keywordsNotSetText,
             excludedCountText, exclusionWordsText, addedExceptionWordsText, wordDeletedText, wordIsNotInTheListText,
             listText, excludedWordsNotSetText, listTodoIsEmptyText, confirmDeletedUserText,
-            chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText;
+            chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
+            fullSearchStartText;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -125,6 +126,8 @@ public class Text {
             chooseSearchDepthText = "Выберите глубину поиска в часах";
             sendIdeaText = "Предложить идею";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
+            searchByKeywordsStartText = "» поиск по ключевым словам";
+            fullSearchStartText = "» поиск всех новостей";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -226,6 +229,8 @@ public class Text {
             chooseSearchDepthText = "Select search depth in hours";
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of removed from Top 20";
+            searchByKeywordsStartText = "» search by keywords";
+            fullSearchStartText = "» search all news";
         }
     }
 

@@ -772,7 +772,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void findAllNews(long chatId) {
-        sendMessage(chatId, "» поиск всех новостей");
+        sendMessage(chatId, fullSearchStartText);
         Set<Headline> headlines = search.start(chatId, "all");
 
         int counterParts = 1;
@@ -811,7 +811,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private int findNewsByKeywords(long chatId) {
         if (!isAutoSearch.get()) {
-            sendMessage(chatId, "» поиск по ключевым словам");
+            sendMessage(chatId,searchByKeywordsStartText);
         }
 
         if (keywordRepository.findKeywordsByChatId(chatId).isEmpty()) {
