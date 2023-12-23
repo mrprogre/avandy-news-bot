@@ -114,10 +114,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
                 String textToSend = messageText.substring(messageText.indexOf(" "));
                 Iterable<User> users = userRepository.findAll();
-//                for (User user: users){
-//                    sendMessage(user.getChatId(), textToSend);
-//                }
-                sendMessage(6455565758L, textToSend);
+                for (User user: users){
+                    sendMessage(user.getChatId(), textToSend);
+                }
             }
 
             else if (messageText.equals("/todo")) {
