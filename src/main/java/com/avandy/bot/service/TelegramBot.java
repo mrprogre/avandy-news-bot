@@ -49,6 +49,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     public static AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private static StringBuilder stringBuilder;
     static String prefix = "";
+    static String topText = "Top 20";
+
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
         super(botToken);
@@ -245,7 +247,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (messageText.startsWith(keywordsSearchText)) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
-            } else if (messageText.startsWith("Top 20")) {
+            } else if (messageText.startsWith(topText)) {
                 showTopTen(chatId);
 
             } else if (messageText.startsWith(fullSearchText)) {
@@ -1184,7 +1186,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
         row.add(fullSearchText);
         row.add(keywordsSearchText);
-        row.add("Top 20");
+        row.add(topText);
 
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
@@ -1227,7 +1229,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         buttons.put("DELETE_TOP", delText);
         buttons.put("ADD_TOP", addText);
-        buttons.put("GET_TOP", "Top 20");
+        buttons.put("GET_TOP", topText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
