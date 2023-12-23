@@ -196,7 +196,7 @@ public class Text {
             delFromListText = "Enter words to remove from the list (separated by comma)";
             removeAllText = "delete all";
             inputSchedulerStart = "Enter the auto search start time (number 0-23)";
-            addTodoText = "Enter task (separated by comma)";
+            addTodoText = "Enter task (separated by ;)";
             delTodoText = "Enter task number (separated by comma)";
             sendMessageForDevText = "Write your suggestions to the developer";
             actionCanceledText = "Action cancelled";
