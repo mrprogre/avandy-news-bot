@@ -186,14 +186,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     for (String row : split) {
                         int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                        String keyword = row
-                                .replaceAll("\\d", "")
-                                .replaceAll("\\s", "")
-                                .replaceAll("\\.", "");
+                        row = row.replaceAll("\\s", "");
+                        row = row.substring(row.indexOf(".") + 1, row.indexOf("["));
 
                         if (wordNum == rowNum) {
-                            log.warn("keyword = " + keyword);
-                            word = keyword;
+                            word = row;
                         }
                     }
 
@@ -1035,7 +1032,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("DELETE_EXCLUDED", delText);
         buttons.put("EXCLUDE", addText);
-        buttons.put("FIND_ALL", findText);
+        buttons.put("FIND_ALL", searchText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1058,7 +1055,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("LIST_EXCLUDED", excludedText);
-        buttons.put("FIND_ALL", findText);
+        buttons.put("FIND_ALL", searchText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1070,7 +1067,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("LIST_KEYWORDS", listKeywordsText);
-        buttons.put("FIND_BY_KEYWORDS", findText);
+        buttons.put("FIND_BY_KEYWORDS", searchText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1083,7 +1080,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("DELETE", delText);
         buttons.put("ADD", addText);
-        buttons.put("FIND_BY_KEYWORDS", findText);
+        buttons.put("FIND_BY_KEYWORDS", searchText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1153,7 +1150,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("LIST_KEYWORDS", listKeywordsText);
-        buttons.put("FIND_BY_KEYWORDS", findAgainText);
+        buttons.put("FIND_BY_KEYWORDS", searchText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
@@ -1165,7 +1162,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("EXCLUDE", excludeWordText);
-        buttons.put("FIND_ALL", findAgainText);
+        buttons.put("FIND_ALL", searchText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);

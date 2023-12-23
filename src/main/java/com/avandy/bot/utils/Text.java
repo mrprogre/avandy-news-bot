@@ -6,7 +6,7 @@ import com.vdurmont.emoji.EmojiParser;
 public class Text {
     public static String greetingText, letsStartText, noText, yesText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText, listTodoText,
-            startText, deleteUserText, addText, delText, findAgainText, excludeWordText, findText, excludedText,
+            startText, deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
             updateTopText, undefinedCommandText, changeIntervalText, schedulerChangedText, excludedChangedText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllKeywordsText, deleteAllExcludedText,
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText,
@@ -43,9 +43,8 @@ public class Text {
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
             delText = "Удалить";
-            findAgainText = "Искать снова";
             excludeWordText = "Исключить слова";
-            findText = "Поиск";
+            searchText = "Поиск";
             excludedText = "Исключённое";
             updateTopText = "Обновить";
             undefinedCommandText = "Данная команда не существует";
@@ -146,9 +145,8 @@ public class Text {
             deleteUserText = "Delete user data";
             addText = "Add";
             delText = "Delete";
-            findAgainText = "Find again";
             excludeWordText = "Exclude word";
-            findText = "Search";
+            searchText = "Search";
             excludedText = "Excluded";
             undefinedCommandText = "Command does not exist";
             changeIntervalText = EmojiParser.parseToUnicode("Search interval changed ✔️");
