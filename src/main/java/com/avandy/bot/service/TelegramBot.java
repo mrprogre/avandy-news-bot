@@ -121,7 +121,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
             }
 
-            else if (messageText.equals("/todo")) {
+            else if (messageText.equals("/tasks")) {
                 getTodoList(chatId);
 
             } else if (messageText.startsWith("/addtodo") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
@@ -415,7 +415,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/find", findSelectText));
         listOfCommands.add(new BotCommand("/top", top20Text));
         listOfCommands.add(new BotCommand("/rss", listRssText));
-        listOfCommands.add(new BotCommand("/todo", listTodoText));
+        listOfCommands.add(new BotCommand("/tasks", listTodoText));
         listOfCommands.add(new BotCommand("/info", infoText));
         listOfCommands.add(new BotCommand("/delete", deleteUserText));
         listOfCommands.add(new BotCommand("/start", startText));
