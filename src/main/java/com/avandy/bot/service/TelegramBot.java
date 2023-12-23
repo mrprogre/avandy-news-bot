@@ -518,7 +518,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     String text = getSettingsText(x, lang);
                     getSettingsButtons(chatId, text);
                 },
-                () -> sendMessage(chatId, "Настройки не обнаружены")
+                () -> sendMessage(chatId, settingsNotFoundText)
         );
     }
 
@@ -526,22 +526,21 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
         if (!keywordsByChatId.isEmpty()) {
-            String text = "<b>Список ключевых слов</b>\n" +
+            String text = "<b>" + keywordsListText + "</b>\n" +
                     keywordsByChatId
                             .toString()
                             .replace("[", "")
                             .replace("]", "");
             showKeywordButtons(chatId, text);
         } else {
-            showAddKeywordsButton(chatId, "» ключевые слова не заданы");
+            showAddKeywordsButton(chatId, keywordsNotSetText);
         }
     }
 
     private void getExcludedList(long chatId) {
         List<String> excludedByChatId = excludedRepository.findExcludedByChatId(chatId);
         if (excludedByChatId.size() >= 400) {
-            sendMessage(chatId, "Количество слов-исключений <b>" + excludedByChatId.size() +
-                    "</b>\nПокажу последние <b>" + EXCLUDED_LIMIT + "</b>");
+            sendMessage(chatId, excludedCountText + " <b>" + excludedByChatId.size());
             excludedByChatId = excludedRepository.findExcludedByChatIdLimit(chatId, EXCLUDED_LIMIT);
         }
 
@@ -550,7 +549,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             for (String item : excludedByChatId) {
                 joiner.add(item);
             }
-            showExcludedButtons(chatId, "<b>Слова-исключения</b>\n" + joiner);
+            showExcludedButtons(chatId, "<b>" + exclusionWordsText + "</b>\n" + joiner);
         } else {
             showExcludeButton(chatId);
         }
@@ -715,7 +714,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (counter != 0) {
-            sendMessage(chatId, EmojiParser.parseToUnicode("Добавлено слов-исключений - " + counter + " ✔️"));
+            sendMessage(chatId, EmojiParser.parseToUnicode(addedExceptionWordsText + " - " + counter + " ✔️"));
         } else {
             sendMessage(chatId, wordsIsNotAddedText);
         }
@@ -733,9 +732,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (keywordRepository.isKeywordExists(chatId, keyword) > 0) {
                 keywordRepository.deleteKeywordByChatId(chatId, keyword);
-                sendMessage(chatId, EmojiParser.parseToUnicode("Удалено слово - " + keyword + " ❌"));
+                sendMessage(chatId, EmojiParser.parseToUnicode(wordDeletedText + " - " + keyword + " ❌"));
             } else {
-                sendMessage(chatId, "Слово " + keyword + " отсутствует в списке");
+                sendMessage(chatId, String.format(wordIsNotInTheListText, keyword));
             }
         }
         prefix = "";
@@ -899,7 +898,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void showOnOffScheduler(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Автопоиск");
+        SendMessage message = prepareMessage(chatId, autoSearchText);
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("SCHEDULER_OFF", "Off");
@@ -910,7 +909,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void showOnOffExcluded(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Исключение заголовков");
+        SendMessage message = prepareMessage(chatId, exclusionText);
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("EXCLUDED_OFF", "Off");
@@ -949,14 +948,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("TODO_DEL", delText);
         buttons.put("TODO_ADD", addText);
-        buttons.put("TODO_LIST", "Список");
+        buttons.put("TODO_LIST", listText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
     }
 
     public void showTodoAddButton(long chatId) {
-        SendMessage message = prepareMessage(chatId, "<b>Список задач пуст</b>");
+        SendMessage message = prepareMessage(chatId, "<b>" + listTodoIsEmptyText + "</b>");
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
@@ -967,7 +966,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void showYesNoOnDeleteUser(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Подтверждаете удаление пользователя?");
+        SendMessage message = prepareMessage(chatId, confirmDeletedUserText);
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("DELETE_YES", yesText);
@@ -978,7 +977,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void getNumbersForKeywordsPeriodButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Выберите глубину поиска в часах");
+        SendMessage message = prepareMessage(chatId, chooseSearchDepthText);
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("BUTTON_1", "1");
@@ -994,7 +993,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void getNumbersForAllPeriodButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, "Выберите глубину поиска в часах");
+        SendMessage message = prepareMessage(chatId, chooseSearchDepthText);
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("BUTTON_1_ALL", "1");
@@ -1034,7 +1033,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void showExcludeButton(long chatId) {
-        SendMessage message = prepareMessage(chatId, "» слова-исключения не заданы");
+        SendMessage message = prepareMessage(chatId, excludedWordsNotSetText);
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
@@ -1132,7 +1131,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("FEEDBACK", "Предложить идею");
+        buttons.put("FEEDBACK", sendIdeaText);
         buttons.put("START_SEARCH", "» » »");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
@@ -1226,8 +1225,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void getTopTenWordsList(long chatId) {
-        showTopTenListButtons(chatId, "<b>Список удалённого из Top 20</b> " +
-                "(крайние " + TOP_TEN_LIST_LIMIT + " слов)\n" +
+        showTopTenListButtons(chatId, "<b>" + listOfDeletedFromTopText + "</b>\n" +
                 topTenRepository.findAllExcludedFromTopTenByChatId(chatId).stream()
                         .limit(TOP_TEN_LIST_LIMIT)
                         .toList()
@@ -1298,9 +1296,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String word : words) {
             if (topTenRepository.isWordExists(chatId, word) > 0) {
                 topTenRepository.deleteWordByChatId(chatId, word);
-                sendMessage(chatId, EmojiParser.parseToUnicode("Удалено слово - " + word + " ❌"));
+                sendMessage(chatId, EmojiParser.parseToUnicode(wordDeletedText + " - " + word + " ❌"));
             } else {
-                sendMessage(chatId, "Слово " + word + " отсутствует в списке");
+                sendMessage(chatId, String.format(wordIsNotInTheListText, word));
             }
         }
         prefix = "";

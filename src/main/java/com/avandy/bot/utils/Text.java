@@ -17,7 +17,10 @@ public class Text {
             sendMessageForDevText, actionCanceledText, delFromTopInstText, findByWordFromTopInstText,
             removeFromTopTenListText, taskDeletedText, taskAddedText, taskListText, rssSourcesText,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
-            foundNewsText, excludedNewsText;
+            foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText, keywordsNotSetText,
+            excludedCountText, exclusionWordsText, addedExceptionWordsText, wordDeletedText, wordIsNotInTheListText,
+            listText, excludedWordsNotSetText, listTodoIsEmptyText, confirmDeletedUserText,
+            chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -73,7 +76,7 @@ public class Text {
             buyButtonText = EmojiParser.parseToUnicode("Пока, друг! \uD83D\uDC4B");
             intervalText = "Интервал";
             autoSearchText = "Автопоиск";
-            exclusionText = "Исключение";
+            exclusionText = "Исключения";
             startSettingsText = "Старт";
             excludedListText = "Список удалённого";
             delFromTopText = "Удалить из топа";
@@ -107,6 +110,21 @@ public class Text {
             cancelButtonText = "Отменить";
             foundNewsText = "Найдено";
             excludedNewsText = "исключено";
+            settingsNotFoundText = "Настройки не обнаружены";
+            keywordsListText = "Список ключевых слов";
+            keywordsNotSetText = "» ключевые слова не заданы";
+            excludedWordsNotSetText = "» слова-исключения не заданы";
+            excludedCountText = "Количество слов-исключений";
+            exclusionWordsText = "Слова-исключения";
+            addedExceptionWordsText = "Добавлено слов-исключений";
+            wordDeletedText = "Удалено слово";
+            wordIsNotInTheListText = "Слово %s отсутствует в списке";
+            listText = "Список";
+            listTodoIsEmptyText = "Список задач пуст";
+            confirmDeletedUserText = "Подтверждаете удаление пользователя?";
+            chooseSearchDepthText = "Выберите глубину поиска в часах";
+            sendIdeaText = "Предложить идею";
+            listOfDeletedFromTopText = "Список удалённого из Top 20";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -184,7 +202,7 @@ public class Text {
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             taskDeletedText = "Tasks deleted";
             taskAddedText = "The task list has been added";
-            taskListText = "Tasks list";
+            taskListText = "Tasks";
             rssSourcesText = "News sources";
             searchWithFilterText = "Full search <b>with filtering</b>";
             searchWithFilter2Text = "excluded words";
@@ -193,6 +211,21 @@ public class Text {
             cancelButtonText = "Cancel";
             foundNewsText = "Found";
             excludedNewsText = "excluded";
+            settingsNotFoundText = "Settings not found";
+            keywordsListText = "List of keywords";
+            keywordsNotSetText = "» keywords not specified";
+            excludedWordsNotSetText = "» no exception words specified";
+            excludedCountText = "Number of exception words";
+            exclusionWordsText = "Exception words";
+            addedExceptionWordsText = "Added exception words";
+            wordDeletedText = "The word has been removed";
+            wordIsNotInTheListText = "The word <b>%s</b> is not in the list";
+            listText = "List";
+            listTodoIsEmptyText = "The task list is empty";
+            confirmDeletedUserText = "Do you confirm deleting the user?";
+            chooseSearchDepthText = "Select search depth in hours";
+            sendIdeaText = "Send feedback";
+            listOfDeletedFromTopText = "List of removed from Top 20";
         }
     }
 
