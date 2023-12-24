@@ -3,8 +3,6 @@ package com.avandy.bot.utils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.LocalTime;
@@ -68,21 +66,10 @@ public class Common {
         }
     }
 
-    // Input: 2023-12-13 13:39:06.0
-    // Output: 13:39 13.12
+    // INPUT  2023-12-13 13:39:06.0
+    // OUTPUT 13:39 13.12
     public static String dateToShowFormatChange(String input) {
         return input.substring(11, 16) + " " + input.substring(8, 10) + "." + input.substring(5, 7);
-    }
-
-    public static boolean isValidEmailAddress(String email) {
-        boolean result = true;
-        try {
-            InternetAddress emailAddr = new InternetAddress(email);
-            emailAddr.validate();
-        } catch (AddressException ex) {
-            result = false;
-        }
-        return result;
     }
 
     public static List<Integer> getTimeToExecute(LocalTime start, String interval) {
