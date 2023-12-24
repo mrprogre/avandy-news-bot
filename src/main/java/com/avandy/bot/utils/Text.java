@@ -58,7 +58,7 @@ public class Text {
             deleteAllExcludedText = "Удалены все слова-исключения ❌";
             wordIsExistsText = "Слово уже есть в списке: ";
             wordsIsNotAddedText = "Слова не добавлены";
-            wordsAddedText = "Добавлено слов - ";
+            wordsAddedText = "Слово добавлено";
             aboutDeveloperText = """
                     <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>Почта</b>: rps_project@mail.ru
@@ -152,7 +152,7 @@ public class Text {
             deleteAllExcludedText = "All exception words removed ❌";
             wordIsExistsText = "The word is already on the list: ";
             wordsIsNotAddedText = "No words added";
-            wordsAddedText = "Added words - ";
+            wordsAddedText = "Word added";
             aboutDeveloperText = """
                     <b>Developer</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>E-mail</b>: rps_project@mail.ru
