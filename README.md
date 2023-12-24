@@ -23,7 +23,7 @@ https://t.me/AvandyNewsBot
 
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/2c1bd9c7-a67a-45df-9c5e-c60ca2ba089d)
 
-**/top20**      - top 20 words in headlines for the period (list, adding, deleting)
+**/top**      - top 20 words in headlines for the period (list, adding, deleting)
 
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0bbd081f-4f71-4105-b08e-64a16e951d32)
 
