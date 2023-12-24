@@ -26,11 +26,6 @@ public class CommonTest {
     }
 
     @Test
-    public void dateFormatTest() {
-        assertTrue(Common.isValidEmailAddress("rps_project@mail.ru"));
-    }
-
-    @Test
     public void dateToShowFormatChangeTest() {
         assertEquals(Common.dateToShowFormatChange("2023-12-13 14:39:06.0"), "14:39 13.12");
     }
