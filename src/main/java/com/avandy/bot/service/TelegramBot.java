@@ -1101,27 +1101,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    private void getReplyKeywordWithSearch(long chatId, String textToSend, String firstName) {
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText(String.format(textToSend, firstName));
-
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        keyboardMarkup.setResizeKeyboard(true);
-
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
-
-        KeyboardRow row = new KeyboardRow();
-        row.add(fullSearchText);
-        row.add(keywordsSearchText);
-        row.add(topText);
-
-        keyboardRows.add(row);
-        keyboardMarkup.setKeyboard(keyboardRows);
-        message.setReplyMarkup(keyboardMarkup);
-        executeMessage(message);
-    }
-
     // Показать топ слов за период
     private void showTopTenButtons(long chatId, String text) {
         SendMessage message = prepareMessage(chatId, text);
@@ -1257,6 +1236,29 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
         isAutoSearch.set(false);
+    }
+
+    // Нижняя клавиатура
+    private void getReplyKeywordWithSearch(long chatId, String textToSend, String firstName) {
+        SendMessage message = new SendMessage();
+        message.setChatId(String.valueOf(chatId));
+        message.setText(String.format(textToSend, firstName));
+
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setSelective(false);
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+
+        KeyboardRow row = new KeyboardRow();
+        row.add(fullSearchText);
+        row.add(keywordsSearchText);
+        row.add(topText);
+
+        keyboardRows.add(row);
+        keyboardMarkup.setKeyboard(keyboardRows);
+        message.setReplyMarkup(keyboardMarkup);
+        executeMessage(message);
     }
 
     private void createMenuCommands() {
