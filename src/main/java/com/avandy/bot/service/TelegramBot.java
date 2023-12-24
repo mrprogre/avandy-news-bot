@@ -421,14 +421,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void createMenuCommands() {
         List<BotCommand> listOfCommands = new LinkedList<>();
         listOfCommands.add(new BotCommand("/settings", settingText));
-        listOfCommands.add(new BotCommand("/excluded", listExcludedText));
         listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
-        listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/top", top20Text));
-        listOfCommands.add(new BotCommand("/rss", listRssText));
+        listOfCommands.add(new BotCommand("/search", findSelectText));
+        listOfCommands.add(new BotCommand("/excluded", listExcludedText));
         listOfCommands.add(new BotCommand("/tasks", listTodoText));
+        listOfCommands.add(new BotCommand("/rss", listRssText));
         listOfCommands.add(new BotCommand("/info", infoText));
-        listOfCommands.add(new BotCommand("/delete", deleteUserText));
+        //listOfCommands.add(new BotCommand("/delete", deleteUserText));
         listOfCommands.add(new BotCommand("/start", startText));
 
         try {
