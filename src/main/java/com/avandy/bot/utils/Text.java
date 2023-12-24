@@ -18,7 +18,7 @@ public class Text {
             removeFromTopTenListText, rssSourcesText,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText, keywordsNotSetText,
-            exclusionWordsText, addedExceptionWordsText, wordDeletedText, wordIsNotInTheListText,
+            exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
             listText, excludedWordsNotSetText, confirmDeletedUserText,
             chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
             fullSearchStartText, chooseNumberWordFromTop;
@@ -110,7 +110,6 @@ public class Text {
             excludedWordsNotSetText = "» слова-исключения не заданы";
             exclusionWordsText = "Слова-исключения";
             addedExceptionWordsText = "Добавлено слов-исключений";
-            wordDeletedText = "Удалено слово";
             wordIsNotInTheListText = "Слово %s отсутствует в списке";
             listText = "Список";
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
@@ -205,7 +204,6 @@ public class Text {
             excludedWordsNotSetText = "» no excluding terms specified";
             exclusionWordsText = "Excluding terms";
             addedExceptionWordsText = "Added excluding terms";
-            wordDeletedText = "The word has been removed";
             wordIsNotInTheListText = "The word <b>%s</b> is not in the list";
             listText = "List";
             confirmDeletedUserText = "Do you confirm deleting the user?";

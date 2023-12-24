@@ -563,7 +563,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             try {
                 topTenRepository.save(topTenExcluded);
-                sendMessage(chatId, EmojiParser.parseToUnicode(wordDeletedText + " - " + word + " ❌"));
+                sendMessage(chatId,"❌ " + word);
             } catch (Exception e) {
                 if (e.getMessage().contains("ui_top_ten_excluded")) {
                     log.info(wordIsExistsText + word);
@@ -605,7 +605,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
         if (counter != 0) {
-            sendMessage(chatId, EmojiParser.parseToUnicode(wordsAddedText + counter + " ✔️"));
+            sendMessage(chatId, wordsAddedText + " - " + counter + " ✔️");
         } else {
             sendMessage(chatId, wordsIsNotAddedText);
         }
@@ -652,18 +652,18 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void delKeyword(long chatId, String[] keywords) {
-        for (String keyword : keywords) {
-            if (keyword.equals("*")) {
+        for (String word : keywords) {
+            if (word.equals("*")) {
                 keywordRepository.deleteAllKeywordsByChatId(chatId);
                 sendMessage(chatId, deleteAllKeywordsText);
                 break;
             }
 
-            if (keywordRepository.isKeywordExists(chatId, keyword) > 0) {
-                keywordRepository.deleteKeywordByChatId(chatId, keyword);
-                sendMessage(chatId, EmojiParser.parseToUnicode(wordDeletedText + " - " + keyword + " ❌"));
+            if (keywordRepository.isKeywordExists(chatId, word) > 0) {
+                keywordRepository.deleteKeywordByChatId(chatId, word);
+                sendMessage(chatId, EmojiParser.parseToUnicode("❌ " + word));
             } else {
-                sendMessage(chatId, String.format(wordIsNotInTheListText, keyword));
+                sendMessage(chatId, String.format(wordIsNotInTheListText, word));
             }
         }
         prefix = "";
@@ -1249,7 +1249,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String word : words) {
             if (topTenRepository.isWordExists(chatId, word) > 0) {
                 topTenRepository.deleteWordByChatId(chatId, word);
-                sendMessage(chatId, EmojiParser.parseToUnicode(wordDeletedText + " - " + word + " ❌"));
+                sendMessage(chatId, EmojiParser.parseToUnicode("❌ " + word));
             } else {
                 sendMessage(chatId, String.format(wordIsNotInTheListText, word));
             }
