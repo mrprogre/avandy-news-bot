@@ -643,7 +643,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (counter != 0) {
-            sendMessage(chatId, EmojiParser.parseToUnicode(addedExceptionWordsText + " - " + counter + " ✔️"));
+            sendMessage(chatId, addedExceptionWordsText + " - " + counter + " ✔️");
         } else {
             sendMessage(chatId, wordsIsNotAddedText);
         }
@@ -661,7 +661,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (keywordRepository.isKeywordExists(chatId, word) > 0) {
                 keywordRepository.deleteKeywordByChatId(chatId, word);
-                sendMessage(chatId, EmojiParser.parseToUnicode("❌ " + word));
+                sendMessage(chatId, "❌ " + word);
             } else {
                 sendMessage(chatId, String.format(wordIsNotInTheListText, word));
             }
@@ -679,7 +679,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (excludedRepository.isWordExists(chatId, exclude) > 0) {
                 excludedRepository.deleteExcludedByChatId(chatId, exclude);
-                sendMessage(chatId, EmojiParser.parseToUnicode("Удалено слово - " + exclude + " ❌"));
+                sendMessage(chatId, "Удалено слово - " + exclude + " ❌");
             } else {
                 sendMessage(chatId, "Слово " + exclude + " отсутствует в списке");
             }
@@ -1249,7 +1249,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String word : words) {
             if (topTenRepository.isWordExists(chatId, word) > 0) {
                 topTenRepository.deleteWordByChatId(chatId, word);
-                sendMessage(chatId, EmojiParser.parseToUnicode("❌ " + word));
+                sendMessage(chatId, "❌ " + word);
             } else {
                 sendMessage(chatId, String.format(wordIsNotInTheListText, word));
             }

@@ -47,9 +47,9 @@ public class Text {
             excludedText = "Исключённое";
             updateTopText = "Обновить";
             undefinedCommandText = "Данная команда не существует";
-            changeIntervalText = EmojiParser.parseToUnicode("Интервал поиска изменён ✔️");
-            schedulerChangedText = EmojiParser.parseToUnicode("Режим автопоиска переключён ✔️");
-            excludedChangedText = EmojiParser.parseToUnicode("Режим исключения заголовков переключён ✔️");
+            changeIntervalText = "Интервал поиска изменён ✔️";
+            schedulerChangedText = "Режим автопоиска переключён ✔️";
+            excludedChangedText = "Режим исключения заголовков переключён ✔️";
             startTimeChangedText = "Время старта автопоиска установлено ✔️";
             headlinesNotFound = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
             setupKeywordsText = "» ключевые слова не заданы";
@@ -140,10 +140,10 @@ public class Text {
             searchText = "Search";
             excludedText = "Excluded";
             undefinedCommandText = "Command does not exist";
-            changeIntervalText = EmojiParser.parseToUnicode("Search interval changed ✔️");
-            schedulerChangedText = EmojiParser.parseToUnicode("Auto search mode switched ✔️");
-            excludedChangedText = EmojiParser.parseToUnicode("Header exclusion mode switched ✔️");
-            startTimeChangedText = EmojiParser.parseToUnicode("Auto search start time is set ✔️");
+            changeIntervalText = "Search interval changed ✔️";
+            schedulerChangedText = "Auto search mode switched ✔️";
+            excludedChangedText = "Header exclusion mode switched ✔️";
+            startTimeChangedText = "Auto search start time is set ✔️";
             headlinesNotFound = EmojiParser.parseToUnicode("» no news headlines found \uD83D\uDCA4");
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 2 characters";
