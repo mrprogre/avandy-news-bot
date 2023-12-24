@@ -91,9 +91,9 @@ public class Text {
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
-            searchWithFilterText = "Полный поиск <b>с фильтрацией</b>";
+            searchWithFilterText = "Полный поиск";
             searchWithFilter2Text = "слов-исключений";
-            keywordSearchText = "Поиск по <b>ключевым словам</b>";
+            keywordSearchText = "Поиск по ключевым словам";
             keywordSearch2Text = "ключевых слов";
             cancelButtonText = "Отменить";
             foundNewsText = "Найдено";
@@ -182,9 +182,9 @@ public class Text {
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "News sources";
-            searchWithFilterText = "Full search <b>with filtering</b>";
+            searchWithFilterText = "Full search";
             searchWithFilter2Text = "excluding terms";
-            keywordSearchText = "Search by <b>keywords</b>";
+            keywordSearchText = "Search by keywords";
             keywordSearch2Text = "keywords";
             cancelButtonText = "Cancel";
             foundNewsText = "Found";

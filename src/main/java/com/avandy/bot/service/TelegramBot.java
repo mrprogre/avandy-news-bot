@@ -180,7 +180,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/start" -> startActions(update, chatId);
                     case "/settings" -> new Thread(() -> getSettings(chatId)).start();
                     case "/info" -> new Thread(() -> infoButtons(chatId)).start();
-                    case "/search" -> initSearchButtons(chatId);
+                    case "/search" -> initSearch(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/keywords" -> getKeywordsList(chatId);
                     case "/top" -> showTop(chatId);
@@ -195,7 +195,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getCallbackQuery().getMessage().getChatId();
 
             switch (callbackData) {
-                case "START_SEARCH", "DELETE_NO" -> initSearchButtons(chatId);
+                case "START_SEARCH", "DELETE_NO" -> initSearch(chatId);
 
                 /* FULL SEARCH */
                 case "FIND_ALL" -> new Thread(() -> findAllNews(chatId)).start();
@@ -437,19 +437,21 @@ public class TelegramBot extends TelegramLongPollingBot {
         return messageText.substring(messageText.indexOf(" ")).trim().toLowerCase();
     }
 
-    private void initSearchButtons(long chatId) {
-        showSearchAllButtons(chatId, getTextForAllSearch(chatId));
-        showKeywordButtonsForSearch(chatId, getKeywordButtonsText(chatId));
-    }
+    private void initSearch(long chatId) {
+        String fullText = "1. " + searchWithFilterText + " [-" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
+                excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
+        String keywordsText = "2. " + keywordSearchText + " [-" + settingsRepository.getPeriodByChatId(chatId) + ", " +
+                keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
 
-    private String getTextForAllSearch(long chatId) {
-        return searchWithFilterText + " [<b>" + settingsRepository.getPeriodAllByChatId(chatId) + "</b>, " +
-                searchWithFilter2Text + " - <b>" + excludedRepository.getExcludedCountByChatId(chatId) + "</b>]";
-    }
+        SendMessage message = prepareMessage(chatId, fullText + "\n" + keywordsText);
+        message.enableHtml(true);
 
-    private String getKeywordButtonsText(long chatId) {
-        return keywordSearchText + " [<b>" + settingsRepository.getPeriodByChatId(chatId) + "</b>, " +
-                keywordSearch2Text + " - <b>" + keywordRepository.getKeywordsCountByChatId(chatId) + "</b>]";
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("FIND_ALL", fullSearchText);
+        buttons.put("FIND_BY_KEYWORDS", listKeywordsText);
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
     }
 
     private void getSettings(long chatId) {
@@ -999,30 +1001,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("EXCLUDE", addText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
-    }
-
-    private void showSearchAllButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("LIST_EXCLUDED", excludedText);
-        buttons.put("FIND_ALL", searchText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
-    }
-
-    private void showKeywordButtonsForSearch(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("LIST_KEYWORDS", listKeywordsText);
-        buttons.put("FIND_BY_KEYWORDS", searchText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);
