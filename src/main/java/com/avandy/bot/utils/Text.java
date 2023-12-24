@@ -21,7 +21,7 @@ public class Text {
             excludedCountText, exclusionWordsText, addedExceptionWordsText, wordDeletedText, wordIsNotInTheListText,
             listText, excludedWordsNotSetText, listTodoIsEmptyText, confirmDeletedUserText,
             chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
-            fullSearchStartText;
+            fullSearchStartText, chooseNumberWordFromTop;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -127,6 +127,7 @@ public class Text {
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             searchByKeywordsStartText = "» поиск по ключевым словам";
             fullSearchStartText = "» поиск всех новостей";
+            chooseNumberWordFromTop = "Выберите порядковый номер слова для поиска новостей, которые его содержат";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -217,7 +218,7 @@ public class Text {
             keywordsNotSetText = "» keywords not specified";
             excludedWordsNotSetText = "» no excluding terms specified";
             excludedCountText = "Number of exception words";
-            exclusionWordsText = "Exception words";
+            exclusionWordsText = "Excluding terms";
             addedExceptionWordsText = "Added exception words";
             wordDeletedText = "The word has been removed";
             wordIsNotInTheListText = "The word <b>%s</b> is not in the list";
@@ -229,6 +230,7 @@ public class Text {
             listOfDeletedFromTopText = "List of removed from Top 20";
             searchByKeywordsStartText = "» search by keywords";
             fullSearchStartText = "» search all news";
+            chooseNumberWordFromTop = "Select the number of a word to search for news that contains it";
         }
     }
 

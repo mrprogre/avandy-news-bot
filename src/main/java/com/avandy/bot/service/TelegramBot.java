@@ -116,12 +116,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
                 String textToSend = messageText.substring(messageText.indexOf(" "));
                 Iterable<User> users = userRepository.findAll();
-                for (User user: users){
+                for (User user : users) {
                     sendMessage(user.getChatId(), textToSend);
                 }
-            }
-
-            else if (messageText.equals("/tasks")) {
+            } else if (messageText.equals("/tasks")) {
                 getTodoList(chatId);
 
             } else if (messageText.startsWith("/addtodo") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
@@ -178,31 +176,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
             } else if (messageText.startsWith("/findtop") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
-                String word = "empty";
-                int wordNum = Integer.parseInt(parseMessageText(messageText));
-
-                try {
-                    String[] split = stringBuilder.toString().split("\n");
-
-                    for (String row : split) {
-                        int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                        row = row.replaceAll("\\s", "");
-                        row = row.substring(row.indexOf(".") + 1, row.indexOf("["));
-
-                        if (wordNum == rowNum) {
-                            word = row;
-                        }
-                    }
-
-                    wordSearch(chatId, word);
-                    prefix = "";
-                } catch (NumberFormatException n) {
-                    sendMessage(chatId, allowNumberText);
-                    prefix = "";
-                } catch (NullPointerException npe) {
-                    sendMessage(chatId, startSearchBeforeText);
-                    prefix = "";
-                }
+                int num = Integer.parseInt(prepareTextToSave(messageText).replaceAll("\\D+", ""));
+                showNewsByWordNumberForTop20(num, chatId);
 
             } else if (messageText.startsWith("/remove-excluded")) {
                 String keywords = parseMessageText(messageText);
@@ -390,15 +365,60 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
                 case "LIST_TOP" -> getTopTenWordsList(chatId);
                 case "GET_TOP" -> showTopTen(chatId);
-                case "WORD_SEARCH" -> {
-                    prefix = "/findtop ";
-                    cancelButton(chatId, findByWordFromTopInstText);
-                }
+                case "WORD_SEARCH" -> getNumberTopSearchByWord(chatId);
                 case "DELETE_TOP" -> {
                     prefix = "/remove-top-ten ";
                     cancelButton(chatId, removeFromTopTenListText);
                 }
+
+                case "TOP_NUM_1" -> showNewsByWordNumberForTop20(1, chatId);
+                case "TOP_NUM_2" -> showNewsByWordNumberForTop20(2, chatId);
+                case "TOP_NUM_3" -> showNewsByWordNumberForTop20(3, chatId);
+                case "TOP_NUM_4" -> showNewsByWordNumberForTop20(4, chatId);
+                case "TOP_NUM_5" -> showNewsByWordNumberForTop20(5, chatId);
+                case "TOP_NUM_6" -> showNewsByWordNumberForTop20(6, chatId);
+                case "TOP_NUM_7" -> showNewsByWordNumberForTop20(7, chatId);
+                case "TOP_NUM_8" -> showNewsByWordNumberForTop20(8, chatId);
+                case "TOP_NUM_9" -> showNewsByWordNumberForTop20(9, chatId);
+                case "TOP_NUM_10" -> showNewsByWordNumberForTop20(10, chatId);
+                case "TOP_NUM_11" -> showNewsByWordNumberForTop20(11, chatId);
+                case "TOP_NUM_12" -> showNewsByWordNumberForTop20(12, chatId);
+                case "TOP_NUM_13" -> showNewsByWordNumberForTop20(13, chatId);
+                case "TOP_NUM_14" -> showNewsByWordNumberForTop20(14, chatId);
+                case "TOP_NUM_15" -> showNewsByWordNumberForTop20(15, chatId);
+                case "TOP_NUM_16" -> showNewsByWordNumberForTop20(16, chatId);
+                case "TOP_NUM_17" -> showNewsByWordNumberForTop20(17, chatId);
+                case "TOP_NUM_18" -> showNewsByWordNumberForTop20(18, chatId);
+                case "TOP_NUM_19" -> showNewsByWordNumberForTop20(19, chatId);
+                case "TOP_NUM_20" -> showNewsByWordNumberForTop20(20, chatId);
             }
+        }
+    }
+
+    private void showNewsByWordNumberForTop20(int wordNum, long chatId) {
+        String word = "empty";
+
+        try {
+            String[] split = stringBuilder.toString().split("\n");
+
+            for (String row : split) {
+                int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
+                row = row.replaceAll("\\s", "");
+                row = row.substring(row.indexOf(".") + 1, row.indexOf("["));
+
+                if (wordNum == rowNum) {
+                    word = row;
+                }
+            }
+
+            wordSearch(chatId, word);
+            prefix = "";
+        } catch (NumberFormatException n) {
+            sendMessage(chatId, allowNumberText);
+            prefix = "";
+        } catch (NullPointerException npe) {
+            sendMessage(chatId, startSearchBeforeText);
+            prefix = "";
         }
     }
 
@@ -817,7 +837,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private int findNewsByKeywords(long chatId) {
         if (!isAutoSearch.get()) {
-            sendMessage(chatId,searchByKeywordsStartText);
+            sendMessage(chatId, searchByKeywordsStartText);
         }
 
         if (keywordRepository.findKeywordsByChatId(chatId).isEmpty()) {
@@ -1011,6 +1031,37 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("BUTTON_24_ALL", "24");
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
+    public void getNumberTopSearchByWord(long chatId) {
+        SendMessage message = prepareMessage(chatId, chooseNumberWordFromTop);
+
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons3 = new LinkedHashMap<>();
+        buttons1.put("TOP_NUM_1", "1");
+        buttons1.put("TOP_NUM_2", "2");
+        buttons1.put("TOP_NUM_3", "3");
+        buttons1.put("TOP_NUM_4", "4");
+        buttons1.put("TOP_NUM_5", "5");
+        buttons1.put("TOP_NUM_6", "6");
+        buttons1.put("TOP_NUM_7", "7");
+        buttons1.put("TOP_NUM_8", "8");
+        buttons2.put("TOP_NUM_9", "9");
+        buttons2.put("TOP_NUM_10", "10");
+        buttons2.put("TOP_NUM_11", "11");
+        buttons2.put("TOP_NUM_12", "12");
+        buttons2.put("TOP_NUM_13", "13");
+        buttons2.put("TOP_NUM_14", "14");
+        buttons3.put("TOP_NUM_15", "15");
+        buttons3.put("TOP_NUM_16", "16");
+        buttons3.put("TOP_NUM_17", "17");
+        buttons3.put("TOP_NUM_18", "18");
+        buttons3.put("TOP_NUM_19", "19");
+        buttons3.put("TOP_NUM_20", "20");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3));
         executeMessage(message);
     }
 
@@ -1249,10 +1300,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<String> topTen = getTopTen(chatId);
         if (topTen.size() > 0) {
             stringBuilder = new StringBuilder();
-            String point = ".     ";
+            String point = ".    ";
 
             for (String s : topTen) {
-                if (x >= 10) point = ".   ";
+                if (x >= 10) point = ".  ";
                 stringBuilder.append(x++).append(point).append(s);
             }
 
