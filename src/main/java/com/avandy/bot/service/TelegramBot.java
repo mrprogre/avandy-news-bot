@@ -112,7 +112,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendFeedback(chatId, feedback);
                 prefix = "";
 
-                // Send to all from bot owner
+                /* SEND TO ALL FROM BOT OWNER */
             } else if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
                 String textToSend = messageText.substring(messageText.indexOf(" "));
                 Iterable<User> users = userRepository.findAll();
@@ -573,7 +573,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             for (String item : excludedByChatId) {
                 joiner.add(item);
             }
-            showExcludedButtons(chatId, "<b>" + exclusionWordsText + "</b> [" + excludedCount +"]\n" +
+            showExcludedButtons(chatId, "<b>" + exclusionWordsText + "</b> [" + excludedCount + "]\n" +
                     joiner);
         } else {
             showExcludeButton(chatId);
