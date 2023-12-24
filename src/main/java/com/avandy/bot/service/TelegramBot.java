@@ -228,7 +228,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/start" -> startActions(update, chatId);
                     case "/settings" -> new Thread(() -> getSettings(chatId)).start();
                     case "/info" -> new Thread(() -> infoButtons(chatId)).start();
-                    case "/find" -> initSearchButtons(chatId);
+                    case "/search" -> initSearchButtons(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/keywords" -> getKeywordsList(chatId);
                     case "/top" -> showTopTen(chatId);
@@ -424,7 +424,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/settings", settingText));
         listOfCommands.add(new BotCommand("/excluded", listExcludedText));
         listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
-        listOfCommands.add(new BotCommand("/find", findSelectText));
+        listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/top", top20Text));
         listOfCommands.add(new BotCommand("/rss", listRssText));
         listOfCommands.add(new BotCommand("/tasks", listTodoText));
@@ -549,7 +549,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
         if (!keywordsByChatId.isEmpty()) {
-            String text = "<b>" + keywordsListText + "</b>\n" +
+            String text = "<b>" + keywordsListText + "</b> [" + keywordsByChatId.size() + "]\n" +
                     keywordsByChatId
                             .toString()
                             .replace("[", "")
@@ -562,8 +562,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void getExcludedList(long chatId) {
         List<String> excludedByChatId = excludedRepository.findExcludedByChatId(chatId);
+        int excludedCount = excludedByChatId.size();
+
         if (excludedByChatId.size() >= 400) {
-            sendMessage(chatId, excludedCountText + " <b>" + excludedByChatId.size());
             excludedByChatId = excludedRepository.findExcludedByChatIdLimit(chatId, EXCLUDED_LIMIT);
         }
 
@@ -572,7 +573,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             for (String item : excludedByChatId) {
                 joiner.add(item);
             }
-            showExcludedButtons(chatId, "<b>" + exclusionWordsText + "</b>\n" + joiner);
+            showExcludedButtons(chatId, "<b>" + exclusionWordsText + "</b> [" + excludedCount +"]\n" +
+                    joiner);
         } else {
             showExcludeButton(chatId);
         }
@@ -1279,8 +1281,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void getTopTenWordsList(long chatId) {
-        showTopTenListButtons(chatId, "<b>" + listOfDeletedFromTopText + "</b>\n" +
-                topTenRepository.findAllExcludedFromTopTenByChatId(chatId).stream()
+        Set<String> terms = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+
+        showTopTenListButtons(chatId, "<b>" + listOfDeletedFromTopText + "</b> [" + terms.size() + "]\n" +
+                terms.stream()
                         .limit(TOP_TEN_LIST_LIMIT)
                         .toList()
                         .toString()

@@ -18,7 +18,7 @@ public class Text {
             removeFromTopTenListText, taskDeletedText, taskAddedText, taskListText, rssSourcesText,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText, keywordsNotSetText,
-            excludedCountText, exclusionWordsText, addedExceptionWordsText, wordDeletedText, wordIsNotInTheListText,
+            exclusionWordsText, addedExceptionWordsText, wordDeletedText, wordIsNotInTheListText,
             listText, excludedWordsNotSetText, listTodoIsEmptyText, confirmDeletedUserText,
             chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
             fullSearchStartText, chooseNumberWordFromTop;
@@ -114,7 +114,6 @@ public class Text {
             keywordsListText = "Список ключевых слов";
             keywordsNotSetText = "» ключевые слова не заданы";
             excludedWordsNotSetText = "» слова-исключения не заданы";
-            excludedCountText = "Количество слов-исключений";
             exclusionWordsText = "Слова-исключения";
             addedExceptionWordsText = "Добавлено слов-исключений";
             wordDeletedText = "Удалено слово";
@@ -139,7 +138,7 @@ public class Text {
             listKeywordsText = "Keywords";
             findSelectText = "Selecting a search type";
             top20Text = "Top 20 words for the period";
-            listExcludedText = "Excluded words";
+            listExcludedText = "Excluding terms";
             listRssText = "RSS sources";
             listTodoText = "Task manager";
             startText = "Bot start";
@@ -217,9 +216,8 @@ public class Text {
             keywordsListText = "List of keywords";
             keywordsNotSetText = "» keywords not specified";
             excludedWordsNotSetText = "» no excluding terms specified";
-            excludedCountText = "Number of exception words";
             exclusionWordsText = "Excluding terms";
-            addedExceptionWordsText = "Added exception words";
+            addedExceptionWordsText = "Added excluding terms";
             wordDeletedText = "The word has been removed";
             wordIsNotInTheListText = "The word <b>%s</b> is not in the list";
             listText = "List";
