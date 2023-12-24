@@ -31,10 +31,6 @@ https://t.me/AvandyNewsBot
 
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0f4b1201-144e-46a1-b615-1bc4678bf719)
 
-**/todo**       - tasks (list, adding, deleting)
-
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/159e0f93-d7b9-433c-8f29-e02708f3209b)
-
 **/info**       - information about the developer and the ability to send a message to the developer
 
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/7147d611-cc06-4448-93d7-82b5ed930e74)

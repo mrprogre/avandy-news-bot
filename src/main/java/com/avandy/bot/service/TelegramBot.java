@@ -44,7 +44,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private SettingsRepository settingsRepository;
     private ExcludedRepository excludedRepository;
     private RssRepository rssRepository;
-    private TodoRepository todoRepository;
     private TopTenRepository topTenRepository;
     public static AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private static StringBuilder stringBuilder;
@@ -91,11 +90,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.topTenRepository = topTenRepository;
     }
 
-    @Autowired
-    public void setTodoRepository(TodoRepository todoRepository) {
-        this.todoRepository = todoRepository;
-    }
-
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -118,19 +112,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 for (User user : users) {
                     sendMessage(user.getChatId(), textToSend);
                 }
-            } else if (messageText.equals("/tasks")) {
-                getTodoList(chatId);
-
-            } else if (messageText.startsWith("/addtodo") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
-                addTodo(messageText, chatId);
-                getTodoList(chatId);
-                prefix = "";
-
-            } else if (messageText.startsWith("/deltodo") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
-                deleteTodo(messageText, chatId);
-                getTodoList(chatId);
-                prefix = "";
-
             } else if (messageText.startsWith("/add-keywords")) {
                 String keywords = parseMessageText(messageText);
                 String[] words = keywords.split(",");
@@ -301,16 +282,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                     getSettings(chatId);
                 }
 
-                case "TODO_LIST" -> getTodoList(chatId);
-                case "TODO_ADD" -> {
-                    prefix = "/addtodo ";
-                    cancelButton(chatId, addTodoText);
-                }
-                case "TODO_DEL" -> {
-                    prefix = "/deltodo ";
-                    cancelButton(chatId, delTodoText);
-                }
-
                 case "FEEDBACK" -> {
                     prefix = "/send-feedback ";
                     cancelButton(chatId, sendMessageForDevText);
@@ -425,7 +396,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/top", top20Text));
         listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/excluded", listExcludedText));
-        listOfCommands.add(new BotCommand("/tasks", listTodoText));
         listOfCommands.add(new BotCommand("/rss", listRssText));
         listOfCommands.add(new BotCommand("/info", infoText));
         //listOfCommands.add(new BotCommand("/delete", deleteUserText));
@@ -448,46 +418,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         settingsRepository.updatePeriodAll(period + "h", chatId);
         sendMessage(chatId, changeIntervalText);
         getSettings(chatId);
-    }
-
-    private void deleteTodo(String messageText, long chatId) {
-        String toDel = parseMessageText(messageText);
-        String[] ids = toDel.split(",");
-
-        for (String id : ids) {
-            int idToDel = Integer.parseInt(id);
-
-            if (todoRepository.findById(idToDel).isPresent()) {
-                todoRepository.deleteById(idToDel);
-            }
-        }
-        sendMessage(chatId, taskDeletedText);
-    }
-
-    private void addTodo(String messageText, long chatId) {
-        String[] texts = messageText
-                .substring(messageText.indexOf(" "))
-                .split(";");
-
-        for (String text : texts) {
-            todoRepository.save(new Todo(chatId, text.trim()));
-        }
-        sendMessage(chatId, taskAddedText);
-    }
-
-    private void getTodoList(long chatId) {
-        List<Todo> todoList = todoRepository.findByChatId(chatId);
-
-        if (todoList.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n");
-            for (Todo item : todoList) {
-                joiner.add(item.getId() + ". " + item.getText() + " [" + item.getAddDate() + "]");
-            }
-            showTodoButtons(chatId, "<b>" + taskListText + "</b>\n" + joiner);
-
-        } else {
-            showTodoAddButton(chatId);
-        }
     }
 
     private void removeUser(long chatId) {
@@ -960,30 +890,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("RU_BUTTON", "rus");
         buttons.put("EN_BUTTON", "eng");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
-    }
-
-    public void showTodoButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("TODO_DEL", delText);
-        buttons.put("TODO_ADD", addText);
-        buttons.put("TODO_LIST", listText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
-    }
-
-    public void showTodoAddButton(long chatId) {
-        SendMessage message = prepareMessage(chatId, "<b>" + listTodoIsEmptyText + "</b>");
-        message.enableHtml(true);
-
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("TODO_ADD", addText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
         executeMessage(message);

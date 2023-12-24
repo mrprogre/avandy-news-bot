@@ -12,3 +12,6 @@ from users u
          left join keywords k on u.chat_id = k.chat_id
          left join excluded e on u.chat_id = e.chat_id
 where u.chat_id != 1254981379;
+
+-- todo Сделать тесты на каждый кейс в идеале
+-- todo Сделать поиск по ключевым словам с %, чтобы искать типа повыш%зарплат'

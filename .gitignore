@@ -9,5 +9,4 @@ target/
 /.mvn/
 /var/
 /news-console.jar
-/todo.txt
 /news.db

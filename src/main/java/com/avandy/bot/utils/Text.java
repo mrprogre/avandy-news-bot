@@ -5,7 +5,7 @@ import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
     public static String greetingText, letsStartText, noText, yesText,
-            infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText, listTodoText,
+            infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText,
             startText, deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
             updateTopText, undefinedCommandText, changeIntervalText, schedulerChangedText, excludedChangedText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllKeywordsText, deleteAllExcludedText,
@@ -13,13 +13,13 @@ public class Text {
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
             excludedListText, delFromTopText, searchByTopWordText, top20ByPeriodText, allowCommasAndNumbersText,
             allowNumberText, startSearchBeforeText, incorrectTimeText, keywordsSearchText, fullSearchText,
-            addInListText, delFromListText, removeAllText, inputSchedulerStart, addTodoText, delTodoText,
-            sendMessageForDevText, actionCanceledText, delFromTopInstText, findByWordFromTopInstText,
-            removeFromTopTenListText, taskDeletedText, taskAddedText, taskListText, rssSourcesText,
+            addInListText, delFromListText, removeAllText, inputSchedulerStart, sendMessageForDevText,
+            actionCanceledText, delFromTopInstText, findByWordFromTopInstText,
+            removeFromTopTenListText, rssSourcesText,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText, keywordsNotSetText,
             exclusionWordsText, addedExceptionWordsText, wordDeletedText, wordIsNotInTheListText,
-            listText, excludedWordsNotSetText, listTodoIsEmptyText, confirmDeletedUserText,
+            listText, excludedWordsNotSetText, confirmDeletedUserText,
             chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
             fullSearchStartText, chooseNumberWordFromTop;
 
@@ -38,7 +38,6 @@ public class Text {
             top20Text = "Top 20 слов за период";
             listExcludedText = "Слова-исключения";
             listRssText = "Источники RSS";
-            listTodoText = "Список задач";
             startText = "Запуск бота";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
@@ -92,16 +91,11 @@ public class Text {
             delFromListText = "Введите слова для удаления из списка (разделять запятой)";
             removeAllText = "удалить всё";
             inputSchedulerStart = "Введите время старта автопоиска (число 0-23)";
-            addTodoText = "Введите задачу (разделять точкой запятой)";
-            delTodoText = "Введите номер задачи (разделять запятой)";
             sendMessageForDevText = "Напишите свои предложения разработчику";
             actionCanceledText = "Действие отменено";
             delFromTopInstText = "Введите порядковый номер слова для удаления из топа (разделять запятой)";
             findByWordFromTopInstText = "Введите порядковый номер слова для поиска содержащих его новостей";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
-            taskDeletedText = "Задачи удалены";
-            taskAddedText = "Список задач дополнен";
-            taskListText = "Список задач";
             rssSourcesText = "Источники новостей";
             searchWithFilterText = "Полный поиск <b>с фильтрацией</b>";
             searchWithFilter2Text = "слов-исключений";
@@ -119,7 +113,6 @@ public class Text {
             wordDeletedText = "Удалено слово";
             wordIsNotInTheListText = "Слово %s отсутствует в списке";
             listText = "Список";
-            listTodoIsEmptyText = "Список задач пуст";
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
             chooseSearchDepthText = "Выберите глубину поиска в часах";
             sendIdeaText = "Предложить идею";
@@ -140,7 +133,6 @@ public class Text {
             top20Text = "Top 20 words for the period";
             listExcludedText = "Excluding terms";
             listRssText = "RSS sources";
-            listTodoText = "Task manager";
             startText = "Bot start";
             deleteUserText = "Delete user data";
             addText = "Add";
@@ -194,16 +186,11 @@ public class Text {
             delFromListText = "Enter words to remove from the list (separated by comma)";
             removeAllText = "delete all";
             inputSchedulerStart = "Enter the auto search start time (number 0-23)";
-            addTodoText = "Enter task (separated by ; )";
-            delTodoText = "Enter task number (separated by comma)";
             sendMessageForDevText = "Write your suggestions to the developer";
             actionCanceledText = "Cancelled";
             delFromTopInstText = "Enter the serial number of the word to remove from the top (separate by comma)";
             findByWordFromTopInstText = "Enter the serial number of a word to search for news containing it";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
-            taskDeletedText = "Tasks deleted";
-            taskAddedText = "The task list has been added";
-            taskListText = "Tasks";
             rssSourcesText = "News sources";
             searchWithFilterText = "Full search <b>with filtering</b>";
             searchWithFilter2Text = "excluding terms";
@@ -221,7 +208,6 @@ public class Text {
             wordDeletedText = "The word has been removed";
             wordIsNotInTheListText = "The word <b>%s</b> is not in the list";
             listText = "List";
-            listTodoIsEmptyText = "The task list is empty";
             confirmDeletedUserText = "Do you confirm deleting the user?";
             chooseSearchDepthText = "Select search time in hours";
             sendIdeaText = "Send feedback";
