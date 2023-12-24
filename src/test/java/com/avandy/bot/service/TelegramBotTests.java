@@ -118,7 +118,7 @@ public class TelegramBotTests {
 
     @Test
     public void excludedTest() throws TelegramApiException {
-        update.getMessage().setText("/excluded");
+        update.getMessage().setText("/excluding");
         bot.onUpdateReceived(update);
         verify(bot, new Times(1)).execute(argumentCaptor.capture());
 
