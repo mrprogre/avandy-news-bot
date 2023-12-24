@@ -20,8 +20,9 @@ public interface ExcludedRepository extends CrudRepository<Excluded, Long> {
     @Query(value = "SELECT count(word) FROM excluded WHERE chat_id = :chatId", nativeQuery = true)
     int getExcludedCountByChatId(Long chatId);
 
-    @Query(value = "SELECT count(word) FROM excluded WHERE lower(word) = lower(:word)", nativeQuery = true)
-    int isWordExists(String word);
+    @Query(value = "SELECT count(word) FROM excluded WHERE lower(word) = lower(:word) and chat_id = :chatId"
+            , nativeQuery = true)
+    int isWordExists(Long chatId, String word);
 
     @Transactional
     @Modifying(clearAutomatically = true)

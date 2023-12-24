@@ -772,7 +772,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 break;
             }
 
-            if (excludedRepository.isWordExists(exclude) > 0) {
+            if (excludedRepository.isWordExists(chatId, exclude) > 0) {
                 excludedRepository.deleteExcludedByChatId(chatId, exclude);
                 sendMessage(chatId, EmojiParser.parseToUnicode("Удалено слово - " + exclude + " ❌"));
             } else {
