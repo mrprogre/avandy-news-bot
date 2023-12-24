@@ -412,13 +412,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             wordSearch(chatId, word);
-            prefix = "";
         } catch (NumberFormatException n) {
             sendMessage(chatId, allowNumberText);
-            prefix = "";
         } catch (NullPointerException npe) {
             sendMessage(chatId, startSearchBeforeText);
-            prefix = "";
         }
     }
 
