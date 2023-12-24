@@ -78,9 +78,9 @@ public class Text {
             autoSearchText = "Автопоиск";
             exclusionText = "Исключения";
             startSettingsText = "Старт";
-            excludedListText = "Список удалённого";
+            excludedListText = "Удалённое";
             delFromTopText = "Удалить из топа";
-            searchByTopWordText = "Поиск по позиции";
+            searchByTopWordText = "Поиск";
             top20ByPeriodText = "Top 20 слов за ";
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
             allowNumberText = "Допустима только одна цифра";
@@ -126,7 +126,7 @@ public class Text {
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             searchByKeywordsStartText = "» поиск по ключевым словам";
             fullSearchStartText = "» поиск всех новостей";
-            chooseNumberWordFromTop = "Выберите порядковый номер слова для поиска новостей, которые его содержат";
+            chooseNumberWordFromTop = "Нажмите на слово для поиска новостей";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -181,8 +181,8 @@ public class Text {
             startSettingsText = "Start";
             excludedListText = "List of deleted";
             delFromTopText = "Delete";
-            searchByTopWordText = "Search by number";
-            updateTopText = "Update top";
+            searchByTopWordText = "Search";
+            updateTopText = "Refresh top";
             top20ByPeriodText = "Top 20 words in ";
             allowCommasAndNumbersText = "Only numbers or commas are allowed";
             allowNumberText = "Only one digit is allowed";
@@ -228,7 +228,7 @@ public class Text {
             listOfDeletedFromTopText = "List of removed from Top 20";
             searchByKeywordsStartText = "» search by keywords";
             fullSearchStartText = "» search all news";
-            chooseNumberWordFromTop = "Select the number of a word to search for news that contains it";
+            chooseNumberWordFromTop = "Click to search for news";
         }
     }
 

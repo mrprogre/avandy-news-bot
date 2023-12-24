@@ -35,25 +35,41 @@ public class InlineKeyboards {
 
     public static InlineKeyboardMarkup inlineKeyboardMaker(Map<String, String> buttons1,
                                                            Map<String, String> buttons2,
-                                                           Map<String, String> buttons3) {
+                                                           Map<String, String> buttons3,
+                                                           Map<String, String> buttons4,
+                                                           Map<String, String> buttons5) {
         InlineKeyboardMarkup inlineKeyboardAbout = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
 
-        // создаем первый этаж
+        // 1 этаж
         List<InlineKeyboardButton> rowInLine1 = new ArrayList<>();
         setButtons(buttons1, rowInLine1);
         rowsInLine.add(rowInLine1);
 
-        // создаем второй этаж
+        // 2 этаж
         List<InlineKeyboardButton> rowInLine2 = new ArrayList<>();
         setButtons(buttons2, rowInLine2);
         rowsInLine.add(rowInLine2);
 
-        // создаем третий этаж
+        // 3 этаж
         if (buttons3 != null) {
             List<InlineKeyboardButton> rowInLine3 = new ArrayList<>();
             setButtons(buttons3, rowInLine3);
             rowsInLine.add(rowInLine3);
+        }
+
+        // 4 этаж
+        if (buttons4 != null) {
+            List<InlineKeyboardButton> rowInLine4 = new ArrayList<>();
+            setButtons(buttons4, rowInLine4);
+            rowsInLine.add(rowInLine4);
+        }
+
+        // 5 этаж
+        if (buttons5 != null) {
+            List<InlineKeyboardButton> rowInLine5 = new ArrayList<>();
+            setButtons(buttons5, rowInLine5);
+            rowsInLine.add(rowInLine5);
         }
 
         inlineKeyboardAbout.setKeyboard(rowsInLine);
