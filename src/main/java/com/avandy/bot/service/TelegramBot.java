@@ -185,7 +185,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/keywords" -> getKeywordsList(chatId);
                     case "/top" -> showTop(chatId);
                     case "/rss" -> getRssList(chatId);
-                    case "/excluded" -> getExcludedList(chatId);
+                    case "/excluding" -> getExcludedList(chatId);
                     default -> sendMessage(chatId, undefinedCommandText);
                 }
             }
@@ -655,7 +655,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String word : keywords) {
             if (word.equals("*")) {
                 keywordRepository.deleteAllKeywordsByChatId(chatId);
-                sendMessage(chatId, deleteAllKeywordsText);
+                sendMessage(chatId, deleteAllWordsText);
                 break;
             }
 
@@ -673,7 +673,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String exclude : excluded) {
             if (exclude.equals("*")) {
                 excludedRepository.deleteAllExcludedByChatId(chatId);
-                sendMessage(chatId, deleteAllExcludedText);
+                sendMessage(chatId, deleteAllWordsText);
                 break;
             }
 
@@ -942,7 +942,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void deleteFromTopButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, chooseNumberWordFromTop);
+        SendMessage message = prepareMessage(chatId, chooseWordDelFromTop);
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
@@ -1287,11 +1287,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
         listOfCommands.add(new BotCommand("/top", top20Text));
         listOfCommands.add(new BotCommand("/search", findSelectText));
-        listOfCommands.add(new BotCommand("/excluded", listExcludedText));
-        listOfCommands.add(new BotCommand("/rss", listRssText));
+        listOfCommands.add(new BotCommand("/excluding", listExcludedText));
         listOfCommands.add(new BotCommand("/info", infoText));
+        listOfCommands.add(new BotCommand("/rss", listRssText));
         //listOfCommands.add(new BotCommand("/delete", deleteUserText));
-        listOfCommands.add(new BotCommand("/start", startText));
+        //listOfCommands.add(new BotCommand("/start", startText));
 
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));

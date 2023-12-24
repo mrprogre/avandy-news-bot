@@ -8,20 +8,18 @@ public class Text {
             infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText,
             startText, deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
             updateTopText, undefinedCommandText, changeIntervalText, schedulerChangedText, excludedChangedText,
-            headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllKeywordsText, deleteAllExcludedText,
+            headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText,
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
             excludedListText, delFromTopText, searchByTopWordText, top20ByPeriodText, allowCommasAndNumbersText,
-            allowNumberText, startSearchBeforeText, incorrectTimeText, keywordsSearchText, fullSearchText,
+            startSearchBeforeText, incorrectTimeText, keywordsSearchText, fullSearchText,
             addInListText, delFromListText, removeAllText, inputSchedulerStart, sendMessageForDevText,
-            actionCanceledText, delFromTopInstText, findByWordFromTopInstText,
-            removeFromTopTenListText, rssSourcesText,
+            actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText, keywordsNotSetText,
             exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
-            listText, excludedWordsNotSetText, confirmDeletedUserText,
-            chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
-            fullSearchStartText, chooseNumberWordFromTop;
+            listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
+            chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText;
 
     public static void setInterfaceLanguage(String lang) {
 
@@ -54,8 +52,7 @@ public class Text {
             headlinesNotFound = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 2 символов";
-            deleteAllKeywordsText = "Удалены все ключевые слова ❌";
-            deleteAllExcludedText = "Удалены все слова-исключения ❌";
+            deleteAllWordsText = "❌ все слова удалены";
             wordIsExistsText = "Слово уже есть в списке: ";
             wordsIsNotAddedText = "Слова не добавлены";
             wordsAddedText = "Слово добавлено";
@@ -82,7 +79,6 @@ public class Text {
             searchByTopWordText = "Поиск";
             top20ByPeriodText = "Top 20 слов за ";
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
-            allowNumberText = "Допустима только одна цифра";
             startSearchBeforeText = "Сначала необходимо запустить поиск слов /top";
             incorrectTimeText = "Указано некорректное время. Должна быть цифра от 0 до 23 включительно";
             keywordsSearchText = "Поиск по словам";
@@ -93,8 +89,6 @@ public class Text {
             inputSchedulerStart = "Введите время старта автопоиска (число 0-23)";
             sendMessageForDevText = "Напишите свои предложения разработчику";
             actionCanceledText = "Действие отменено";
-            delFromTopInstText = "Введите порядковый номер слова для удаления из топа (разделять запятой)";
-            findByWordFromTopInstText = "Введите порядковый номер слова для поиска содержащих его новостей";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
             searchWithFilterText = "Полный поиск <b>с фильтрацией</b>";
@@ -119,6 +113,7 @@ public class Text {
             searchByKeywordsStartText = "» поиск по ключевым словам";
             fullSearchStartText = "» поиск всех новостей";
             chooseNumberWordFromTop = "Нажмите на слово для поиска новостей";
+            chooseWordDelFromTop = "Нажмите на слово для удаления";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -131,7 +126,7 @@ public class Text {
             findSelectText = "Selecting a search type";
             top20Text = "Top 20 words for the period";
             listExcludedText = "Excluding terms";
-            listRssText = "RSS sources";
+            listRssText = "News sources";
             startText = "Bot start";
             deleteUserText = "Delete user data";
             addText = "Add";
@@ -147,8 +142,7 @@ public class Text {
             headlinesNotFound = EmojiParser.parseToUnicode("» no news headlines found \uD83D\uDCA4");
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 2 characters";
-            deleteAllKeywordsText = "All keywords removed ❌";
-            deleteAllExcludedText = "All exception words removed ❌";
+            deleteAllWordsText = "❌ all words removed";
             wordIsExistsText = "The word is already on the list: ";
             wordsIsNotAddedText = "No words added";
             wordsAddedText = "Word added";
@@ -176,19 +170,16 @@ public class Text {
             updateTopText = "Refresh top";
             top20ByPeriodText = "Top 20 words in ";
             allowCommasAndNumbersText = "Only numbers or commas are allowed";
-            allowNumberText = "Only one digit is allowed";
             startSearchBeforeText = "First you need to run a word search /top";
             incorrectTimeText = "The time specified is incorrect. Must be a number from 0 to 23 inclusive";
             keywordsSearchText = "Keywords";
             fullSearchText = "Full search";
-            addInListText = "Enter words to add to the list (separated by comma)";
-            delFromListText = "Enter words to remove from the list (separated by comma)";
+            addInListText = "Input words to add (separated by comma)";
+            delFromListText = "Input words to remove (separated by comma)";
             removeAllText = "delete all";
             inputSchedulerStart = "Enter the auto search start time (number 0-23)";
-            sendMessageForDevText = "Write your suggestions to the developer";
+            sendMessageForDevText = "Write your feedback to the developer";
             actionCanceledText = "Cancelled";
-            delFromTopInstText = "Enter the serial number of the word to remove from the top (separate by comma)";
-            findByWordFromTopInstText = "Enter the serial number of a word to search for news containing it";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "News sources";
             searchWithFilterText = "Full search <b>with filtering</b>";
@@ -213,6 +204,7 @@ public class Text {
             searchByKeywordsStartText = "» search by keywords";
             fullSearchStartText = "» search all news";
             chooseNumberWordFromTop = "Click to search for news";
+            chooseWordDelFromTop = "Click to delete word";
         }
     }
 
