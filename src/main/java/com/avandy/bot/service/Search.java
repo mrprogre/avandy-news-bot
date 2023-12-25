@@ -42,13 +42,8 @@ public class Search {
 
     public Set<Headline> start(Long chatId, String searchType) {
         boolean isTopSearch = !searchType.equals("all") && !searchType.equals("keywords") && !searchType.equals("top");
-        List<Keyword> keywords = keywordRepository.findAllByChatId(chatId);
-        List<String> allExcludedByChatId = excludedRepository.findExcludedByChatId(chatId);
-        List<String> showedNewsHash = showedNewsRepository.findShowedNewsHashByChatId(chatId);
-        Set<ShowedNews> showedNewsToSave = new HashSet<>();
-        Set<Headline> headlinesToShow = new TreeSet<>();
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
-        headlinesTopTen = new TreeSet<>();
+        Set<Headline> headlinesToShow = new TreeSet<>();
 
         if (searchType.equals("keywords")) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriod()),
@@ -58,49 +53,55 @@ public class Search {
                     () -> periodMinutes = 60);
         }
 
-        // find news by period
-        TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodMinutes + " minutes");
+        if (!isTopSearch) {
+            List<Keyword> keywords = keywordRepository.findAllByChatId(chatId);
+            List<String> showedNewsHash = showedNewsRepository.findShowedNewsHashByChatId(chatId);
+            headlinesTopTen = new TreeSet<>();
 
-        for (NewsList news : newsListByPeriod) {
-            String rss = news.getSource();
-            String title = news.getTitle().trim();
-            String hash = Common.getHash(title);
-            Date date = news.getPubDate();
-            String link = news.getLink();
+            // find news by period
+            TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodMinutes + " minutes");
 
-            int dateDiff = Common.compareDates(new Date(), date, periodMinutes);
-            switch (searchType) {
+            for (NewsList news : newsListByPeriod) {
+                String rss = news.getSource();
+                String title = news.getTitle().trim();
+                String hash = Common.getHash(title);
+                Date date = news.getPubDate();
+                String link = news.getLink();
 
-                /* ALL NEWS SEARCH */
-                case "all" -> {
-                    if (title.length() > 15) {
+                int dateDiff = Common.compareDates(new Date(), date, periodMinutes);
+                switch (searchType) {
 
-                        if (dateDiff != 0) {
-                            if (!showedNewsHash.contains(hash)) {
-                                headlinesToShow.add(new Headline(rss, title, link, date, chatId, 4, hash));
-                            }
-                        }
-                    }
-                }
-
-                /* KEYWORDS SEARCH */
-                case "keywords" -> {
-                    for (Keyword keyword : keywords) {
-                        if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase()) && title.length() > 15) {
+                    /* ALL NEWS SEARCH */
+                    case "all" -> {
+                        if (title.length() > 15) {
 
                             if (dateDiff != 0) {
                                 if (!showedNewsHash.contains(hash)) {
-                                    headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
+                                    headlinesToShow.add(new Headline(rss, title, link, date, chatId, 4, hash));
                                 }
                             }
                         }
                     }
-                }
 
-                /* TOP */
-                case "top" -> {
-                    if (dateDiff != 0) {
-                        headlinesTopTen.add(new Headline(rss, title, link, date, chatId, -1, hash));
+                    /* KEYWORDS SEARCH */
+                    case "keywords" -> {
+                        for (Keyword keyword : keywords) {
+                            if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase()) && title.length() > 15) {
+
+                                if (dateDiff != 0) {
+                                    if (!showedNewsHash.contains(hash)) {
+                                        headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    /* TOP */
+                    case "top" -> {
+                        if (dateDiff != 0) {
+                            headlinesTopTen.add(new Headline(rss, title, link, date, chatId, -1, hash));
+                        }
                     }
                 }
             }
@@ -128,6 +129,8 @@ public class Search {
         totalNewsCounter = headlinesToShow.size();
         // remove titles contains excluded words
         if (searchType.equals("all") && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
+            List<String> allExcludedByChatId = excludedRepository.findExcludedByChatId(chatId);
+
             for (String word : allExcludedByChatId) {
                 headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(word.toLowerCase()));
             }
@@ -135,6 +138,8 @@ public class Search {
         filteredNewsCounter = headlinesToShow.size();
 
         if (!isTopSearch) {
+            Set<ShowedNews> showedNewsToSave = new HashSet<>();
+
             ShowedNews showedNewsRow;
             for (Headline line : headlinesToShow) {
                 showedNewsRow = new ShowedNews();
