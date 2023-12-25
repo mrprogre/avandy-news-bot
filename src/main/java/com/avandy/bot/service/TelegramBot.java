@@ -405,13 +405,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void updatePeriod(int period, long chatId) {
         settingsRepository.updatePeriod(period + "h", chatId);
         sendMessage(chatId, changeIntervalText);
-        getSettings(chatId);
+        initSearch(chatId);
     }
 
     private void updatePeriodAll(int period, long chatId) {
         settingsRepository.updatePeriodAll(period + "h", chatId);
         sendMessage(chatId, changeIntervalText);
-        getSettings(chatId);
+        initSearch(chatId);
     }
 
     private void updatePeriodTop(int period, long chatId) {
@@ -448,19 +448,23 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void initSearch(long chatId) {
-        String fullText = "1. " + searchWithFilterText + " [-" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
+        String fullText = "1. " + searchWithFilterText + " [" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
                 excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
-        String keywordsText = "2. " + keywordSearchText + " [-" + settingsRepository.getPeriodByChatId(chatId) + ", " +
+        String keywordsText = "2. " + keywordSearchText + " [" + settingsRepository.getPeriodByChatId(chatId) + ", " +
                 keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
 
         SendMessage message = prepareMessage(chatId, fullText + "\n" + keywordsText);
         message.enableHtml(true);
 
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("FIND_ALL", fullSearchText);
-        buttons.put("FIND_BY_KEYWORDS", listKeywordsText);
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        buttons1.put("SET_PERIOD", intervalText);
+        buttons1.put("FIND_BY_KEYWORDS", listKeywordsText);
+        buttons2.put("SET_PERIOD_ALL", intervalText);
+        buttons2.put("FIND_ALL", fullSearchText);
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
         executeMessage(message);
     }
 
@@ -1212,8 +1216,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 stringBuilder.append(x++).append(point).append(s);
             }
 
-            showTopTenButtons(chatId, "<b>" + top20ByPeriodText +
-                    settingsRepository.getPeriodTopByChatId(chatId) + "</b>\n" + stringBuilder);
+            String period = settingsRepository.getPeriodTopByChatId(chatId);
+
+            showTopTenButtons(chatId,
+                    String.format("%s<b>%s</b>]\n%s", top20ByPeriodText, period, stringBuilder));
         }
     }
 
