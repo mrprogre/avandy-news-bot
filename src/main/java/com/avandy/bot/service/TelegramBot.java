@@ -541,13 +541,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
+            log.warn(e.getMessage() + String.format("[chat_id: %s, message: %s]", message.getChatId(), message.getText()));
+
             if (e.getMessage().contains("bot was blocked by the user")) {
                 removeUser(Long.parseLong(message.getChatId()));
-                log.warn(String.format("Удалён пользователь chat_id: %s, т.к. он заблокировал бота",
-                        message.getChatId()));
-            } else {
-                log.warn(e.getMessage() + String.format("[chat_id: %s, message: %s]",
-                        message.getChatId(), message.getText()));
+                log.warn(String.format("Пользователь chat_id: %s, т.к. заблокировал бота", message.getChatId()));
             }
         }
     }
