@@ -110,10 +110,10 @@ public class Search {
             }
         }
 
-        /* SEARCH BY ONE WORD FROM TOP */
+        /* SEARCH BY ONE WORD FROM TOP (this case searchType is word for search)*/
         if (isTopSearch) {
             TreeSet<NewsList> newsListByPeriodAndWord =
-                    newsListRepository.getNewsListByPeriodAndWord(periodMinutes + " minutes", searchType);
+                    newsListRepository.getTopNewsListByPeriodAndWord(periodMinutes + " minutes", searchType);
 
             for (NewsList news : newsListByPeriodAndWord) {
                 String rss = news.getSource();
