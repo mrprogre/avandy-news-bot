@@ -80,8 +80,8 @@ public class Text {
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
             startSearchBeforeText = "Сначала необходимо запустить поиск слов /top";
             incorrectTimeText = "Указано некорректное время. Должна быть цифра от 0 до 23 включительно";
-            keywordsSearchText = "Поиск по словам";
-            fullSearchText = "<b>Поиск общий</b>";
+            keywordsSearchText = "По словам";
+            fullSearchText = "Полный поиск";
             addInListText = "Введите слова для добавления в список (разделять запятой)";
             delFromListText = "Введите слова для удаления из списка (разделять запятой)";
             removeAllText = "удалить всё";
@@ -90,7 +90,7 @@ public class Text {
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
-            searchWithFilterText = "Полный поиск";
+            searchWithFilterText = "<b>Полный поиск</b>";
             searchWithFilter2Text = "исключений";
             keywordSearchText = "Поиск по <b>ключевым словам</b>";
             keywordSearch2Text = "ключевых слов";

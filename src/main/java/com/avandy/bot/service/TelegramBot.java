@@ -448,12 +448,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void initSearch(long chatId) {
-        String fullText = "1. " + searchWithFilterText + " [" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
-                excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
-        String keywordsText = "2. " + keywordSearchText + " [" + settingsRepository.getPeriodByChatId(chatId) + ", " +
+        String keywordsText = "1. " + keywordSearchText + " [" + settingsRepository.getPeriodByChatId(chatId) + ", " +
                 keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
+        String fullText = "2. " + searchWithFilterText + " [" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
+                excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
 
-        SendMessage message = prepareMessage(chatId, fullText + "\n" + keywordsText);
+        SendMessage message = prepareMessage(chatId, keywordsText + "\n" + fullText);
         message.enableHtml(true);
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
