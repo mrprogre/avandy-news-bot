@@ -44,7 +44,7 @@ public class Text {
             excludedText = "Исключённое";
             updateTopText = "Обновить";
             undefinedCommandText = "Данная команда не существует";
-            changeIntervalText = "Интервал поиска изменён ✔️";
+            changeIntervalText = "Интервал изменён ✔️";
             schedulerChangedText = "Режим автопоиска переключён ✔️";
             excludedChangedText = "Режим исключения заголовков переключён ✔️";
             startTimeChangedText = "Время старта автопоиска установлено ✔️";
@@ -132,7 +132,7 @@ public class Text {
             searchText = "Search";
             excludedText = "Excluded";
             undefinedCommandText = "Command not defined";
-            changeIntervalText = "Search interval changed ✔️";
+            changeIntervalText = "Interval changed ✔️";
             schedulerChangedText = "Auto search mode switched ✔️";
             excludedChangedText = "Header exclusion mode switched ✔️";
             startTimeChangedText = "Auto search start time is set ✔️";

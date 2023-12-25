@@ -220,6 +220,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "GET_SETTINGS" -> getSettings(chatId);
                 case "SET_PERIOD" -> getNumbersForKeywordsPeriodButtons(chatId);
                 case "SET_PERIOD_ALL" -> getNumbersForAllPeriodButtons(chatId);
+                case "SET_PERIOD_TOP" -> getNumbersForTopPeriodButtons(chatId);
+
                 case "SET_SCHEDULER" -> showOnOffScheduler(chatId);
                 case "SCHEDULER_ON" -> {
                     settingsRepository.updateScheduler("on", chatId);
@@ -344,6 +346,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "TOP_DEL_18" -> deleteWordFromTop(18, chatId);
                 case "TOP_DEL_19" -> deleteWordFromTop(19, chatId);
                 case "TOP_DEL_20" -> deleteWordFromTop(20, chatId);
+
+                case "TOP_INTERVAL_1" -> updatePeriodTop(1, chatId);
+                case "TOP_INTERVAL_2" -> updatePeriodTop(2, chatId);
+                case "TOP_INTERVAL_4" -> updatePeriodTop(4, chatId);
+                case "TOP_INTERVAL_12" -> updatePeriodTop(12, chatId);
+                case "TOP_INTERVAL_24" -> updatePeriodTop(24, chatId);
+                case "TOP_INTERVAL_48" -> updatePeriodTop(48, chatId);
+                case "TOP_INTERVAL_72" -> updatePeriodTop(72, chatId);
             }
         }
     }
@@ -402,6 +412,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         settingsRepository.updatePeriodAll(period + "h", chatId);
         sendMessage(chatId, changeIntervalText);
         getSettings(chatId);
+    }
+
+    private void updatePeriodTop(int period, long chatId) {
+        settingsRepository.updatePeriodTop(period + "h", chatId);
+        sendMessage(chatId, changeIntervalText);
+        showTop(chatId);
     }
 
     private void removeUser(long chatId) {
@@ -923,6 +939,22 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
+    public void getNumbersForTopPeriodButtons(long chatId) {
+        SendMessage message = prepareMessage(chatId, chooseSearchDepthText);
+
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("TOP_INTERVAL_1",  "1");
+        buttons.put("TOP_INTERVAL_2",  "2");
+        buttons.put("TOP_INTERVAL_4",  "4");
+        buttons.put("TOP_INTERVAL_12", "12");
+        buttons.put("TOP_INTERVAL_24", "24");
+        buttons.put("TOP_INTERVAL_48", "48");
+        buttons.put("TOP_INTERVAL_72", "72");
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        executeMessage(message);
+    }
+
     public void topSearchButtons(long chatId) {
         SendMessage message = prepareMessage(chatId, chooseNumberWordFromTop);
         Map<String, String> buttons1 = new LinkedHashMap<>();
@@ -1116,13 +1148,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons3 = new LinkedHashMap<>();
 
         buttons1.put("LIST_TOP", excludedListText);
         buttons1.put("DEL_FROM_TOP", delFromTopText);
         buttons2.put("GET_TOP", updateTopText);
         buttons2.put("WORD_SEARCH", searchByTopWordText);
+        buttons3.put("SET_PERIOD_TOP", intervalText);
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
         executeMessage(message);
     }
 
@@ -1179,7 +1213,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             showTopTenButtons(chatId, "<b>" + top20ByPeriodText +
-                    settingsRepository.getPeriodAllByChatId(chatId) + "</b>\n" + stringBuilder);
+                    settingsRepository.getPeriodTopByChatId(chatId) + "</b>\n" + stringBuilder);
         }
     }
 

@@ -17,6 +17,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Query(value = "SELECT period_all FROM settings WHERE chat_id = :chatId", nativeQuery = true)
     String getPeriodAllByChatId(long chatId);
 
+    @Query(value = "SELECT period_top FROM settings WHERE chat_id = :chatId", nativeQuery = true)
+    String getPeriodTopByChatId(long chatId);
+
     @Query(value = "SELECT scheduler FROM settings WHERE chat_id = :chatId", nativeQuery = true)
     String getSchedulerOnOffByChatId(long chatId);
 
@@ -58,4 +61,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE settings SET lang = :value WHERE chat_id = :chatId", nativeQuery = true)
     void updateLanguage(String value, long chatId);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE settings SET period_top = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
+    void updatePeriodTop(String value, long chatId);
 }

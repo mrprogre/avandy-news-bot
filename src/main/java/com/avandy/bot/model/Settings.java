@@ -14,11 +14,14 @@ public class Settings {
     private Long chatId;
     @Size(max = 3)
     private String scheduler;
-    @Size(max = 32)
+    @Size(max = 8)
     private String period;
+    @Size(max = 8)
     private String periodAll;
     private LocalTime start;
     private String excluded;
     @Size(max = 2)
     private String lang;
+    @Size(max = 8)
+    private String periodTop;
 }

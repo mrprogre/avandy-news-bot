@@ -48,6 +48,9 @@ public class Search {
         if (searchType.equals("keywords")) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriod()),
                     () -> periodMinutes = 1440);
+        } else if (searchType.equals("top")) {
+            settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
+                    () -> periodMinutes = 1440);
         } else {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodAll()),
                     () -> periodMinutes = 60);
