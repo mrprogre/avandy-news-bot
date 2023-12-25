@@ -124,13 +124,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 addExclude(chatId, words);
                 getExcludedList(chatId);
 
-//            } else if (messageText.startsWith("/addtop") && messageText.length() > 7 && messageText.charAt(7) == ' ') {
-//                addToTop(messageText, chatId);
-
-//            } else if (messageText.startsWith("/findtop") && messageText.length() > 8 && messageText.charAt(8) == ' ') {
-//                int num = Integer.parseInt(prepareTextToSave(messageText).replaceAll("\\D+", ""));
-//                searchNewsTop(num, chatId);
-
             } else if (messageText.startsWith("/remove-excluded")) {
                 String keywords = parseMessageText(messageText);
                 String[] words = keywords.split(",");
@@ -503,8 +496,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private static String parseMessageText(String messageText) {
         return messageText.substring(messageText.indexOf(" "))
-                .replaceAll(" ", "")
-                .replace("_", " ") // for add words with space: spb_exchange -> spb exch exchange
                 .trim()
                 .toLowerCase();
     }
@@ -583,7 +574,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Keyword word;
         for (String keyword : keywords) {
-            keyword = keyword.toLowerCase();
+            keyword = keyword.trim().toLowerCase();
             if (!(keyword.length() <= 2)) {
                 if (!keywordsByChatId.contains(keyword)) {
                     word = new Keyword();
@@ -620,7 +611,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Excluded excluded;
         for (String word : list) {
-            word = word.toLowerCase();
+            word = word.trim().toLowerCase();
             if (!(word.length() <= 2)) {
                 if (!excludedByChatId.contains(word)) {
                     excluded = new Excluded();
@@ -655,6 +646,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void delKeyword(long chatId, String[] keywords) {
         for (String word : keywords) {
+            word = word.trim().toLowerCase();
+
             if (word.equals("*")) {
                 keywordRepository.deleteAllKeywordsByChatId(chatId);
                 sendMessage(chatId, deleteAllWordsText);
@@ -673,6 +666,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void delExcluded(long chatId, String[] excluded) {
         for (String exclude : excluded) {
+            exclude = exclude.trim().toLowerCase();
+
             if (exclude.equals("*")) {
                 excludedRepository.deleteAllExcludedByChatId(chatId);
                 sendMessage(chatId, deleteAllWordsText);
@@ -1204,6 +1199,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void delFromTopTenList(long chatId, String[] words) {
         for (String word : words) {
+            word = word.trim().toLowerCase();
+
             if (topTenRepository.isWordExists(chatId, word) > 0) {
                 topTenRepository.deleteWordByChatId(chatId, word);
                 sendMessage(chatId, "❌ " + word);
