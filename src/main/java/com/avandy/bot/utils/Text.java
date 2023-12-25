@@ -16,7 +16,7 @@ public class Text {
             addInListText, delFromListText, removeAllText, inputSchedulerStart, sendMessageForDevText,
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
-            foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText, keywordsNotSetText,
+            foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText,
             exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
             listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText;
@@ -100,7 +100,6 @@ public class Text {
             excludedNewsText = "исключено";
             settingsNotFoundText = "Настройки не обнаружены";
             keywordsListText = "Список ключевых слов";
-            keywordsNotSetText = "» ключевые слова не заданы";
             excludedWordsNotSetText = "» слова-исключения не заданы";
             exclusionWordsText = "Слова-исключения";
             addedExceptionWordsText = "Добавлено слов-исключений";
@@ -191,7 +190,6 @@ public class Text {
             excludedNewsText = "excluded";
             settingsNotFoundText = "Settings not found";
             keywordsListText = "List of keywords";
-            keywordsNotSetText = "» keywords not specified";
             excludedWordsNotSetText = "» no excluding terms specified";
             exclusionWordsText = "Excluding terms";
             addedExceptionWordsText = "Added excluding terms";

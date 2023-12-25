@@ -163,7 +163,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
             } else if (messageText.startsWith(topText)) {
-                showTop(chatId);
+                new Thread(() -> showTop(chatId)).start();
 
             } else if (messageText.startsWith(fullSearchText)) {
                 new Thread(() -> findAllNews(chatId)).start();
@@ -391,6 +391,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             sendMessage(chatId, startSearchBeforeText);
         }
     }
+
     private void updatePeriod(int period, long chatId) {
         settingsRepository.updatePeriod(period + "h", chatId);
         sendMessage(chatId, changeIntervalText);
@@ -470,7 +471,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                             .replace("]", "");
             showKeywordButtons(chatId, text);
         } else {
-            showAddKeywordsButton(chatId, keywordsNotSetText);
+            showAddKeywordsButton(chatId, setupKeywordsText);
         }
     }
 
@@ -537,14 +538,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    protected void executeMessage(SendMessage message) {
+    private void executeMessage(SendMessage message) {
         try {
             execute(message);
         } catch (TelegramApiException e) {
             log.warn(e.getMessage() + String.format("[chat_id: %s, message: %s]", message.getChatId(), message.getText()));
 
             if (e.getMessage().contains("bot was blocked by the user")) {
-                removeUser(Long.parseLong(message.getChatId()));
+                userRepository.updateIsActive(0, Long.parseLong(message.getChatId()));
                 log.warn(String.format("Пользователь chat_id: %s, т.к. заблокировал бота", message.getChatId()));
             }
         }
@@ -561,7 +562,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             try {
                 topTenRepository.save(topTenExcluded);
-                sendMessage(chatId,"❌ " + word);
+                sendMessage(chatId, "❌ " + word);
             } catch (Exception e) {
                 if (e.getMessage().contains("ui_top_ten_excluded")) {
                     log.info(wordIsExistsText + word);
@@ -737,17 +738,22 @@ public class TelegramBot extends TelegramLongPollingBot {
             String text = EmojiParser.parseToUnicode(headlinesNotFound);
             nextButtonAfterAllSearch(chatId, text);
         }
-
     }
 
     private int findNewsByKeywords(long chatId) {
-        if (!isAutoSearch.get()) {
-            sendMessage(chatId, searchByKeywordsStartText);
+        List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
+
+        if (isAutoSearch.get() && keywordsByChatId.isEmpty()) {
+            return 0;
         }
 
-        if (keywordRepository.findKeywordsByChatId(chatId).isEmpty()) {
+        if (!isAutoSearch.get() && keywordsByChatId.isEmpty()) {
             showAddKeywordsButton(chatId, setupKeywordsText);
             return 0;
+        }
+
+        if (!isAutoSearch.get()) {
+            sendMessage(chatId, searchByKeywordsStartText);
         }
 
         // Search
@@ -1233,8 +1239,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             String username = userRepository.findNameByChatId(setting.getChatId());
 
             if (timeToExecute.contains(hourNow)) {
-                int counter = findNewsByKeywords(setting.getChatId());
-                if (counter > 0) log.warn("Автопоиск ключевых слов. Пользователь: {}, найдено {}", username, counter);
+                if (userRepository.isActive(setting.getChatId()) == 1) {
+                    int counter = findNewsByKeywords(setting.getChatId());
+
+                    if (counter > 0)
+                        log.warn("Автопоиск ключевых слов. Пользователь: {}, найдено {}", username, counter);
+                }
             }
         }
         isAutoSearch.set(false);
