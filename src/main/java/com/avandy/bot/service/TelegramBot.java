@@ -464,7 +464,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
         if (!keywordsByChatId.isEmpty()) {
-            String text = "<b>" + keywordsListText + "</b> [" + keywordsByChatId.size() + "]\n" +
+            String text = "<b>" + listKeywordsText + "</b> [" + keywordsByChatId.size() + "]\n" +
                     keywordsByChatId
                             .toString()
                             .replace("[", "")

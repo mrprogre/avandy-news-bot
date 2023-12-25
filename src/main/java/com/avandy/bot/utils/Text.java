@@ -16,8 +16,7 @@ public class Text {
             addInListText, delFromListText, removeAllText, inputSchedulerStart, sendMessageForDevText,
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
-            foundNewsText, excludedNewsText, settingsNotFoundText, keywordsListText,
-            exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
+            foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
             listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText;
 
@@ -99,7 +98,6 @@ public class Text {
             foundNewsText = "Найдено";
             excludedNewsText = "исключено";
             settingsNotFoundText = "Настройки не обнаружены";
-            keywordsListText = "Список ключевых слов";
             excludedWordsNotSetText = "» слова-исключения не заданы";
             exclusionWordsText = "Слова-исключения";
             addedExceptionWordsText = "Добавлено слов-исключений";
@@ -111,8 +109,8 @@ public class Text {
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             searchByKeywordsStartText = "» поиск по ключевым словам";
             fullSearchStartText = "» поиск всех новостей";
-            chooseNumberWordFromTop = "Нажмите на слово для поиска новостей";
-            chooseWordDelFromTop = "Нажмите на слово для удаления";
+            chooseNumberWordFromTop = "Нажмите для поиска";
+            chooseWordDelFromTop = "Нажмите для удаления";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -130,10 +128,10 @@ public class Text {
             deleteUserText = "Delete user data";
             addText = "Add";
             delText = "Delete";
-            excludeWordText = "Exclude word";
+            excludeWordText = "Exclude term";
             searchText = "Search";
             excludedText = "Excluded";
-            undefinedCommandText = "Command does not exist";
+            undefinedCommandText = "Command not defined";
             changeIntervalText = "Search interval changed ✔️";
             schedulerChangedText = "Auto search mode switched ✔️";
             excludedChangedText = "Header exclusion mode switched ✔️";
@@ -166,7 +164,7 @@ public class Text {
             excludedListText = "List of deleted";
             delFromTopText = "Delete";
             searchByTopWordText = "Search";
-            updateTopText = "Refresh top";
+            updateTopText = "Update top";
             top20ByPeriodText = "Top 20 words in ";
             allowCommasAndNumbersText = "Only numbers or commas are allowed";
             startSearchBeforeText = "First you need to run a word search /top";
@@ -189,20 +187,19 @@ public class Text {
             foundNewsText = "Found";
             excludedNewsText = "excluded";
             settingsNotFoundText = "Settings not found";
-            keywordsListText = "List of keywords";
             excludedWordsNotSetText = "» no excluding terms specified";
             exclusionWordsText = "Excluding terms";
             addedExceptionWordsText = "Added excluding terms";
-            wordIsNotInTheListText = "The word <b>%s</b> is not in the list";
+            wordIsNotInTheListText = "The word <b>%s</b> isn't in the list";
             listText = "List";
-            confirmDeletedUserText = "Do you confirm deleting the user?";
+            confirmDeletedUserText = "Do you confirm?";
             chooseSearchDepthText = "Select search time in hours";
             sendIdeaText = "Send feedback";
-            listOfDeletedFromTopText = "List of removed from Top 20";
+            listOfDeletedFromTopText = "List of removed from top";
             searchByKeywordsStartText = "» search by keywords";
             fullSearchStartText = "» search all news";
-            chooseNumberWordFromTop = "Click to search for news";
-            chooseWordDelFromTop = "Click to delete word";
+            chooseNumberWordFromTop = "Click to search";
+            chooseWordDelFromTop = "Click to delete";
         }
     }
 
