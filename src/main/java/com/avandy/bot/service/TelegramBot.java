@@ -1152,9 +1152,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         buttons1.put("LIST_TOP", excludedListText);
         buttons1.put("DEL_FROM_TOP", delFromTopText);
+        buttons2.put("SET_PERIOD_TOP", intervalText);
         buttons2.put("GET_TOP", updateTopText);
-        buttons2.put("WORD_SEARCH", searchByTopWordText);
-        buttons3.put("SET_PERIOD_TOP", intervalText);
+        buttons3.put("WORD_SEARCH", searchByTopWordText);
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
         executeMessage(message);

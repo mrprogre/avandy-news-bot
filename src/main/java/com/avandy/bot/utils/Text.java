@@ -222,7 +222,7 @@ public class Text {
                     "Глубина поиска новостей по <b>ключевым словам</b> (интервал поиска равен текущему моменту минус глубина в часах)" + "\n" +
                     "- - - - - -\n" +
                     "<b>2. Интервал</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
-                    "Глубина поиска <b>всех новостей</b> и слов для <b>Top 20</b>" + "\n" +
+                    "Глубина поиска <b>всех новостей</b>" + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Автопоиск: " + x.getScheduler() + "</b>\n" +
                     "Автоматический запуск поиска по <b>ключевым словам</b> за период, указанный в п.1, с частотой в п.5" + "\n" +
@@ -251,7 +251,7 @@ public class Text {
                     "Search time of news search by <b>keywords</b> (search interval is equal to the current moment minus hours)" + "\n" +
                     "- - - - - -\n" +
                     "<b>2. Interval</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
-                    "Search time for <b>all news</b> and words for <b>Top 20</b>" + "\n" +
+                    "Search time for <b>all news</b>" + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Auto search: " + x.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
