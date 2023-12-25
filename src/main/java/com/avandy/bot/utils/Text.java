@@ -180,7 +180,7 @@ public class Text {
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "News sources";
             searchWithFilterText = "<b>Full search</b>";
-            searchWithFilter2Text = "excl terms";
+            searchWithFilter2Text = "excluding terms";
             keywordSearchText = "Search by <b>keywords</b>";
             keywordSearch2Text = "keywords";
             cancelButtonText = "Cancel";
