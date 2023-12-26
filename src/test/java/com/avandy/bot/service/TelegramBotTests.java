@@ -35,8 +35,6 @@ public class TelegramBotTests {
     @Mock
     private SettingsRepository settingsRepository;
     @Mock
-    private RssRepository rssRepository;
-    @Mock
     private KeywordRepository keywordRepository;
     @Mock
     private ExcludedRepository excludedRepository;
@@ -72,20 +70,6 @@ public class TelegramBotTests {
                 .isUserExistsByChatId(update.getMessage().getChatId());
         verify(settingsRepository, times(1))
                 .save(any());
-    }
-
-    @Test
-    public void rssTest() throws TelegramApiException {
-        update.getMessage().setText("/rss");
-        bot.onUpdateReceived(update);
-        verify(bot, new Times(1)).execute(argumentCaptor.capture());
-
-        List<SendMessage> actual = argumentCaptor.getAllValues();
-        assertThat(actual.get(0).getText())
-                .isNotEmpty();
-
-        verify(rssRepository, times(1))
-                .findAllActiveSources();
     }
 
     @Test

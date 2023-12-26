@@ -204,7 +204,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/keywords" -> getKeywordsList(chatId);
                     case "/top" -> showTop(chatId);
-                    case "/rss" -> getRssList(chatId);
                     case "/excluding" -> getExcludedList(chatId);
                     default -> sendMessage(chatId, undefinedCommandText);
                 }
@@ -454,14 +453,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, text);
     }
 
-    private void getRssList(long chatId) {
+    private String getRssList() {
         Iterable<RssList> sources = rssRepository.findAllActiveSources();
 
         StringJoiner joiner = new StringJoiner(", ");
         for (RssList item : sources) {
             joiner.add(item.getSource());
         }
-        nextButton(chatId, "<b>" + rssSourcesText + "</b>\n" + joiner);
+
+        return "<b>" + rssSourcesText + "</b>\n" + joiner;
     }
 
     private void startActions(Update update, long chatId) {
@@ -1138,7 +1138,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void infoButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, aboutDeveloperText);
+        SendMessage message = prepareMessage(chatId, aboutDeveloperText + "\n\n" + getRssList());
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
@@ -1353,7 +1353,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/excluding", listExcludedText));
         listOfCommands.add(new BotCommand("/info", infoText));
-        listOfCommands.add(new BotCommand("/rss", listRssText));
+        //listOfCommands.add(new BotCommand("/rss", listRssText));
         //listOfCommands.add(new BotCommand("/delete", deleteUserText));
         //listOfCommands.add(new BotCommand("/start", startText));
 
