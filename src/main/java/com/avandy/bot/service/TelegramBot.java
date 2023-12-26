@@ -702,8 +702,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void delKeyword(long chatId, ArrayList<String> keywords) {
         for (String word : keywords) {
-            log.warn("delKeyword + word = " + word);
-            //word = word.trim().toLowerCase();
+            word = word.trim().toLowerCase();
 
             if (word.equals("*")) {
                 keywordRepository.deleteAllKeywordsByChatId(chatId);
@@ -1249,6 +1248,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             showTopTenButtons(chatId,
                     String.format("%s<b>%s</b>]\n%s", top20ByPeriodText, period, stringBuilder));
+        } else {
+            showTopTenButton(chatId, updateTopText);
         }
     }
 

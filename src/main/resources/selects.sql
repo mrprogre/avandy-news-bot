@@ -1,21 +1,22 @@
-select title, pub_date from news_list n
-        where pub_date > (current_timestamp - cast('4 hours' as interval))
-          AND title ilike '%цик%'
-except
-select title, pub_date from news_list n
-where pub_date > (current_timestamp - cast('4 hours' as interval))
-  AND title ilike '% цик%';
+SET TIME ZONE 'Europe/Moscow';
+select current_timestamp;
+
+select title, pub_date
+from news_list n
+where pub_date > (current_timestamp + cast('1 hours' as interval))
+  AND title ilike '%суд%'
+order by pub_date desc;
 
 select u.chat_id,
        u.first_name,
        u.user_name,
        k.keyword,
-       e.word as exclude,
+       e.word       as exclude,
        s.period,
        s.period_all as "all",
        s.period_top as top,
-       s.scheduler as sched,
-       s.excluded as excl
+       s.scheduler  as sched,
+       s.excluded   as excl
 from users u
          left join settings s on u.chat_id = s.chat_id
          left join keywords k on u.chat_id = k.chat_id

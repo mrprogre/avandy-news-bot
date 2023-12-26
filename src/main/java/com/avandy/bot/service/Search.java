@@ -26,7 +26,7 @@ public class Search {
     private final ShowedNewsRepository showedNewsRepository;
     private final ExcludedRepository excludedRepository;
     private final NewsListRepository newsListRepository;
-    public static Set<Headline> headlinesTopTen;
+    public static ArrayList<Headline> headlinesTopTen;
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
@@ -59,7 +59,7 @@ public class Search {
         if (!isTopSearch) {
             List<Keyword> keywords = keywordRepository.findAllByChatId(chatId);
             List<String> showedNewsHash = showedNewsRepository.findShowedNewsHashByChatId(chatId);
-            headlinesTopTen = new TreeSet<>();
+            headlinesTopTen = new ArrayList<>();
 
             // find news by period
             TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodMinutes + " minutes");
@@ -112,6 +112,8 @@ public class Search {
 
         /* SEARCH BY ONE WORD FROM TOP (this case searchType is word for search)*/
         if (isTopSearch) {
+            settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
+                    () -> periodMinutes = 1440);
             TreeSet<NewsList> newsListByPeriodAndWord =
                     newsListRepository.getTopNewsListByPeriodAndWord(periodMinutes + " minutes", searchType);
 
