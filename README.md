@@ -9,32 +9,28 @@ https://t.me/AvandyNewsBot
 
 **/settings**   - setting search intervals and enabling auto search
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/d7377359-9075-4423-9d53-ffb33fdaf97e)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/8ce8dd97-29b1-4302-ab1d-4024c2a65937)
 
 **/excluding**   - list of excluded words from search (adding, deleting)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/7de4c058-02dc-443f-a272-0cd66bc24fcd)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/df782f82-1bb5-4393-a8c8-c5094798abb7)
 
 **/keywords**   - list of keywords (adding, deleting)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0c3e7a0d-0110-4d6d-b597-2888e79880da)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/af1fd0e9-5cbd-4692-b360-8df93cf0638b)
 
-**/search**       - selecting a search type
+**/search**     - selecting a search type
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/2c1bd9c7-a67a-45df-9c5e-c60ca2ba089d)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/003604bb-dc4b-49a1-bf8f-4d073f85ebd8)
 
-**/top**      - top 20 words in headlines for the period (list, adding, deleting)
+**/top**        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0bbd081f-4f71-4105-b08e-64a16e951d32)
-
-**/rss**        - news sources
-
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0f4b1201-144e-46a1-b615-1bc4678bf719)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/80b9ee49-b963-4845-bfbf-ce62a91a3191)
 
 **/info**       - information about the developer and the ability to send a message to the developer
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/7147d611-cc06-4448-93d7-82b5ed930e74)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/1885ff11-3ec6-4abe-a173-dd8a861ebb94)
 
 **/start**      - you can start again after deleting user information
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/1f1c3e50-1dd6-4c30-b037-4f4425d9c864)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/001f20d2-7f13-461f-80d2-0346d596eb48)
