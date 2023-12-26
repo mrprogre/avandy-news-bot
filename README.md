@@ -25,7 +25,7 @@ https://t.me/AvandyNewsBot
 
 **/top**        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/80b9ee49-b963-4845-bfbf-ce62a91a3191)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/3970af0d-87cc-4fc9-9877-6f44f0379bcc)
 
 **/info**       - information about the developer and the ability to send a message to the developer
 
