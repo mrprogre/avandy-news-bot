@@ -42,7 +42,7 @@ public class Text {
             excludeWordText = "Исключить слова";
             searchText = "Поиск";
             excludedText = "Исключённое";
-            updateTopText = "Обновить";
+            updateTopText = "Обновить топ";
             undefinedCommandText = "Данная команда не существует";
             changeIntervalText = "Интервал изменён ✔️";
             schedulerChangedText = "Режим автопоиска переключён ✔️";
