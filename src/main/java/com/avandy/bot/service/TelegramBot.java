@@ -1258,7 +1258,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         for (Headline headline : Search.headlinesTopTen) {
             // Удаление ненужных знаков
-            String[] titles = headline.getTitle().replaceAll("[,:«»]", "").toLowerCase().split(" ");
+            String[] titles = headline.getTitle()
+                    .replaceAll("[,:«»\"]", "")
+                    .toLowerCase()
+                    .split(" ");
+
             for (String word : titles) {
                 if (word.length() > 2) {
                     wordsCount.put(word, wordsCount.getOrDefault(word, 0) + 1);
