@@ -575,7 +575,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             userRepository.save(user);
             log.warn("* * * * * * ДОБАВЛЕН НОВЫЙ ПОЛЬЗОВАТЕЛЬ: {} * * * * * *", user);
             addSettings(message.getChatId());
-        } else {
+        } else if (userRepository.isActive(message.getChatId()) == 0) {
             userRepository.updateIsActive(1, message.getChatId());
             log.warn("* * * * * * ПОЛЬЗОВАТЕЛЬ СНОВА АКТИВЕН: {} * * * * * *", user);
         }
