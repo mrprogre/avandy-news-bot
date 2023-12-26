@@ -47,6 +47,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private TopTenRepository topTenRepository;
     public static AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private static StringBuilder stringBuilder;
+    private static StringJoiner joinerKeywords;
     static String prefix = "";
     static String topText = "Top 20";
 
@@ -131,10 +132,36 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getExcludedList(chatId);
 
             } else if (messageText.startsWith("/remove-keywords")) {
-                String keywords = parseMessageText(messageText);
-                String[] words = keywords.split(",");
-                delKeyword(chatId, words);
-                getKeywordsList(chatId);
+                ArrayList<String> words = new ArrayList<>();
+                String tops = parseMessageText(messageText);
+                String[] nums = tops.split(",");
+
+                try {
+                    String[] split = joinerKeywords.toString().split("\n");
+
+                    for (String num : nums) {
+                        int numInt = Integer.parseInt(num.trim());
+
+                        for (String row : split) {
+                            int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
+                            row = row.replaceAll("\\s", "");
+                            row = row.substring(row.indexOf(".") + 1);
+
+                            if (numInt == rowNum) {
+                                words.add(row);
+                            }
+                        }
+                    }
+
+                    delKeyword(chatId, words);
+                    getKeywordsList(chatId);
+                } catch (NumberFormatException n) {
+                    sendMessage(chatId, allowCommasAndNumbersText);
+                    prefix = "";
+                } catch (NullPointerException npe) {
+                    sendMessage(chatId, "click /keywords" + TOP_TEN_SHOW_LIMIT);
+                    prefix = "";
+                }
 
             } else if (messageText.startsWith("/remove-top-ten")) {
                 String text = parseMessageText(messageText);
@@ -481,15 +508,16 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void getKeywordsList(long chatId) {
+        int counter = 0;
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
         if (!keywordsByChatId.isEmpty()) {
-            String text = "<b>" + listKeywordsText + "</b> [" + keywordsByChatId.size() + "]\n" +
-                    keywordsByChatId
-                            .toString()
-                            .replace("[", "")
-                            .replace("]", "");
-            showKeywordButtons(chatId, text);
+            joinerKeywords = new StringJoiner("\n");
+            for (String item : keywordsByChatId) {
+                joinerKeywords.add(++counter + ". " + item);
+            }
+
+            showKeywordButtons(chatId, "<b>" + listKeywordsText + "</b>\n" + joinerKeywords);
         } else {
             showAddKeywordsButton(chatId, setupKeywordsText);
         }
@@ -672,9 +700,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         prefix = "";
     }
 
-    private void delKeyword(long chatId, String[] keywords) {
+    private void delKeyword(long chatId, ArrayList<String> keywords) {
         for (String word : keywords) {
-            word = word.trim().toLowerCase();
+            log.warn("delKeyword + word = " + word);
+            //word = word.trim().toLowerCase();
 
             if (word.equals("*")) {
                 keywordRepository.deleteAllKeywordsByChatId(chatId);

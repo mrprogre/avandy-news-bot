@@ -83,7 +83,7 @@ public class Text {
             keywordsSearchText = "По словам";
             fullSearchText = "Полный поиск";
             addInListText = "Введите слова для добавления в список (разделять запятой)";
-            delFromListText = "Введите слова для удаления из списка (разделять запятой)";
+            delFromListText = "Введите номера слова для удаления (разделять запятой)";
             removeAllText = "удалить всё";
             inputSchedulerStart = "Введите время старта автопоиска (число 0-23)";
             sendMessageForDevText = "Напишите свои предложения разработчику";
@@ -172,7 +172,7 @@ public class Text {
             keywordsSearchText = "Keywords";
             fullSearchText = "Full search";
             addInListText = "Input words to add (separated by comma)";
-            delFromListText = "Input words to remove (separated by comma)";
+            delFromListText = "Input word numbers to remove (separated by comma)";
             removeAllText = "delete all";
             inputSchedulerStart = "Enter the auto search start time (number 0-23)";
             sendMessageForDevText = "Write your feedback to the developer";
