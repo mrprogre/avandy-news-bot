@@ -1,4 +1,11 @@
--- мой id 1254981379
+select title, pub_date from news_list n
+        where pub_date > (current_timestamp - cast('4 hours' as interval))
+          AND title ilike '%цик%'
+except
+select title, pub_date from news_list n
+where pub_date > (current_timestamp - cast('4 hours' as interval))
+  AND title ilike '% цик%';
+
 select u.chat_id,
        u.first_name,
        u.user_name,
@@ -15,13 +22,14 @@ from users u
          left join excluded e on u.chat_id = e.chat_id
 where u.chat_id != 1254981379;
 
--- todo сделать проще удаление ключевых слов
--- todo Сделать тесты на каждый кейс в идеале
--- todo Сделать поиск по ключевым словам с %, чтобы искать типа повыш%зарплат'
-
 select source, title, pub_date, extract(minute from (pub_date - add_date)) as "pub-add"
 from news_list n
          join showed_news s
               on n.title_hash = s.title_hash and s.chat_id = 6190696388
 where pub_date > (current_timestamp - interval '180 minutes')::timestamp
 order by n.id desc;
+
+-- мой id 1254981379
+-- todo сделать проще удаление ключевых слов
+-- todo Сделать тесты на каждый кейс в идеале
+-- todo Сделать поиск по ключевым словам с %, чтобы искать типа повыш%зарплат'

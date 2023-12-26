@@ -20,7 +20,7 @@ public interface NewsListRepository extends CrudRepository<NewsList, Long> {
 
     @Query(value = "SELECT id, source, title, title_hash, link, pub_date, add_date FROM news_list" +
             "        WHERE pub_date > current_timestamp - cast(:period as interval)" +
-            "         AND title ilike '% '||cast(:word as text)||'%'"
+            "         AND title ilike '%'||cast(:word as text)||'%'"
             , nativeQuery = true)
     TreeSet<NewsList> getTopNewsListByPeriodAndWord(@Param("period") String period,
                                                     @Param("word") String word);
