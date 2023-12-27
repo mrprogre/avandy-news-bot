@@ -21,7 +21,9 @@ from users u
          left join settings s on u.chat_id = s.chat_id
          left join keywords k on u.chat_id = k.chat_id
          left join excluded e on u.chat_id = e.chat_id
-where u.chat_id != 1254981379;
+where u.chat_id = 5184241058
+    --u.chat_id != 1254981379
+;
 
 select source, title, pub_date, extract(minute from (pub_date - add_date)) as "pub-add"
 from news_list n

@@ -127,35 +127,39 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getExcludedList(chatId);
 
             } else if (messageText.startsWith("/remove-excluded")) {
-                String keywords = parseMessageText(messageText);
-                String[] words = keywords.split(",");
+                String excluded = parseMessageText(messageText);
+                String[] words = excluded.split(",");
                 delExcluded(chatId, words);
                 getExcludedList(chatId);
 
             } else if (messageText.startsWith("/remove-keywords")) {
                 ArrayList<String> words = new ArrayList<>();
-                String tops = parseMessageText(messageText);
-                String[] nums = tops.split(",");
-
+                String keywords = parseMessageText(messageText);
                 try {
-                    String[] split = joinerKeywords.toString().split("\n");
+                    if (keywords.equals("*")) {
+                        words.add("*");
+                        delKeyword(chatId, words);
+                        getKeywordsList(chatId);
+                    } else {
+                        String[] nums = keywords.split(",");
+                        String[] split = joinerKeywords.toString().split("\n");
 
-                    for (String num : nums) {
-                        int numInt = Integer.parseInt(num.trim());
+                        for (String num : nums) {
+                            int numInt = Integer.parseInt(num.trim());
 
-                        for (String row : split) {
-                            int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                            row = row.replaceAll("\\s", "");
-                            row = row.substring(row.indexOf(".") + 1);
+                            for (String row : split) {
+                                int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
+                                row = row.replaceAll("\\s", "");
+                                row = row.substring(row.indexOf(".") + 1);
 
-                            if (numInt == rowNum) {
-                                words.add(row);
+                                if (numInt == rowNum) {
+                                    words.add(row);
+                                }
                             }
                         }
+                        delKeyword(chatId, words);
+                        getKeywordsList(chatId);
                     }
-
-                    delKeyword(chatId, words);
-                    getKeywordsList(chatId);
                 } catch (NumberFormatException n) {
                     sendMessage(chatId, allowCommasAndNumbersText);
                     prefix = "";
@@ -746,6 +750,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setChatId(chatId);
         settings.setPeriod("6h");
         settings.setPeriodAll("1h");
+        settings.setPeriodTop("12h");
         settings.setScheduler("on");
         settings.setStart(LocalTime.of(14, 0));
         settings.setExcluded("on");
