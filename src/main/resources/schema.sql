@@ -12,6 +12,9 @@ create table if not exists rss_list
     constraint ui_rss_list_chat_id_link unique (chat_id, link)
 );
 
+comment on column rss_list.country is 'Страна источника новостей';
+comment on column rss_list.parser_type is '"rss" для RomeTools, "no-rss" - остальные источники';
+
 create table if not exists users
 (
     chat_id       bigint,
@@ -26,10 +29,10 @@ create table if not exists users
 create table if not exists settings
 (
     chat_id    bigint,
-    period     varchar(8) default '12h'::character varying,
+    period     varchar(8) default '1h'::character varying,
     period_all varchar(8) default '1h'::character varying,
     scheduler  varchar(3) default 'on'::character varying,
-    start      time       default '14:00'::time,
+    start      time       default '10:00'::time,
     excluded   varchar(3) default 'on'::character varying,
     lang       varchar(2) default 'ru'::character varying,
     period_top varchar(8) default '12h'::character varying,
@@ -41,6 +44,8 @@ comment on column settings.period_all is 'Глубина поиска всех �
 comment on column settings.scheduler is 'Включение/выключение автопоиска (on/off)';
 comment on column settings.start is 'Время старта автопоиска по ключевым словам. Исходя из него формируется список часов старта поиска.';
 comment on column settings.excluded is 'Включение/выключение фильтрации заголовков, содержащих слова-исключения (on/off)';
+comment on column settings.lang is 'Язык интерфейса';
+comment on column settings.period_top is 'Глубина поиска для Топ 20';
 
 create table if not exists keywords
 (
@@ -71,6 +76,7 @@ create table if not exists showed_news
     constraint fk_headlines_chat_id foreign key (chat_id) references users (chat_id) on delete cascade,
     constraint ui_showed_news unique (chat_id, title_hash, type)
 );
+
 comment on column showed_news.type is 'Тип поиска: 2 - поиск по ключевым словам, 4 - полный поиск';
 
 create table if not exists news_list
