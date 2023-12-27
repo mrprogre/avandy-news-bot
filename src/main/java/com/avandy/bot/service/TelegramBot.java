@@ -34,10 +34,11 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
-    public static final int TOP_TEN_SHOW_LIMIT = 20;
-    public static final int TOP_TEN_LIST_LIMIT = 60;
-    public static final int EXCLUDED_LIMIT = 100;
+    private static final int TOP_TEN_SHOW_LIMIT = 20;
+    private static final int TOP_TEN_LIST_LIMIT = 60;
+    private static final int EXCLUDED_LIMIT = 100;
     private static final String REPLACE_ALL_TOP = ",:«»\"";
+    private static final String TOP_TEXT = "Top 20";
     private final BotConfig config;
     private Search search;
     private UserRepository userRepository;
@@ -46,11 +47,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     private ExcludedRepository excludedRepository;
     private RssRepository rssRepository;
     private TopTenRepository topTenRepository;
-    public static AtomicBoolean isAutoSearch = new AtomicBoolean(false);
-    private static StringBuilder stringBuilder;
-    private static StringJoiner joinerKeywords;
-    private static final String TOP_TEXT = "Top 20";
-    String prefix = "";
+    public AtomicBoolean isAutoSearch = new AtomicBoolean(false);
+    private StringBuilder stringBuilder;
+    private StringJoiner joinerKeywords;
+    private String prefix = "";
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
         super(botToken);
