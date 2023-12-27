@@ -815,7 +815,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (headlines.size() > 0) {
             StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
             for (Headline headline : headlines) {
-                String text = headline.getSource() + "</b> [" +
+                String text = "<b>" + headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>";
@@ -823,7 +823,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 if (isAutoSearch.get()) {
                     joiner.add(text);
                 } else {
-                    joiner.add(showCounter++ + ". <b>" + text);
+                    joiner.add(showCounter++ + ". " + text);
                 }
 
                 if (counterParts == 10) {
