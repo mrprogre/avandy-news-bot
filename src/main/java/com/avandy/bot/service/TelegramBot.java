@@ -143,21 +143,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getTopTenWordsList(chatId);
 
             } else if (messageText.startsWith("/update-start")) {
-                int start = Integer.parseInt(prepareTextToSave(messageText).replaceAll("\\D+", ""));
-                try {
-
-                    if (start < 0 || start > 23) {
-                        sendMessage(chatId, incorrectTimeText);
-                        prefix = "/update-start ";
-                    } else {
-                        settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
-                        sendMessage(chatId, startTimeChangedText);
-                        getSettings(chatId);
-                        prefix = "";
-                    }
-                } catch (Exception e) {
-                    log.error(e.getMessage());
-                }
+                updateSearchStartTime(messageText, chatId);
 
             } else if (messageText.startsWith(keywordsSearchText)) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
@@ -356,6 +342,24 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "TOP_INTERVAL_48" -> updatePeriodTop(48, chatIdCallback);
                 case "TOP_INTERVAL_72" -> updatePeriodTop(72, chatIdCallback);
             }
+        }
+    }
+
+    private void updateSearchStartTime(String messageText, long chatId) {
+        int start = Integer.parseInt(prepareTextToSave(messageText).replaceAll("\\D+", ""));
+        try {
+
+            if (start < 0 || start > 23) {
+                sendMessage(chatId, incorrectTimeText);
+                prefix = "/update-start ";
+            } else {
+                settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
+                sendMessage(chatId, startTimeChangedText);
+                getSettings(chatId);
+                prefix = "";
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
     }
 
