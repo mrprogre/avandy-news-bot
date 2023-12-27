@@ -1070,12 +1070,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId, text);
         message.enableHtml(true);
 
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("DELETE_EXCLUDED", delText);
-        buttons.put("EXCLUDE", addText);
-        buttons.put("FIND_ALL", searchText);
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        buttons1.put("DELETE_EXCLUDED", delText);
+        buttons1.put("EXCLUDE", addText);
+        buttons2.put("SET_PERIOD_ALL", intervalText);
+        buttons2.put("FIND_ALL", searchText);
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
         executeMessage(message);
     }
 
@@ -1094,12 +1097,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId, text);
         message.enableHtml(true);
 
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("DELETE", delText);
-        buttons.put("ADD", addText);
-        buttons.put("FIND_BY_KEYWORDS", searchText);
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        buttons1.put("DELETE", delText);
+        buttons1.put("ADD", addText);
+        buttons2.put("SET_PERIOD", intervalText);
+        buttons2.put("FIND_BY_KEYWORDS", searchText);
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
         executeMessage(message);
     }
 
@@ -1166,6 +1172,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("SET_PERIOD", intervalText);
         buttons.put("LIST_KEYWORDS", listKeywordsText);
         buttons.put("FIND_BY_KEYWORDS", searchText);
 
@@ -1178,6 +1185,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.enableHtml(true);
 
         Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("SET_PERIOD_ALL", intervalText);
         buttons.put("EXCLUDE", excludeWordText);
         buttons.put("FIND_ALL", searchText);
 
