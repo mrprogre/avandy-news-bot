@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -217,8 +218,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
             chatIdCallback = update.getCallbackQuery().getMessage().getChatId();
+            //String callbackQueryId = update.getCallbackQuery().getId();
 
             switch (callbackData) {
+                case "FEEDBACK" -> {
+                    //showAlert(callbackQueryId, "/send-feedback ");
+                    prefix = "/send-feedback ";
+                    cancelButton(chatIdCallback, sendMessageForDevText);
+                }
+
                 case "START_SEARCH", "DELETE_NO" -> initSearch(chatIdCallback);
 
                 /* FULL SEARCH */
@@ -278,11 +286,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                     settingsRepository.updateExcluded("off", chatIdCallback);
                     sendMessage(chatIdCallback, excludedChangedText);
                     getSettings(chatIdCallback);
-                }
-
-                case "FEEDBACK" -> {
-                    prefix = "/send-feedback ";
-                    cancelButton(chatIdCallback, sendMessageForDevText);
                 }
 
                 case "CANCEL" -> {
@@ -1387,6 +1390,19 @@ public class TelegramBot extends TelegramLongPollingBot {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
             log.error(Common.ERROR_TEXT + e.getMessage());
+        }
+    }
+
+    private void showAlert(String callbackQueryId, String text) {
+        AnswerCallbackQuery answer = new AnswerCallbackQuery();
+        answer.setCallbackQueryId(callbackQueryId);
+        answer.setText(text);
+        answer.setShowAlert(true);
+
+        try {
+            execute(answer);
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
         }
     }
 }
