@@ -37,6 +37,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public static final int TOP_TEN_SHOW_LIMIT = 20;
     public static final int TOP_TEN_LIST_LIMIT = 60;
     public static final int EXCLUDED_LIMIT = 100;
+    private static final String REPLACE_ALL_TOP = ",:«»\"";
     private final BotConfig config;
     private Search search;
     private UserRepository userRepository;
@@ -814,10 +815,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (headlines.size() > 0) {
             StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
             for (Headline headline : headlines) {
-                joiner.add(showCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                String text = headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
                         headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>");
+                        "<a href=\"" + headline.getLink() + "\">link</a>";
+
+                if (isAutoSearch.get()) {
+                    joiner.add(text);
+                } else {
+                    joiner.add(showCounter++ + ". <b>" + text);
+                }
 
                 if (counterParts == 10) {
                     sendMessage(chatId, String.valueOf(joiner));
@@ -975,9 +982,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId, chooseSearchDepthText);
 
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("TOP_INTERVAL_1",  "1");
-        buttons.put("TOP_INTERVAL_4",  "4");
-        buttons.put("TOP_INTERVAL_8",  "8");
+        buttons.put("TOP_INTERVAL_1", "1");
+        buttons.put("TOP_INTERVAL_4", "4");
+        buttons.put("TOP_INTERVAL_8", "8");
         buttons.put("TOP_INTERVAL_12", "12");
         buttons.put("TOP_INTERVAL_24", "24");
         buttons.put("TOP_INTERVAL_48", "48");
@@ -1259,7 +1266,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (Headline headline : Search.headlinesTopTen) {
             // Удаление ненужных знаков
             String[] titles = headline.getTitle()
-                    .replaceAll("[,:«»\"]", "")
+                    .replaceAll(REPLACE_ALL_TOP, "")
                     .toLowerCase()
                     .split(" ");
 
