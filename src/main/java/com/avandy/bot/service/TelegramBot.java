@@ -134,40 +134,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getExcludedList(chatId);
 
             } else if (messageText.startsWith("/remove-keywords")) {
-                ArrayList<String> words = new ArrayList<>();
-                String keywords = parseMessageText(messageText);
-                try {
-                    if (keywords.equals("*")) {
-                        words.add("*");
-                        delKeyword(chatId, words);
-                        getKeywordsList(chatId);
-                    } else {
-                        String[] nums = keywords.split(",");
-                        String[] split = joinerKeywords.toString().split("\n");
-
-                        for (String num : nums) {
-                            int numInt = Integer.parseInt(num.trim());
-
-                            for (String row : split) {
-                                int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                                row = row.replaceAll("\\s", "");
-                                row = row.substring(row.indexOf(".") + 1);
-
-                                if (numInt == rowNum) {
-                                    words.add(row);
-                                }
-                            }
-                        }
-                        delKeyword(chatId, words);
-                        getKeywordsList(chatId);
-                    }
-                } catch (NumberFormatException n) {
-                    sendMessage(chatId, allowCommasAndNumbersText);
-                    prefix = "";
-                } catch (NullPointerException npe) {
-                    sendMessage(chatId, "click /keywords" + TOP_TEN_SHOW_LIMIT);
-                    prefix = "";
-                }
+                removeKeywords(messageText, chatId);
 
             } else if (messageText.startsWith("/remove-top-ten")) {
                 String text = parseMessageText(messageText);
@@ -390,6 +357,63 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "TOP_INTERVAL_72" -> updatePeriodTop(72, chatIdCallback);
             }
         }
+    }
+
+    private void removeKeywords(String messageText, long chatId) {
+        ArrayList<String> words = new ArrayList<>();
+        String keywords = parseMessageText(messageText);
+        try {
+            if (keywords.equals("*")) {
+                words.add("*");
+                delKeyword(chatId, words);
+                getKeywordsList(chatId);
+            } else {
+                String[] nums = keywords.split(",");
+                String[] split = joinerKeywords.toString().split("\n");
+
+                for (String num : nums) {
+                    int numInt = Integer.parseInt(num.trim());
+
+                    for (String row : split) {
+                        int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
+                        row = row.replaceAll("\\s", "");
+                        row = row.substring(row.indexOf(".") + 1);
+
+                        if (numInt == rowNum) {
+                            words.add(row);
+                        }
+                    }
+                }
+                delKeyword(chatId, words);
+                getKeywordsList(chatId);
+            }
+        } catch (NumberFormatException n) {
+            sendMessage(chatId, allowCommasAndNumbersText);
+            prefix = "";
+        } catch (NullPointerException npe) {
+            sendMessage(chatId, "click /keywords" + TOP_TEN_SHOW_LIMIT);
+            prefix = "";
+        }
+    }
+
+    private void delKeyword(long chatId, ArrayList<String> keywords) {
+        for (String word : keywords) {
+            word = word.trim().toLowerCase();
+
+            if (word.equals("*")) {
+                keywordRepository.deleteAllKeywordsByChatId(chatId);
+                sendMessage(chatId, deleteAllWordsText);
+                break;
+            }
+
+            if (keywordRepository.isKeywordExists(chatId, word) > 0) {
+                keywordRepository.deleteKeywordByChatId(chatId, word);
+                sendMessage(chatId, "❌ " + word);
+            } else {
+                sendMessage(chatId, String.format(wordIsNotInTheListText, word));
+            }
+        }
+        prefix = "";
     }
 
     private void deleteWordFromTop(int wordNum, long chatId) {
@@ -705,26 +729,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             sendMessage(chatId, wordsIsNotAddedText);
         }
 
-        prefix = "";
-    }
-
-    private void delKeyword(long chatId, ArrayList<String> keywords) {
-        for (String word : keywords) {
-            word = word.trim().toLowerCase();
-
-            if (word.equals("*")) {
-                keywordRepository.deleteAllKeywordsByChatId(chatId);
-                sendMessage(chatId, deleteAllWordsText);
-                break;
-            }
-
-            if (keywordRepository.isKeywordExists(chatId, word) > 0) {
-                keywordRepository.deleteKeywordByChatId(chatId, word);
-                sendMessage(chatId, "❌ " + word);
-            } else {
-                sendMessage(chatId, String.format(wordIsNotInTheListText, word));
-            }
-        }
         prefix = "";
     }
 
