@@ -893,7 +893,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void sendFeedback(long chatId, String text) {
-        sendMessage(1254981379, "<b>Message</b> from " + chatId + "\n" + text);
+        String userName = userRepository.findNameByChatId(chatId);
+        sendMessage(1254981379, "<b>Message</b> from user: " + userName + ", id: " + chatId + "\n" + text);
         prefix = "";
     }
 
