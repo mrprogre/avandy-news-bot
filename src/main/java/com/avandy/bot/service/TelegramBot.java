@@ -104,7 +104,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (messageText.startsWith("/send-feedback")) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
-                sendFeedback(chatId, feedback);
+                new Thread(() -> sendFeedback(chatId, feedback)).start();
                 prefix = "";
 
                 /* SEND TO ALL FROM BOT OWNER */
@@ -248,7 +248,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
                 /* SETTINGS */
-                case "GET_SETTINGS" -> getSettings(chatId);
+                case "GET_SETTINGS" -> new Thread(() -> getSettings(chatId)).start();
                 case "SET_PERIOD" -> getNumbersForKeywordsPeriodButtons(chatId);
                 case "SET_PERIOD_ALL" -> getNumbersForAllPeriodButtons(chatId);
                 case "SET_PERIOD_TOP" -> getNumbersForTopPeriodButtons(chatId);
