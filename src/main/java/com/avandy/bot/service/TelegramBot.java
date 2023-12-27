@@ -547,17 +547,37 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private static String parseMessageText(String messageText) {
+    private String parseMessageText(String messageText) {
         return messageText.substring(messageText.indexOf(" "))
                 .trim()
                 .toLowerCase();
     }
 
-    public static SendMessage prepareMessage(long chatId, String textToSend) {
+    public SendMessage prepareMessage(long chatId, String textToSend) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(textToSend);
         return message;
+    }
+
+    private void sendMessage(long chatId, String textToSend) {
+        SendMessage message = prepareMessage(chatId, textToSend);
+        message.enableHtml(true);
+        message.disableWebPagePreview();
+        executeMessage(message);
+    }
+
+    private void executeMessage(SendMessage message) {
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            if (e.getMessage().contains("bot was blocked by the user")) {
+                userRepository.updateIsActive(0, Long.parseLong(message.getChatId()));
+                log.warn(String.format("Пользователь chat_id: %s, т.к. заблокировал бота", message.getChatId()));
+            } else {
+                log.warn(e.getMessage() + String.format("[chat_id: %s]", message.getChatId()));
+            }
+        }
     }
 
     @Override
@@ -582,27 +602,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else if (userRepository.isActive(message.getChatId()) == 0) {
             userRepository.updateIsActive(1, message.getChatId());
             log.warn("* * * * * * ПОЛЬЗОВАТЕЛЬ СНОВА АКТИВЕН: {} * * * * * *", user);
-        }
-    }
-
-    private void sendMessage(long chatId, String textToSend) {
-        SendMessage message = prepareMessage(chatId, textToSend);
-        message.enableHtml(true);
-        message.setChatId(chatId);
-        message.disableWebPagePreview();
-        executeMessage(message);
-    }
-
-    private void executeMessage(SendMessage message) {
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            if (e.getMessage().contains("bot was blocked by the user")) {
-                userRepository.updateIsActive(0, Long.parseLong(message.getChatId()));
-                log.warn(String.format("Пользователь chat_id: %s, т.к. заблокировал бота", message.getChatId()));
-            } else {
-                log.warn(e.getMessage() + String.format("[chat_id: %s]", message.getChatId()));
-            }
         }
     }
 
