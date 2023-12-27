@@ -34,6 +34,7 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
+    private Long chatIdCallback;
     private static final int TOP_TEN_SHOW_LIMIT = 20;
     private static final int TOP_TEN_LIST_LIMIT = 60;
     private static final int EXCLUDED_LIMIT = 100;
@@ -215,175 +216,175 @@ public class TelegramBot extends TelegramLongPollingBot {
             /* CALLBACK DATA */
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
-            long chatId = update.getCallbackQuery().getMessage().getChatId();
+            chatIdCallback = update.getCallbackQuery().getMessage().getChatId();
 
             switch (callbackData) {
-                case "START_SEARCH", "DELETE_NO" -> initSearch(chatId);
+                case "START_SEARCH", "DELETE_NO" -> initSearch(chatIdCallback);
 
                 /* FULL SEARCH */
-                case "FIND_ALL" -> new Thread(() -> findAllNews(chatId)).start();
+                case "FIND_ALL" -> new Thread(() -> findAllNews(chatIdCallback)).start();
 
                 /* EXCLUDED */
-                case "LIST_EXCLUDED" -> new Thread(() -> getExcludedList(chatId)).start();
+                case "LIST_EXCLUDED" -> new Thread(() -> getExcludedList(chatIdCallback)).start();
                 case "EXCLUDE" -> {
                     prefix = "/add-excluded ";
-                    cancelButton(chatId, addInListText);
+                    cancelButton(chatIdCallback, addInListText);
                 }
                 case "DELETE_EXCLUDED" -> {
                     prefix = "/remove-excluded ";
-                    cancelButton(chatId, delFromListText + "\n* - " + removeAllText);
+                    cancelButton(chatIdCallback, delFromListText + "\n* - " + removeAllText);
                 }
 
                 /* KEYWORDS */
-                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatId)).start();
-                case "LIST_KEYWORDS" -> new Thread(() -> getKeywordsList(chatId)).start();
+                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatIdCallback)).start();
+                case "LIST_KEYWORDS" -> new Thread(() -> getKeywordsList(chatIdCallback)).start();
                 case "ADD" -> {
                     prefix = "/add-keywords ";
-                    cancelButton(chatId, addInListText);
+                    cancelButton(chatIdCallback, addInListText);
                 }
                 case "DELETE" -> {
                     prefix = "/remove-keywords ";
-                    cancelButton(chatId, delFromListText + "\n* - " + removeAllText);
+                    cancelButton(chatIdCallback, delFromListText + "\n* - " + removeAllText);
                 }
 
                 /* SETTINGS */
-                case "GET_SETTINGS" -> new Thread(() -> getSettings(chatId)).start();
-                case "SET_PERIOD" -> getNumbersForKeywordsPeriodButtons(chatId);
-                case "SET_PERIOD_ALL" -> getNumbersForAllPeriodButtons(chatId);
-                case "SET_PERIOD_TOP" -> getNumbersForTopPeriodButtons(chatId);
+                case "GET_SETTINGS" -> new Thread(() -> getSettings(chatIdCallback)).start();
+                case "SET_PERIOD" -> getNumbersForKeywordsPeriodButtons(chatIdCallback);
+                case "SET_PERIOD_ALL" -> getNumbersForAllPeriodButtons(chatIdCallback);
+                case "SET_PERIOD_TOP" -> getNumbersForTopPeriodButtons(chatIdCallback);
 
-                case "SET_SCHEDULER" -> showOnOffScheduler(chatId);
+                case "SET_SCHEDULER" -> showOnOffScheduler(chatIdCallback);
                 case "SCHEDULER_ON" -> {
-                    settingsRepository.updateScheduler("on", chatId);
-                    sendMessage(chatId, schedulerChangedText);
-                    getSettings(chatId);
+                    settingsRepository.updateScheduler("on", chatIdCallback);
+                    sendMessage(chatIdCallback, schedulerChangedText);
+                    getSettings(chatIdCallback);
                 }
                 case "SCHEDULER_OFF" -> {
-                    settingsRepository.updateScheduler("off", chatId);
-                    sendMessage(chatId, schedulerChangedText);
-                    getSettings(chatId);
+                    settingsRepository.updateScheduler("off", chatIdCallback);
+                    sendMessage(chatIdCallback, schedulerChangedText);
+                    getSettings(chatIdCallback);
                 }
                 case "SCHEDULER_START" -> {
                     prefix = "/update-start ";
-                    cancelButton(chatId, inputSchedulerStart);
+                    cancelButton(chatIdCallback, inputSchedulerStart);
                 }
-                case "SET_EXCLUDED" -> showOnOffExcluded(chatId);
+                case "SET_EXCLUDED" -> showOnOffExcluded(chatIdCallback);
                 case "EXCLUDED_ON" -> {
-                    settingsRepository.updateExcluded("on", chatId);
-                    sendMessage(chatId, excludedChangedText);
-                    getSettings(chatId);
+                    settingsRepository.updateExcluded("on", chatIdCallback);
+                    sendMessage(chatIdCallback, excludedChangedText);
+                    getSettings(chatIdCallback);
                 }
                 case "EXCLUDED_OFF" -> {
-                    settingsRepository.updateExcluded("off", chatId);
-                    sendMessage(chatId, excludedChangedText);
-                    getSettings(chatId);
+                    settingsRepository.updateExcluded("off", chatIdCallback);
+                    sendMessage(chatIdCallback, excludedChangedText);
+                    getSettings(chatIdCallback);
                 }
 
                 case "FEEDBACK" -> {
                     prefix = "/send-feedback ";
-                    cancelButton(chatId, sendMessageForDevText);
+                    cancelButton(chatIdCallback, sendMessageForDevText);
                 }
 
                 case "CANCEL" -> {
                     prefix = "";
-                    nextButton(chatId, actionCanceledText);
+                    nextButton(chatIdCallback, actionCanceledText);
                 }
 
                 case "RU_BUTTON" -> {
-                    setLang(chatId, "ru");
-                    setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-                    getReplyKeywordWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
-                    showYesNoOnStart(chatId, letsStartText);
+                    setLang(chatIdCallback, "ru");
+                    setInterfaceLanguage(settingsRepository.getLangByChatId(chatIdCallback));
+                    getReplyKeywordWithSearch(chatIdCallback, greetingText, userRepository.findNameByChatId(chatIdCallback));
+                    showYesNoOnStart(chatIdCallback, letsStartText);
                     createMenuCommands();
                 }
                 case "EN_BUTTON" -> {
-                    setLang(chatId, "en");
-                    setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-                    getReplyKeywordWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
-                    showYesNoOnStart(chatId, letsStartText);
+                    setLang(chatIdCallback, "en");
+                    setInterfaceLanguage(settingsRepository.getLangByChatId(chatIdCallback));
+                    getReplyKeywordWithSearch(chatIdCallback, greetingText, userRepository.findNameByChatId(chatIdCallback));
+                    showYesNoOnStart(chatIdCallback, letsStartText);
                     createMenuCommands();
                 }
 
                 // Обновление периода поиска по ключевым словам
-                case "BUTTON_1" -> updatePeriod(1, chatId);
-                case "BUTTON_2" -> updatePeriod(2, chatId);
-                case "BUTTON_4" -> updatePeriod(4, chatId);
-                case "BUTTON_12" -> updatePeriod(12, chatId);
-                case "BUTTON_24" -> updatePeriod(24, chatId);
-                case "BUTTON_48" -> updatePeriod(48, chatId);
-                case "BUTTON_72" -> updatePeriod(72, chatId);
+                case "BUTTON_1" -> updatePeriod(1, chatIdCallback);
+                case "BUTTON_2" -> updatePeriod(2, chatIdCallback);
+                case "BUTTON_4" -> updatePeriod(4, chatIdCallback);
+                case "BUTTON_12" -> updatePeriod(12, chatIdCallback);
+                case "BUTTON_24" -> updatePeriod(24, chatIdCallback);
+                case "BUTTON_48" -> updatePeriod(48, chatIdCallback);
+                case "BUTTON_72" -> updatePeriod(72, chatIdCallback);
 
                 // Обновление периода поиска по всем новостям
-                case "BUTTON_1_ALL" -> updatePeriodAll(1, chatId);
-                case "BUTTON_2_ALL" -> updatePeriodAll(2, chatId);
-                case "BUTTON_4_ALL" -> updatePeriodAll(4, chatId);
-                case "BUTTON_6_ALL" -> updatePeriodAll(6, chatId);
-                case "BUTTON_8_ALL" -> updatePeriodAll(8, chatId);
-                case "BUTTON_12_ALL" -> updatePeriodAll(12, chatId);
-                case "BUTTON_24_ALL" -> updatePeriodAll(24, chatId);
+                case "BUTTON_1_ALL" -> updatePeriodAll(1, chatIdCallback);
+                case "BUTTON_2_ALL" -> updatePeriodAll(2, chatIdCallback);
+                case "BUTTON_4_ALL" -> updatePeriodAll(4, chatIdCallback);
+                case "BUTTON_6_ALL" -> updatePeriodAll(6, chatIdCallback);
+                case "BUTTON_8_ALL" -> updatePeriodAll(8, chatIdCallback);
+                case "BUTTON_12_ALL" -> updatePeriodAll(12, chatIdCallback);
+                case "BUTTON_24_ALL" -> updatePeriodAll(24, chatIdCallback);
 
-                case "YES_BUTTON" -> showAddKeywordsButton(chatId, yesButtonText);
-                case "NO_BUTTON" -> sendMessage(chatId, buyButtonText);
-                case "DELETE_YES" -> removeUser(chatId);
+                case "YES_BUTTON" -> showAddKeywordsButton(chatIdCallback, yesButtonText);
+                case "NO_BUTTON" -> sendMessage(chatIdCallback, buyButtonText);
+                case "DELETE_YES" -> removeUser(chatIdCallback);
 
-                case "DEL_FROM_TOP" -> deleteFromTopButtons(chatId);
-                case "LIST_TOP" -> getTopTenWordsList(chatId);
-                case "GET_TOP" -> showTop(chatId);
-                case "WORD_SEARCH" -> topSearchButtons(chatId);
+                case "DEL_FROM_TOP" -> deleteFromTopButtons(chatIdCallback);
+                case "LIST_TOP" -> getTopTenWordsList(chatIdCallback);
+                case "GET_TOP" -> showTop(chatIdCallback);
+                case "WORD_SEARCH" -> topSearchButtons(chatIdCallback);
                 case "DELETE_TOP" -> {
                     prefix = "/remove-top-ten ";
-                    cancelButton(chatId, removeFromTopTenListText);
+                    cancelButton(chatIdCallback, removeFromTopTenListText);
                 }
 
-                case "TOP_NUM_1" -> searchNewsTop(1, chatId);
-                case "TOP_NUM_2" -> searchNewsTop(2, chatId);
-                case "TOP_NUM_3" -> searchNewsTop(3, chatId);
-                case "TOP_NUM_4" -> searchNewsTop(4, chatId);
-                case "TOP_NUM_5" -> searchNewsTop(5, chatId);
-                case "TOP_NUM_6" -> searchNewsTop(6, chatId);
-                case "TOP_NUM_7" -> searchNewsTop(7, chatId);
-                case "TOP_NUM_8" -> searchNewsTop(8, chatId);
-                case "TOP_NUM_9" -> searchNewsTop(9, chatId);
-                case "TOP_NUM_10" -> searchNewsTop(10, chatId);
-                case "TOP_NUM_11" -> searchNewsTop(11, chatId);
-                case "TOP_NUM_12" -> searchNewsTop(12, chatId);
-                case "TOP_NUM_13" -> searchNewsTop(13, chatId);
-                case "TOP_NUM_14" -> searchNewsTop(14, chatId);
-                case "TOP_NUM_15" -> searchNewsTop(15, chatId);
-                case "TOP_NUM_16" -> searchNewsTop(16, chatId);
-                case "TOP_NUM_17" -> searchNewsTop(17, chatId);
-                case "TOP_NUM_18" -> searchNewsTop(18, chatId);
-                case "TOP_NUM_19" -> searchNewsTop(19, chatId);
-                case "TOP_NUM_20" -> searchNewsTop(20, chatId);
+                case "TOP_NUM_1" -> searchNewsTop(1, chatIdCallback);
+                case "TOP_NUM_2" -> searchNewsTop(2, chatIdCallback);
+                case "TOP_NUM_3" -> searchNewsTop(3, chatIdCallback);
+                case "TOP_NUM_4" -> searchNewsTop(4, chatIdCallback);
+                case "TOP_NUM_5" -> searchNewsTop(5, chatIdCallback);
+                case "TOP_NUM_6" -> searchNewsTop(6, chatIdCallback);
+                case "TOP_NUM_7" -> searchNewsTop(7, chatIdCallback);
+                case "TOP_NUM_8" -> searchNewsTop(8, chatIdCallback);
+                case "TOP_NUM_9" -> searchNewsTop(9, chatIdCallback);
+                case "TOP_NUM_10" -> searchNewsTop(10, chatIdCallback);
+                case "TOP_NUM_11" -> searchNewsTop(11, chatIdCallback);
+                case "TOP_NUM_12" -> searchNewsTop(12, chatIdCallback);
+                case "TOP_NUM_13" -> searchNewsTop(13, chatIdCallback);
+                case "TOP_NUM_14" -> searchNewsTop(14, chatIdCallback);
+                case "TOP_NUM_15" -> searchNewsTop(15, chatIdCallback);
+                case "TOP_NUM_16" -> searchNewsTop(16, chatIdCallback);
+                case "TOP_NUM_17" -> searchNewsTop(17, chatIdCallback);
+                case "TOP_NUM_18" -> searchNewsTop(18, chatIdCallback);
+                case "TOP_NUM_19" -> searchNewsTop(19, chatIdCallback);
+                case "TOP_NUM_20" -> searchNewsTop(20, chatIdCallback);
 
-                case "TOP_DEL_1" -> deleteWordFromTop(1, chatId);
-                case "TOP_DEL_2" -> deleteWordFromTop(2, chatId);
-                case "TOP_DEL_3" -> deleteWordFromTop(3, chatId);
-                case "TOP_DEL_4" -> deleteWordFromTop(4, chatId);
-                case "TOP_DEL_5" -> deleteWordFromTop(5, chatId);
-                case "TOP_DEL_6" -> deleteWordFromTop(6, chatId);
-                case "TOP_DEL_7" -> deleteWordFromTop(7, chatId);
-                case "TOP_DEL_8" -> deleteWordFromTop(8, chatId);
-                case "TOP_DEL_9" -> deleteWordFromTop(9, chatId);
-                case "TOP_DEL_10" -> deleteWordFromTop(10, chatId);
-                case "TOP_DEL_11" -> deleteWordFromTop(11, chatId);
-                case "TOP_DEL_12" -> deleteWordFromTop(12, chatId);
-                case "TOP_DEL_13" -> deleteWordFromTop(13, chatId);
-                case "TOP_DEL_14" -> deleteWordFromTop(14, chatId);
-                case "TOP_DEL_15" -> deleteWordFromTop(15, chatId);
-                case "TOP_DEL_16" -> deleteWordFromTop(16, chatId);
-                case "TOP_DEL_17" -> deleteWordFromTop(17, chatId);
-                case "TOP_DEL_18" -> deleteWordFromTop(18, chatId);
-                case "TOP_DEL_19" -> deleteWordFromTop(19, chatId);
-                case "TOP_DEL_20" -> deleteWordFromTop(20, chatId);
+                case "TOP_DEL_1" -> deleteWordFromTop(1, chatIdCallback);
+                case "TOP_DEL_2" -> deleteWordFromTop(2, chatIdCallback);
+                case "TOP_DEL_3" -> deleteWordFromTop(3, chatIdCallback);
+                case "TOP_DEL_4" -> deleteWordFromTop(4, chatIdCallback);
+                case "TOP_DEL_5" -> deleteWordFromTop(5, chatIdCallback);
+                case "TOP_DEL_6" -> deleteWordFromTop(6, chatIdCallback);
+                case "TOP_DEL_7" -> deleteWordFromTop(7, chatIdCallback);
+                case "TOP_DEL_8" -> deleteWordFromTop(8, chatIdCallback);
+                case "TOP_DEL_9" -> deleteWordFromTop(9, chatIdCallback);
+                case "TOP_DEL_10" -> deleteWordFromTop(10, chatIdCallback);
+                case "TOP_DEL_11" -> deleteWordFromTop(11, chatIdCallback);
+                case "TOP_DEL_12" -> deleteWordFromTop(12, chatIdCallback);
+                case "TOP_DEL_13" -> deleteWordFromTop(13, chatIdCallback);
+                case "TOP_DEL_14" -> deleteWordFromTop(14, chatIdCallback);
+                case "TOP_DEL_15" -> deleteWordFromTop(15, chatIdCallback);
+                case "TOP_DEL_16" -> deleteWordFromTop(16, chatIdCallback);
+                case "TOP_DEL_17" -> deleteWordFromTop(17, chatIdCallback);
+                case "TOP_DEL_18" -> deleteWordFromTop(18, chatIdCallback);
+                case "TOP_DEL_19" -> deleteWordFromTop(19, chatIdCallback);
+                case "TOP_DEL_20" -> deleteWordFromTop(20, chatIdCallback);
 
-                case "TOP_INTERVAL_1" -> updatePeriodTop(1, chatId);
-                case "TOP_INTERVAL_4" -> updatePeriodTop(4, chatId);
-                case "TOP_INTERVAL_8" -> updatePeriodTop(8, chatId);
-                case "TOP_INTERVAL_12" -> updatePeriodTop(12, chatId);
-                case "TOP_INTERVAL_24" -> updatePeriodTop(24, chatId);
-                case "TOP_INTERVAL_48" -> updatePeriodTop(48, chatId);
-                case "TOP_INTERVAL_72" -> updatePeriodTop(72, chatId);
+                case "TOP_INTERVAL_1" -> updatePeriodTop(1, chatIdCallback);
+                case "TOP_INTERVAL_4" -> updatePeriodTop(4, chatIdCallback);
+                case "TOP_INTERVAL_8" -> updatePeriodTop(8, chatIdCallback);
+                case "TOP_INTERVAL_12" -> updatePeriodTop(12, chatIdCallback);
+                case "TOP_INTERVAL_24" -> updatePeriodTop(24, chatIdCallback);
+                case "TOP_INTERVAL_48" -> updatePeriodTop(48, chatIdCallback);
+                case "TOP_INTERVAL_72" -> updatePeriodTop(72, chatIdCallback);
             }
         }
     }
