@@ -105,7 +105,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             if (messageText.startsWith("/send-feedback")) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
                 new Thread(() -> sendFeedback(chatId, feedback)).start();
-                prefix = "";
 
                 /* SEND TO ALL FROM BOT OWNER */
             } else if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
@@ -748,11 +747,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addSettings(long chatId) {
         Settings settings = new Settings();
         settings.setChatId(chatId);
-        settings.setPeriod("6h");
+        settings.setPeriod("1h");
         settings.setPeriodAll("1h");
         settings.setPeriodTop("12h");
         settings.setScheduler("on");
-        settings.setStart(LocalTime.of(14, 0));
+        settings.setStart(LocalTime.of(10, 0));
         settings.setExcluded("on");
         settings.setLang("ru");
         settingsRepository.save(settings);
@@ -894,6 +893,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void sendFeedback(long chatId, String text) {
         sendMessage(1254981379, "<b>Message</b> from " + chatId + "\n" + text);
+        prefix = "";
     }
 
     public void showOnOffScheduler(long chatId) {

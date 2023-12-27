@@ -18,7 +18,7 @@ from users u
          left join keywords k on u.chat_id = k.chat_id
          left join excluded e on u.chat_id = e.chat_id
 where
-u.chat_id = 5184241058
+u.chat_id in (5184241058, 975260763)
 -- u.chat_id != 1254981379
 ;
 
