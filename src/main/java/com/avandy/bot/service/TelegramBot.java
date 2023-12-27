@@ -47,7 +47,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private ExcludedRepository excludedRepository;
     private RssRepository rssRepository;
     private TopTenRepository topTenRepository;
-    public AtomicBoolean isAutoSearch = new AtomicBoolean(false);
+    private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private StringBuilder stringBuilder;
     private StringJoiner joinerKeywords;
     private String prefix = "";
