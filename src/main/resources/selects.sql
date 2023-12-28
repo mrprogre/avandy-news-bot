@@ -1,25 +1,24 @@
 select u.chat_id,
        u.first_name,
-       u.last_name,
-       u.is_active,
-       s.period,
-       s.period_all,
+       string_agg(k.keyword, ',' ORDER BY k.keyword) as keyword,
+       string_agg(e.word, ',' ORDER BY e.word)       as keyword,
+       s.period                                      as "key",
+       s.period_all                                  as "all",
+       s.period_top                                  as "top",
        s.scheduler,
-       s.start,
-       s.excluded,
+       s.excluded                                    as "excl",
        s.lang,
-       s.period_top,
-       k.keyword,
-       k.add_date,
-       e.word,
-       e.add_date
+       u.is_active                                   as "1/0",
+       s.start
 from users u
          left join settings s on u.chat_id = s.chat_id
          left join keywords k on u.chat_id = k.chat_id
          left join excluded e on u.chat_id = e.chat_id
 where
 --u.chat_id in (5184241058, 975260763)
-u.chat_id not in (1254981379, 1020961767, 6455565758, 6128707071)
+u.chat_id not in (1254981379 /* я */ /*,1020961767 /* Лена */, 6455565758 /* Вика */, 6128707071 /* Саша */*/)
+group by u.chat_id, u.first_name, s.period, s.period_all, s.scheduler, s.start, s.excluded, s.lang, s.period_top,
+         u.is_active
 ;
 
 select title, pub_date
