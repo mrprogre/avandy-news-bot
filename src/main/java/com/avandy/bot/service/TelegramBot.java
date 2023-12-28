@@ -106,7 +106,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (messageText.startsWith("/send-feedback")) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
-                new Thread(() -> sendFeedback(chatId, feedback)).start();
+                sendFeedback(chatId, feedback);
 
                 /* SEND TO ALL FROM BOT OWNER */
             } else if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
@@ -157,8 +157,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* Команды без параметров */
                 switch (messageText) {
                     case "/start" -> startActions(update, chatId);
-                    case "/settings" -> new Thread(() -> getSettings(chatId)).start();
-                    case "/info" -> new Thread(() -> infoButtons(chatId)).start();
+                    case "/settings" -> getSettings(chatId);
+                    case "/info" -> infoButtons(chatId);
                     case "/search" -> initSearch(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/keywords" -> getKeywordsList(chatId);
@@ -186,7 +186,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "FIND_ALL" -> new Thread(() -> findAllNews(chatIdCallback)).start();
 
                 /* EXCLUDED */
-                case "LIST_EXCLUDED" -> new Thread(() -> getExcludedList(chatIdCallback)).start();
+                case "LIST_EXCLUDED" -> getExcludedList(chatIdCallback);
                 case "EXCLUDE" -> {
                     prefix = "/add-excluded ";
                     cancelButton(chatIdCallback, addInListText);
@@ -198,7 +198,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 /* KEYWORDS */
                 case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatIdCallback)).start();
-                case "LIST_KEYWORDS" -> new Thread(() -> getKeywordsList(chatIdCallback)).start();
+                case "LIST_KEYWORDS" -> getKeywordsList(chatIdCallback);
                 case "ADD" -> {
                     prefix = "/add-keywords ";
                     cancelButton(chatIdCallback, addInListText);
@@ -209,7 +209,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
                 /* SETTINGS */
-                case "GET_SETTINGS" -> new Thread(() -> getSettings(chatIdCallback)).start();
+                case "GET_SETTINGS" -> getSettings(chatIdCallback);
                 case "SET_PERIOD" -> getNumbersForKeywordsPeriodButtons(chatIdCallback);
                 case "SET_PERIOD_ALL" -> getNumbersForAllPeriodButtons(chatIdCallback);
                 case "SET_PERIOD_TOP" -> getNumbersForTopPeriodButtons(chatIdCallback);
@@ -283,10 +283,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "NO_BUTTON" -> sendMessage(chatIdCallback, buyButtonText);
                 case "DELETE_YES" -> removeUser(chatIdCallback);
 
+                /* TOP */
                 case "DEL_FROM_TOP" -> deleteFromTopButtons(chatIdCallback);
                 case "LIST_TOP" -> getTopTenWordsList(chatIdCallback);
                 case "GET_TOP" -> showTop(chatIdCallback);
-                case "WORD_SEARCH" -> topSearchButtons(chatIdCallback);
+                case "WORD_SEARCH" -> new Thread(() -> topSearchButtons(chatIdCallback)).start();
                 case "DELETE_TOP" -> {
                     prefix = "/remove-top-ten ";
                     cancelButton(chatIdCallback, removeFromTopTenListText);
@@ -500,7 +501,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return "<b>" + rssSourcesText + "</b>\n" + joiner;
     }
 
-    private void startActions(Update update, long chatId) {
+    private synchronized void startActions(Update update, long chatId) {
         addUser(update.getMessage());
         showLangButtons(chatId, "Choose your language");
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
@@ -510,7 +511,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return messageText.substring(messageText.indexOf(" ")).trim().toLowerCase();
     }
 
-    private void initSearch(long chatId) {
+    private synchronized void initSearch(long chatId) {
         String keywordsText = "1. " + keywordSearchText + "\n[" + settingsRepository.getPeriodByChatId(chatId) + ", " +
                 keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
         String fullText = "2. " + searchWithFilterText + "\n[" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
@@ -531,7 +532,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    private void getSettings(long chatId) {
+    private synchronized void getSettings(long chatId) {
         Optional<Settings> sets = settingsRepository.findById(chatId).stream().findFirst();
         String lang = settingsRepository.getLangByChatId(chatId);
 
@@ -543,7 +544,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         );
     }
 
-    private void getKeywordsList(long chatId) {
+    private synchronized void getKeywordsList(long chatId) {
         int counter = 0;
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
@@ -559,7 +560,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void getExcludedList(long chatId) {
+    private synchronized void getExcludedList(long chatId) {
         List<String> excludedByChatId = excludedRepository.findExcludedByChatId(chatId);
         int excludedCount = excludedByChatId.size();
 
@@ -770,7 +771,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         prefix = "";
     }
 
-    private void findAllNews(long chatId) {
+    private synchronized void findAllNews(long chatId) {
         sendMessage(chatId, fullSearchStartText);
         Set<Headline> headlines = search.start(chatId, "all");
 
@@ -807,7 +808,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private int findNewsByKeywords(long chatId) {
+    private synchronized int findNewsByKeywords(long chatId) {
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
         if (isAutoSearch.get() && keywordsByChatId.isEmpty()) {
@@ -869,7 +870,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 
-    private void wordSearch(long chatId, String word) {
+    private synchronized void wordSearch(long chatId, String word) {
         Set<Headline> headlines = search.start(chatId, word);
 
         int counterParts = 1;
@@ -953,7 +954,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    public void showYesNoOnDeleteUser(long chatId) {
+    public synchronized void showYesNoOnDeleteUser(long chatId) {
         SendMessage message = prepareMessage(chatId, confirmDeletedUserText);
 
         Map<String, String> buttons = new LinkedHashMap<>();
@@ -1168,7 +1169,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    private void infoButtons(long chatId) {
+    private synchronized void infoButtons(long chatId) {
         SendMessage message = prepareMessage(chatId, aboutDeveloperText + "\n\n" + getRssList());
         message.enableHtml(true);
 
@@ -1262,7 +1263,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         );
     }
 
-    private void showTop(long chatId) {
+    private synchronized void showTop(long chatId) {
         // init
         int x = 1;
         search.start(chatId, "top");
