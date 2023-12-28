@@ -34,6 +34,20 @@ from news_list n
 where pub_date > (current_timestamp - interval '180 minutes')::timestamp
 order by n.id desc;
 
--- мой id 1254981379
+-- я 1254981379, Лена 1020961767, Вика 6455565758, Саша 6128707071
 -- todo Сделать тесты на каждый кейс в идеале
 -- todo Сделать поиск по ключевым словам с %, чтобы искать типа повыш%зарплат'
+
+-- ALLERT
+-- private void showAlert(String callbackQueryId, String text) {
+--         AnswerCallbackQuery answer = new AnswerCallbackQuery();
+-- answer.setCallbackQueryId(callbackQueryId);
+-- answer.setText(text);
+-- answer.setShowAlert(true);
+--
+-- try {
+-- execute(answer);
+-- } catch (TelegramApiException e) {
+--             log.error(e.getMessage());
+-- }
+-- }

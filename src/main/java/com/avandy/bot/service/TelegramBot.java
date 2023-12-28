@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -175,7 +174,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (callbackData) {
                 case "FEEDBACK" -> {
-                    //showAlert(callbackQueryId, "/send-feedback ");
                     prefix = "/send-feedback ";
                     cancelButton(chatIdCallback, sendMessageForDevText);
                 }
@@ -1402,16 +1400,4 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void showAlert(String callbackQueryId, String text) {
-        AnswerCallbackQuery answer = new AnswerCallbackQuery();
-        answer.setCallbackQueryId(callbackQueryId);
-        answer.setText(text);
-        answer.setShowAlert(true);
-
-        try {
-            execute(answer);
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage());
-        }
-    }
 }
