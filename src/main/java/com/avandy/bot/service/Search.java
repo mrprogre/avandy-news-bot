@@ -89,8 +89,10 @@ public class Search {
                     /* KEYWORDS SEARCH */
                     case "keywords" -> {
                         for (Keyword keyword : keywords) {
-                            if (title.toLowerCase().contains(keyword.getKeyword().toLowerCase()) && title.length() > 15) {
+                            boolean isContains = title.toLowerCase().contains(keyword.getKeyword().toLowerCase())
+                                    && title.length() > 15;
 
+                            if (isContains) {
                                 if (dateDiff != 0) {
                                     if (!showedNewsHash.contains(hash)) {
                                         headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));

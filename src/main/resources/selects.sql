@@ -18,12 +18,9 @@ from users u
          left join keywords k on u.chat_id = k.chat_id
          left join excluded e on u.chat_id = e.chat_id
 where
-u.chat_id in (5184241058, 975260763)
--- u.chat_id != 1254981379
+--u.chat_id in (5184241058, 975260763)
+u.chat_id not in (1254981379, 1020961767, 6455565758, 6128707071)
 ;
-
-set time zone 'Europe/Moscow';
-select current_timestamp;
 
 select title, pub_date
 from news_list n
@@ -39,6 +36,5 @@ where pub_date > (current_timestamp - interval '180 minutes')::timestamp
 order by n.id desc;
 
 -- мой id 1254981379
--- todo сделать проще удаление ключевых слов
 -- todo Сделать тесты на каждый кейс в идеале
 -- todo Сделать поиск по ключевым словам с %, чтобы искать типа повыш%зарплат'
