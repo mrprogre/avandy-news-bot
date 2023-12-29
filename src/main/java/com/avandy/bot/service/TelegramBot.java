@@ -35,7 +35,6 @@ import static com.avandy.bot.utils.Text.*;
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
     public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]"; // тыс. "аэрофлота"
-    ///public static final String REPLACE_ALL_TOP = "[^(а-яА-Яa-zA-Z)]$"; // тыс.
     private Long chatIdCallback;
     private static final int TOP_TEN_SHOW_LIMIT = 20;
     private static final int TOP_TEN_LIST_LIMIT = 60;
