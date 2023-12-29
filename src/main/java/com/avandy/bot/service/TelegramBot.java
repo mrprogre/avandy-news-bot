@@ -1296,7 +1296,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             for (String word : titles) {
                 if (word.length() > 2) {
-                    log.warn("word = " + word);
                     wordsCount.put(word, wordsCount.getOrDefault(word, 0) + 1);
                 }
             }
