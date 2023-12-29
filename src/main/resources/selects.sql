@@ -38,6 +38,16 @@ order by n.id desc;
 -- todo Сделать тесты на каждый кейс в идеале
 -- todo Сделать поиск по ключевым словам с %, чтобы искать типа повыш%зарплат'
 
+SELECT title FROM news_list
+WHERE pub_date > (current_timestamp - cast('12h' as interval))
+--and lower(title) ~ '^сво | сво | сво$'
+  AND title ilike '%сво%'
+except
+SELECT title FROM news_list
+WHERE pub_date > (current_timestamp - cast('12h' as interval))
+  and lower(title) ~ '^сво\W? | \W?сво\W? | \W?сво$'
+;
+
 -- ALLERT
 -- private void showAlert(String callbackQueryId, String text) {
 --         AnswerCallbackQuery answer = new AnswerCallbackQuery();

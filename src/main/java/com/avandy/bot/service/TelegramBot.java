@@ -34,11 +34,11 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
+    public static final String REPLACE_ALL_TOP = "[}|]|\\[|]|,|:|«|»|\"]";
     private Long chatIdCallback;
     private static final int TOP_TEN_SHOW_LIMIT = 20;
     private static final int TOP_TEN_LIST_LIMIT = 60;
     private static final int EXCLUDED_LIMIT = 100;
-    private static final String REPLACE_ALL_TOP = ",:«»\"";
     private static final String TOP_TEXT = "Top 20";
     private final BotConfig config;
     private Search search;
@@ -347,7 +347,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void updateSearchStartTime(String messageText, long chatId) {
         int start = Integer.parseInt(prepareTextToSave(messageText).replaceAll("\\D+", ""));
         try {
-
             if (start < 0 || start > 23) {
                 sendMessage(chatId, incorrectTimeText);
                 prefix = "/update-start ";
@@ -499,7 +498,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return "<b>" + rssSourcesText + "</b>\n" + joiner;
     }
 
-    private synchronized void startActions(Update update, long chatId) {
+    private void startActions(Update update, long chatId) {
         addUser(update.getMessage());
         showLangButtons(chatId, "Choose your language");
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
@@ -509,7 +508,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         return messageText.substring(messageText.indexOf(" ")).trim().toLowerCase();
     }
 
-    private synchronized void initSearch(long chatId) {
+    private void initSearch(long chatId) {
         String keywordsText = "1. " + keywordSearchText + "\n[" + settingsRepository.getPeriodByChatId(chatId) + ", " +
                 keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
         String fullText = "2. " + searchWithFilterText + "\n[" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
@@ -530,7 +529,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    private synchronized void getSettings(long chatId) {
+    private void getSettings(long chatId) {
         Optional<Settings> sets = settingsRepository.findById(chatId).stream().findFirst();
         String lang = settingsRepository.getLangByChatId(chatId);
 
@@ -542,7 +541,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         );
     }
 
-    private synchronized void getKeywordsList(long chatId) {
+    private void getKeywordsList(long chatId) {
         int counter = 0;
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
@@ -558,7 +557,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private synchronized void getExcludedList(long chatId) {
+    private void getExcludedList(long chatId) {
         List<String> excludedByChatId = excludedRepository.findExcludedByChatId(chatId);
         int excludedCount = excludedByChatId.size();
 
@@ -769,7 +768,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         prefix = "";
     }
 
-    private synchronized void findAllNews(long chatId) {
+    private void findAllNews(long chatId) {
         sendMessage(chatId, fullSearchStartText);
         Set<Headline> headlines = search.start(chatId, "all");
 
@@ -806,7 +805,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private synchronized int findNewsByKeywords(long chatId) {
+    private int findNewsByKeywords(long chatId) {
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
         if (isAutoSearch.get() && keywordsByChatId.isEmpty()) {
@@ -868,7 +867,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 
-    private synchronized void wordSearch(long chatId, String word) {
+    private void wordSearch(long chatId, String word) {
         Set<Headline> headlines = search.start(chatId, word);
 
         int counterParts = 1;
@@ -952,7 +951,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    public synchronized void showYesNoOnDeleteUser(long chatId) {
+    public void showYesNoOnDeleteUser(long chatId) {
         SendMessage message = prepareMessage(chatId, confirmDeletedUserText);
 
         Map<String, String> buttons = new LinkedHashMap<>();
@@ -1167,7 +1166,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    private synchronized void infoButtons(long chatId) {
+    private void infoButtons(long chatId) {
         SendMessage message = prepareMessage(chatId, aboutDeveloperText + "\n\n" + getRssList());
         message.enableHtml(true);
 
@@ -1261,7 +1260,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         );
     }
 
-    private synchronized void showTop(long chatId) {
+    private void showTop(long chatId) {
         // init
         int x = 1;
         search.start(chatId, "top");

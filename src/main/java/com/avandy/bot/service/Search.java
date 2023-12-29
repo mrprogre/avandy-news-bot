@@ -117,7 +117,8 @@ public class Search {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
             TreeSet<NewsList> newsListByPeriodAndWord =
-                    newsListRepository.getTopNewsListByPeriodAndWord(periodMinutes + " minutes", searchType);
+                    newsListRepository.getTopNewsListByPeriodAndWord(periodMinutes + " minutes",
+                            searchType.replaceAll(TelegramBot.REPLACE_ALL_TOP,""));
 
             for (NewsList news : newsListByPeriodAndWord) {
                 String rss = news.getSource();
