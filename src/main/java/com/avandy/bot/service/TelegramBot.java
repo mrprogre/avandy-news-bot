@@ -27,6 +27,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.avandy.bot.utils.Text.*;
@@ -34,6 +35,7 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
+    private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
     private Long chatIdCallback;
     private static final int TOP_TEN_SHOW_LIMIT = 20;
@@ -51,7 +53,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private StringBuilder stringBuilder;
     private StringJoiner joinerKeywords;
-    private String prefix = "";
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
         super(botToken);
@@ -96,53 +97,65 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = prefix + update.getMessage().getText();
+            String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+            UserState userState = userStates.get(chatId);
 
             String firstName = update.getMessage().getChat().getFirstName();
             log.warn(firstName + ": [" + messageText + "]");
 
-            if (messageText.startsWith("/send-feedback")) {
-                String feedback = messageText.substring(messageText.indexOf(" ") + 1);
-                sendFeedback(chatId, feedback);
-
-                /* SEND TO ALL FROM BOT OWNER */
-            } else if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
+            /* SEND TO ALL FROM BOT OWNER */
+            if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
                 String textToSend = messageText.substring(messageText.indexOf(" "));
                 Iterable<User> users = userRepository.findAll();
                 for (User user : users) {
                     sendMessage(user.getChatId(), textToSend);
                 }
-            } else if (messageText.startsWith("/add-keywords")) {
-                String keywords = parseMessageText(messageText);
+
+                /* USER INPUT BLOCK */
+            } else if (userState != null && "SEND_FEEDBACK".equals(userState.getState())) {
+                String feedback = messageText.substring(messageText.indexOf(" ") + 1);
+                sendFeedback(chatId, feedback);
+                userStates.remove(chatId);
+
+            } else if (userState != null && "ADD_KEYWORDS".equals(userState.getState())) {
+                String keywords = messageText.trim().toLowerCase();
                 String[] words = keywords.split(",");
                 addKeyword(chatId, words);
                 getKeywordsList(chatId);
+                userStates.remove(chatId);
 
-            } else if (messageText.startsWith("/add-excluded")) {
-                String exclude = parseMessageText(messageText);
+            } else if (userState != null && "DEL_KEYWORDS".equals(userState.getState())) {
+                String keywords = messageText.trim().toLowerCase();
+                removeKeywords(keywords, chatId);
+                userStates.remove(chatId);
+
+            } else if (userState != null && "ADD_EXCLUDED".equals(userState.getState())) {
+                String exclude = messageText.trim().toLowerCase();
                 String[] words = exclude.split(",");
                 addExclude(chatId, words);
                 getExcludedList(chatId);
+                userStates.remove(chatId);
 
-            } else if (messageText.startsWith("/remove-excluded")) {
-                String excluded = parseMessageText(messageText);
+            } else if (userState != null && "DEL_EXCLUDED".equals(userState.getState())) {
+                String excluded = messageText.trim().toLowerCase();
                 String[] words = excluded.split(",");
                 delExcluded(chatId, words);
                 getExcludedList(chatId);
+                userStates.remove(chatId);
 
-            } else if (messageText.startsWith("/remove-keywords")) {
-                removeKeywords(messageText, chatId);
-
-            } else if (messageText.startsWith("/remove-top-ten")) {
-                String text = parseMessageText(messageText);
+            } else if (userState != null && "DEL_TOP".equals(userState.getState())) {
+                String text = messageText.trim().toLowerCase();
                 String[] words = text.split(",");
                 delFromTopTenList(chatId, words);
                 getTopTenWordsList(chatId);
+                userStates.remove(chatId);
 
-            } else if (messageText.startsWith("/update-start")) {
+                // todo сделать выбором кнопки от 0 до 23
+            } else if (userState != null && "UPDATE_START".equals(userState.getState())) {
                 updateSearchStartTime(messageText, chatId);
+                userStates.remove(chatId);
 
             } else if (messageText.startsWith(keywordsSearchText)) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
@@ -173,9 +186,22 @@ public class TelegramBot extends TelegramLongPollingBot {
             //String callbackQueryId = update.getCallbackQuery().getId();
 
             switch (callbackData) {
+
                 case "FEEDBACK" -> {
-                    prefix = "/send-feedback ";
+                    userStates.put(chatIdCallback, new UserState("SEND_FEEDBACK"));
                     cancelButton(chatIdCallback, sendMessageForDevText);
+                }
+
+                /* KEYWORDS */
+                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatIdCallback)).start();
+                case "LIST_KEYWORDS" -> getKeywordsList(chatIdCallback);
+                case "ADD" -> {
+                    userStates.put(chatIdCallback, new UserState("ADD_KEYWORDS"));
+                    cancelButton(chatIdCallback, addInListText);
+                }
+                case "DELETE" -> {
+                    userStates.put(chatIdCallback, new UserState("DEL_KEYWORDS"));
+                    cancelButton(chatIdCallback, delFromListText + "\n* - " + removeAllText);
                 }
 
                 case "START_SEARCH", "DELETE_NO" -> initSearch(chatIdCallback);
@@ -186,24 +212,22 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* EXCLUDED */
                 case "LIST_EXCLUDED" -> getExcludedList(chatIdCallback);
                 case "EXCLUDE" -> {
-                    prefix = "/add-excluded ";
+                    userStates.put(chatIdCallback, new UserState("ADD_EXCLUDED"));
                     cancelButton(chatIdCallback, addInListText);
                 }
                 case "DELETE_EXCLUDED" -> {
-                    prefix = "/remove-excluded ";
+                    userStates.put(chatIdCallback, new UserState("DEL_EXCLUDED"));
                     cancelButton(chatIdCallback, delFromListText + "\n* - " + removeAllText);
                 }
 
-                /* KEYWORDS */
-                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatIdCallback)).start();
-                case "LIST_KEYWORDS" -> getKeywordsList(chatIdCallback);
-                case "ADD" -> {
-                    prefix = "/add-keywords ";
-                    cancelButton(chatIdCallback, addInListText);
-                }
-                case "DELETE" -> {
-                    prefix = "/remove-keywords ";
-                    cancelButton(chatIdCallback, delFromListText + "\n* - " + removeAllText);
+                /* TOP */
+                case "DEL_FROM_TOP" -> deleteFromTopButtons(chatIdCallback);
+                case "LIST_TOP" -> getTopTenWordsList(chatIdCallback);
+                case "GET_TOP" -> showTop(chatIdCallback);
+                case "WORD_SEARCH" -> new Thread(() -> topSearchButtons(chatIdCallback)).start();
+                case "DELETE_TOP" -> {
+                    userStates.put(chatIdCallback, new UserState("DEL_TOP"));
+                    cancelButton(chatIdCallback, removeFromTopTenListText);
                 }
 
                 /* SETTINGS */
@@ -224,7 +248,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     getSettings(chatIdCallback);
                 }
                 case "SCHEDULER_START" -> {
-                    prefix = "/update-start ";
+                    userStates.put(chatIdCallback, new UserState("UPDATE_START"));
                     cancelButton(chatIdCallback, inputSchedulerStart);
                 }
                 case "SET_EXCLUDED" -> showOnOffExcluded(chatIdCallback);
@@ -240,7 +264,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
                 case "CANCEL" -> {
-                    prefix = "";
+                    userStates.remove(chatIdCallback);
                     nextButton(chatIdCallback, actionCanceledText);
                 }
 
@@ -280,16 +304,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "YES_BUTTON" -> showAddKeywordsButton(chatIdCallback, yesButtonText);
                 case "NO_BUTTON" -> sendMessage(chatIdCallback, buyButtonText);
                 case "DELETE_YES" -> removeUser(chatIdCallback);
-
-                /* TOP */
-                case "DEL_FROM_TOP" -> deleteFromTopButtons(chatIdCallback);
-                case "LIST_TOP" -> getTopTenWordsList(chatIdCallback);
-                case "GET_TOP" -> showTop(chatIdCallback);
-                case "WORD_SEARCH" -> new Thread(() -> topSearchButtons(chatIdCallback)).start();
-                case "DELETE_TOP" -> {
-                    prefix = "/remove-top-ten ";
-                    cancelButton(chatIdCallback, removeFromTopTenListText);
-                }
 
                 case "TOP_NUM_1" -> searchNewsTop(1, chatIdCallback);
                 case "TOP_NUM_2" -> searchNewsTop(2, chatIdCallback);
@@ -345,25 +359,25 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void updateSearchStartTime(String messageText, long chatId) {
-        int start = Integer.parseInt(prepareTextToSave(messageText).replaceAll("\\D+", ""));
+        int start = Integer.parseInt(messageText.trim()
+                .toLowerCase()
+                .replaceAll("\\D+", ""));
         try {
             if (start < 0 || start > 23) {
                 sendMessage(chatId, incorrectTimeText);
-                prefix = "/update-start ";
             } else {
                 settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
                 sendMessage(chatId, startTimeChangedText);
                 getSettings(chatId);
-                prefix = "";
             }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
 
-    private void removeKeywords(String messageText, long chatId) {
+    private void removeKeywords(String keywords, long chatId) {
         ArrayList<String> words = new ArrayList<>();
-        String keywords = parseMessageText(messageText);
+
         try {
             if (keywords.equals("*")) {
                 words.add("*");
@@ -378,7 +392,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     for (String row : split) {
                         int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                        row = row.replaceAll("\\s", "");
+                        //row = row.replaceAll("\\s", "");
                         row = row.substring(row.indexOf(".") + 1);
 
                         if (numInt == rowNum) {
@@ -391,10 +405,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         } catch (NumberFormatException n) {
             sendMessage(chatId, allowCommasAndNumbersText);
-            prefix = "";
         } catch (NullPointerException npe) {
             sendMessage(chatId, "click /keywords" + TOP_TEN_SHOW_LIMIT);
-            prefix = "";
         }
     }
 
@@ -415,7 +427,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, String.format(wordIsNotInTheListText, word));
             }
         }
-        prefix = "";
     }
 
     private void deleteWordFromTop(int wordNum, long chatId) {
@@ -504,10 +515,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
     }
 
-    private static String prepareTextToSave(String messageText) {
-        return messageText.substring(messageText.indexOf(" ")).trim().toLowerCase();
-    }
-
     private void initSearch(long chatId) {
         String keywordsText = "1. " + keywordSearchText + "\n[" + settingsRepository.getPeriodByChatId(chatId) + ", " +
                 keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
@@ -575,12 +582,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             showExcludeButton(chatId);
         }
-    }
-
-    private String parseMessageText(String messageText) {
-        return messageText.substring(messageText.indexOf(" "))
-                .trim()
-                .toLowerCase();
     }
 
     public SendMessage prepareMessage(long chatId, String textToSend) {
@@ -692,7 +693,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             sendMessage(chatId, wordsIsNotAddedText);
         }
-        prefix = "";
     }
 
     private void addExclude(long chatId, String[] list) {
@@ -730,8 +730,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             sendMessage(chatId, wordsIsNotAddedText);
         }
-
-        prefix = "";
     }
 
     private void delExcluded(long chatId, String[] excluded) {
@@ -751,7 +749,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, "Слово " + exclude + " отсутствует в списке");
             }
         }
-        prefix = "";
     }
 
     private void addSettings(long chatId) {
@@ -765,7 +762,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setExcluded("on");
         settings.setLang("ru");
         settingsRepository.save(settings);
-        prefix = "";
     }
 
     private void findAllNews(long chatId) {
@@ -904,7 +900,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void sendFeedback(long chatId, String text) {
         String userName = userRepository.findNameByChatId(chatId);
         sendMessage(1254981379, "<b>Message</b> from user: " + userName + ", id: " + chatId + "\n" + text);
-        prefix = "";
     }
 
     public void showOnOffScheduler(long chatId) {
@@ -1326,7 +1321,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, String.format(wordIsNotInTheListText, word));
             }
         }
-        prefix = "";
     }
 
     private void setLang(long chatId, String lang) {

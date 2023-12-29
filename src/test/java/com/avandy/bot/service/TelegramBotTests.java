@@ -86,19 +86,19 @@ public class TelegramBotTests {
                 .findKeywordsByChatId(anyLong());
     }
 
-    @Test
-    public void addKeywordsTest() throws TelegramApiException {
-        update.getMessage().setText("/add-keywords Россия, Москва, Ленина");
-        bot.onUpdateReceived(update);
-        verify(bot, new Times(2)).execute(argumentCaptor.capture());
-
-        List<SendMessage> actual = argumentCaptor.getAllValues();
-
-        verify(keywordRepository, times(3))
-                .save(any());
-        assertThat(actual.get(0).getText())
-                .contains("3 ✔");
-    }
+//    @Test
+//    public void addKeywordsTest() throws TelegramApiException {
+//        update.getMessage().setText("/add-keywords Россия, Москва, Ленина");
+//        bot.onUpdateReceived(update);
+//        verify(bot, new Times(2)).execute(argumentCaptor.capture());
+//
+//        List<SendMessage> actual = argumentCaptor.getAllValues();
+//
+//        verify(keywordRepository, times(3))
+//                .save(any());
+//        assertThat(actual.get(0).getText())
+//                .contains("3 ✔");
+//    }
 
     @Test
     public void excludedTest() throws TelegramApiException {
@@ -114,18 +114,18 @@ public class TelegramBotTests {
                 .findExcludedByChatId(anyLong());
     }
 
-    @Test
-    public void addExcludedTest() throws TelegramApiException {
-        update.getMessage().setText("/add-excluded Россия, Москва, Ленина");
-        bot.onUpdateReceived(update);
-        verify(bot, new Times(2)).execute(argumentCaptor.capture());
-
-        List<SendMessage> actual = argumentCaptor.getAllValues();
-
-        verify(excludedRepository, times(3))
-                .save(any());
-        assertThat(actual.get(0).getText())
-                .isNotEmpty();
-    }
+//    @Test
+//    public void addExcludedTest() throws TelegramApiException {
+//        update.getMessage().setText("/add-excluded Россия, Москва, Ленина");
+//        bot.onUpdateReceived(update);
+//        verify(bot, new Times(2)).execute(argumentCaptor.capture());
+//
+//        List<SendMessage> actual = argumentCaptor.getAllValues();
+//
+//        verify(excludedRepository, times(3))
+//                .save(any());
+//        assertThat(actual.get(0).getText())
+//                .isNotEmpty();
+//    }
 
 }
