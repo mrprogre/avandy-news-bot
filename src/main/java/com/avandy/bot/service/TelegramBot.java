@@ -375,7 +375,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void removeKeywords(String keywords, long chatId) {
+    private synchronized void removeKeywords(String keywords, long chatId) {
         ArrayList<String> words = new ArrayList<>();
 
         try {
