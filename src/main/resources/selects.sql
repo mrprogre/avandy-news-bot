@@ -39,13 +39,13 @@ order by n.id desc;
 -- todo Сделать поиск по ключевым словам с %, чтобы искать типа повыш%зарплат'
 
 SELECT title FROM news_list
-WHERE pub_date > (current_timestamp - cast('12h' as interval))
---and lower(title) ~ '^сво | сво | сво$'
-  AND title ilike '%сво%'
+WHERE pub_date > (current_timestamp - cast('8h' as interval))
+-- --and lower(title) ~ '^сво | сво | сво$'
+AND title ilike '%заявил%'
 except
 SELECT title FROM news_list
-WHERE pub_date > (current_timestamp - cast('12h' as interval))
-  and lower(title) ~ '^сво\W? | \W?сво\W? | \W?сво$'
+WHERE pub_date > (current_timestamp - cast('8h' as interval))
+  and lower(title) ~ '^заявил\s|\sзаявил\s|\sзаявил$'
 ;
 
 -- ALLERT

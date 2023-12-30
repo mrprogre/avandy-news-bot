@@ -19,7 +19,7 @@ public interface NewsListRepository extends CrudRepository<NewsList, Long> {
 
     @Query(value = "SELECT id, source, title, title_hash, link, pub_date, add_date FROM news_list" +
             "        WHERE pub_date > (current_timestamp - cast(:period as interval))" +
-            "         AND lower(title) ~ ('^'||:word||'\\s|\\s'||:word||'\\s|\\s'||:word||'$')"
+            "         AND lower(title) ~ ('^'||:word||'(\\s|\\W)|(\\s|\\W)'||:word||'(\\s|\\W)|(\\s|\\W)'||:word||'$')"
             , nativeQuery = true)
     TreeSet<NewsList> getTopNewsListByPeriodAndWord(String period, String word);
 
