@@ -35,7 +35,6 @@ import static com.avandy.bot.utils.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
-    private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
     private Long chatIdCallback;
     private static final int TOP_TEN_SHOW_LIMIT = 20;
@@ -52,7 +51,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private TopTenRepository topTenRepository;
     private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private StringBuilder stringBuilder;
-    private StringJoiner joinerKeywords;
+    private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
         super(botToken);
@@ -123,7 +122,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String keywords = messageText.trim().toLowerCase();
                 String[] words = keywords.split(",");
                 addKeyword(chatId, words);
-                getKeywordsList(chatId);
+                showKeywordsList(chatId);
                 userStates.remove(chatId);
 
             } else if (userState != null && "DEL_KEYWORDS".equals(userState.getState())) {
@@ -173,7 +172,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/info" -> infoButtons(chatId);
                     case "/search" -> initSearch(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
-                    case "/keywords" -> getKeywordsList(chatId);
+                    case "/keywords" -> showKeywordsList(chatId);
                     case "/top" -> showTop(chatId);
                     case "/excluding" -> getExcludedList(chatId);
                     default -> sendMessage(chatId, undefinedCommandText);
@@ -194,7 +193,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 /* KEYWORDS */
                 case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatIdCallback)).start();
-                case "LIST_KEYWORDS" -> getKeywordsList(chatIdCallback);
+                case "LIST_KEYWORDS" -> showKeywordsList(chatIdCallback);
                 case "ADD" -> {
                     userStates.put(chatIdCallback, new UserState("ADD_KEYWORDS"));
                     cancelButton(chatIdCallback, addInListText);
@@ -382,10 +381,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             if (keywords.equals("*")) {
                 words.add("*");
                 delKeyword(chatId, words);
-                getKeywordsList(chatId);
+                showKeywordsList(chatId);
             } else {
                 String[] nums = keywords.split(",");
-                String[] split = joinerKeywords.toString().split("\n");
+                String[] split = getKeywordsList(chatId).split("\n");
 
                 for (String num : nums) {
                     int numInt = Integer.parseInt(num.trim());
@@ -401,7 +400,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     }
                 }
                 delKeyword(chatId, words);
-                getKeywordsList(chatId);
+                showKeywordsList(chatId);
             }
         } catch (NumberFormatException n) {
             sendMessage(chatId, allowCommasAndNumbersText);
@@ -548,20 +547,27 @@ public class TelegramBot extends TelegramLongPollingBot {
         );
     }
 
-    private void getKeywordsList(long chatId) {
-        int counter = 0;
-        List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
+    private void showKeywordsList(long chatId) {
+        String joinerKeywords = getKeywordsList(chatId);
 
-        if (!keywordsByChatId.isEmpty()) {
-            joinerKeywords = new StringJoiner("\n");
-            for (String item : keywordsByChatId) {
-                joinerKeywords.add(++counter + ". " + item);
-            }
-
+        if (joinerKeywords != null && joinerKeywords.length() != 0) {
             showKeywordButtons(chatId, "<b>" + listKeywordsText + "</b>\n" + joinerKeywords);
         } else {
             showAddKeywordsButton(chatId, setupKeywordsText);
         }
+    }
+
+    private String getKeywordsList(long chatId) {
+        int counter = 0;
+        StringJoiner joinerKeywords = new StringJoiner("\n");
+        List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
+
+        if (!keywordsByChatId.isEmpty()) {
+            for (String item : keywordsByChatId) {
+                joinerKeywords.add(++counter + ". " + item);
+            }
+        }
+        return joinerKeywords.toString();
     }
 
     private void getExcludedList(long chatId) {
