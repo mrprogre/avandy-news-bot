@@ -50,7 +50,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private RssRepository rssRepository;
     private TopTenRepository topTenRepository;
     private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
-    private StringBuilder stringBuilder;
+    private StringBuilder stringBuilderTop;
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
@@ -432,7 +432,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         String word = "empty";
 
         try {
-            String[] split = stringBuilder.toString().split("\n");
+            String[] split = stringBuilderTop.toString().split("\n");
 
             for (String row : split) {
                 int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
@@ -454,7 +454,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         String word = "empty";
 
         try {
-            String[] split = stringBuilder.toString().split("\n");
+            String[] split = stringBuilderTop.toString().split("\n");
 
             for (String row : split) {
                 int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
@@ -1268,18 +1268,18 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         List<String> topTen = getTopTen(chatId);
         if (topTen.size() > 0) {
-            stringBuilder = new StringBuilder();
+            stringBuilderTop = new StringBuilder();
             String point = ".    ";
 
             for (String s : topTen) {
                 if (x >= 10) point = ".  ";
-                stringBuilder.append(x++).append(point).append(s);
+                stringBuilderTop.append(x++).append(point).append(s);
             }
 
             String period = settingsRepository.getPeriodTopByChatId(chatId);
 
             showTopTenButtons(chatId,
-                    String.format("%s<b>%s</b>]\n%s", top20ByPeriodText, period, stringBuilder));
+                    String.format("%s<b>%s</b>]\n%s", top20ByPeriodText, period, stringBuilderTop));
         } else {
             showTopTenButton(chatId, updateTopText);
         }
