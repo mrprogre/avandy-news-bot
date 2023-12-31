@@ -151,11 +151,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getTopTenWordsList(chatId);
                 userStates.remove(chatId);
 
-                // todo сделать выбором кнопки от 0 до 23
-            } else if (userState != null && "UPDATE_START".equals(userState.getState())) {
-                updateSearchStartTime(messageText, chatId);
-                userStates.remove(chatId);
-
             } else if (messageText.startsWith(keywordsSearchText)) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
@@ -235,21 +230,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "SET_PERIOD_ALL" -> getNumbersForAllPeriodButtons(chatIdCallback);
                 case "SET_PERIOD_TOP" -> getNumbersForTopPeriodButtons(chatIdCallback);
 
-                case "SET_SCHEDULER" -> showOnOffScheduler(chatIdCallback);
-                case "SCHEDULER_ON" -> {
-                    settingsRepository.updateScheduler("on", chatIdCallback);
-                    sendMessage(chatIdCallback, schedulerChangedText);
-                    getSettings(chatIdCallback);
-                }
-                case "SCHEDULER_OFF" -> {
-                    settingsRepository.updateScheduler("off", chatIdCallback);
-                    sendMessage(chatIdCallback, schedulerChangedText);
-                    getSettings(chatIdCallback);
-                }
-                case "SCHEDULER_START" -> {
-                    userStates.put(chatIdCallback, new UserState("UPDATE_START"));
-                    cancelButton(chatIdCallback, inputSchedulerStart);
-                }
                 case "SET_EXCLUDED" -> showOnOffExcluded(chatIdCallback);
                 case "EXCLUDED_ON" -> {
                     settingsRepository.updateExcluded("on", chatIdCallback);
@@ -353,25 +333,52 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "TOP_INTERVAL_24" -> updatePeriodTop(24, chatIdCallback);
                 case "TOP_INTERVAL_48" -> updatePeriodTop(48, chatIdCallback);
                 case "TOP_INTERVAL_72" -> updatePeriodTop(72, chatIdCallback);
+
+                /* AUTO SEARCH BY KEYWORDS */
+                case "SET_SCHEDULER" -> showOnOffScheduler(chatIdCallback);
+                case "SCHEDULER_ON" -> {
+                    settingsRepository.updateScheduler("on", chatIdCallback);
+                    sendMessage(chatIdCallback, schedulerChangedText);
+                    getSettings(chatIdCallback);
+                }
+                case "SCHEDULER_OFF" -> {
+                    settingsRepository.updateScheduler("off", chatIdCallback);
+                    sendMessage(chatIdCallback, schedulerChangedText);
+                    getSettings(chatIdCallback);
+                } case "SCHEDULER_START" -> startSearchTimeButtons(chatIdCallback);
+                // Set start time
+                case "SET_START_0" -> updateSearchStartTime(0, chatIdCallback);
+                case "SET_START_1" -> updateSearchStartTime(1, chatIdCallback);
+                case "SET_START_2" -> updateSearchStartTime(2, chatIdCallback);
+                case "SET_START_3" -> updateSearchStartTime(3, chatIdCallback);
+                case "SET_START_4" -> updateSearchStartTime(4, chatIdCallback);
+                case "SET_START_5" -> updateSearchStartTime(5, chatIdCallback);
+                case "SET_START_6" -> updateSearchStartTime(6, chatIdCallback);
+                case "SET_START_7" -> updateSearchStartTime(7, chatIdCallback);
+                case "SET_START_8" -> updateSearchStartTime(8, chatIdCallback);
+                case "SET_START_9" -> updateSearchStartTime(9, chatIdCallback);
+                case "SET_START_10" -> updateSearchStartTime(10, chatIdCallback);
+                case "SET_START_11" -> updateSearchStartTime(11, chatIdCallback);
+                case "SET_START_12" -> updateSearchStartTime(12, chatIdCallback);
+                case "SET_START_13" -> updateSearchStartTime(13, chatIdCallback);
+                case "SET_START_14" -> updateSearchStartTime(14, chatIdCallback);
+                case "SET_START_15" -> updateSearchStartTime(15, chatIdCallback);
+                case "SET_START_16" -> updateSearchStartTime(16, chatIdCallback);
+                case "SET_START_17" -> updateSearchStartTime(17, chatIdCallback);
+                case "SET_START_18" -> updateSearchStartTime(18, chatIdCallback);
+                case "SET_START_19" -> updateSearchStartTime(19, chatIdCallback);
+                case "SET_START_20" -> updateSearchStartTime(20, chatIdCallback);
+                case "SET_START_21" -> updateSearchStartTime(21, chatIdCallback);
+                case "SET_START_22" -> updateSearchStartTime(22, chatIdCallback);
+                case "SET_START_23" -> updateSearchStartTime(23, chatIdCallback);
             }
         }
     }
 
-    private void updateSearchStartTime(String messageText, long chatId) {
-        int start = Integer.parseInt(messageText.trim()
-                .toLowerCase()
-                .replaceAll("\\D+", ""));
-        try {
-            if (start < 0 || start > 23) {
-                sendMessage(chatId, incorrectTimeText);
-            } else {
-                settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
-                sendMessage(chatId, startTimeChangedText);
-                getSettings(chatId);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+    private void updateSearchStartTime(int start, long chatId) {
+        settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
+        sendMessage(chatId, startTimeChangedText);
+        getSettings(chatId);
     }
 
     private synchronized void removeKeywords(String keywords, long chatId) {
@@ -1064,6 +1071,29 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
+        executeMessage(message);
+    }
+
+    public void startSearchTimeButtons(long chatId) {
+        SendMessage message = prepareMessage(chatId, chooseSearchStartText);
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons3 = new LinkedHashMap<>();
+        Map<String, String> buttons4 = new LinkedHashMap<>();
+
+        for (int x = 0; x <= 23; x++) {
+            if (x <= 5)
+                buttons1.put("SET_START_" + x, String.valueOf(x));
+            else if (x <= 11)
+                buttons2.put("SET_START_" + x, String.valueOf(x));
+            else if (x <= 17)
+                buttons3.put("SET_START_" + x, String.valueOf(x));
+            else
+                buttons4.put("SET_START_" + x, String.valueOf(x));
+        }
+
+
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, null));
         executeMessage(message);
     }
 

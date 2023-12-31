@@ -12,7 +12,7 @@ public class Text {
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
             excludedListText, delFromTopText, searchByTopWordText, top20ByPeriodText, allowCommasAndNumbersText,
-            startSearchBeforeText, incorrectTimeText, keywordsSearchText, fullSearchText,
+            startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
             addInListText, delFromListText, removeAllText, inputSchedulerStart, sendMessageForDevText,
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
@@ -79,7 +79,6 @@ public class Text {
             top20ByPeriodText = "<b>Top 20 слов</b> [за ";
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
             startSearchBeforeText = "Сначала необходимо запустить поиск слов /top";
-            incorrectTimeText = "Указано некорректное время. Должна быть цифра от 0 до 23 включительно";
             keywordsSearchText = "По словам";
             fullSearchText = "Полный поиск";
             addInListText = "Укажите слова для добавления в список (разделять запятой)";
@@ -111,6 +110,7 @@ public class Text {
             fullSearchStartText = "» поиск всех новостей";
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
+            chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -168,7 +168,6 @@ public class Text {
             top20ByPeriodText = "<b>Top 20 words</b> [in ";
             allowCommasAndNumbersText = "Only numbers or commas are allowed";
             startSearchBeforeText = "First you need to run a word search /top";
-            incorrectTimeText = "The time specified is incorrect. Must be a number from 0 to 23 inclusive";
             keywordsSearchText = "Keywords";
             fullSearchText = "Full search";
             addInListText = "Input words to add (separated by comma)";
@@ -200,6 +199,7 @@ public class Text {
             fullSearchStartText = "» search all news";
             chooseNumberWordFromTop = "Click to search";
             chooseWordDelFromTop = "Click to delete";
+            chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";
         }
     }
 

@@ -1,7 +1,7 @@
 select u.chat_id,
        u.first_name,
-       string_agg(k.keyword, ',' order by k.keyword) as keyword,
-       string_agg(e.word, ',' order by e.word)       as excluding,
+       string_agg(distinct k.keyword, ',' order by k.keyword) as keyword,
+       string_agg(distinct e.word, ',' order by e.word)       as excluding,
        s.period                                      as "key",
        s.period_all                                  as "all",
        s.period_top                                  as "top",
@@ -31,7 +31,7 @@ select source, title, pub_date, extract(minute from (pub_date - add_date)) as "p
 from news_list n
          join showed_news s
               on n.title_hash = s.title_hash and s.chat_id = 6190696388
-where pub_date > (current_timestamp - interval '180 minutes')::timestamp
+where pub_date > (current_timestamp - interval '1440 minutes')::timestamp
 order by n.id desc;
 
 -- я 1254981379, Лена 1020961767, Вика 6455565758, Саша 6128707071
