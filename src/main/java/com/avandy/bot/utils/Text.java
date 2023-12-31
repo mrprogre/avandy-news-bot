@@ -33,7 +33,7 @@ public class Text {
             listKeywordsText = "Ключевые слова";
             findSelectText = "Выбор вида поиска";
             top20Text = "Top 20 слов за период";
-            top20Text2 = "Top 20 слов за";
+            top20Text2 = "<b>Top 20</b> слов за ";
             listExcludedText = "Слова-исключения";
             listRssText = "Источники RSS";
             startText = "Запуск бота";
@@ -91,9 +91,9 @@ public class Text {
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
-            searchWithFilterText = "<b>Полный поиск</b>";
+            searchWithFilterText = "<b>Полный поиск</b> за ";
             searchWithFilter2Text = "исключений";
-            keywordSearchText = "Поиск по <b>ключевым словам</b>";
+            keywordSearchText = "Поиск по <b>ключевым словам</b> за ";
             keywordSearch2Text = "ключевых слов";
             cancelButtonText = "Отменить";
             foundNewsText = "Найдено";
@@ -124,7 +124,7 @@ public class Text {
             listKeywordsText = "Keywords";
             findSelectText = "Selecting a search type";
             top20Text = "Top 20 words for the period";
-            top20Text2 = "Top 20 words in";
+            top20Text2 = "<b>Top 20</b> words in ";
             listExcludedText = "Excluding terms";
             listRssText = "News sources";
             startText = "Bot start";
@@ -182,9 +182,9 @@ public class Text {
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "News sources";
-            searchWithFilterText = "<b>Full search</b>";
+            searchWithFilterText = "<b>Full search</b> in ";
             searchWithFilter2Text = "excluding terms";
-            keywordSearchText = "Search by <b>keywords</b>";
+            keywordSearchText = "Search by <b>keywords</b> in ";
             keywordSearch2Text = "keywords";
             cancelButtonText = "Cancel";
             foundNewsText = "Found";

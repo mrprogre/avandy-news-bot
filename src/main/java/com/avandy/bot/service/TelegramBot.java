@@ -522,11 +522,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void initSearch(long chatId) {
-        String fullText = "1. " + searchWithFilterText + "\n[" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
+        String fullText = "1. " + searchWithFilterText + settingsRepository.getPeriodAllByChatId(chatId) + "\n[" +
                 excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
-        String keywordsText = "2. " + keywordSearchText + "\n[" + settingsRepository.getPeriodByChatId(chatId) + ", " +
+        String keywordsText = "2. " + keywordSearchText + settingsRepository.getPeriodByChatId(chatId) + "\n[" +
                 keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
-        String topText = "3. " + top20Text2 + " " + settingsRepository.getPeriodTopByChatId(chatId);
+        String topText = "3. " + top20Text2 + settingsRepository.getPeriodTopByChatId(chatId);
 
         SendMessage message = prepareMessage(chatId,"<b>Search news » » »</b>" +
                 "\n- - - - - -\n" +
