@@ -522,23 +522,35 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void initSearch(long chatId) {
-        String keywordsText = "1. " + keywordSearchText + "\n[" + settingsRepository.getPeriodByChatId(chatId) + ", " +
-                keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
-        String fullText = "2. " + searchWithFilterText + "\n[" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
+        String fullText = "1. " + searchWithFilterText + "\n[" + settingsRepository.getPeriodAllByChatId(chatId) + ", " +
                 excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
+        String keywordsText = "2. " + keywordSearchText + "\n[" + settingsRepository.getPeriodByChatId(chatId) + ", " +
+                keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
+        String topText = "3. " + top20Text2 + " " + settingsRepository.getPeriodTopByChatId(chatId);
 
-        SendMessage message = prepareMessage(chatId, keywordsText + "\n- - - - - -\n" + fullText);
+        SendMessage message = prepareMessage(chatId,"<b>Search news » » »</b>" +
+                "\n- - - - - -\n" +
+                fullText +
+                "\n- - - - - -\n" +
+                keywordsText +
+                "\n- - - - - -\n" +
+                topText +
+                "\n- - - - - -"
+        );
         message.enableHtml(true);
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons3 = new LinkedHashMap<>();
 
         buttons1.put("SET_PERIOD", intervalText);
         buttons1.put("FIND_BY_KEYWORDS", listKeywordsText);
         buttons2.put("SET_PERIOD_ALL", intervalText);
         buttons2.put("FIND_ALL", fullSearchText);
+        buttons3.put("SET_PERIOD_TOP", intervalText);
+        buttons3.put("GET_TOP", updateTopText2);
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
         executeMessage(message);
     }
 
@@ -1413,10 +1425,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void createMenuCommands() {
         List<BotCommand> listOfCommands = new LinkedList<>();
         listOfCommands.add(new BotCommand("/settings", settingText));
-        listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
-        listOfCommands.add(new BotCommand("/top", top20Text));
-        listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/excluding", listExcludedText));
+        listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
+        //listOfCommands.add(new BotCommand("/top", top20Text));
+        listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/info", infoText));
         //listOfCommands.add(new BotCommand("/rss", listRssText));
         //listOfCommands.add(new BotCommand("/delete", deleteUserText));

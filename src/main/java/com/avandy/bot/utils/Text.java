@@ -5,9 +5,9 @@ import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
     public static String greetingText, letsStartText, noText, yesText,
-            infoText, settingText, listKeywordsText, findSelectText, top20Text, listExcludedText, listRssText,
+            infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText, listRssText,
             startText, deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
-            updateTopText, undefinedCommandText, changeIntervalText, schedulerChangedText, excludedChangedText,
+            updateTopText, updateTopText2, undefinedCommandText, changeIntervalText, schedulerChangedText, excludedChangedText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText,
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
@@ -33,6 +33,7 @@ public class Text {
             listKeywordsText = "Ключевые слова";
             findSelectText = "Выбор вида поиска";
             top20Text = "Top 20 слов за период";
+            top20Text2 = "Top 20 слов за";
             listExcludedText = "Слова-исключения";
             listRssText = "Источники RSS";
             startText = "Запуск бота";
@@ -43,6 +44,7 @@ public class Text {
             searchText = "Поиск";
             excludedText = "Исключённое";
             updateTopText = "Обновить топ";
+            updateTopText2 = "Tоп 20";
             undefinedCommandText = "Данная команда не существует";
             changeIntervalText = "Интервал изменён ✔️";
             schedulerChangedText = "Режим автопоиска переключён ✔️";
@@ -122,6 +124,7 @@ public class Text {
             listKeywordsText = "Keywords";
             findSelectText = "Selecting a search type";
             top20Text = "Top 20 words for the period";
+            top20Text2 = "Top 20 words in";
             listExcludedText = "Excluding terms";
             listRssText = "News sources";
             startText = "Bot start";
@@ -165,6 +168,7 @@ public class Text {
             delFromTopText = "Delete";
             searchByTopWordText = "Search by word";
             updateTopText = "Update top";
+            updateTopText2 = "Show top";
             top20ByPeriodText = "<b>Top 20 words</b> [in ";
             allowCommasAndNumbersText = "Only numbers or commas are allowed";
             startSearchBeforeText = "First you need to run a word search /top";
