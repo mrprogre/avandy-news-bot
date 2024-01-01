@@ -527,13 +527,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void initSearch(long chatId) {
         String template = ". %s%s\n[List: <b>%d</b> %s]";
 
-        String keywordsText = String.format("1" + template, keywordSearchText,
-                settingsRepository.getPeriodByChatId(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
-                keywordSearch2Text);
-
-        String fullText = String.format("2" + template, searchWithFilterText,
+        String fullText = String.format("1" + template, searchWithFilterText,
                 settingsRepository.getPeriodAllByChatId(chatId), excludedRepository.getExcludedCountByChatId(chatId),
                 searchWithFilter2Text);
+
+        String keywordsText = String.format("2" + template, keywordSearchText,
+                settingsRepository.getPeriodByChatId(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
+                keywordSearch2Text);
 
         String topText = String.format("3" + template, top20Text2,
                 settingsRepository.getPeriodTopByChatId(chatId), topTenRepository.deleteFromTopTenCount(chatId),
@@ -542,9 +542,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId,
                 "<b>Search news » » »</b>" +
                         "\n- - - - - -\n" +
-                        keywordsText +
-                        "\n- - - - - -\n" +
                         fullText +
+                        "\n- - - - - -\n" +
+                        keywordsText +
                         "\n- - - - - -\n" +
                         topText +
                         "\n- - - - - -"
@@ -555,15 +555,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
 
-        // Keywords search
-        buttons1.put("SET_PERIOD", intervalText);
-        buttons1.put("LIST_KEYWORDS", listText);
-        buttons1.put("FIND_BY_KEYWORDS", keywordsSearchText);
-
         // Full search
-        buttons2.put("SET_PERIOD_ALL", intervalText);
-        buttons2.put("LIST_EXCLUDED", listText);
-        buttons2.put("FIND_ALL", fullSearchText);
+        buttons1.put("SET_PERIOD_ALL", intervalText);
+        buttons1.put("LIST_EXCLUDED", listText);
+        buttons1.put("FIND_ALL", fullSearchText);
+
+        // Keywords search
+        buttons2.put("SET_PERIOD", intervalText);
+        buttons2.put("LIST_KEYWORDS", listText);
+        buttons2.put("FIND_BY_KEYWORDS", keywordsSearchText);
 
         // Top 20
         buttons3.put("SET_PERIOD_TOP", intervalText);
