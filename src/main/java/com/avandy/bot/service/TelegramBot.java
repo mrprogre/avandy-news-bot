@@ -525,21 +525,24 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void initSearch(long chatId) {
-        String fullText = "1. " + searchWithFilterText + settingsRepository.getPeriodAllByChatId(chatId) + "\n[" +
-                excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
-        String keywordsText = "2. " + keywordSearchText + settingsRepository.getPeriodByChatId(chatId) + "\n[" +
+        String keywordsText = "1. " + keywordSearchText + settingsRepository.getPeriodByChatId(chatId) + "\n[List: " +
                 keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
-        String topText = "3. " + top20Text2 + settingsRepository.getPeriodTopByChatId(chatId) + "\n[" +
+
+        String fullText = "2. " + searchWithFilterText + settingsRepository.getPeriodAllByChatId(chatId) + "\n[List: " +
+                excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
+
+        String topText = "3. " + top20Text2 + settingsRepository.getPeriodTopByChatId(chatId) + "\n[List: " +
                 topTenRepository.deleteFromTopTenCount(chatId) + removedFromTopText + "]";
 
-        SendMessage message = prepareMessage(chatId, "<b>Search news » » »</b>" +
-                "\n- - - - - -\n" +
-                fullText +
-                "\n- - - - - -\n" +
-                keywordsText +
-                "\n- - - - - -\n" +
-                topText +
-                "\n- - - - - -"
+        SendMessage message = prepareMessage(chatId,
+                "<b>Search news » » »</b>" +
+                        "\n- - - - - -\n" +
+                        keywordsText +
+                        "\n- - - - - -\n" +
+                        fullText +
+                        "\n- - - - - -\n" +
+                        topText +
+                        "\n- - - - - -"
         );
         message.enableHtml(true);
 
