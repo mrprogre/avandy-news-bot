@@ -20,6 +20,9 @@ public interface TopTenRepository extends JpaRepository<TopTenExcluded, Long> {
             nativeQuery = true)
     int isWordExists(Long chatId, String keyword);
 
+    @Query(value = "SELECT count(word) FROM top_ten_excluded WHERE user_id = :chatId", nativeQuery = true)
+    int deleteFromTopTenCount(Long chatId);
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "DELETE FROM top_ten_excluded WHERE user_id = :chatId AND lower(word) = lower(:word)",

@@ -347,7 +347,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                     settingsRepository.updateScheduler("off", chatIdCallback);
                     sendMessage(chatIdCallback, schedulerChangedText);
                     getSettings(chatIdCallback);
-                } case "SCHEDULER_START" -> startSearchTimeButtons(chatIdCallback);
+                }
+                case "SCHEDULER_START" -> startSearchTimeButtons(chatIdCallback);
                 // Set start time
                 case "SET_START_0" -> updateSearchStartTime(0, chatIdCallback);
                 case "SET_START_1" -> updateSearchStartTime(1, chatIdCallback);
@@ -528,9 +529,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 excludedRepository.getExcludedCountByChatId(chatId) + " " + searchWithFilter2Text + "]";
         String keywordsText = "2. " + keywordSearchText + settingsRepository.getPeriodByChatId(chatId) + "\n[" +
                 keywordRepository.getKeywordsCountByChatId(chatId) + " " + keywordSearch2Text + "]";
-        String topText = "3. " + top20Text2 + settingsRepository.getPeriodTopByChatId(chatId);
+        String topText = "3. " + top20Text2 + settingsRepository.getPeriodTopByChatId(chatId) + "\n[" +
+                topTenRepository.deleteFromTopTenCount(chatId) + removedFromTopText + "]";
 
-        SendMessage message = prepareMessage(chatId,"<b>Search news » » »</b>" +
+        SendMessage message = prepareMessage(chatId, "<b>Search news » » »</b>" +
                 "\n- - - - - -\n" +
                 fullText +
                 "\n- - - - - -\n" +
@@ -612,7 +614,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             int counter = 0;
             for (String item : excludedByChatId) {
                 joiner.add(item);
-                if (++ counter == EXCLUDING_TERMS_LIST_LIMIT) break;
+                if (++counter == EXCLUDING_TERMS_LIST_LIMIT) break;
             }
             showExcludedButtons(chatId, "<b>" + exclusionWordsText + "</b> [" + excludedCount + "]\n" +
                     joiner);

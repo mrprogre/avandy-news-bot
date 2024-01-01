@@ -17,7 +17,7 @@ public class Text {
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
-            listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
+            listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop, removedFromTopText,
             chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText;
 
     public static void setInterfaceLanguage(String lang) {
@@ -113,6 +113,7 @@ public class Text {
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
+            removedFromTopText = " удалено слов";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -204,6 +205,7 @@ public class Text {
             chooseNumberWordFromTop = "Click to search";
             chooseWordDelFromTop = "Click to delete";
             chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";
+            removedFromTopText = " words removed";
         }
     }
 
