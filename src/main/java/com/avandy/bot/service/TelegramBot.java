@@ -20,6 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -39,6 +40,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private Long chatIdCallback;
     private static final int TOP_TEN_SHOW_LIMIT = 20;
     private static final int TOP_TEN_LIST_LIMIT = 60;
+    private static final int EXCLUDING_TERMS_LIST_LIMIT = 60;
     private static final int EXCLUDED_LIMIT = 100;
     private static final String TOP_TEXT = "Top 20";
     private final BotConfig config;
@@ -164,12 +166,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 switch (messageText) {
                     case "/start" -> startActions(update, chatId);
                     case "/settings" -> getSettings(chatId);
-                    case "/info" -> infoButtons(chatId);
                     case "/search" -> initSearch(chatId);
-                    case "/delete" -> showYesNoOnDeleteUser(chatId);
+                    case "/info" -> infoButtons(chatId);
                     case "/keywords" -> showKeywordsList(chatId);
-                    case "/top" -> showTop(chatId);
                     case "/excluding" -> getExcludedList(chatId);
+                    case "/delete" -> showYesNoOnDeleteUser(chatId);
+                    case "/top" -> showTop(chatId);
                     default -> sendMessage(chatId, undefinedCommandText);
                 }
             }
@@ -543,15 +545,23 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
 
+        // Keywords search
         buttons1.put("SET_PERIOD", intervalText);
-        buttons1.put("FIND_BY_KEYWORDS", listKeywordsText);
+        buttons1.put("LIST_KEYWORDS", listText);
+        buttons1.put("FIND_BY_KEYWORDS", keywordsSearchText);
+
+        // Full search
         buttons2.put("SET_PERIOD_ALL", intervalText);
+        buttons2.put("LIST_EXCLUDED", listText);
         buttons2.put("FIND_ALL", fullSearchText);
+
+        // Top 20
         buttons3.put("SET_PERIOD_TOP", intervalText);
+        buttons3.put("LIST_TOP", listText);
         buttons3.put("GET_TOP", updateTopText2);
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
-        executeMessage(message);
+        getReplyKeywordWithSearch(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null),
+                message);
     }
 
     private void getSettings(long chatId) {
@@ -599,8 +609,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (!excludedByChatId.isEmpty()) {
             StringJoiner joiner = new StringJoiner(", ");
+            int counter = 0;
             for (String item : excludedByChatId) {
                 joiner.add(item);
+                if (++ counter == EXCLUDING_TERMS_LIST_LIMIT) break;
             }
             showExcludedButtons(chatId, "<b>" + exclusionWordsText + "</b> [" + excludedCount + "]\n" +
                     joiner);
@@ -1422,11 +1434,31 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
+    // Нижняя клавиатура
+    private void getReplyKeywordWithSearch(InlineKeyboardMarkup inlineKeyboardMarkup, SendMessage message) {
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setSelective(false);
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+
+        KeyboardRow row = new KeyboardRow();
+        row.add(fullSearchText);
+        row.add(keywordsSearchText);
+        row.add(TOP_TEXT);
+
+        keyboardRows.add(row);
+        keyboardMarkup.setKeyboard(keyboardRows);
+        message.setReplyMarkup(keyboardMarkup);
+        message.setReplyMarkup(inlineKeyboardMarkup);
+        executeMessage(message);
+    }
+
     private void createMenuCommands() {
         List<BotCommand> listOfCommands = new LinkedList<>();
         listOfCommands.add(new BotCommand("/settings", settingText));
-        listOfCommands.add(new BotCommand("/excluding", listExcludedText));
-        listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
+        //listOfCommands.add(new BotCommand("/excluding", listExcludedText));
+        //listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
         //listOfCommands.add(new BotCommand("/top", top20Text));
         listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/info", infoText));

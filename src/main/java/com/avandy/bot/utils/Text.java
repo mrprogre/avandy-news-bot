@@ -198,7 +198,7 @@ public class Text {
             confirmDeletedUserText = "Do you confirm?";
             chooseSearchDepthText = "Select search time in hours";
             sendIdeaText = "Send feedback";
-            listOfDeletedFromTopText = "List of removed from top";
+            listOfDeletedFromTopText = "List of deleted from top";
             searchByKeywordsStartText = "» search by keywords";
             fullSearchStartText = "» search all news";
             chooseNumberWordFromTop = "Click to search";
