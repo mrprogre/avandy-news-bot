@@ -155,7 +155,7 @@ public class Text {
                     The first thing to do is add <b>keywords</b>.
                     If you are interested in news related to taxes, for example, then you need to add the word <b>tax</b> to get all the headlines containing: <b>tax, taxes</b>, etc.
                     - - - - - -
-                    The second is to add <b>excluding terms</b> through the menu for a complete search, so as not to read news like: “How to dye eyelashes correctly.” Just add <b>eyelashes</b> to the exceptions and you won’t see such headlines anymore!
+                    The second is to add <b>excluding terms</b> through the menu for a complete search, so as not to read news like: “How to dye eyelashes correctly.” Just add <b>eyelash</b> to the excluding terms list and you won’t see such headlines anymore!
                     - - - - - -
                     You can add one word or several separated by commas.
                     - - - - - -
