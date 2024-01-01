@@ -9,7 +9,7 @@ https://t.me/AvandyNewsBot
 
 **/settings**   - setting search intervals and enabling auto search
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/1841da1d-baab-43f9-be17-ee8953f154a2)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/098a48a4-f16d-4f5a-9db2-0e46b2a9ae1c)
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0e67843f-30ff-492c-89f8-1840d7e86c9a)
 
 **/excluding**   - list of excluded words from search (last 60 items)
