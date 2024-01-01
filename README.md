@@ -9,7 +9,7 @@ https://t.me/AvandyNewsBot
 
 **/settings**   - setting search intervals and enabling auto search
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/098a48a4-f16d-4f5a-9db2-0e46b2a9ae1c)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/213b5b13-5b6d-407d-8e49-c791c5a0a936)
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0e67843f-30ff-492c-89f8-1840d7e86c9a)
 
 **/excluding**   - list of excluded words from search (last 60 items)
@@ -22,14 +22,14 @@ https://t.me/AvandyNewsBot
 
 **/search**     - selecting a search type
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/9e09de54-2b0e-416a-bf1f-6b798143f71c)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/219c0c0c-0f73-426f-8de6-990ceea8fbb4)
 
 **/top** (Show top)        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/a1e2e7fa-55d3-4172-b2df-2f0275c0748b)
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/a433780d-2ff2-4195-9bb6-0a12adba438d)
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/cb9dee85-2eea-4988-a58a-d49d328b0662)
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/4990d1ad-70ff-4bfa-86aa-1cdfddf1b4f3)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0808317d-6cbe-4d3c-acae-0828e670cb82)
 
 **/info**       - information about the developer and the ability to send a message to the developer
 
@@ -37,4 +37,4 @@ https://t.me/AvandyNewsBot
 
 **/start**      - you can start again after deleting user information
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/001f20d2-7f13-461f-80d2-0346d596eb48)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/e88a2ae5-a553-4f6b-b23a-66e0e18edec6)
