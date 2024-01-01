@@ -525,14 +525,19 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void initSearch(long chatId) {
-        String keywordsText = "1. " + keywordSearchText + settingsRepository.getPeriodByChatId(chatId) + "\n[List: <b>" +
-                keywordRepository.getKeywordsCountByChatId(chatId) + "</b> " + keywordSearch2Text + "]";
+        String template = ". %s%s\n[List: <b>%d</b> %s]";
 
-        String fullText = "2. " + searchWithFilterText + settingsRepository.getPeriodAllByChatId(chatId) + "\n[List: <b>" +
-                excludedRepository.getExcludedCountByChatId(chatId) + "</b> " + searchWithFilter2Text + "]";
+        String keywordsText = String.format("1" + template, keywordSearchText,
+                settingsRepository.getPeriodByChatId(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
+                keywordSearch2Text);
 
-        String topText = "3. " + top20Text2 + settingsRepository.getPeriodTopByChatId(chatId) + "\n[List: <b>" +
-                topTenRepository.deleteFromTopTenCount(chatId) +"</b> " + removedFromTopText + "]";
+        String fullText = String.format("2" + template, searchWithFilterText,
+                settingsRepository.getPeriodAllByChatId(chatId), excludedRepository.getExcludedCountByChatId(chatId),
+                searchWithFilter2Text);
+
+        String topText = String.format("3" + template, top20Text2,
+                settingsRepository.getPeriodTopByChatId(chatId), topTenRepository.deleteFromTopTenCount(chatId),
+                removedFromTopText);
 
         SendMessage message = prepareMessage(chatId,
                 "<b>Search news » » »</b>" +
