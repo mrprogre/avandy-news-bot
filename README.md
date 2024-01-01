@@ -9,23 +9,27 @@ https://t.me/AvandyNewsBot
 
 **/settings**   - setting search intervals and enabling auto search
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/8ce8dd97-29b1-4302-ab1d-4024c2a65937)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/1841da1d-baab-43f9-be17-ee8953f154a2)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0e67843f-30ff-492c-89f8-1840d7e86c9a)
 
-**/excluding**   - list of excluded words from search (adding, deleting)
+**/excluding**   - list of excluded words from search (last 60 items)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/df782f82-1bb5-4393-a8c8-c5094798abb7)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/9c89b9dd-e5db-4e9e-a801-8348b9272b3b)
 
 **/keywords**   - list of keywords (adding, deleting)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/af1fd0e9-5cbd-4692-b360-8df93cf0638b)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/29ddd9d0-d9d3-4336-a69a-836763593afd)
 
 **/search**     - selecting a search type
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/003604bb-dc4b-49a1-bf8f-4d073f85ebd8)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/9ed6ab59-519a-4662-84c0-a4676cf85067)
 
-**/top**        - top 20 words in headlines for the period (list, adding, deleting, fast search)
+**/top** (Show top)        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/3970af0d-87cc-4fc9-9877-6f44f0379bcc)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/a1e2e7fa-55d3-4172-b2df-2f0275c0748b)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/a433780d-2ff2-4195-9bb6-0a12adba438d)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/cb9dee85-2eea-4988-a58a-d49d328b0662)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/4990d1ad-70ff-4bfa-86aa-1cdfddf1b4f3)
 
 **/info**       - information about the developer and the ability to send a message to the developer
 
