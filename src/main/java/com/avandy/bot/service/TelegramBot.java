@@ -1423,7 +1423,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         isAutoSearch.set(false);
     }
 
-    // Нижняя клавиатура
+    // Нижняя клавиатура TODO нельзя 2 клавиатуры на 1 сообщение, подумать
     private void getReplyKeywordWithSearch(long chatId, String textToSend, String firstName) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));

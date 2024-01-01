@@ -155,7 +155,7 @@ public class Text {
                     The first thing to do is add <b>keywords</b>.
                     If you are interested in news related to taxes, for example, then you need to add the word <b>tax</b> to get all the headlines containing: <b>tax, taxes</b>, etc.
                     - - - - - -
-                    The second is to add <b>exception words</b> through the menu for a complete search, so as not to read news like: “How to dye eyelashes correctly.” Just add <b>eyelashes</b> to the exceptions and you won’t see such headlines anymore!
+                    The second is to add <b>excluding terms</b> through the menu for a complete search, so as not to read news like: “How to dye eyelashes correctly.” Just add <b>eyelashes</b> to the exceptions and you won’t see such headlines anymore!
                     - - - - - -
                     You can add one word or several separated by commas.
                     - - - - - -
@@ -263,7 +263,7 @@ public class Text {
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
                     "<b>4. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
-                    "<b>on</b> - excluding news that contains exception words\n" +
+                    "<b>on</b> - excluding news that contains excluding terms\n" +
                     "<b>off</b> - show all news without filter\n" +
                     schedSettings +
                     "- - - - - -\n" +
