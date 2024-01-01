@@ -1302,13 +1302,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId, text);
         message.enableHtml(true);
 
-        Map<String, String> buttons = new LinkedHashMap<>();
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
 
-        buttons.put("DELETE_TOP", delText);
-        buttons.put("DEL_FROM_TOP", addText);
-        buttons.put("GET_TOP", TOP_TEXT);
+        buttons1.put("DELETE_TOP", delText);
+        buttons1.put("DEL_FROM_TOP", addText);
+        buttons2.put("SET_PERIOD_TOP", intervalText);
+        buttons2.put("GET_TOP", TOP_TEXT);
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
         executeMessage(message);
     }
 
