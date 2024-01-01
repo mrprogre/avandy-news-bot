@@ -22,7 +22,7 @@ https://t.me/AvandyNewsBot
 
 **/search**     - selecting a search type
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/9ed6ab59-519a-4662-84c0-a4676cf85067)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/9e09de54-2b0e-416a-bf1f-6b798143f71c)
 
 **/top** (Show top)        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
