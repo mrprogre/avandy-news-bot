@@ -15,6 +15,21 @@ public class CommonTest {
         String s1 = "CRATE", s2 = "TRACE", s3 = "DwAyNE", s4 = "DuANE";
         assertEquals(73, jwd.compare(s1, s2));
         assertEquals(82, jwd.compare(s3, s4));
+
+        s1 = "атака";
+        s2 = "атаке";
+        s3 = "атаку";
+        s4 = "атакован";
+        assertEquals(86, jwd.compare(s1, s2));
+        assertEquals(86, jwd.compare(s1, s3));
+        assertEquals(87, jwd.compare(s1, s4));
+        assertEquals(86, jwd.compare(s2, s3));
+        assertEquals(76, jwd.compare(s2, s4));
+        assertEquals(76, jwd.compare(s3, s4));
+
+        s1 = "played";
+        s2 = "player";
+        assertEquals(88, jwd.compare(s1, s2));
     }
 
     @Test
