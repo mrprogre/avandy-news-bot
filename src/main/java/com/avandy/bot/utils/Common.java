@@ -116,6 +116,7 @@ public class Common {
     // output: level = 87 : атак-5 [атаку-2, атаке-3]
     // output: level > 87 : null
     public Map<String, Integer> fillTopWithoutDuplicates(Map<String, Integer> wordsCount, int jaroWinklerLevel) {
+
         Map<String, Integer> topMap = new TreeMap<>();
         List<String> forDeleteFromMap = new ArrayList<>();
         List<String> excluded = new ArrayList<>();

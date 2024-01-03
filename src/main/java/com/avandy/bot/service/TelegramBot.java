@@ -1390,12 +1390,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
 
-        // Удаление исключённых слов из мап для анализа
-        Set<String> excludedWordsFromAnalysis = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
-        for (String word : excludedWordsFromAnalysis) {
-            wordsCount.remove(word);
-        }
-
         wordsCount = wordsCount.entrySet().stream()
                 .filter(x -> x.getValue() > 3)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -1404,6 +1398,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             wordsCount = Common.fillTopWithoutDuplicates(wordsCount, JARO_WINKLER_LEVEL);
         }
 
+        // Удаление исключённых слов из мап для анализа
+        Set<String> excludedWordsFromAnalysis = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+        for (String word : excludedWordsFromAnalysis) {
+            wordsCount.remove(word);
+        }
 
         return wordsCount.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
