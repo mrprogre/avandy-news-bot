@@ -100,7 +100,8 @@ public class Text {
             wordIsNotInTheListText = "Слово %s отсутствует в списке";
             listText = "Список";
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
-            chooseSearchDepthText = "Выберите глубину поиска в часах";
+            chooseSearchDepthText = "Глубина поиска новостей (интервал поиска равен текущему моменту минус глубина в часах).\n" +
+                    "Выберите глубину поиска.";
             sendIdeaText = "Предложить идею";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             searchByKeywordsStartText = "» поиск по ключевым словам";
@@ -192,7 +193,8 @@ public class Text {
             wordIsNotInTheListText = "The word <b>%s</b> isn't in the list";
             listText = "List";
             confirmDeletedUserText = "Do you confirm?";
-            chooseSearchDepthText = "Select search time in hours";
+            chooseSearchDepthText = "Search time of news search (search interval = current moment minus hours). " +
+                    "Select search time in hours.";
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of deleted from the Top";
             searchByKeywordsStartText = "» search by keywords";
@@ -219,20 +221,14 @@ public class Text {
                     default ->
                             " (часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
+                schedSettings = "- - - - - -\n" + "<b>3. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
             }
 
             return "<b>Настройки</b>\n" +
-                    "<b>1. Интервал</b>: <b>-" + x.getPeriod() + "</b>\n" +
-                    "Глубина поиска новостей по <b>ключевым словам</b> (интервал поиска равен текущему моменту минус глубина в часах)" + "\n" +
-                    "- - - - - -\n" +
-                    "<b>2. Интервал</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
-                    "Глубина поиска <b>всех новостей</b>" + "\n" +
-                    "- - - - - -\n" +
-                    "<b>3. Автопоиск: " + x.getScheduler() + "</b>\n" +
+                    "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
                     "Автоматический запуск поиска по <b>ключевым словам</b> за период, указанный в п.1, с частотой в п.5" + "\n" +
                     "- - - - - -\n" +
-                    "<b>4. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "<b>2. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "<b>on</b> - исключение новостей, которые содержат слова-исключения\n" +
                     "<b>off</b> - показывать все новости без исключения\n" +
                     schedSettings +
@@ -248,20 +244,14 @@ public class Text {
                     default ->
                             " (start time: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
+                schedSettings = "- - - - - -\n" + "<b>3. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
             }
 
             return "<b>Settings</b>\n" +
-                    "<b>1. Interval</b>: <b>-" + x.getPeriod() + "</b>\n" +
-                    "Search time of news search by <b>keywords</b> (search interval is equal to the current moment minus hours)" + "\n" +
-                    "- - - - - -\n" +
-                    "<b>2. Interval</b>: <b>-" + x.getPeriodAll() + "</b>\n" +
-                    "Search time for <b>all news</b>" + "\n" +
-                    "- - - - - -\n" +
-                    "<b>3. Auto search: " + x.getScheduler() + "</b>\n" +
+                    "<b>1. Auto search: " + x.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
-                    "<b>4. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "<b>2. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "<b>on</b> - excluding news that contains excluding terms\n" +
                     "<b>off</b> - show all news without filter\n" +
                     schedSettings +
