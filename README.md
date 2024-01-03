@@ -17,10 +17,14 @@ https://t.me/AvandyNewsBot
 
 **/top** (Show top)        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/2bd1fb50-5387-4cbc-97d9-71a8efc95662)
+![3](https://github.com/mrprogre/avandy-news-bot/assets/45883640/5344af6b-2396-4bba-8dec-7c71d0d3e338)
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/e3afd035-146d-44bb-a31c-fa7b91b75803)
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/2199ba85-e9b9-457e-bb5a-639e52c38aa8)
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/3e6b98d5-04ca-43a7-886f-4e6754c35cff)
+Jaro-Winkler **off**
+![1](https://github.com/mrprogre/avandy-news-bot/assets/45883640/219d43d5-23ff-45eb-8296-963fecd40928)
+Jaro-Winkler **on**
+![2](https://github.com/mrprogre/avandy-news-bot/assets/45883640/064f01fd-b336-45a1-965b-5a901c182347)
 
 **/settings**   - setting search intervals and enabling auto search
 
