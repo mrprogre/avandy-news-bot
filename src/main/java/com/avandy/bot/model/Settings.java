@@ -24,4 +24,6 @@ public class Settings {
     private String lang;
     @Size(max = 8)
     private String periodTop;
+    @Size(max = 3)
+    private String jaroWinkler;
 }

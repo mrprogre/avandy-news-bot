@@ -7,11 +7,11 @@ public class Text {
     public static String greetingText, letsStartText, noText, yesText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText, listRssText,
             startText, deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
-            updateTopText, updateTopText2, undefinedCommandText, changeIntervalText, schedulerChangedText, excludedChangedText,
-            headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText,
-            wordIsExistsText, wordsIsNotAddedText, wordsAddedText, startTimeChangedText, aboutDeveloperText,
+            updateTopText, updateTopText2, undefinedCommandText, changesSavedText, jaroWinklerSwitcherText,
+            headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
+            wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
-            excludedListText, delFromTopText, searchByTopWordText, top20ByPeriodText, allowCommasAndNumbersText,
+            excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText,
             startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
             addInListText, delFromListText, removeAllText, inputSchedulerStart, sendMessageForDevText,
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
@@ -21,7 +21,6 @@ public class Text {
             chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText;
 
     public static void setInterfaceLanguage(String lang) {
-
         if (lang != null && lang.equals("ru")) {
             greetingText = EmojiParser.parseToUnicode("Здравствуй, %s! :blush: \n" +
                     "Я могу найти для тебя важную информацию и отсеять много лишней!");
@@ -46,10 +45,7 @@ public class Text {
             updateTopText = "Обновить топ";
             updateTopText2 = "Tоп 20";
             undefinedCommandText = "Данная команда не существует";
-            changeIntervalText = "Интервал изменён ✔️";
-            schedulerChangedText = "Режим автопоиска переключён ✔️";
-            excludedChangedText = "Режим исключения заголовков переключён ✔️";
-            startTimeChangedText = "Время старта автопоиска установлено ✔️";
+            changesSavedText = "Сохранено ✔️";
             headlinesNotFound = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 2 символов";
@@ -77,7 +73,6 @@ public class Text {
             startSettingsText = "Старт";
             excludedListText = "Удалённое";
             delFromTopText = "Удалить из топа";
-            searchByTopWordText = "Поиск по слову";
             top20ByPeriodText = "<b>Top 20 слов</b> [за ";
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
             startSearchBeforeText = "Сначала необходимо запустить поиск слов /top";
@@ -114,6 +109,9 @@ public class Text {
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
             removedFromTopText = "удалено слов";
+            jaroWinklerSwitcherText = "вкл/выкл поиск схожести строк методом Джаро-Винклера " +
+                    "(уровень сходства строк по умолчанию = 85%)";
+            jaroWinklerText = "Джаро-Винклер";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -136,10 +134,7 @@ public class Text {
             searchText = "Search";
             excludedText = "Excluded";
             undefinedCommandText = "Command not defined";
-            changeIntervalText = "Interval changed ✔️";
-            schedulerChangedText = "Auto search mode switched ✔️";
-            excludedChangedText = "Header exclusion mode switched ✔️";
-            startTimeChangedText = "Auto search start time is set ✔️";
+            changesSavedText = "Done ✔️";
             headlinesNotFound = EmojiParser.parseToUnicode("» no news headlines found \uD83D\uDCA4");
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 2 characters";
@@ -167,7 +162,6 @@ public class Text {
             startSettingsText = "Start";
             excludedListText = "List of deleted";
             delFromTopText = "Delete";
-            searchByTopWordText = "Search by word";
             updateTopText = "Update top";
             updateTopText2 = "Show top";
             top20ByPeriodText = "<b>Top 20 words</b> [in ";
@@ -206,6 +200,9 @@ public class Text {
             chooseWordDelFromTop = "Click to delete";
             chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";
             removedFromTopText = "words removed";
+            jaroWinklerText = "Jaro-Winkler";
+            jaroWinklerSwitcherText = "on/off search for string similarity using the Jaro-Winkler method " +
+                    "(default similarity level = 85%)";
         }
     }
 

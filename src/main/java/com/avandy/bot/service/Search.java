@@ -116,11 +116,17 @@ public class Search {
         if (isTopSearch) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
-            TreeSet<NewsList> newsListByPeriodAndWord =
-                    newsListRepository.getTopNewsListByPeriodAndWord(periodMinutes + " minutes",
-                            searchType.replaceAll(TelegramBot.REPLACE_ALL_TOP,""));
 
-            for (NewsList news : newsListByPeriodAndWord) {
+            String type = searchType.replaceAll(TelegramBot.REPLACE_ALL_TOP, "");
+            String period = periodMinutes + " minutes";
+            TreeSet<NewsList> newsList;
+            if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
+                newsList = newsListRepository.getTopNewsListByPeriodAndWordAndJaroWinkler(period, type);
+            } else {
+                newsList = newsListRepository.getTopNewsListByPeriodAndWord(period, type);
+            }
+
+            for (NewsList news : newsList) {
                 String rss = news.getSource();
                 String title = news.getTitle().trim();
                 String hash = Common.getHash(title);

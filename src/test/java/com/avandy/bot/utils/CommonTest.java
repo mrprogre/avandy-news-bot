@@ -3,10 +3,38 @@ package com.avandy.bot.utils;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CommonTest {
+    private final JaroWinklerDistance jwd = new JaroWinklerDistance();
+
+    @Test
+    public void jaroWinklerDistanceTest() {
+        Map<String, Integer> wordsCount = new HashMap<>();
+        wordsCount.put("атака", 1);
+        wordsCount.put("атаку", 2);
+        wordsCount.put("атаке", 3);
+        wordsCount.put("атакован", 4);
+
+        Map<String, Integer> stringIntegerMap = Common.fillTopWithoutDuplicates(wordsCount, 80);
+        assertEquals(10, stringIntegerMap.get("атак"));
+
+        stringIntegerMap = Common.fillTopWithoutDuplicates(wordsCount, 87);
+        assertEquals(5, stringIntegerMap.get("атак"));
+
+        stringIntegerMap = Common.fillTopWithoutDuplicates(wordsCount, 88);
+        assertNull(stringIntegerMap.get("атак"));
+    }
+
+    @Test
+    public void checkJaroWinklerDistanceCompare() {
+        String s1 = "CRATE", s2 = "TRACE", s3 = "DwAyNE", s4 = "DuANE";
+        assertEquals(73, jwd.compare(s1, s2));
+        assertEquals(82, jwd.compare(s3, s4));
+    }
 
     @Test
     public void timeMapperTest() {

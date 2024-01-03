@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @UtilityClass
@@ -88,6 +85,66 @@ public class Common {
         }
         times.sort(Integer::compare);
         return times;
+    }
+
+    // поиск общей подстроки (полно всяких: ный, ять, акой, ать)
+    private String longestCommonSubstring(String s, String t) {
+        int[][] table = new int[s.length()][t.length()];
+        int longest = 0;
+        String result = "";
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j < t.length(); j++) {
+                if (s.charAt(i) != t.charAt(j)) {
+                    continue;
+                }
+                table[i][j] = (i == 0 || j == 0) ? 1
+                        : 1 + table[i - 1][j - 1];
+                if (table[i][j] > longest) {
+                    longest = table[i][j];
+                }
+                if (table[i][j] == longest) {
+                    result = s.substring(i - longest + 1, i + 1);
+                }
+            }
+        }
+        return result;
+    }
+
+    // Объединяет и суммирует однокоренные слова c разными окончаниями методом Jaro-Winkler Distance
+    // input: атака-1, атаку-2, атаке-3, атакован-4
+    // output: level < 87 : атак-10
+    // output: level = 87 : атак-5 [атаку-2, атаке-3]
+    // output: level > 87 : null
+    public Map<String, Integer> fillTopWithoutDuplicates(Map<String, Integer> wordsCount, int jaroWinklerLevel) {
+        Map<String, Integer> topMap = new TreeMap<>();
+        List<String> forDeleteFromMap = new ArrayList<>();
+        List<String> excluded = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> word1 : wordsCount.entrySet()) {
+            for (Map.Entry<String, Integer> word2 : wordsCount.entrySet()) {
+                int compare = new JaroWinklerDistance().compare(word1.getKey(), word2.getKey());
+
+                if (compare != 100 && compare >= jaroWinklerLevel && !excluded.contains(word1.getKey())) {
+                    String string = longestCommonSubstring(word1.getKey(), word2.getKey());
+                    if (string.length() > 3) {
+                        forDeleteFromMap.add(word1.getKey());
+                        forDeleteFromMap.add(word2.getKey());
+                        topMap.put(string, topMap.getOrDefault(string, 0) + word1.getValue());
+                    }
+                    excluded.add(word1.getKey());
+                }
+            }
+        }
+
+        // Удаление однокоренных слов из общей коллекции
+        for (String word : forDeleteFromMap) {
+            wordsCount.remove(word);
+        }
+
+        // добавление обобщённого слова в общую коллекцию слов
+        wordsCount.putAll(topMap);
+
+        return wordsCount;
     }
 
 }
