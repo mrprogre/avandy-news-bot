@@ -193,8 +193,7 @@ public class Text {
             wordIsNotInTheListText = "The word <b>%s</b> isn't in the list";
             listText = "List";
             confirmDeletedUserText = "Do you confirm?";
-            chooseSearchDepthText = "Search time of news search (search interval = current moment minus hours). " +
-                    "Select search time in hours.";
+            chooseSearchDepthText = "Search time = current moment minus hours. Select time.";
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of deleted from the Top";
             searchByKeywordsStartText = "» search by keywords";
