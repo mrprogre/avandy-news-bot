@@ -20,7 +20,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -570,8 +569,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons3.put("LIST_TOP", listText);
         buttons3.put("GET_TOP", updateTopText2);
 
-        getReplyKeywordWithSearch(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null),
-                message);
+        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
+        executeMessage(message);
     }
 
     private void getSettings(long chatId) {
@@ -812,7 +811,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void findAllNews(long chatId) {
-        sendMessage(chatId, fullSearchStartText);
+        getReplyKeywordWithSearch(chatId, fullSearchStartText);
         Set<Headline> headlines = search.start(chatId, "all");
 
         int counterParts = 1;
@@ -861,7 +860,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!isAutoSearch.get()) {
-            sendMessage(chatId, searchByKeywordsStartText);
+            getReplyKeywordWithSearch(chatId, searchByKeywordsStartText);
         }
 
         // Search
@@ -932,7 +931,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             if (counterParts != 0) {
-                sendMessage(chatId, String.valueOf(joiner));
+                getReplyKeywordWithSearch(chatId, String.valueOf(joiner));
             }
 
             String text = foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b>";
@@ -1446,8 +1445,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    // Нижняя клавиатура
-    private void getReplyKeywordWithSearch(InlineKeyboardMarkup inlineKeyboardMarkup, SendMessage message) {
+    private void getReplyKeywordWithSearch(long chatId, String textToSend) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(textToSend);
+
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setSelective(false);
@@ -1462,7 +1464,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
         message.setReplyMarkup(keyboardMarkup);
-        message.setReplyMarkup(inlineKeyboardMarkup);
         executeMessage(message);
     }
 

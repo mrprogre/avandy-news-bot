@@ -30,8 +30,8 @@ order by pub_date desc;
 select source, title, pub_date, extract(minute from (pub_date - add_date)) as "pub-add"
 from news_list n
          join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 6190696388
-where pub_date > (current_timestamp - interval '1440 minutes')::timestamp
+              on n.title_hash = s.title_hash and s.chat_id = 220605449
+where pub_date > '2024-01-01'::date
 order by n.id desc;
 
 -- я 1254981379, Лена 1020961767, Вика 6455565758, Саша 6128707071
