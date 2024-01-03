@@ -109,10 +109,10 @@ public class Text {
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
             removedFromTopText = "удалено слов";
-            jaroWinklerSwitcherText = "вкл/выкл проверка схожести строк методом Джаро-Винклера " +
+            jaroWinklerSwitcherText = "вкл/выкл проверку схожести строк методом Джаро-Винклера " +
                     "(минимальный уровень схожести строк по умолчанию = 85%, т.е. слова: \"атака, атаке, атаку\" " +
                     "будут объединены в слово \"атак\", т.к. их сходство между собой равно 86%)";
-            jaroWinklerText = "Джаро-Винклер";
+            jaroWinklerText = "Jaro-Winkler";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");

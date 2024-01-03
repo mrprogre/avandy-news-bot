@@ -1367,7 +1367,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             String period = settingsRepository.getPeriodTopByChatId(chatId);
 
             showTopTenButtons(chatId,
-                    String.format("%s<b>%s</b>]\n%s", top20ByPeriodText, period, stringBuilderTop));
+                    String.format("%s<b>%s</b>, Jaro-Winkler: <b>%s</b>]\n%s", top20ByPeriodText, period,
+                            settingsRepository.getJaroWinklerByChatId(chatId), stringBuilderTop));
         } else {
             showTopTenButton(chatId, updateTopText);
         }
