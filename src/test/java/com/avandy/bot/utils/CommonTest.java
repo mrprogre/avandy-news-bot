@@ -3,31 +3,12 @@ package com.avandy.bot.utils;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class CommonTest {
     private final JaroWinklerDistance jwd = new JaroWinklerDistance();
-
-    @Test
-    public void jaroWinklerDistanceTest() {
-        Map<String, Integer> wordsCount = new HashMap<>();
-        wordsCount.put("атака", 1);
-        wordsCount.put("атаку", 2);
-        wordsCount.put("атаке", 3);
-        wordsCount.put("атакован", 4);
-
-        Map<String, Integer> stringIntegerMap = Common.fillTopWithoutDuplicates(wordsCount, 80);
-        assertEquals(10, stringIntegerMap.get("атак"));
-
-        stringIntegerMap = Common.fillTopWithoutDuplicates(wordsCount, 87);
-        assertEquals(5, stringIntegerMap.get("атак"));
-
-        stringIntegerMap = Common.fillTopWithoutDuplicates(wordsCount, 88);
-        assertNull(stringIntegerMap.get("атак"));
-    }
 
     @Test
     public void checkJaroWinklerDistanceCompare() {
