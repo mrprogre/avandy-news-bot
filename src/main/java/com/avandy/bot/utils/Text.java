@@ -109,7 +109,7 @@ public class Text {
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
             removedFromTopText = "удалено слов";
-            jaroWinklerSwitcherText = "вкл/выкл схожесть строк методом Джаро-Винклера " +
+            jaroWinklerSwitcherText = "вкл/выкл проверка схожести строк методом Джаро-Винклера " +
                     "(минимальный уровень схожести строк по умолчанию = 85%, т.е. слова: \"атака, атаке, атаку\" " +
                     "будут объединены в слово \"атак\", т.к. их сходство между собой равно 86%)";
             jaroWinklerText = "Джаро-Винклер";
@@ -202,7 +202,7 @@ public class Text {
             chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";
             removedFromTopText = "words removed";
             jaroWinklerText = "Jaro-Winkler";
-            jaroWinklerSwitcherText = "on/off search for string similarity using the Jaro-Winkler method " +
+            jaroWinklerSwitcherText = "on/off check for string similarity using the Jaro-Winkler method " +
                     "(default similarity level = 85%, therefore the words: \"played, player\" will be combined into " +
                     "the word \"play\", because their similarity to each other is 88%)";
         }
