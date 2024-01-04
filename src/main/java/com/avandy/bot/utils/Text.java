@@ -58,14 +58,9 @@ public class Text {
                     <b>Почта</b>: rps_project@mail.ru
                     <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
             yesButtonText = """
-                    Первое, что нужно сделать, - это добавить <b>ключевые слова</b>.
-                    Если интересуют новости, связанные с ипотекой, к примеру, то надо добавить слово <b>ипотек</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b> и т.д.
+                    Первое, что нужно сделать, - добавить <b>ключевые слова</b>. Если интересуют новости, связанные с ипотекой, к примеру, то добавь слово <b>ипотек</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b> и т.д.
                     - - - - - -
-                    Второе - добавить через меню <b>слова-исключения</b> для полного поиска, чтобы не читать новости типа: "Как правильно красить ресницы". Просто добавь <b>ресниц</b> в исключения и таких заголовков больше не увидишь!
-                    - - - - - -
-                    Добавлять можно как одно слово, так и несколько через запятую.
-                    - - - - - -
-                    На данном этапе мы добавим <b>ключевые слова</b>. Нажми кнопку "Добавить".""";
+                    Нажми кнопку "Добавить".""";
             buyButtonText = EmojiParser.parseToUnicode("Пока, друг! \uD83D\uDC4B");
             intervalText = "Интервал";
             autoSearchText = "Автопоиск";
@@ -78,7 +73,7 @@ public class Text {
             startSearchBeforeText = "Сначала необходимо запустить поиск слов /top";
             keywordsSearchText = "По словам";
             fullSearchText = "Полный поиск";
-            addInListText = "Укажите слова для добавления в список (разделять запятой)";
+            addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
             delFromListText = "Укажите номера слов для удаления (разделять запятой)";
             removeAllText = "удалить всё";
             inputSchedulerStart = "Введите время старта автопоиска (число 0-23)";
@@ -149,14 +144,9 @@ public class Text {
                     <b>E-mail</b>: rps_project@mail.ru
                     <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
             yesButtonText = """
-                    The first thing to do is add <b>keywords</b>.
-                    If you are interested in news related to taxes, for example, then you need to add the word <b>tax</b> to get all the headlines containing: <b>tax, taxes</b>, etc.
+                    The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax</b> to get all the headlines containing: <b>tax, taxpayer, taxes</b>, etc.
                     - - - - - -
-                    The second is to add <b>excluding terms</b> through the menu for a complete search, so as not to read news like: “How to dye eyelashes correctly.” Just add <b>eyelash</b> to the excluding terms list and you won’t see such headlines anymore!
-                    - - - - - -
-                    You can add one word or several separated by commas.
-                    - - - - - -
-                    At this point we will add <b>keywords</b>. Click the "Add" button.""";
+                    Click the "Add" button.""";
             buyButtonText = EmojiParser.parseToUnicode("Good buy! \uD83D\uDC4B");
             intervalText = "Interval";
             autoSearchText = "Auto search";
@@ -171,7 +161,7 @@ public class Text {
             startSearchBeforeText = "First you need to run a word search /top";
             keywordsSearchText = "Keywords";
             fullSearchText = "Full search";
-            addInListText = "Input words to add (separated by comma)";
+            addInListText = "Input words to add (separated by comma) and send the message";
             delFromListText = "Input word numbers to remove (separated by comma)";
             removeAllText = "delete all";
             inputSchedulerStart = "Enter the auto search start time (number 0-23)";
