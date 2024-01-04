@@ -1,5 +1,6 @@
 package com.avandy.bot.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -8,15 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class InlineKeyboards {
 
     private static void setButtons(Map<String, String> buttons, List<InlineKeyboardButton> rowInLine) {
-        for (Map.Entry<String, String> item : buttons.entrySet()) {
-            InlineKeyboardButton button = new InlineKeyboardButton();
-            button.setText(item.getValue());
-            button.setCallbackData(item.getKey());
-            rowInLine.add(button);
+        try {
+            for (Map.Entry<String, String> item : buttons.entrySet()) {
+                InlineKeyboardButton button = new InlineKeyboardButton();
+                button.setText(item.getValue());
+                button.setCallbackData(item.getKey());
+                rowInLine.add(button);
+            }
+        } catch (Exception e) {
+            log.warn(e.getMessage());
         }
     }
 

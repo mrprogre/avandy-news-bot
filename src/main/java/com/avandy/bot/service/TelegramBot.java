@@ -180,10 +180,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
             Long chatId = update.getCallbackQuery().getMessage().getChatId();
-            //String callbackQueryId = update.getCallbackQuery().getId();
+            setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
 
             switch (callbackData) {
-
                 case "FEEDBACK" -> {
                     userStates.put(chatId, new UserState("SEND_FEEDBACK"));
                     cancelButton(chatId, sendMessageForDevText);
@@ -649,19 +648,21 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void sendMessage(long chatId, String textToSend, ReplyKeyboard keyboard) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(textToSend);
+        if (textToSend != null) message.setText(textToSend);
+        else return;
         message.enableHtml(true);
         message.disableWebPagePreview();
-        message.setReplyMarkup(keyboard);
+        if (keyboard != null) message.setReplyMarkup(keyboard);
         executeMessage(message);
     }
 
     private void sendMessageWithPreview(long chatId, String textToSend, ReplyKeyboard keyboard) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(textToSend);
+        if (textToSend != null) message.setText(textToSend);
+        else return;
         message.enableHtml(true);
-        message.setReplyMarkup(keyboard);
+        if (keyboard != null) message.setReplyMarkup(keyboard);
         executeMessage(message);
     }
 
