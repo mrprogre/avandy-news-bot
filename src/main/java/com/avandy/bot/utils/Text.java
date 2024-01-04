@@ -214,7 +214,7 @@ public class Text {
                 schedSettings = "- - - - - -\n" + "<b>3. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
             }
 
-            return "<b>Настройки</b>\n" +
+            return "<b>Настройки</b> " + TelegramBot.ICON_SETTINGS + " \n" +
                     "<b>2. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "<b>on</b> - исключение новостей, которые содержат слова-исключения\n" +
                     "<b>off</b> - показывать все новости без исключения\n" +
@@ -237,7 +237,7 @@ public class Text {
                 schedSettings = "- - - - - -\n" + "<b>3. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
             }
 
-            return "<b>Settings</b>\n" +
+            return "<b>Settings</b> " + TelegramBot.ICON_SETTINGS + " \n" +
                     "<b>1. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "<b>on</b> - excluding news that contains excluding terms\n" +
                     "<b>off</b> - show all news without filter\n" +

@@ -58,6 +58,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final String ICON_NEWS_FOUNDED = "\uD83C\uDF3F";
     public static final String ICON_END_SEARCH_NOT_FOUND = "\uD83D\uDCA4";
     public static final String ICON_GOOD_BYE = "\uD83D\uDC4B";
+    public static final String ICON_SETTINGS = "\uD83C\uDF0D";
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
         super(botToken);
