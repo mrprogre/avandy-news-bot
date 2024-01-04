@@ -536,13 +536,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void initSearch(long chatId) {
         String template = ". %s%s\n[List: <b>%d</b> %s]";
 
-        String fullText = String.format("1" + template, searchWithFilterText,
-                settingsRepository.getPeriodAllByChatId(chatId), excludedRepository.getExcludedCountByChatId(chatId),
-                searchWithFilter2Text);
-
-        String keywordsText = String.format("2" + template, keywordSearchText,
+        String keywordsText = String.format("1" + template, keywordSearchText,
                 settingsRepository.getPeriodByChatId(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
                 keywordSearch2Text);
+
+        String fullText = String.format("2" + template, searchWithFilterText,
+                settingsRepository.getPeriodAllByChatId(chatId), excludedRepository.getExcludedCountByChatId(chatId),
+                searchWithFilter2Text);
 
         String topText = String.format("3" + template, top20Text2,
                 settingsRepository.getPeriodTopByChatId(chatId), topTenRepository.deleteFromTopTenCount(chatId),
@@ -551,9 +551,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = prepareMessage(chatId,
                 "<b>Search news » » »</b>" +
                         "\n- - - - - -\n" +
-                        fullText +
-                        "\n- - - - - -\n" +
                         keywordsText +
+                        "\n- - - - - -\n" +
+                        fullText +
                         "\n- - - - - -\n" +
                         topText +
                         "\n- - - - - -"
@@ -564,15 +564,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
 
-        // Full search
-        buttons1.put("SET_PERIOD_ALL", intervalText);
-        buttons1.put("LIST_EXCLUDED", listText);
-        buttons1.put("FIND_ALL", fullSearchText);
-
         // Keywords search
-        buttons2.put("SET_PERIOD", intervalText);
-        buttons2.put("LIST_KEYWORDS", listText);
-        buttons2.put("FIND_BY_KEYWORDS", keywordsSearchText);
+        buttons1.put("SET_PERIOD", intervalText);
+        buttons1.put("LIST_KEYWORDS", listText);
+        buttons1.put("FIND_BY_KEYWORDS", keywordsSearchText);
+
+        // Full search
+        buttons2.put("SET_PERIOD_ALL", intervalText);
+        buttons2.put("LIST_EXCLUDED", listText);
+        buttons2.put("FIND_ALL", fullSearchText);
 
         // Top 20
         buttons3.put("SET_PERIOD_TOP", intervalText);
@@ -642,6 +642,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     public SendMessage prepareMessage(long chatId, String textToSend) {
         SendMessage message = new SendMessage();
+        message.enableHtml(true);
         message.setChatId(chatId);
         message.setText(textToSend);
         return message;
@@ -984,6 +985,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void showOnOffJaroWinkler(long chatId) {
         SendMessage message = prepareMessage(chatId, jaroWinklerSwitcherText);
 
+
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("JARO_WINKLER_OFF", "Off");
         buttons.put("JARO_WINKLER_ON", "On");
@@ -1224,8 +1226,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
-        buttons1.put("SET_SCHEDULER", "1. " + autoSearchText);
-        buttons1.put("SET_EXCLUDED", "2. " + exclusionText);
+        buttons1.put("SET_EXCLUDED", "1. " + exclusionText);
+        buttons1.put("SET_SCHEDULER", "2. " + autoSearchText);
 
         if (isOn) {
             buttons2.put("SCHEDULER_START", "3. " + startSettingsText);

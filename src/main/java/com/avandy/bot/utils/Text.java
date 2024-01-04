@@ -105,8 +105,8 @@ public class Text {
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
             removedFromTopText = "удалено слов";
-            jaroWinklerSwitcherText = "вкл/выкл проверку схожести строк методом Джаро-Винклера " +
-                    "(минимальный уровень схожести строк по умолчанию = 85%, т.е. слова: \"атака, атаке, атаку\" " +
+            jaroWinklerSwitcherText = "<b>вкл/выкл</b> проверку схожести строк методом <b>Джаро-Винклера</b> " +
+                    "(минимальный уровень схожести строк по умолчанию = <b>85%</b>, т.е. слова: \"атака, атаке, атаку\" " +
                     "будут объединены в слово \"атак\", т.к. их сходство между собой равно 86%)";
             jaroWinklerText = "Jaro-Winkler";
         } else {
@@ -193,8 +193,8 @@ public class Text {
             chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";
             removedFromTopText = "words removed";
             jaroWinklerText = "Jaro-Winkler";
-            jaroWinklerSwitcherText = "on/off check for string similarity using the Jaro-Winkler method " +
-                    "(default similarity level = 85%, therefore the words: \"played, player\" will be combined into " +
+            jaroWinklerSwitcherText = "<b>on/off</b> check for string similarity using the <b>Jaro-Winkler</b> method " +
+                    "(default similarity level = <b>85%</b>, therefore the words: \"played, player\" will be combined into " +
                     "the word \"play\", because their similarity to each other is 88%)";
         }
     }
@@ -214,12 +214,12 @@ public class Text {
             }
 
             return "<b>Настройки</b>\n" +
-                    "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
-                    "Автоматический запуск поиска по <b>ключевым словам</b> за период, указанный в п.1, с частотой в п.5" + "\n" +
-                    "- - - - - -\n" +
                     "<b>2. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "<b>on</b> - исключение новостей, которые содержат слова-исключения\n" +
                     "<b>off</b> - показывать все новости без исключения\n" +
+                    "- - - - - -\n" +
+                    "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
+                    "Автоматический запуск поиска по <b>ключевым словам</b> за период, указанный в п.1, с частотой в п.5" + "\n" +
                     schedSettings +
                     "- - - - - -\n" +
                     "Параметры меняются после нажатия на кнопки";
@@ -237,12 +237,12 @@ public class Text {
             }
 
             return "<b>Settings</b>\n" +
-                    "<b>1. Auto search: " + x.getScheduler() + "</b>\n" +
-                    "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
-                    "- - - - - -\n" +
-                    "<b>2. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "<b>1. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "<b>on</b> - excluding news that contains excluding terms\n" +
                     "<b>off</b> - show all news without filter\n" +
+                    "- - - - - -\n" +
+                    "<b>2. Auto search: " + x.getScheduler() + "</b>\n" +
+                    "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     schedSettings +
                     "- - - - - -\n" +
                     "Parameters change after pressing buttons";
