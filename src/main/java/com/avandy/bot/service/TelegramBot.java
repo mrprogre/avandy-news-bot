@@ -20,6 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -548,17 +549,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                 settingsRepository.getPeriodTopByChatId(chatId), topTenRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
 
-        SendMessage message = prepareMessage(chatId,
-                "<b>Search news » » »</b>" +
-                        "\n- - - - - -\n" +
-                        keywordsText +
-                        "\n- - - - - -\n" +
-                        fullText +
-                        "\n- - - - - -\n" +
-                        topText +
-                        "\n- - - - - -"
-        );
-        message.enableHtml(true);
+        String text = "<b>Search news » » »</b>" +
+                "\n- - - - - -\n" +
+                keywordsText +
+                "\n- - - - - -\n" +
+                fullText +
+                "\n- - - - - -\n" +
+                topText +
+                "\n- - - - - -";
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
@@ -579,8 +577,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons3.put("LIST_TOP", listText);
         buttons3.put("GET_TOP", updateTopText2);
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
     }
 
     private void getSettings(long chatId) {
@@ -640,18 +637,39 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    public SendMessage prepareMessage(long chatId, String textToSend) {
-        SendMessage message = new SendMessage();
-        message.enableHtml(true);
-        message.setChatId(chatId);
-        message.setText(textToSend);
-        return message;
-    }
+//    public SendMessage prepareMessage(long chatId, String textToSend) {
+//        SendMessage message = new SendMessage();
+//        message.enableHtml(true);
+//        message.setChatId(chatId);
+//        message.setText(textToSend);
+//        return message;
+//    }
 
     private void sendMessage(long chatId, String textToSend) {
-        SendMessage message = prepareMessage(chatId, textToSend);
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(textToSend);
         message.enableHtml(true);
         message.disableWebPagePreview();
+        executeMessage(message);
+    }
+
+    private void sendMessage(long chatId, String textToSend, ReplyKeyboard keyboard) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(textToSend);
+        message.enableHtml(true);
+        message.disableWebPagePreview();
+        message.setReplyMarkup(keyboard);
+        executeMessage(message);
+    }
+
+    private void sendMessageWithPreview(long chatId, String textToSend, ReplyKeyboard keyboard) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(textToSend);
+        message.enableHtml(true);
+        message.setReplyMarkup(keyboard);
         executeMessage(message);
     }
 
@@ -961,75 +979,48 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void showOnOffScheduler(long chatId) {
-        SendMessage message = prepareMessage(chatId, autoSearchText);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("SCHEDULER_OFF", "Off");
         buttons.put("SCHEDULER_ON", "On");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, autoSearchText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void showOnOffExcluded(long chatId) {
-        SendMessage message = prepareMessage(chatId, exclusionText);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("EXCLUDED_OFF", "Off");
         buttons.put("EXCLUDED_ON", "On");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, exclusionText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void showOnOffJaroWinkler(long chatId) {
-        SendMessage message = prepareMessage(chatId, jaroWinklerSwitcherText);
-
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("JARO_WINKLER_OFF", "Off");
         buttons.put("JARO_WINKLER_ON", "On");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, jaroWinklerSwitcherText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void showYesNoOnStart(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("NO_BUTTON", noText);
         buttons.put("YES_BUTTON", yesText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void showLangButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("RU_BUTTON", "rus");
         buttons.put("EN_BUTTON", "eng");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void showYesNoOnDeleteUser(long chatId) {
-        SendMessage message = prepareMessage(chatId, confirmDeletedUserText);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("DELETE_YES", yesText);
         buttons.put("DELETE_NO", noText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, confirmDeletedUserText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void getNumbersForKeywordsPeriodButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, chooseSearchDepthText);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("BUTTON_1", "1");
         buttons.put("BUTTON_2", "2");
@@ -1038,14 +1029,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("BUTTON_24", "24");
         buttons.put("BUTTON_48", "48");
         buttons.put("BUTTON_72", "72");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void getNumbersForAllPeriodButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, chooseSearchDepthText);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("BUTTON_1_ALL", "1");
         buttons.put("BUTTON_2_ALL", "2");
@@ -1054,14 +1041,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("BUTTON_8_ALL", "8");
         buttons.put("BUTTON_12_ALL", "12");
         buttons.put("BUTTON_24_ALL", "24");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void getNumbersForTopPeriodButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, chooseSearchDepthText);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("TOP_INTERVAL_1", "1");
         buttons.put("TOP_INTERVAL_4", "4");
@@ -1070,13 +1053,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("TOP_INTERVAL_24", "24");
         buttons.put("TOP_INTERVAL_48", "48");
         buttons.put("TOP_INTERVAL_72", "72");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void topSearchButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, chooseNumberWordFromTop);
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
@@ -1098,13 +1078,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             else if (x <= 20)
                 buttons5.put("TOP_NUM_" + x++, s);
         }
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
-        executeMessage(message);
+        sendMessage(chatId, chooseNumberWordFromTop, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
     }
 
     public void deleteFromTopButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, chooseWordDelFromTop);
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
@@ -1127,12 +1104,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 buttons5.put("TOP_DEL_" + x++, s);
         }
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
-        executeMessage(message);
+        sendMessage(chatId, chooseWordDelFromTop, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
     }
 
     public void startSearchTimeButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, chooseSearchStartText);
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
@@ -1149,26 +1124,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                 buttons4.put("SET_START_" + x, String.valueOf(x));
         }
 
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, null));
-        executeMessage(message);
+        sendMessage(chatId, chooseSearchStartText, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, null));
     }
 
     private void cancelButton(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("CANCEL", cancelButtonText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void showExcludedButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
 
@@ -1176,26 +1141,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("EXCLUDE", addText);
         buttons2.put("SET_PERIOD_ALL", intervalText);
         buttons2.put("FIND_ALL", searchText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }
 
     private void showExcludeButton(long chatId) {
-        SendMessage message = prepareMessage(chatId, excludedWordsNotSetText);
-        message.enableHtml(true);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("EXCLUDE", addText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, excludedWordsNotSetText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void showKeywordButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
 
@@ -1203,25 +1158,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("ADD", addText);
         buttons2.put("SET_PERIOD", intervalText);
         buttons2.put("FIND_BY_KEYWORDS", searchText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }
 
     private void showAddKeywordsButton(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("ADD", addText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void getSettingsButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
         boolean isOn = settingsRepository.getSchedulerOnOffByChatId(chatId).equals("on");
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
@@ -1236,64 +1182,41 @@ public class TelegramBot extends TelegramLongPollingBot {
             buttons2.put("START_SEARCH", "» » »");
         }
 
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }
 
     private void nextButton(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("START_SEARCH", "» » »");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void infoButtons(long chatId) {
-        SendMessage message = prepareMessage(chatId, aboutDeveloperText + "\n\n" + getRssList());
-        message.enableHtml(true);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("FEEDBACK", sendIdeaText);
         buttons.put("START_SEARCH", "» » »");
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(),
+                InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void nextButtonAfterKeywordsSearch(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("SET_PERIOD", intervalText);
         buttons.put("LIST_KEYWORDS", listKeywordsText);
         buttons.put("FIND_BY_KEYWORDS", searchText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void nextButtonAfterAllSearch(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("SET_PERIOD_ALL", intervalText);
         buttons.put("EXCLUDE", excludeWordText);
         buttons.put("FIND_ALL", searchText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     // Показать топ слов за период
     private void showTopTenButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
@@ -1304,25 +1227,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons2.put("GET_TOP", updateTopText);
         buttons3.put("JARO_WINKLER_MODE", jaroWinklerText);
         buttons3.put("WORD_SEARCH", searchText);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
     }
 
     private void showTopTenButton(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("GET_TOP", updateTopText);
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     // Список удалённых слов из топа
     private void showTopTenListButtons(long chatId, String text) {
-        SendMessage message = prepareMessage(chatId, text);
-        message.enableHtml(true);
-
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
 
@@ -1330,9 +1245,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("DEL_FROM_TOP", addText);
         buttons2.put("SET_PERIOD_TOP", intervalText);
         buttons2.put("GET_TOP", TOP_TEXT);
-
-        message.setReplyMarkup(InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
-        executeMessage(message);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }
 
     private void getTopTenWordsList(long chatId) {
