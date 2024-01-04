@@ -41,14 +41,17 @@ public class Search {
     }
 
     public Set<Headline> start(Long chatId, String searchType) {
-        boolean isTopSearch = !searchType.equals("all") && !searchType.equals("keywords") && !searchType.equals("top");
+        boolean isAllSearch = searchType.equals("all");
+        boolean isKeywordSearch = searchType.equals("keywords");
+        boolean isTopSearch = searchType.equals("top");
+        boolean isSearchByWord = !isAllSearch && !isKeywordSearch && !isTopSearch;
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         Set<Headline> headlinesToShow = new TreeSet<>();
 
-        if (searchType.equals("keywords")) {
+        if (isKeywordSearch) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriod()),
                     () -> periodMinutes = 1440);
-        } else if (searchType.equals("top")) {
+        } else if (isTopSearch) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
         } else {
@@ -56,7 +59,7 @@ public class Search {
                     () -> periodMinutes = 60);
         }
 
-        if (!isTopSearch) {
+        if (!isSearchByWord) {
             List<Keyword> keywords = keywordRepository.findAllByChatId(chatId);
             List<String> showedNewsHash = showedNewsRepository.findShowedNewsHashByChatId(chatId);
             headlinesTopTen = new ArrayList<>();
@@ -89,6 +92,7 @@ public class Search {
                     /* KEYWORDS SEARCH */
                     case "keywords" -> {
                         for (Keyword keyword : keywords) {
+                            // todo заменить на SQL запрос, чтобы слово Java не находило JavaScript
                             boolean isContains = title.toLowerCase().contains(keyword.getKeyword().toLowerCase())
                                     && title.length() > 15;
 
@@ -113,7 +117,7 @@ public class Search {
         }
 
         /* SEARCH BY ONE WORD FROM TOP (this case searchType is word for search)*/
-        if (isTopSearch) {
+        if (isSearchByWord) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
 
@@ -123,7 +127,7 @@ public class Search {
             if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
                 newsList = newsListRepository.getTopNewsListByPeriodAndWordAndJaroWinkler(period, type);
             } else {
-                newsList = newsListRepository.getTopNewsListByPeriodAndWord(period, type);
+                newsList = newsListRepository.getTopNewsListByPeriodAndWord(period, type); // как пример
             }
 
             for (NewsList news : newsList) {
@@ -142,7 +146,7 @@ public class Search {
 
         totalNewsCounter = headlinesToShow.size();
         // remove titles contains excluded words
-        if (searchType.equals("all") && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
+        if (isAllSearch && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
             List<String> allExcludedByChatId = excludedRepository.findExcludedByChatId(chatId);
 
             for (String word : allExcludedByChatId) {
@@ -151,7 +155,7 @@ public class Search {
         }
         filteredNewsCounter = headlinesToShow.size();
 
-        if (!isTopSearch) {
+        if (!isSearchByWord) {
             Set<ShowedNews> showedNewsToSave = new HashSet<>();
 
             ShowedNews showedNewsRow;
