@@ -1357,12 +1357,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         isAutoSearch.set(false);
     }
 
-    // Нижняя клавиатура TODO нельзя 2 клавиатуры на 1 сообщение, подумать
     private void getReplyKeywordWithSearch(long chatId, String textToSend, String firstName) {
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText(String.format(textToSend, firstName));
-
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setSelective(false);
@@ -1376,17 +1371,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
-        message.setReplyMarkup(keyboardMarkup);
-        executeMessage(message);
+
+        sendMessage(chatId, String.format(textToSend, firstName), keyboardMarkup);
     }
 
     private void getReplyKeywordWithSearch(long chatId, String textToSend) {
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(textToSend);
-        message.enableHtml(true);
-        message.disableWebPagePreview();
-
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setSelective(false);
@@ -1400,8 +1389,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
-        message.setReplyMarkup(keyboardMarkup);
-        executeMessage(message);
+
+        sendMessage(chatId, textToSend, keyboardMarkup);
     }
 
     private void createMenuCommands() {
