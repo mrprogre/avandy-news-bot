@@ -32,7 +32,7 @@ Jaro-Winkler **on**
 
 **/settings**   - setting search intervals and enabling auto search
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/41a2dbdd-5758-4353-abf7-67d292bef78d)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0764f7a1-e562-4294-af4f-b0748499935c)
 
 **/keywords**   - list of keywords (adding, deleting)
 
