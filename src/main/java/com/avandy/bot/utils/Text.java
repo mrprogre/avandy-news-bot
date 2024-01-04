@@ -1,6 +1,7 @@
 package com.avandy.bot.utils;
 
 import com.avandy.bot.model.Settings;
+import com.avandy.bot.service.TelegramBot;
 import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
@@ -46,7 +47,7 @@ public class Text {
             updateTopText2 = "Tоп 20";
             undefinedCommandText = "Данная команда не существует";
             changesSavedText = "Сохранено ✔️";
-            headlinesNotFound = EmojiParser.parseToUnicode("» новости не найдены \uD83D\uDCA4");
+            headlinesNotFound = "» новости не найдены " + TelegramBot.ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 2 символов";
             deleteAllWordsText = "❌ все слова удалены";
@@ -61,7 +62,7 @@ public class Text {
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>. Если интересуют новости, связанные с ипотекой, к примеру, то добавь слово <b>ипотек</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b> и т.д.
                     - - - - - -
                     Нажми кнопку "Добавить".""";
-            buyButtonText = EmojiParser.parseToUnicode("Пока, друг! \uD83D\uDC4B");
+            buyButtonText = "Пока, друг! " + TelegramBot.ICON_GOOD_BYE;
             intervalText = "Интервал";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключения";
@@ -132,7 +133,7 @@ public class Text {
             excludedText = "Excluded";
             undefinedCommandText = "Command not defined";
             changesSavedText = "Done ✔️";
-            headlinesNotFound = EmojiParser.parseToUnicode("» no news headlines found \uD83D\uDCA4");
+            headlinesNotFound = "» no news headlines found " + TelegramBot.ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 2 characters";
             deleteAllWordsText = "❌ all words removed";
@@ -147,7 +148,7 @@ public class Text {
                     The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax</b> to get all the headlines containing: <b>tax, taxpayer, taxes</b>, etc.
                     - - - - - -
                     Click the "Add" button.""";
-            buyButtonText = EmojiParser.parseToUnicode("Good buy! \uD83D\uDC4B");
+            buyButtonText = "Good buy! " + TelegramBot.ICON_GOOD_BYE;
             intervalText = "Interval";
             autoSearchText = "Auto search";
             exclusionText = "News exclusion";

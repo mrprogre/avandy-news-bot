@@ -5,7 +5,6 @@ import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
 import com.avandy.bot.utils.InlineKeyboards;
-import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +54,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private StringBuilder stringBuilderTop;
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
+    private static final String ICON_SEARCH = "\uD83C\uDFB2";
+    private static final String ICON_NEWS_FOUNDED = "\uD83C\uDF3F";
+    public static final String ICON_END_SEARCH_NOT_FOUND = "\uD83D\uDCA4";
+    public static final String ICON_GOOD_BYE = "\uD83D\uDC4B";
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
         super(botToken);
@@ -548,7 +551,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 settingsRepository.getPeriodTopByChatId(chatId), topTenRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
 
-        String text = "<b>Search news » » »</b>" +
+        String text = "<b>Search news</b> " + ICON_SEARCH +
                 "\n- - - - - -\n" +
                 keywordsText +
                 "\n- - - - - -\n" +
@@ -860,13 +863,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, String.valueOf(joiner));
             }
 
-            String text = foundNewsText + " <b>" + Search.totalNewsCounter + "</b> (" + excludedNewsText +
-                    " <b>" + (Search.totalNewsCounter - headlines.size()) + "</b>)";
-
-            nextButtonAfterAllSearch(chatId, text);
+            nextButtonAfterAllSearch(chatId, foundNewsText + " <b>" + Search.totalNewsCounter + "</b> (" +
+                    excludedNewsText + " <b>" + (Search.totalNewsCounter - headlines.size()) + "</b>) " +
+                    ICON_NEWS_FOUNDED);
         } else {
-            String text = EmojiParser.parseToUnicode(headlinesNotFound);
-            nextButtonAfterAllSearch(chatId, text);
+            nextButtonAfterAllSearch(chatId, headlinesNotFound);
         }
     }
 
@@ -917,20 +918,18 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, String.valueOf(joiner));
             }
 
-            String text = foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b>";
 
             if (!isAutoSearch.get()) {
-                nextButtonAfterKeywordsSearch(chatId, text);
+                nextButtonAfterKeywordsSearch(chatId,
+                        foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b> " + ICON_NEWS_FOUNDED);
             }
         } else {
             if (!isAutoSearch.get()) {
-                String text = EmojiParser.parseToUnicode(headlinesNotFound);
-                nextButtonAfterKeywordsSearch(chatId, text);
+                nextButtonAfterKeywordsSearch(chatId, headlinesNotFound);
             }
         }
         return Search.filteredNewsCounter;
     }
-
 
     private void wordSearch(long chatId, String word) {
         Set<Headline> headlines = search.start(chatId, word);
@@ -957,12 +956,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getReplyKeywordWithSearch(chatId, String.valueOf(joiner));
             }
 
-            String text = foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b>";
-
-            showTopTenButton(chatId, text);
+            showTopTenButton(chatId, foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b> " +
+                    ICON_NEWS_FOUNDED);
         } else {
-            String text = EmojiParser.parseToUnicode(headlinesNotFound);
-            showTopTenButton(chatId, text);
+            showTopTenButton(chatId, headlinesNotFound);
         }
     }
 
