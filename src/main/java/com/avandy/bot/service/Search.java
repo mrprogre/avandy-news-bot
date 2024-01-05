@@ -44,7 +44,7 @@ public class Search {
         boolean isAllSearch = searchType.equals("all");
         boolean isKeywordSearch = searchType.equals("keywords");
         boolean isTopSearch = searchType.equals("top");
-        boolean isSearchByWord = !isAllSearch && !isKeywordSearch && !isTopSearch;
+        boolean isSearchByOneWordFromTop = !isAllSearch && !isKeywordSearch && !isTopSearch;
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         Set<Headline> headlinesToShow = new TreeSet<>();
 
@@ -120,7 +120,7 @@ public class Search {
         }
 
         /* SEARCH BY ONE WORD FROM TOP (this case searchType is word for search)*/
-        if (isSearchByWord) {
+        if (isSearchByOneWordFromTop) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
 
@@ -155,7 +155,7 @@ public class Search {
         }
         filteredNewsCounter = headlinesToShow.size();
 
-        if (!isSearchByWord) {
+        if (!isSearchByOneWordFromTop) {
             Set<ShowedNews> showedNewsToSave = new HashSet<>();
 
             ShowedNews showedNewsRow;
