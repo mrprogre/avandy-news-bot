@@ -9,9 +9,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface KeywordRepository extends CrudRepository<Keyword, Long> {
-    @Query(value = "SELECT id, chat_id, lower(keyword) as keyword FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
-    List<Keyword> findAllByChatId(Long chatId);
-
     @Query(value = "SELECT lower(keyword) as keyword FROM keywords WHERE chat_id = :chatId", nativeQuery = true)
     List<String> findKeywordsByChatId(Long chatId);
 

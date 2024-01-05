@@ -21,12 +21,12 @@ public interface NewsListRepository extends CrudRepository<NewsList, Long> {
             "        WHERE pub_date > (current_timestamp - cast(:period as interval))" +
             "         AND lower(title) ~ ('^'||:word||'(\\s|\\W)|(\\s|\\W)'||:word||'(\\s|\\W)|(\\s|\\W)'||:word||'$')"
             , nativeQuery = true)
-    TreeSet<NewsList> getTopNewsListByPeriodAndWord(String period, String word);
+    TreeSet<NewsList> getNewsWithRegexp(String period, String word);
 
     @Query(value = "SELECT id, source, title, title_hash, link, pub_date, add_date FROM news_list" +
             "        WHERE pub_date > (current_timestamp - cast(:period as interval))" +
             "         AND lower(title) ilike '%'||:word||'%'"
             , nativeQuery = true)
-    TreeSet<NewsList> getTopNewsListByPeriodAndWordAndJaroWinkler(String period, String word);
+    TreeSet<NewsList> getNewsWithLike(String period, String word);
 
 }
