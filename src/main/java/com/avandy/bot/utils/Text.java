@@ -69,7 +69,7 @@ public class Text {
             startSettingsText = "Старт";
             excludedListText = "Удалённое";
             delFromTopText = "Удалить из топа";
-            top20ByPeriodText = "<b>Top 20 слов</b> [за ";
+            top20ByPeriodText = "<b>Top 20 слов</b> за ";
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
             startSearchBeforeText = "Сначала необходимо запустить поиск слов /top";
             keywordsSearchText = "По словам";
@@ -108,7 +108,8 @@ public class Text {
             removedFromTopText = "удалено слов";
             jaroWinklerSwitcherText = "<b>вкл/выкл</b> проверку схожести строк методом <b>Джаро-Винклера</b> " +
                     "(минимальный уровень схожести строк по умолчанию = <b>85%</b>, т.е. слова: \"атака, атаке, атаку\" " +
-                    "будут объединены в слово \"атак\", т.к. их сходство между собой равно 86%)";
+                    "будут объединены в слово \"атак\", т.к. их сходство между собой равно 86%).\n" +
+                    "Текущий статус: ";
             jaroWinklerText = "Jaro-Winkler";
         } else {
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
@@ -157,7 +158,7 @@ public class Text {
             delFromTopText = "Delete";
             updateTopText = "Update top";
             updateTopText2 = "Show top";
-            top20ByPeriodText = "<b>Top 20 words</b> [in ";
+            top20ByPeriodText = "<b>Top 20 words</b> in ";
             allowCommasAndNumbersText = "Only numbers or commas are allowed";
             startSearchBeforeText = "First you need to run a word search /top";
             keywordsSearchText = "Keywords";
@@ -196,7 +197,8 @@ public class Text {
             jaroWinklerText = "Jaro-Winkler";
             jaroWinklerSwitcherText = "<b>on/off</b> check for string similarity using the <b>Jaro-Winkler</b> method " +
                     "(default similarity level = <b>85%</b>, therefore the words: \"played, player\" will be combined into " +
-                    "the word \"play\", because their similarity to each other is 88%)";
+                    "the word \"play\", because their similarity to each other is 88%).\n" +
+                    "Current status: ";
         }
     }
 

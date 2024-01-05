@@ -59,6 +59,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public static final String ICON_END_SEARCH_NOT_FOUND = "\uD83D\uDCA4";
     public static final String ICON_GOOD_BYE = "\uD83D\uDC4B";
     public static final String ICON_SETTINGS = "\uD83C\uDF0D";
+    public static final String ICON_TOP_20_FIRE = "\uD83D\uDD25";
 
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
         super(botToken);
@@ -987,7 +988,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("JARO_WINKLER_OFF", "Off");
         buttons.put("JARO_WINKLER_ON", "On");
-        sendMessage(chatId, jaroWinklerSwitcherText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, jaroWinklerSwitcherText + "<b>" + settingsRepository.getJaroWinklerByChatId(chatId) +
+                "</b>", InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     public void showYesNoOnStart(long chatId, String text) {
@@ -1269,9 +1271,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             String period = settingsRepository.getPeriodTopByChatId(chatId);
 
-            showTopTenButtons(chatId,
-                    String.format("%s<b>%s</b>, Jaro-Winkler: <b>%s</b>]\n%s", top20ByPeriodText, period,
-                            settingsRepository.getJaroWinklerByChatId(chatId), stringBuilderTop));
+            showTopTenButtons(chatId, String.format("%s<b>%s</b> "+ ICON_TOP_20_FIRE + " \n%s", top20ByPeriodText,
+                            period, stringBuilderTop));
         } else {
             showTopTenButton(chatId, updateTopText);
         }
