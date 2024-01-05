@@ -1365,8 +1365,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<KeyboardRow> keyboardRows = new ArrayList<>();
 
         KeyboardRow row = new KeyboardRow();
-        row.add(fullSearchText);
         row.add(keywordsSearchText);
+        row.add(fullSearchText);
         row.add(TOP_TEXT);
 
         keyboardRows.add(row);
@@ -1383,8 +1383,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<KeyboardRow> keyboardRows = new ArrayList<>();
 
         KeyboardRow row = new KeyboardRow();
-        row.add(fullSearchText);
         row.add(keywordsSearchText);
+        row.add(fullSearchText);
         row.add(TOP_TEXT);
 
         keyboardRows.add(row);
