@@ -1398,9 +1398,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/settings", settingText));
         //listOfCommands.add(new BotCommand("/excluding", listExcludedText));
         //listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
-        //listOfCommands.add(new BotCommand("/top", top20Text));
         listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/info", infoText));
+        listOfCommands.add(new BotCommand("/top", top20Text));
         //listOfCommands.add(new BotCommand("/rss", listRssText));
         //listOfCommands.add(new BotCommand("/delete", deleteUserText));
         //listOfCommands.add(new BotCommand("/start", startText));
