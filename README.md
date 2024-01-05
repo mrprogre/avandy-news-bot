@@ -9,7 +9,7 @@ https://t.me/AvandyNewsBot
 
 **/start**      - you can start again after deleting user information
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/138b3224-b8b2-4dce-bb5a-5eb690ec6995)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/07dc5587-6802-4c70-ae5a-4bedfcd51b0e)
 
 **/search**     - selecting a search type
 
@@ -17,9 +17,8 @@ https://t.me/AvandyNewsBot
 
 **/top** (Show top)        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/decdb239-598e-4984-9dbd-0ed3176b1742)
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/e3afd035-146d-44bb-a31c-fa7b91b75803)
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/2199ba85-e9b9-457e-bb5a-639e52c38aa8)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/e847af42-0e9d-420f-997b-bab0358c7e93)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/c2aef9e4-f0ec-452e-bbee-66ac2e10d95f)
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/3e6b98d5-04ca-43a7-886f-4e6754c35cff)
 
 Jaro-Winkler **off**
