@@ -44,3 +44,7 @@ Jaro-Winkler **on**
 **/info**       - information about the developer and the ability to send a message to the developer
 
 ![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/9acda404-fb17-4cce-b5f5-1ca95b793a9d)
+
+
+**Database:** [schema.sql](https://github.com/mrprogre/avandy-news-bot/blob/master/src/main/resources/schema.sql)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/3af79e10-a185-46b7-9756-331884cf8b8c)
