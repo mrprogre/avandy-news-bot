@@ -958,8 +958,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getReplyKeywordWithSearch(chatId, String.valueOf(joiner));
             }
 
-            showTopTenButton(chatId, foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b> " +
-                    ICON_NEWS_FOUNDED);
+            //showTopTenButton(chatId, foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b> " + ICON_NEWS_FOUNDED);
+            topSearchButtons(chatId);
         } else {
             showTopTenButton(chatId, headlinesNotFound);
         }
