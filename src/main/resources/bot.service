@@ -1,0 +1,18 @@
+[Unit]
+  Description=Avandy News Bot
+ 
+[Service]
+  ExecStart=java -jar /home/bot.jar
+  Type=idle
+  KillMode=process
+ 
+  SyslogIdentifier=bot
+  SyslogFacility=daemon
+ 
+  Restart=on-failure
+  
+  Environment="AVANDY_NEWS_BOT_TOKEN=***"
+  Environment="POSTGRES_16_PWD=***"
+ 
+[Install]
+  WantedBy=multiuser.target
