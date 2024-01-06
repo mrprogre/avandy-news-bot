@@ -70,7 +70,7 @@ create table if not exists excluding_terms
     constraint fk_excluding_terms_chat_id foreign key (chat_id) references users (chat_id) on delete cascade,
     constraint ui_excluding_terms unique (chat_id, word)
 );
-comment on table excluded is 'Слова-исключения для отсева заголовков при полном поиске';
+comment on table excluding_terms is 'Слова-исключения для отсева заголовков при полном поиске';
 
 create table if not exists showed_news
 (
