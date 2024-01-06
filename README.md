@@ -47,5 +47,4 @@ Jaro-Winkler **on**
 
 
 **Database:** [schema.sql](https://github.com/mrprogre/avandy-news-bot/blob/master/src/main/resources/schema.sql)
-![bot-remote](https://github.com/mrprogre/avandy-news-bot/assets/45883640/1a02a021-b0e2-4a63-9e73-cc44a4ccfba5)
-
+![bot-local](https://github.com/mrprogre/avandy-news-bot/assets/45883640/9703ef6c-e27a-4156-9452-d1b815cad29d)
