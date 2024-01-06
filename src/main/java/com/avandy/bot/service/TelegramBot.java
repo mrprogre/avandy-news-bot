@@ -124,40 +124,34 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (userState != null && "SEND_FEEDBACK".equals(userState.getState())) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
                 sendFeedback(chatId, feedback);
-                userStates.remove(chatId);
 
             } else if (userState != null && "ADD_KEYWORDS".equals(userState.getState())) {
                 String keywords = messageText.trim().toLowerCase();
                 String[] words = keywords.split(",");
                 addKeyword(chatId, words);
                 showKeywordsList(chatId);
-                userStates.remove(chatId);
 
             } else if (userState != null && "DEL_KEYWORDS".equals(userState.getState())) {
                 String keywords = messageText.trim().toLowerCase();
                 removeKeywords(keywords, chatId);
-                userStates.remove(chatId);
 
             } else if (userState != null && "ADD_EXCLUDED".equals(userState.getState())) {
                 String exclude = messageText.trim().toLowerCase();
                 String[] words = exclude.split(",");
                 addExclude(chatId, words);
                 getExcludedList(chatId);
-                userStates.remove(chatId);
 
             } else if (userState != null && "DEL_EXCLUDED".equals(userState.getState())) {
                 String excluded = messageText.trim().toLowerCase();
                 String[] words = excluded.split(",");
                 delExcluded(chatId, words);
                 getExcludedList(chatId);
-                userStates.remove(chatId);
 
             } else if (userState != null && "DEL_TOP".equals(userState.getState())) {
                 String text = messageText.trim().toLowerCase();
                 String[] words = text.split(",");
                 delFromTopTenList(chatId, words);
                 getTopTenWordsList(chatId);
-                userStates.remove(chatId);
 
             } else if (messageText.startsWith(keywordsSearchText)) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
@@ -181,6 +175,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                     default -> sendMessage(chatId, undefinedCommandText);
                 }
             }
+            userStates.remove(chatId);
+
             /* CALLBACK DATA */
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
