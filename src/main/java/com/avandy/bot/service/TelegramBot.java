@@ -400,8 +400,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             if (keywords.equals("*")) {
                 words.add("*");
-                delKeyword(chatId, words);
-                showKeywordsList(chatId);
             } else {
                 String[] nums = keywords.split(",");
                 String[] split = getKeywordsList(chatId).split("\n");
@@ -419,9 +417,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                         }
                     }
                 }
-                delKeyword(chatId, words);
-                showKeywordsList(chatId);
             }
+            delKeyword(chatId, words);
+            showKeywordsList(chatId);
         } catch (NumberFormatException n) {
             sendMessage(chatId, allowCommasAndNumbersText);
         } catch (NullPointerException npe) {

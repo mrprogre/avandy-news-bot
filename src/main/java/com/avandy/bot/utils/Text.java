@@ -7,14 +7,14 @@ import com.vdurmont.emoji.EmojiParser;
 public class Text {
     public static String greetingText, letsStartText, noText, yesText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText, listRssText,
-            startText, deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
+            deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
             updateTopText, updateTopText2, undefinedCommandText, changesSavedText, jaroWinklerSwitcherText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
             excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText,
             startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
-            addInListText, delFromListText, removeAllText, inputSchedulerStart, sendMessageForDevText,
+            addInListText, delFromListText, removeAllText, sendMessageForDevText,
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
@@ -36,7 +36,6 @@ public class Text {
             top20Text2 = "<b>Top 20</b> слов за ";
             listExcludedText = "Слова-исключения";
             listRssText = "Источники RSS";
-            startText = "Запуск бота";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
             delText = "Удалить";
@@ -77,7 +76,6 @@ public class Text {
             addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
             delFromListText = "Укажите номера слов для удаления (разделять запятой)";
             removeAllText = "удалить всё";
-            inputSchedulerStart = "Введите время старта автопоиска (число 0-23)";
             sendMessageForDevText = "Напишите свои предложения разработчику";
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
@@ -125,7 +123,6 @@ public class Text {
             top20Text2 = "<b>Top 20</b> words in ";
             listExcludedText = "Excluding terms";
             listRssText = "News sources";
-            startText = "Bot start";
             deleteUserText = "Delete user data";
             addText = "Add";
             delText = "Delete";
@@ -166,7 +163,6 @@ public class Text {
             addInListText = "Input words to add (separated by comma) and send the message";
             delFromListText = "Input word numbers to remove (separated by comma)";
             removeAllText = "delete all";
-            inputSchedulerStart = "Enter the auto search start time (number 0-23)";
             sendMessageForDevText = "Write your feedback to the developer";
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
