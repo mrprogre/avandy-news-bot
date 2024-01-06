@@ -5,13 +5,15 @@ create table if not exists rss_list
     source      varchar(64),
     link        varchar(512),
     is_active   integer    default 1,
-    position    INTEGER    default 100,
+    position    integer    default 100,
     add_date    timestamp  default current_timestamp::timestamp,
     country     varchar(128),
     parser_type varchar(8) default 'rss'::character varying,
     constraint ui_rss_list_chat_id_link unique (chat_id, link)
 );
-
+comment on table rss_list is 'Список новостных источников';
+comment on column rss_list.chat_id is 'Для функционала когда у каждого пользователя будет свой список источников';
+comment on column rss_list.position is 'Порядковый номер источника';
 comment on column rss_list.country is 'Страна источника новостей';
 comment on column rss_list.parser_type is '"rss" для RomeTools, "no-rss" - остальные источники';
 
@@ -25,6 +27,7 @@ create table if not exists users
     is_active     integer default 1,
     constraint pk_users_chat_id primary key (chat_id)
 );
+comment on table users is 'Список пользователей Telegram';
 
 create table if not exists settings
 (
@@ -39,7 +42,6 @@ create table if not exists settings
     jaro_winkler varchar(3) default 'off'::character varying,
     constraint fk_settings_chat_id foreign key (chat_id) references users (chat_id) on delete cascade
 );
-
 comment on column settings.period is 'Глубина поиска по ключевым словам';
 comment on column settings.period_all is 'Глубина поиска всех новостей';
 comment on column settings.scheduler is 'Включение/выключение автопоиска (on/off)';
@@ -57,6 +59,7 @@ create table if not exists keywords
     constraint fk_keywords_chat_id foreign key (chat_id) references users (chat_id) on delete cascade,
     constraint ui_keywords_chat_id_link unique (chat_id, keyword)
 );
+comment on table keywords is 'Ключевые слова';
 
 create table if not exists excluded
 (
@@ -67,6 +70,7 @@ create table if not exists excluded
     constraint fk_excluded_chat_id foreign key (chat_id) references users (chat_id) on delete cascade,
     constraint ui_excluded unique (chat_id, word)
 );
+comment on table excluded is 'Слова-исключения для отсева заголовков при полном поиске';
 
 create table if not exists showed_news
 (
@@ -77,7 +81,7 @@ create table if not exists showed_news
     constraint fk_headlines_chat_id foreign key (chat_id) references users (chat_id) on delete cascade,
     constraint ui_showed_news unique (chat_id, title_hash, type)
 );
-
+comment on table showed_news is 'Запись хэша новостей, которые были показаны, для быстрого отсева при следующем поиске';
 comment on column showed_news.type is 'Тип поиска: 2 - поиск по ключевым словам, 4 - полный поиск';
 
 create table if not exists news_list
@@ -92,6 +96,7 @@ create table if not exists news_list
     constraint ui_news_list unique (title_hash)
 );
 create index if not exists news_list_pub_date_index on news_list (pub_date);
+comment on table news_list is 'Все сохранённые новости';
 
 create table if not exists top_excluded
 (
