@@ -10,22 +10,22 @@ import java.util.Set;
 
 public interface TopTenRepository extends JpaRepository<TopTenExcluded, Long> {
 
-    @Query(value = "SELECT lower(word) as word FROM top_ten_excluded " +
-            "WHERE user_id = :chatId OR user_id IS NULL " +
+    @Query(value = "SELECT lower(word) as word FROM top_excluded " +
+            "WHERE chat_id = :chatId OR chat_id IS NULL " +
             "ORDER BY id DESC",
             nativeQuery = true)
     Set<String> findAllExcludedFromTopTenByChatId(Long chatId);
 
-    @Query(value = "SELECT count(word) FROM top_ten_excluded WHERE lower(word) = lower(:keyword) and user_id = :chatId",
+    @Query(value = "SELECT count(word) FROM top_excluded WHERE lower(word) = lower(:keyword) and chat_id = :chatId",
             nativeQuery = true)
     int isWordExists(Long chatId, String keyword);
 
-    @Query(value = "SELECT count(word) FROM top_ten_excluded WHERE user_id = :chatId", nativeQuery = true)
+    @Query(value = "SELECT count(word) FROM top_excluded WHERE chat_id = :chatId", nativeQuery = true)
     int deleteFromTopTenCount(Long chatId);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "DELETE FROM top_ten_excluded WHERE user_id = :chatId AND lower(word) = lower(:word)",
+    @Query(value = "DELETE FROM top_excluded WHERE chat_id = :chatId AND lower(word) = lower(:word)",
             nativeQuery = true)
     void deleteWordByChatId(Long chatId, String word);
 

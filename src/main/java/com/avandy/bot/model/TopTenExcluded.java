@@ -11,12 +11,12 @@ import java.util.Objects;
 
 @Data
 @NoArgsConstructor
-@Entity(name = "top_ten_excluded")
+@Entity(name = "top_excluded")
 public class TopTenExcluded {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
+    private Long chatId;
     private String word;
 
     @Override
@@ -24,11 +24,11 @@ public class TopTenExcluded {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TopTenExcluded that = (TopTenExcluded) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(word, that.word);
+        return Objects.equals(chatId, that.chatId) && Objects.equals(word, that.word);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, word);
+        return Objects.hash(chatId, word);
     }
 }

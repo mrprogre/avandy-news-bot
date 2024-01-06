@@ -93,11 +93,12 @@ create table if not exists news_list
 );
 create index if not exists news_list_pub_date_index on news_list (pub_date);
 
-create table if not exists top_ten_excluded
+create table if not exists top_excluded
 (
     id       serial,
     word     varchar(32),
-    user_id  bigint,
+    chat_id  bigint,
     add_date timestamp default current_timestamp::timestamp,
-    constraint ui_top_ten_excluded unique (word, user_id)
+    constraint fk_top_excluded_chat_id foreign key (chat_id) references users (chat_id) on delete cascade,
+    constraint ui_top_excluded unique (word, chat_id)
 );

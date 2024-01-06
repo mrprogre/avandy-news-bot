@@ -715,7 +715,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         TopTenExcluded topTenExcluded;
         if (!topTenWordsByChatId.contains(word)) {
             topTenExcluded = new TopTenExcluded();
-            topTenExcluded.setUserId(chatId);
+            topTenExcluded.setChatId(chatId);
             topTenExcluded.setWord(word);
 
             try {
