@@ -24,19 +24,19 @@ public class Search {
     private final KeywordRepository keywordRepository;
     private final RssRepository rssRepository;
     private final ShowedNewsRepository showedNewsRepository;
-    private final ExcludedRepository excludedRepository;
+    private final ExcludingTermsRepository excludingTermsRepository;
     private final NewsListRepository newsListRepository;
     public static ArrayList<Headline> headlinesTopTen;
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
                   RssRepository rssRepository, ShowedNewsRepository showedNewsRepository,
-                  ExcludedRepository excludedRepository, NewsListRepository newsListRepository) {
+                  ExcludingTermsRepository excludingTermsRepository, NewsListRepository newsListRepository) {
         this.settingsRepository = settingsRepository;
         this.keywordRepository = keywordRepository;
         this.rssRepository = rssRepository;
         this.showedNewsRepository = showedNewsRepository;
-        this.excludedRepository = excludedRepository;
+        this.excludingTermsRepository = excludingTermsRepository;
         this.newsListRepository = newsListRepository;
     }
 
@@ -147,7 +147,7 @@ public class Search {
         totalNewsCounter = headlinesToShow.size();
         // remove titles contains excluding terms
         if (isAllSearch && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
-            List<String> allExcludedByChatId = excludedRepository.findExcludedByChatId(chatId);
+            List<String> allExcludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
 
             for (String word : allExcludedByChatId) {
                 headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(word.toLowerCase()));

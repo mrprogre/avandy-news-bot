@@ -1,6 +1,6 @@
 package com.avandy.bot.repository;
 
-import com.avandy.bot.model.TopTenExcluded;
+import com.avandy.bot.model.TopExcluded;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Set;
 
-public interface TopTenRepository extends JpaRepository<TopTenExcluded, Long> {
+public interface TopTenRepository extends JpaRepository<TopExcluded, Long> {
 
     @Query(value = "SELECT lower(word) as word FROM top_excluded " +
             "WHERE chat_id = :chatId OR chat_id IS NULL " +

@@ -9,8 +9,8 @@ import lombok.Data;
 import java.util.Objects;
 
 @Data
-@Entity(name = "excluded")
-public class Excluded {
+@Entity(name = "excluding_terms")
+public class ExcludingTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +21,7 @@ public class Excluded {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Excluded excluded = (Excluded) o;
+        ExcludingTerm excluded = (ExcludingTerm) o;
         return Objects.equals(word, excluded.word) && Objects.equals(chatId, excluded.chatId);
     }
 

@@ -37,7 +37,7 @@ public class TelegramBotTests {
     @Mock
     private KeywordRepository keywordRepository;
     @Mock
-    private ExcludedRepository excludedRepository;
+    private ExcludingTermsRepository excludingTermsRepository;
 
     @Spy
     @InjectMocks
@@ -110,7 +110,7 @@ public class TelegramBotTests {
         assertThat(actual.get(0).getText())
                 .isNotEmpty();
 
-        verify(excludedRepository, times(1))
+        verify(excludingTermsRepository, times(1))
                 .findExcludedByChatId(anyLong());
     }
 
@@ -122,7 +122,7 @@ public class TelegramBotTests {
 //
 //        List<SendMessage> actual = argumentCaptor.getAllValues();
 //
-//        verify(excludedRepository, times(3))
+//        verify(excludingTermsRepository, times(3))
 //                .save(any());
 //        assertThat(actual.get(0).getText())
 //                .isNotEmpty();

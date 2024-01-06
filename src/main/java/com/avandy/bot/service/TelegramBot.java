@@ -48,7 +48,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private UserRepository userRepository;
     private KeywordRepository keywordRepository;
     private SettingsRepository settingsRepository;
-    private ExcludedRepository excludedRepository;
+    private ExcludingTermsRepository excludingTermsRepository;
     private RssRepository rssRepository;
     private TopTenRepository topTenRepository;
     private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
@@ -87,8 +87,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     @Autowired
-    public void setExcludedRepository(ExcludedRepository excludedRepository) {
-        this.excludedRepository = excludedRepository;
+    public void setExcludedRepository(ExcludingTermsRepository excludingTermsRepository) {
+        this.excludingTermsRepository = excludingTermsRepository;
     }
 
     @Autowired
@@ -546,7 +546,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 keywordSearch2Text);
 
         String fullText = String.format("2" + template, searchWithFilterText,
-                settingsRepository.getPeriodAllByChatId(chatId), excludedRepository.getExcludedCountByChatId(chatId),
+                settingsRepository.getPeriodAllByChatId(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
                 searchWithFilter2Text);
 
         String topText = String.format("3" + template, top20Text2,
@@ -620,11 +620,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void getExcludedList(long chatId) {
-        List<String> excludedByChatId = excludedRepository.findExcludedByChatId(chatId);
+        List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
         int excludedCount = excludedByChatId.size();
 
         if (excludedByChatId.size() >= 400) {
-            excludedByChatId = excludedRepository.findExcludedByChatIdLimit(chatId, EXCLUDED_LIMIT);
+            excludedByChatId = excludingTermsRepository.findExcludedByChatIdLimit(chatId, EXCLUDED_LIMIT);
         }
 
         if (!excludedByChatId.isEmpty()) {
@@ -712,14 +712,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addTopTen(long chatId, String word) {
         Set<String> topTenWordsByChatId = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
 
-        TopTenExcluded topTenExcluded;
+        TopExcluded topExcluded;
         if (!topTenWordsByChatId.contains(word)) {
-            topTenExcluded = new TopTenExcluded();
-            topTenExcluded.setChatId(chatId);
-            topTenExcluded.setWord(word);
+            topExcluded = new TopExcluded();
+            topExcluded.setChatId(chatId);
+            topExcluded.setWord(word);
 
             try {
-                topTenRepository.save(topTenExcluded);
+                topTenRepository.save(topExcluded);
                 sendMessage(chatId, "❌ " + word);
             } catch (Exception e) {
                 if (e.getMessage().contains("ui_top_ten_excluded")) {
@@ -770,19 +770,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void addExclude(long chatId, String[] list) {
         int counter = 0;
-        List<String> excludedByChatId = excludedRepository.findExcludedByChatId(chatId);
+        List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
 
-        Excluded excluded;
+        ExcludingTerm excluded;
         for (String word : list) {
             word = word.trim().toLowerCase();
             if (!(word.length() <= 2)) {
                 if (!excludedByChatId.contains(word)) {
-                    excluded = new Excluded();
+                    excluded = new ExcludingTerm();
                     excluded.setChatId(chatId);
                     excluded.setWord(word);
 
                     try {
-                        excludedRepository.save(excluded);
+                        excludingTermsRepository.save(excluded);
                         counter++;
                     } catch (Exception e) {
                         if (e.getMessage().contains("ui_excluded")) {
@@ -810,13 +810,13 @@ public class TelegramBot extends TelegramLongPollingBot {
             exclude = exclude.trim().toLowerCase();
 
             if (exclude.equals("*")) {
-                excludedRepository.deleteAllExcludedByChatId(chatId);
+                excludingTermsRepository.deleteAllExcludedByChatId(chatId);
                 sendMessage(chatId, deleteAllWordsText);
                 break;
             }
 
-            if (excludedRepository.isWordExists(chatId, exclude) > 0) {
-                excludedRepository.deleteExcludedByChatId(chatId, exclude);
+            if (excludingTermsRepository.isWordExists(chatId, exclude) > 0) {
+                excludingTermsRepository.deleteExcludedByChatId(chatId, exclude);
                 sendMessage(chatId, "Удалено слово - " + exclude + " ❌");
             } else {
                 sendMessage(chatId, "Слово " + exclude + " отсутствует в списке");

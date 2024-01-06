@@ -12,7 +12,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @Entity(name = "top_excluded")
-public class TopTenExcluded {
+public class TopExcluded {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +23,7 @@ public class TopTenExcluded {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TopTenExcluded that = (TopTenExcluded) o;
+        TopExcluded that = (TopExcluded) o;
         return Objects.equals(chatId, that.chatId) && Objects.equals(word, that.word);
     }
 
