@@ -71,7 +71,7 @@ public class Text {
             delFromTopText = "Удалить из топа";
             top20ByPeriodText = "<b>Top 20 слов</b> за ";
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
-            startSearchBeforeText = "Сначала необходимо запустить поиск слов /top";
+            startSearchBeforeText = "Сначала нажми на /top";
             keywordsSearchText = "По словам";
             fullSearchText = "Полный поиск";
             addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
@@ -160,7 +160,7 @@ public class Text {
             updateTopText2 = "Show top";
             top20ByPeriodText = "<b>Top 20 words</b> in ";
             allowCommasAndNumbersText = "Only numbers or commas are allowed";
-            startSearchBeforeText = "First you need to run a word search /top";
+            startSearchBeforeText = "First press /top";
             keywordsSearchText = "Keywords";
             fullSearchText = "Full search";
             addInListText = "Input words to add (separated by comma) and send the message";
