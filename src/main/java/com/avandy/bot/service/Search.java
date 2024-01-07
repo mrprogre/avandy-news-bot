@@ -6,7 +6,6 @@ import com.avandy.bot.utils.Common;
 import com.avandy.bot.utils.Parser;
 import com.avandy.bot.utils.ParserJsoup;
 import com.rometools.rome.feed.synd.SyndEntry;
-import com.rometools.rome.io.FeedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -183,7 +182,7 @@ public class Search {
         int countJsoup = downloadNewsByJsoup();
 
         long searchTime = System.currentTimeMillis() - start;
-        if (countRome > 0 && countJsoup > 0) {
+        if (countRome > 0 || countJsoup > 0) {
             log.info("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
                     countRome, countJsoup, searchTime);
         }
@@ -196,7 +195,15 @@ public class Search {
 
         try {
             for (RssList source : sources) {
-                for (SyndEntry message : new Parser().parseFeed(source.getLink()).getEntries()) {
+                List<SyndEntry> entries;
+                try {
+                    entries = new Parser().parseFeed(source.getLink()).getEntries();
+                } catch (Exception e) {
+                    log.warn("Error: download news by Rome, source: {}, {}", source.getSource(), e.getMessage());
+                    continue;
+                }
+
+                for (SyndEntry message : entries) {
                     String sourceRss = source.getSource();
                     String title = message.getTitle().trim();
                     String titleHash = Common.getHash(title);
@@ -215,13 +222,8 @@ public class Search {
                 }
             }
             newsListRepository.saveAll(newsList);
-        } catch (FeedException f) {
-            if (f.getMessage().contains("Invalid XML")) {
-                log.info("downloadNewsByRome FeedException: " + f.getMessage());
-            } else {
-                log.warn("downloadNewsByRome FeedException: " + f.getMessage());
-            }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.error("downloadNewsByRome Exception: " + e.getMessage());
         }
         return newsList.size();
