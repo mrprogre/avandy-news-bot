@@ -31,7 +31,7 @@ public class Text {
             infoText = "Информация о приложении";
             settingText = "Настройки";
             listKeywordsText = "Ключевые слова";
-            findSelectText = "Виды поиска";
+            findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
             top20Text2 = "<b>Top 20</b> слов за ";
             listExcludedText = "Слова-исключения";
