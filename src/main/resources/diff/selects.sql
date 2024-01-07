@@ -34,6 +34,6 @@ select (select count(*) from excluding_terms) as excluded,
 select source, title, pub_date, extract(minute from (pub_date - add_date)) as "pub-add"
 from news_list n
          join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 333808055
+              on n.title_hash = s.title_hash and s.chat_id = 388921319
 where pub_date > '2024-01-04'::date
 order by n.id desc;

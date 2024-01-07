@@ -21,7 +21,11 @@ public class Parser {
             InputStream inputStream = urlConnection.getInputStream();
             reader = new XmlReader(inputStream);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            if (e.getMessage().contains("Connect timed out")) {
+                log.info("Connect timed out, url: {}", url);
+            } else {
+                log.error(e.getMessage());
+            }
         }
         return new SyndFeedInput().build(reader);
     }
