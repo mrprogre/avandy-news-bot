@@ -183,7 +183,7 @@ public class Search {
 
         long searchTime = System.currentTimeMillis() - start;
         if (countRome > 0 || countJsoup > 0) {
-            log.info("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
+            log.warn("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
                     countRome, countJsoup, searchTime);
         }
     }
@@ -237,7 +237,15 @@ public class Search {
         try {
 
             for (RssList source : sources) {
-                for (Message message : new ParserJsoup().parse(source.getLink())) {
+                List<Message> entries;
+                try {
+                    entries = new ParserJsoup().parse(source.getLink());
+                } catch (Exception e) {
+                    log.warn("Error: download news by Jsoup, source: {}, {}", source.getSource(), e.getMessage());
+                    continue;
+                }
+
+                for (Message message : entries) {
                     String sourceRss = source.getSource();
                     String title = message.getTitle().trim();
                     String titleHash = Common.getHash(title);
