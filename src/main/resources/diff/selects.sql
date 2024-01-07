@@ -21,6 +21,14 @@ where u.chat_id not in (1254981379 /* я */ /*,1020961767 /* Лена */, 645556
 group by u.chat_id, u.first_name, s.period, s.period_all, s.scheduler, s.start, s.excluded, s.lang, s.period_top,
          u.is_active;
 
+-- Новости, которые получил пользователь
+select source, title, pub_date, extract(minute from (pub_date - add_date)) as "pub-add"
+from news_list n
+         join showed_news s
+              on n.title_hash = s.title_hash and s.chat_id = 1693786834
+where pub_date > '2024-01-05'::date
+order by n.id desc;
+
 -- Rows count
 -- 05.01.2024: 2747, 25, 25470, 32, 5291, 205, 9
 select (select count(*) from excluding_terms) as excluded,
@@ -30,14 +38,6 @@ select (select count(*) from excluding_terms) as excluded,
        (select count(*) from showed_news)     as showed_news,
        (select count(*) from top_excluded)    as top_ten_excluded,
        (select count(*) from users)           as users;
-
--- Новости, которые получил пользователь
-select source, title, pub_date, extract(minute from (pub_date - add_date)) as "pub-add"
-from news_list n
-         join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 1693786834
-where pub_date > '2024-01-05'::date
-order by n.id desc;
 
 -- Новости по языкам
 SELECT n.id, n.source, n.title, n.title_hash, n.link, n.pub_date, n.add_date

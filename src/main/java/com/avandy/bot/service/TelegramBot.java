@@ -109,8 +109,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
 
-            String firstName = update.getMessage().getChat().getFirstName();
-            log.warn(firstName + ": [" + messageText + "]");
+            if (config.getBotOwner() != chatId) {
+                String firstName = update.getMessage().getChat().getFirstName();
+                log.warn(firstName + ": [" + messageText + "]");
+            }
 
             /* SEND TO ALL FROM BOT OWNER */
             if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
@@ -1259,8 +1261,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             String period = settingsRepository.getPeriodTopByChatId(chatId);
 
-            showTopTenButtons(chatId, String.format("%s<b>%s</b> "+ ICON_TOP_20_FIRE + " \n%s", top20ByPeriodText,
-                            period, stringBuilderTop));
+            showTopTenButtons(chatId, String.format("%s<b>%s</b> " + ICON_TOP_20_FIRE + " \n%s", top20ByPeriodText,
+                    period, stringBuilderTop));
         } else {
             showTopTenButton(chatId, updateTopText);
         }
