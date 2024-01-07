@@ -259,20 +259,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                     nextButton(chatId, actionCanceledText);
                 }
 
-                case "RU_BUTTON" -> {
-                    setLang(chatId, "ru");
-                    setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-                    getReplyKeywordWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
-                    showYesNoOnStart(chatId, letsStartText);
-                    createMenuCommands();
-                }
-                case "EN_BUTTON" -> {
-                    setLang(chatId, "en");
-                    setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-                    getReplyKeywordWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
-                    showYesNoOnStart(chatId, letsStartText);
-                    createMenuCommands();
-                }
+                // Language
+                case "DE_BUTTON" -> setLang(chatId, "de");
+                case "ES_BUTTON" -> setLang(chatId, "es");
+                case "FR_BUTTON" -> setLang(chatId, "fr");
+                case "RU_BUTTON" -> setLang(chatId, "ru");
+                case "EN_BUTTON" -> setLang(chatId, "en");
 
                 // Обновление периода поиска по ключевым словам
                 case "BUTTON_1" -> updatePeriod(1, chatId);
@@ -528,7 +520,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void startActions(Update update, long chatId) {
         addUser(update.getMessage());
-        showLangButtons(chatId, "Choose your language");
+        showLangButtons(chatId, "Select news language");
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
     }
 
@@ -994,8 +986,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     public void showLangButtons(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("RU_BUTTON", "rus");
-        buttons.put("EN_BUTTON", "eng");
+        buttons.put("DE_BUTTON", "de");
+        buttons.put("ES_BUTTON", "es");
+        buttons.put("FR_BUTTON", "fr");
+        buttons.put("RU_BUTTON", "ru");
+        buttons.put("EN_BUTTON", "en");
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
@@ -1325,6 +1320,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void setLang(long chatId, String lang) {
         setInterfaceLanguage(lang);
         settingsRepository.updateLanguage(lang, chatId);
+        setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+        getReplyKeywordWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
+        showYesNoOnStart(chatId, letsStartText);
+        createMenuCommands();
     }
 
     @Async

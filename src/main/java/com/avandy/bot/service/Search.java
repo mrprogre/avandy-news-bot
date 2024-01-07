@@ -17,6 +17,7 @@ import java.util.*;
 @Service
 public class Search {
     private int periodMinutes = 1440;
+    private String userLanguage;
     public static int totalNewsCounter;
     public static int filteredNewsCounter;
     private final SettingsRepository settingsRepository;
@@ -45,7 +46,9 @@ public class Search {
         boolean isTopSearch = searchType.equals("top");
         boolean isSearchByOneWordFromTop = !isAllSearch && !isKeywordSearch && !isTopSearch;
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
+        settings.ifPresentOrElse(value -> userLanguage = value.getLang(), () -> userLanguage = "en");
         Set<Headline> headlinesToShow = new TreeSet<>();
+
 
         if (isTopSearch) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
@@ -60,7 +63,8 @@ public class Search {
             headlinesTopTen = new ArrayList<>();
 
             // find news by period
-            TreeSet<NewsList> newsListByPeriod = newsListRepository.getNewsListByPeriod(periodMinutes + " minutes");
+            TreeSet<NewsList> newsListByPeriod =
+                    newsListRepository.getNewsListByPeriod(periodMinutes + " minutes", userLanguage);
             for (NewsList news : newsListByPeriod) {
                 String rss = news.getSource();
                 String title = news.getTitle().trim();
@@ -100,7 +104,7 @@ public class Search {
 
             Set<NewsList> newsList;
             for (String keyword : keywords) {
-                newsList = newsListRepository.getNewsWithLike(period, keyword);
+                newsList = newsListRepository.getNewsWithLike(period, keyword, userLanguage);
 
                 for (NewsList news : newsList) {
                     String rss = news.getSource();
@@ -127,9 +131,9 @@ public class Search {
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
             if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
-                newsList = newsListRepository.getNewsWithLike(period, type);
+                newsList = newsListRepository.getNewsWithLike(period, type, userLanguage);
             } else {
-                newsList = newsListRepository.getNewsWithRegexp(period, type);
+                newsList = newsListRepository.getNewsWithRegexp(period, type, userLanguage);
             }
 
             for (NewsList news : newsList) {
@@ -191,7 +195,7 @@ public class Search {
     public int downloadNewsByRome() {
         Set<NewsList> newsList = new LinkedHashSet<>();
         LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
-        Iterable<RssList> sources = rssRepository.findAllActiveRss();
+        List<RssList> sources = rssRepository.findAllActiveRss();
 
         try {
             for (RssList source : sources) {

@@ -42,6 +42,7 @@ create table if not exists rss_list
     add_date    timestamp  default current_timestamp::timestamp,
     country     varchar(128),
     parser_type varchar(8) default 'rss'::character varying,
+    lang        varchar(2) default 'ru'::character varying,
     constraint ui_rss_list_chat_id_link unique (chat_id, link)
 );
 comment on table rss_list is 'Список новостных источников';

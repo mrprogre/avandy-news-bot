@@ -25,4 +25,6 @@ public class RssList {
     private String country;
     @Size(max = 8)
     private String parserType;
+    @Size(max = 3)
+    private String lang;
 }
