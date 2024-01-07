@@ -32,14 +32,14 @@ public class Text {
             settingText = "Настройки";
             listKeywordsText = "Ключевые слова";
             findSelectText = "Виды поиска";
-            top20Text = "Часто употребляемые слова за период";
+            top20Text = "Часто употребляемые слова";
             top20Text2 = "<b>Top 20</b> слов за ";
             listExcludedText = "Слова-исключения";
             listRssText = "Источники RSS";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
             delText = "Удалить";
-            excludeWordText = "Исключить слова";
+            excludeWordText = "Исключить";
             searchText = "Поиск";
             excludedText = "Исключённое";
             updateTopText = "Обновить топ";
@@ -72,7 +72,7 @@ public class Text {
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
             startSearchBeforeText = "Сначала нажми на /top";
             keywordsSearchText = "По словам";
-            fullSearchText = "Полный поиск";
+            fullSearchText = "Полный";
             addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
             delFromListText = "Укажите номера слов для удаления (разделять запятой)";
             removeAllText = "удалить всё";

@@ -827,7 +827,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void findAllNews(long chatId) {
-        getReplyKeywordWithSearch(chatId, fullSearchStartText);
+        //getReplyKeywordWithSearch(chatId, fullSearchStartText);
+        sendMessage(chatId, fullSearchStartText);
+
         Set<Headline> headlines = search.start(chatId, "all");
 
         int counterParts = 1;
@@ -874,7 +876,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!isAutoSearch.get()) {
-            getReplyKeywordWithSearch(chatId, searchByKeywordsStartText);
+            //getReplyKeywordWithSearch(chatId, searchByKeywordsStartText);
+            sendMessage(chatId, searchByKeywordsStartText);
         }
 
         // Search
@@ -943,7 +946,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             if (counterParts != 0) {
-                getReplyKeywordWithSearch(chatId, String.valueOf(joiner));
+                //getReplyKeywordWithSearch(chatId, String.valueOf(joiner));
+                sendMessage(chatId, String.valueOf(joiner));
             }
 
             topSearchButtons(chatId);
