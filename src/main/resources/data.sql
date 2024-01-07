@@ -1,4 +1,6 @@
 DELETE FROM rss_list;
+INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'Mexico|The Guardian', 'https://www.theguardian.com/world/mexico/rss', 1, 100, '2024-01-07 15:24:04.111005', 'Mexico', 'rss', 'es');
+INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'El Financiero', 'https://www.elfinanciero.com.mx/arc/outboundfeeds/rss/?outputType=xml', 1, 100, '2024-01-07 15:24:04.111005', 'Mexico', 'rss', 'es');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'Zeit', 'https://newsfeed.zeit.de/index', 1, 2, '2024-01-07 13:26:22.875941', 'Germany', 'rss', 'de');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'Spiegel', 'https://www.spiegel.de/international/index.rss', 1, 1, '2024-01-07 13:26:22.875597', 'Germany', 'rss', 'de');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'Kieler Nachrichten', 'https://www.kn-online.de/arc/outboundfeeds/rss/', 1, 3, '2024-01-07 13:26:22.875229', 'Germany', 'rss', 'de');
