@@ -115,7 +115,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             /* SEND TO ALL FROM BOT OWNER */
             if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
                 String textToSend = messageText.substring(messageText.indexOf(" "));
-                Iterable<User> users = userRepository.findAll();
+                List<User> users = userRepository.findAllByIsActive();
                 for (User user : users) {
                     sendMessage(user.getChatId(), textToSend);
                 }
