@@ -9,7 +9,7 @@ https://t.me/AvandyNewsBot
 
 **/start**      - you can start again after deleting user information
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/07dc5587-6802-4c70-ae5a-4bedfcd51b0e)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/2d7bd1fb-de0b-41bc-9ada-8bfa2991eab1)
 
 **/search**     - selecting a search type
 
