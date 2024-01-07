@@ -199,7 +199,11 @@ public class Search {
                 try {
                     entries = new Parser().parseFeed(source.getLink()).getEntries();
                 } catch (Exception e) {
-                    log.warn("Error: download news by Rome, source: {}, {}", source.getSource(), e.getMessage());
+                    if (e.getMessage().contains("Invalid XML")) {
+                        log.info("Invalid XML: " + source.getSource());
+                    } else {
+                        log.warn("Error: download news by Rome, source: {}, {}", source.getSource(), e.getMessage());
+                    }
                     continue;
                 }
 
@@ -241,7 +245,11 @@ public class Search {
                 try {
                     entries = new ParserJsoup().parse(source.getLink());
                 } catch (Exception e) {
-                    log.warn("Error: download news by Jsoup, source: {}, {}", source.getSource(), e.getMessage());
+                    if (e.getMessage().contains("Invalid XML")) {
+                        log.info("Invalid XML: " + source.getSource());
+                    } else {
+                        log.error("Error: download news by Jsoup, source: {}, {}", source.getSource(), e.getMessage());
+                    }
                     continue;
                 }
 

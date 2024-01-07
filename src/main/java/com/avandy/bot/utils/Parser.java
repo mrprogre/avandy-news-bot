@@ -22,7 +22,9 @@ public class Parser {
             reader = new XmlReader(inputStream);
         } catch (Exception e) {
             if (e.getMessage().contains("Connect timed out")) {
-                log.info("Connect timed out, url: {}", url);
+                log.warn("Connect timed out, url: {}", url);
+            } else if (e.getMessage().contains("Connection reset")) {
+                log.warn("Connection reset, url: {}", url);
             } else {
                 log.error(e.getMessage());
             }
