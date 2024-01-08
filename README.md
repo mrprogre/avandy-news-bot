@@ -13,25 +13,25 @@ https://t.me/AvandyNewsBot
 
 **/search**     - selecting a search type
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/5e637ae1-a19a-4139-8207-9c161031fdcd)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/34bfc436-1257-4438-879f-b1e7d30c8e46)
 
 **/top** (Show top)        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/e847af42-0e9d-420f-997b-bab0358c7e93)
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/c2aef9e4-f0ec-452e-bbee-66ac2e10d95f)
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/3e6b98d5-04ca-43a7-886f-4e6754c35cff)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/4854cb60-a8ff-4513-8035-be356837a8ea)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/71781f7a-2654-4384-b1c0-4d6ca6c19a9a)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/2ae35bd1-647a-43c9-9c98-8562886931c1)
 
-Jaro-Winkler **off**
+Word endings **off**
 
 ![1](https://github.com/mrprogre/avandy-news-bot/assets/45883640/219d43d5-23ff-45eb-8296-963fecd40928)
 
-Jaro-Winkler **on**
+Word endings **on**
 
 ![2](https://github.com/mrprogre/avandy-news-bot/assets/45883640/064f01fd-b336-45a1-965b-5a901c182347)
 
 **/settings**   - setting search intervals and enabling auto search
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/0764f7a1-e562-4294-af4f-b0748499935c)
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/59212174-2796-4164-8ef5-a907585be41c)
 
 **/keywords**   - list of keywords (adding, deleting)
 
@@ -43,8 +43,7 @@ Jaro-Winkler **on**
 
 **/info**       - information about the developer and the ability to send a message to the developer
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/9acda404-fb17-4cce-b5f5-1ca95b793a9d)
-
+![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/c58eb624-e678-42c0-ac58-1cc21ccfb658)
 
 **Database:** [schema.sql](https://github.com/mrprogre/avandy-news-bot/blob/master/src/main/resources/schema.sql)
 ![bot-local](https://github.com/mrprogre/avandy-news-bot/assets/45883640/7a4992e4-6cec-4ec8-9148-d7768e9a7efa)
