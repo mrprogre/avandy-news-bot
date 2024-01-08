@@ -50,3 +50,8 @@ select *
 from news_list
 where source = 'EL PAÍS'
   and pub_date > (current_timestamp - cast('2 hours' as interval));
+
+-- Количество новостей, сохранённых за последние 6 часов
+SELECT count(*)
+FROM news_list
+WHERE pub_date > (current_timestamp - cast('6 hours' as interval));

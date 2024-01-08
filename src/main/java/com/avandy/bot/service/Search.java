@@ -187,7 +187,7 @@ public class Search {
 
         long searchTime = System.currentTimeMillis() - start;
         if (countRome > 0 || countJsoup > 0) {
-            log.warn("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
+            log.info("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
                     countRome, countJsoup, searchTime);
         }
     }

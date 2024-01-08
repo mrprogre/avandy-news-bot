@@ -32,4 +32,8 @@ public interface NewsListRepository extends CrudRepository<NewsList, Long> {
             , nativeQuery = true)
     TreeSet<NewsList> getNewsWithLike(String period, String word, String lang);
 
+    /* Monitoring */
+    @Query(value = "SELECT count(*) FROM news_list WHERE pub_date > (current_timestamp - cast('6 hours' as interval))",
+            nativeQuery = true)
+    int getNewsListCountBy6Hours();
 }
