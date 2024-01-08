@@ -26,7 +26,7 @@ public class Parser {
             } else if (e.getMessage().contains("Connection reset")) {
                 log.info("Connection reset, url: {}", url);
             } else {
-                log.error(e.getMessage());
+                log.error("Error parseFeed, url: {}, error {}", url, e.getMessage());
             }
         }
         return new SyndFeedInput().build(reader);

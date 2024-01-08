@@ -42,6 +42,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final int TOP_TEN_LIST_LIMIT = 60;
     private static final int EXCLUDING_TERMS_LIST_LIMIT = 60;
     private static final int EXCLUDED_LIMIT = 100;
+    private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 600;
+    private static final int SLEEP_BETWEEN_SENDING = 25;
     private static final String TOP_TEXT = "Top 20";
     private final BotConfig config;
     private Search search;
@@ -827,32 +829,46 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void findAllNews(long chatId) {
-        //getReplyKeywordWithSearch(chatId, fullSearchStartText);
-        sendMessage(chatId, fullSearchStartText);
+        getReplyKeywordWithSearch(chatId, fullSearchStartText);
+        //sendMessage(chatId, fullSearchStartText);
 
         Set<Headline> headlines = search.start(chatId, "all");
 
         int counterParts = 1;
         int showAllCounter = 1;
         if (headlines.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
-            for (Headline headline : headlines) {
 
-                joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
-                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>");
+            if (headlines.size() > LIMIT_FOR_BREAKING_INTO_PARTS) {
+                // 10 message in 1
+                StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+                for (Headline headline : headlines) {
 
-                if (counterParts == 10) {
-                    sendMessage(chatId, String.valueOf(joiner));
-                    joiner = new StringJoiner("\n- - - - - -\n");
-                    counterParts = 0;
+                    joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                            headline.getTitle() + " " +
+                            "<a href=\"" + headline.getLink() + "\">link</a>");
+
+                    if (counterParts == 10) {
+                        sendMessage(chatId, String.valueOf(joiner));
+                        joiner = new StringJoiner("\n- - - - - -\n");
+                        counterParts = 0;
+                    }
+                    counterParts++;
                 }
-                counterParts++;
-            }
 
-            if (counterParts != 0) {
-                sendMessage(chatId, String.valueOf(joiner));
+
+                if (counterParts != 0) {
+                    sendMessage(chatId, String.valueOf(joiner));
+                }
+            } else {
+                for (Headline headline : headlines) {
+                    sleepBetweenSendMessage();
+
+                    sendMessage(chatId, showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                            headline.getTitle() + " " +
+                            "<a href=\"" + headline.getLink() + "\">link</a>");
+                }
             }
 
             nextButtonAfterAllSearch(chatId, foundNewsText + " <b>" + Search.totalNewsCounter + "</b> (" +
@@ -876,41 +892,29 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!isAutoSearch.get()) {
-            //getReplyKeywordWithSearch(chatId, searchByKeywordsStartText);
-            sendMessage(chatId, searchByKeywordsStartText);
+            getReplyKeywordWithSearch(chatId, searchByKeywordsStartText);
+            //sendMessage(chatId, searchByKeywordsStartText);
         }
 
         // Search
         Set<Headline> headlines = search.start(chatId, "keywords");
 
-        int counterParts = 1;
         int showCounter = 1;
         if (headlines.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+
             for (Headline headline : headlines) {
                 String text = "<b>" + headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>";
 
-                if (isAutoSearch.get()) {
-                    joiner.add(text);
-                } else {
-                    joiner.add(showCounter++ + ". " + text);
+                if (!isAutoSearch.get()) {
+                    text = showCounter++ + ". " + text;
                 }
 
-                if (counterParts == 10) {
-                    sendMessage(chatId, String.valueOf(joiner));
-                    joiner = new StringJoiner("\n- - - - - -\n");
-                    counterParts = 0;
-                }
-                counterParts++;
+                sleepBetweenSendMessage();
+                sendMessage(chatId, text);
             }
-
-            if (counterParts != 0) {
-                sendMessage(chatId, String.valueOf(joiner));
-            }
-
 
             if (!isAutoSearch.get()) {
                 nextButtonAfterKeywordsSearch(chatId,
@@ -927,32 +931,30 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void wordSearch(long chatId, String word) {
         Set<Headline> headlines = search.start(chatId, word);
 
-        int counterParts = 1;
         int showCounter = 1;
         if (headlines.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
             for (Headline headline : headlines) {
-                joiner.add(showCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                String text = showCounter++ + ". <b>" + headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
                         headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>");
+                        "<a href=\"" + headline.getLink() + "\">link</a>";
 
-                if (counterParts == 10) {
-                    sendMessage(chatId, String.valueOf(joiner));
-                    joiner = new StringJoiner("\n- - - - - -\n");
-                    counterParts = 0;
-                }
-                counterParts++;
-            }
+                sleepBetweenSendMessage();
+                sendMessage(chatId, text);
 
-            if (counterParts != 0) {
-                //getReplyKeywordWithSearch(chatId, String.valueOf(joiner));
-                sendMessage(chatId, String.valueOf(joiner));
             }
 
             topSearchButtons(chatId);
         } else {
             showTopTenButton(chatId, headlinesNotFound);
+        }
+    }
+
+    private static void sleepBetweenSendMessage() {
+        try {
+            Thread.sleep(SLEEP_BETWEEN_SENDING);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
         }
     }
 
