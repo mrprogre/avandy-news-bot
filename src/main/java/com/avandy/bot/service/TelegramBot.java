@@ -1165,9 +1165,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons2 = new LinkedHashMap<>();
         buttons1.put("SET_EXCLUDED", "1. " + exclusionText);
         buttons1.put("SET_SCHEDULER", "2. " + autoSearchText);
+        buttons2.put("SET_PERIOD", "3. " + intervalText);
 
         if (isOn) {
-            buttons2.put("SCHEDULER_START", "3. " + startSettingsText);
+            buttons2.put("SCHEDULER_START", "4. " + startSettingsText);
             buttons2.put("START_SEARCH", "» » »");
         } else {
             buttons2.put("START_SEARCH", "» » »");
