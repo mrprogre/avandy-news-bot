@@ -123,7 +123,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 for (User user : users) {
                     sendMessage(user.getChatId(), textToSend);
                 }
-            } else if(messageText.startsWith("@") && config.getBotOwner() == chatId) {
+            } else if (messageText.startsWith("@") && config.getBotOwner() == chatId) {
                 long chatToSend = Long.parseLong(messageText.substring(1, messageText.indexOf(" ")));
                 String textToSend = messageText.substring(messageText.indexOf(" "));
                 sendMessage(chatToSend, textToSend);
@@ -581,6 +581,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         String lang = settingsRepository.getLangByChatId(chatId);
 
         sets.ifPresentOrElse(x -> {
+                    x.setScheduler(setOnOffRus(x.getScheduler(), chatId));
+                    x.setExcluded(setOnOffRus(x.getExcluded(), chatId));
+
                     String text = getSettingsText(x, lang);
                     getSettingsButtons(chatId, text);
                 },
@@ -983,8 +986,21 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("JARO_WINKLER_OFF", "Off");
         buttons.put("JARO_WINKLER_ON", "On");
-        sendMessage(chatId, jaroWinklerSwitcherText + "<b>" + settingsRepository.getJaroWinklerByChatId(chatId) +
+
+        String isActiveJw = settingsRepository.getJaroWinklerByChatId(chatId);
+        isActiveJw = setOnOffRus(isActiveJw, chatId);
+
+        sendMessage(chatId, jaroWinklerSwitcherText + "<b>" + isActiveJw +
                 "</b>", InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
+    // Преобразование on/off в русские слова
+    private String setOnOffRus(String value, long chatId) {
+        String lang = settingsRepository.getLangByChatId(chatId);
+        if (lang.equals("ru")) {
+            value = value.equals("on") ? "вкл [on]" : "выкл [off]";
+        }
+        return value;
     }
 
     public void showYesNoOnStart(long chatId, String text) {

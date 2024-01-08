@@ -107,10 +107,10 @@ public class Text {
             chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
             removedFromTopText = "удалено из Топа";
             jaroWinklerSwitcherText = """
-                    Проверка схожести слов методом <b>Джаро-Винклера</b>. Когда проверка включена - однокоренные слова с разными окончаниями объединяются в одно общее слово,чтобы не забивать Топ одним и тем же.
-                    Пример: если в Топе есть строки со словами: <b>белгородская [10], белгороду [7], белгороде [4]</b>, то при включённом J-W будет одна строка  <b>белгород [21]</b> c общей суммой упоминаний вышеуказанных слов.
+                    Чтобы объединить одинаковые слова для исключения повторений можно включить удаление окончаний.
+                    Пример: в Топ 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
                     Текущий статус:\s""";
-            jaroWinklerText = "Jaro-Winkler";
+            jaroWinklerText = "Окончания";
         } else {
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
             searchNewsHeaderText = "Search news";
@@ -194,11 +194,11 @@ public class Text {
             chooseWordDelFromTop = "Click to delete";
             chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";
             removedFromTopText = "words removed";
-            jaroWinklerText = "Jaro-Winkler";
-            jaroWinklerSwitcherText = "<b>on/off</b> check for string similarity using the <b>Jaro-Winkler</b> method " +
-                    "(default similarity level = <b>85%</b>, therefore the words: \"played, player\" will be combined into " +
-                    "the word \"play\", because their similarity to each other is 88%).\n" +
-                    "Current status: ";
+            jaroWinklerText = "Word endings";
+            jaroWinklerSwitcherText = """
+                    To combine identical words to eliminate repetitions, you can enable removal of word endings
+                    For example: "played, player" will be combined into one word "play".
+                    Current status:\s""";
         }
     }
 
