@@ -10,11 +10,11 @@ public class Text {
             deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
             updateTopText, updateTopText2, undefinedCommandText, changesSavedText, jaroWinklerSwitcherText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
-            wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText,
+            wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText, initSearchTemplateText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
             excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText,
             startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
-            addInListText, delFromListText, removeAllText, sendMessageForDevText,
+            addInListText, delFromListText, removeAllText, sendMessageForDevText, searchNewsHeaderText,
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
@@ -23,6 +23,8 @@ public class Text {
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
+            initSearchTemplateText = ". %s%s\n[Список: <b>%d</b> %s]";
+            searchNewsHeaderText = "Поиск новостей";
             greetingText = EmojiParser.parseToUnicode("Здравствуй, %s! :blush: \n" +
                     "Я могу найти для тебя важную информацию и отсеять много лишней!");
             letsStartText = "Продолжим?";
@@ -81,8 +83,8 @@ public class Text {
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
             searchWithFilterText = "<b>Полный поиск</b> за ";
-            searchWithFilter2Text = "исключений";
-            keywordSearchText = "Поиск по <b>ключевым словам</b> за ";
+            searchWithFilter2Text = "слов-исключений";
+            keywordSearchText = "По <b>ключевым словам</b> за ";
             keywordSearch2Text = "ключевых слов";
             cancelButtonText = "Отменить";
             foundNewsText = "Найдено";
@@ -103,13 +105,15 @@ public class Text {
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
-            removedFromTopText = "удалено слов";
-            jaroWinklerSwitcherText = "<b>вкл/выкл</b> проверку схожести строк методом <b>Джаро-Винклера</b> " +
-                    "(минимальный уровень схожести строк по умолчанию = <b>85%</b>, т.е. слова: \"атака, атаке, атаку\" " +
-                    "будут объединены в слово \"атак\", т.к. их сходство между собой равно 86%).\n" +
-                    "Текущий статус: ";
+            removedFromTopText = "удалено из Топа";
+            jaroWinklerSwitcherText = """
+                    Проверка схожести слов методом <b>Джаро-Винклера</b>. Когда проверка включена - однокоренные слова с разными окончаниями объединяются в одно общее слово,чтобы не забивать Топ одним и тем же.
+                    Пример: если в Топе есть строки со словами: <b>белгородская [10], белгороду [7], белгороде [4]</b>, то при включённом J-W будет одна строка  <b>белгород [21]</b> c общей суммой упоминаний вышеуказанных слов.
+                    Текущий статус:\s""";
             jaroWinklerText = "Jaro-Winkler";
         } else {
+            initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
+            searchNewsHeaderText = "Search news";
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
             letsStartText = "Continue?";

@@ -42,7 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final int TOP_TEN_LIST_LIMIT = 60;
     private static final int EXCLUDING_TERMS_LIST_LIMIT = 60;
     private static final int EXCLUDED_LIMIT = 100;
-    private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 600;
+    private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 200;
     private static final int SLEEP_BETWEEN_SENDING = 25;
     private static final String TOP_TEXT = "Top 20";
     private final BotConfig config;
@@ -529,21 +529,19 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void initSearch(long chatId) {
-        String template = ". %s%s\n[List: <b>%d</b> %s]";
-
-        String keywordsText = String.format("1" + template, keywordSearchText,
+        String keywordsText = String.format("1" + initSearchTemplateText, keywordSearchText,
                 settingsRepository.getPeriodByChatId(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
                 keywordSearch2Text);
 
-        String fullText = String.format("2" + template, searchWithFilterText,
+        String fullText = String.format("2" + initSearchTemplateText, searchWithFilterText,
                 settingsRepository.getPeriodAllByChatId(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
                 searchWithFilter2Text);
 
-        String topText = String.format("3" + template, top20Text2,
+        String topText = String.format("3" + initSearchTemplateText, top20Text2,
                 settingsRepository.getPeriodTopByChatId(chatId), topTenRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
 
-        String text = "<b>Search news</b> " + ICON_SEARCH +
+        String text = "<b>" + searchNewsHeaderText + "</b> " + ICON_SEARCH +
                 "\n- - - - - -\n" +
                 keywordsText +
                 "\n- - - - - -\n" +
@@ -824,7 +822,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setStart(LocalTime.of(10, 0));
         settings.setExcluded("on");
         settings.setLang("ru");
-        settings.setJaroWinkler("off");
+        settings.setJaroWinkler("on");
         settingsRepository.save(settings);
     }
 

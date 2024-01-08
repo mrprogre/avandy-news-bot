@@ -20,7 +20,7 @@ create table if not exists settings
     excluded     varchar(3) default 'on'::character varying,
     lang         varchar(2) default 'ru'::character varying,
     period_top   varchar(8) default '12h'::character varying,
-    jaro_winkler varchar(3) default 'off'::character varying,
+    jaro_winkler varchar(3) default 'on'::character varying,
     constraint fk_settings_chat_id foreign key (chat_id) references users (chat_id) on delete cascade
 );
 comment on column settings.period is 'Глубина поиска по ключевым словам';
