@@ -1140,14 +1140,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void showExcludedButtons(long chatId, String text) {
-        Map<String, String> buttons1 = new LinkedHashMap<>();
-        Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons = new LinkedHashMap<>();
 
-        buttons1.put("DELETE_EXCLUDED", delText);
-        buttons1.put("EXCLUDE", addText);
-        buttons2.put("SET_PERIOD_ALL", intervalText);
-        buttons2.put("FIND_ALL", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+        buttons.put("DELETE_EXCLUDED", delText);
+        buttons.put("EXCLUDE", addText);
+        buttons.put("FIND_ALL", searchText);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void showExcludeButton(long chatId) {
@@ -1157,14 +1155,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void showKeywordButtons(long chatId, String text) {
-        Map<String, String> buttons1 = new LinkedHashMap<>();
-        Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons = new LinkedHashMap<>();
 
-        buttons1.put("DELETE", delText);
-        buttons1.put("ADD", addText);
-        buttons2.put("SET_PERIOD", intervalText);
-        buttons2.put("FIND_BY_KEYWORDS", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+        buttons.put("DELETE", delText);
+        buttons.put("ADD", addText);
+        buttons.put("FIND_BY_KEYWORDS", searchText);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void showAddKeywordsButton(long chatId, String text) {
