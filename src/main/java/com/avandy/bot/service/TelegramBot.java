@@ -44,7 +44,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final int EXCLUDED_LIMIT = 100;
     private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 200;
     private static final int SLEEP_BETWEEN_SENDING = 25;
-    private static final String TOP_TEXT = "Top 20";
     private final BotConfig config;
     private Search search;
     private UserRepository userRepository;
@@ -164,7 +163,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (messageText.startsWith(keywordsSearchText)) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
-            } else if (messageText.startsWith(TOP_TEXT)) {
+            } else if (messageText.startsWith(updateTopText2)) {
                 new Thread(() -> showTop(chatId)).start();
 
             } else if (messageText.startsWith(fullSearchText)) {
@@ -1179,18 +1178,20 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
-        buttons1.put("SET_EXCLUDED", "1. " + exclusionText);
-        buttons1.put("SET_SCHEDULER", "2. " + autoSearchText);
-        buttons2.put("SET_PERIOD", "3. " + intervalText);
+        Map<String, String> buttons3 = new LinkedHashMap<>();
+        buttons1.put("SET_SCHEDULER", "1. " + autoSearchText);
+        buttons1.put("SET_PERIOD", "2. " + intervalText);
+        buttons2.put("SET_EXCLUDED", "3. " + exclusionText);
+        buttons2.put("SET_PERIOD_ALL", "4. " + intervalText);
 
         if (isOn) {
-            buttons2.put("SCHEDULER_START", "4. " + startSettingsText);
-            buttons2.put("START_SEARCH", "» » »");
+            buttons3.put("SCHEDULER_START", "5. " + startSettingsText);
+            buttons3.put("START_SEARCH", "» » »");
         } else {
-            buttons2.put("START_SEARCH", "» » »");
+            buttons3.put("START_SEARCH", "» » »");
         }
 
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
     }
 
     private void nextButton(long chatId, String text) {
@@ -1246,14 +1247,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Список удалённых слов из топа
     private void showTopTenListButtons(long chatId, String text) {
-        Map<String, String> buttons1 = new LinkedHashMap<>();
-        Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons = new LinkedHashMap<>();
 
-        buttons1.put("DELETE_TOP", delText);
-        buttons1.put("DEL_FROM_TOP", addText);
-        buttons2.put("SET_PERIOD_TOP", intervalText);
-        buttons2.put("GET_TOP", TOP_TEXT);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+        buttons.put("DELETE_TOP", delText);
+        buttons.put("DEL_FROM_TOP", addText);
+        buttons.put("GET_TOP", updateTopText2);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     private void getTopTenWordsList(long chatId) {
@@ -1386,7 +1385,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
         row.add(keywordsSearchText);
         row.add(fullSearchText);
-        row.add(TOP_TEXT);
+        row.add(updateTopText2);
 
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
@@ -1404,7 +1403,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         KeyboardRow row = new KeyboardRow();
         row.add(keywordsSearchText);
         row.add(fullSearchText);
-        row.add(TOP_TEXT);
+        row.add(updateTopText2);
 
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);

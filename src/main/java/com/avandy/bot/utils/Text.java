@@ -45,7 +45,7 @@ public class Text {
             searchText = "Поиск";
             excludedText = "Исключённое";
             updateTopText = "Обновить топ";
-            updateTopText2 = "Tоп 20";
+            updateTopText2 = "Top 20";
             undefinedCommandText = "Данная команда не существует или Вы не нажали кнопку Добавить перед вводом текста";
             changesSavedText = "Сохранено ✔️";
             headlinesNotFound = "» новости не найдены " + TelegramBot.ICON_END_SEARCH_NOT_FOUND;
@@ -66,7 +66,7 @@ public class Text {
             buyButtonText = "Пока, друг! " + TelegramBot.ICON_GOOD_BYE;
             intervalText = "Интервал";
             autoSearchText = "Автопоиск";
-            exclusionText = "Исключения";
+            exclusionText = "Исключение";
             startSettingsText = "Старт";
             excludedListText = "Удалённое";
             delFromTopText = "Удалить из топа";
@@ -108,7 +108,7 @@ public class Text {
             removedFromTopText = "удалено из Топа";
             jaroWinklerSwitcherText = """
                     Чтобы объединить одинаковые слова для исключения повторений можно включить удаление окончаний.
-                    Пример: в Топ 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
+                    Пример: в Top 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
                     Текущий статус:\s""";
             jaroWinklerText = "Окончания";
         } else {
@@ -205,7 +205,7 @@ public class Text {
     public static String getSettingsText(Settings x, String lang) {
         if (lang.equals("ru")) {
             String schedSettings = "";
-            if (x.getScheduler().equals("on")) {
+            if (x.getScheduler().contains("on")) {
                 String text = switch (x.getPeriod()) {
                     case "1h" -> " (запуск каждый час)\n";
                     case "2h" -> " (запуск каждые 2 часа)\n";
@@ -213,25 +213,27 @@ public class Text {
                     default ->
                             " (часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n" + "<b>4. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
+                schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
             }
 
             return "<b>Настройки</b> " + TelegramBot.ICON_SETTINGS + " \n" +
-                    "<b>1. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
-                    "<b>on</b> - исключение новостей, которые содержат слова-исключения\n" +
-                    "<b>off</b> - показывать все новости без исключения\n" +
+                    "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
+                    "Автоматический запуск поиска по <b>ключевым словам</b> за интервал в п.2" + "\n" +
                     "- - - - - -\n" +
-                    "<b>2. Автопоиск: " + x.getScheduler() + "</b>\n" +
-                    "Автоматический запуск поиска по <b>ключевым словам</b> за период" + "\n" +
+                    "<b>2. Интервал автопоиска: " + x.getPeriod() + "</b>\n" +
+                    "Интервал равен текущему времени минус глубина поиска в часах" + "\n" +
                     "- - - - - -\n" +
-                    "<b>3. Интервал автопоиска: " + x.getPeriod() + "</b>\n" +
+                    "<b>3. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "Исключение новостей, которые содержат слова-исключения\n" +
+                    "- - - - - -\n" +
+                    "<b>4. Интервал полного поиска: " + x.getPeriodAll() + "</b>\n" +
                     "Интервал равен текущему времени минус глубина поиска в часах" + "\n" +
                     schedSettings +
                     "- - - - - -\n" +
                     "Параметры меняются после нажатия на кнопки";
         } else {
             String schedSettings = "";
-            if (x.getScheduler().equals("on")) {
+            if (x.getScheduler().contains("on")) {
                 String text = switch (x.getPeriod()) {
                     case "1h" -> " (launch every hour)\n";
                     case "2h" -> " (launch every 2 hours)\n";
@@ -239,19 +241,20 @@ public class Text {
                     default ->
                             " (start time: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n" + "<b>4. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
+                schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
             }
 
             return "<b>Settings</b> " + TelegramBot.ICON_SETTINGS + " \n" +
-                    "<b>1. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
-                    "<b>on</b> - excluding news that contains excluding terms\n" +
-                    "<b>off</b> - show all news without filter\n" +
-                    "- - - - - -\n" +
-                    "<b>2. Auto search: " + x.getScheduler() + "</b>\n" +
+                    "<b>1. Auto search: " + x.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
-                    "<b>3. Auto search interval: " + x.getPeriod() + "</b>\n" +
+                    "<b>2. Auto search interval: " + x.getPeriod() + "</b>\n" +
                     "The search period is equal to the current moment minus hours" + "\n" +
+                    "- - - - - -\n" +
+                    "<b>3. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "Excluding news that contains excluding terms\n" +
+                    "- - - - - -\n" +
+                    "<b>4. Full search interval: " + x.getPeriodAll() + "</b>\n" +
                     schedSettings +
                     "- - - - - -\n" +
                     "Parameters change after pressing buttons";
