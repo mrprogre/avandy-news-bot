@@ -72,7 +72,7 @@ public class Text {
             delFromTopText = "Удалить из топа";
             top20ByPeriodText = "<b>Top 20 слов</b> за ";
             allowCommasAndNumbersText = "Допустимы только цифры или запятые";
-            startSearchBeforeText = "Сначала нажми на /top";
+            startSearchBeforeText = "Топ необходимо обновить. Нажмите на /top";
             keywordsSearchText = "По словам";
             fullSearchText = "Полный";
             addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";

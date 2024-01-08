@@ -123,6 +123,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 for (User user : users) {
                     sendMessage(user.getChatId(), textToSend);
                 }
+            } else if(messageText.startsWith("@") && config.getBotOwner() == chatId) {
+                long chatToSend = Long.parseLong(messageText.substring(1, messageText.indexOf(" ")));
+                String textToSend = messageText.substring(messageText.indexOf(" "));
+                sendMessage(chatToSend, textToSend);
 
                 /* USER INPUT BLOCK */
             } else if (userState != null && "SEND_FEEDBACK".equals(userState.getState())) {
