@@ -46,7 +46,7 @@ public class Text {
             excludedText = "Исключённое";
             updateTopText = "Обновить топ";
             updateTopText2 = "Tоп 20";
-            undefinedCommandText = "Данная команда не существует или Вы не нажали кнопку Добавить";
+            undefinedCommandText = "Данная команда не существует или Вы не нажали кнопку Добавить перед вводом";
             changesSavedText = "Сохранено ✔️";
             headlinesNotFound = "» новости не найдены " + TelegramBot.ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
