@@ -26,7 +26,7 @@ select source, title, pub_date, extract(minute from (pub_date - add_date)) as "p
 from news_list n
          join showed_news s
               on n.title_hash = s.title_hash and s.chat_id = 1693786834
-where pub_date > '2024-01-05'::date
+where pub_date > '2024-01-09'::date
 order by n.id desc;
 
 -- Rows count

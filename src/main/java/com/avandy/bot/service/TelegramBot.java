@@ -1012,8 +1012,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void showLangButtons(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("DE_BUTTON", "de");
-        buttons.put("ES_BUTTON", "es");
         buttons.put("FR_BUTTON", "fr");
+        buttons.put("ES_BUTTON", "es");
         buttons.put("RU_BUTTON", "ru");
         buttons.put("EN_BUTTON", "en");
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
