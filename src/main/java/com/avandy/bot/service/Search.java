@@ -104,7 +104,11 @@ public class Search {
 
             Set<NewsList> newsList;
             for (String keyword : keywords) {
-                newsList = newsListRepository.getNewsWithLike(period, keyword, userLanguage);
+                // замена * на любой текстовый символ, который может быть или не быть
+                if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
+
+                //newsList = newsListRepository.getNewsWithLike(period, keyword, userLanguage);
+                newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage);
 
                 for (NewsList news : newsList) {
                     String rss = news.getSource();

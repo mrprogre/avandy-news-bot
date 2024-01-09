@@ -60,7 +60,7 @@ public class Text {
                     <b>Почта</b>: rps_project@mail.ru
                     <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
             yesButtonText = """
-                    Первое, что нужно сделать, - добавить <b>ключевые слова</b>. Если интересуют новости, связанные с ипотекой, к примеру, то добавь слово <b>ипотек</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b> и т.д.
+                    Первое, что нужно сделать, - добавить <b>ключевые слова</b>. Если интересуют новости, связанные с ипотекой, то добавь слово со звёздочкой <b>ипотек*</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b>. Одна звездочка это одна любая буква.
                     - - - - - -
                     Нажми кнопку "Добавить".""";
             buyButtonText = "Пока, друг! " + TelegramBot.ICON_GOOD_BYE;
@@ -147,7 +147,7 @@ public class Text {
                     <b>E-mail</b>: rps_project@mail.ru
                     <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
             yesButtonText = """
-                    The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax</b> to get all the headlines containing: <b>tax, taxpayer, taxes</b>, etc.
+                    The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax**</b> to get all the headlines containing: <b>tax, taxes</b>, etc. One * is equal to any one word character.
                     - - - - - -
                     Click the "Add" button.""";
             buyButtonText = "Good buy! " + TelegramBot.ICON_GOOD_BYE;
