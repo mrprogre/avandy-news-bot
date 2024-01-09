@@ -129,7 +129,7 @@ public class Text {
             settingText = "Settings";
             listKeywordsText = "<b>Keywords</b>\n" +
                     "- - - - - -\n" +
-                    "You can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxes, taxi</b> " +
+                    "For more flexibility you can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxes, taxi</b> " +
                     "but not <b>taxcom</b>.\n" +
                     "- - - - - -";
             listKeywordsButtonText = "Keywords";
