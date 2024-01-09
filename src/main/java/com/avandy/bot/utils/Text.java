@@ -33,9 +33,11 @@ public class Text {
             infoText = "Информация о приложении";
             settingText = "Настройки";
             listKeywordsText = "<b>Ключевые слова</b>\n" +
-                    "<i>Можно использовать символ *, который обозначает одну любую букву. " +
+                    "- - - - - -\n" +
+                    "Можно использовать символ *, который обозначает одну любую букву. " +
                     "Так, например, ключевое слово <b>мёд*</b> найдёт новости со словами <b>мёд, мёда</b>, " +
-                    "но не <b>мёдом</b>. Чтобы находить и <b>мёдом</b> тоже, надо добавить ещё одну звёздочку <b>мёд**</b></i>";
+                    "но не <b>мёдом</b>. Чтобы находить и <b>мёдом</b> тоже, надо добавить ещё одну звёздочку <b>мёд**</b>\n" +
+                    "- - - - - -";
             listKeywordsButtonText = "Ключевые слова";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
@@ -126,8 +128,10 @@ public class Text {
             infoText = "Application information";
             settingText = "Settings";
             listKeywordsText = "<b>Keywords</b>\n" +
-                    "<i>You can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxes, taxi</b> " +
-                    "but not <b>taxcom</b></i>";
+                    "- - - - - -\n" +
+                    "You can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxes, taxi</b> " +
+                    "but not <b>taxcom</b>.\n" +
+                    "- - - - - -";
             listKeywordsButtonText = "Keywords";
             findSelectText = "Search types";
             top20Text = "Frequently used words by period";
