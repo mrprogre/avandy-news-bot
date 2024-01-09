@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 
-public class Stat {
+public class Monitoring {
     private NewsListRepository newsListRepository;
 
     @Autowired
@@ -20,11 +20,8 @@ public class Stat {
 
     @Scheduled(cron = "${cron.monitoring.save.news}")
     void getStat() {
-        int newsListCountBy6Hours = newsListRepository.getNewsListCountBy6Hours();
-        if (newsListCountBy6Hours > 0) {
-            log.warn("За 6 часов сохранено {} новостей", newsListCountBy6Hours);
-        } else {
-            log.error("За 6 часов не сохранена ни одна новость! Проверить!");
+        if (newsListRepository.getNewsListCountBy6Hours() < 10) {
+            log.error("За 2 часа не сохранено ни одной новости! Проверить!");
         }
     }
 }
