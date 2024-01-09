@@ -158,7 +158,7 @@ public class Text {
                     <b>E-mail</b>: rps_project@mail.ru
                     <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
             yesButtonText = """
-                    The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax**</b> to get all the headlines containing: <b>tax, taxes</b>, etc. One * is equal to any one word character.
+                    The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax**</b> to get all the headlines containing: <b>tax, taxes</b>, etc., but not <b>taxcom</b>. One * is equal to any one word character.
                     - - - - - -
                     Click the "Add" button.""";
             buyButtonText = "Good buy! " + TelegramBot.ICON_GOOD_BYE;
