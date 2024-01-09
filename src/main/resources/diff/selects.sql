@@ -2,20 +2,17 @@
 -- Мой: 1254981379, Лена: 1020961767, Вика: 6455565758, Саша: 6128707071
 select u.chat_id,
        u.first_name,
+       rpad(s.period, 3, ' ') ||lpad(s.period_all, 4, ' ')||'  '||s.period_top                                       as "key-all-top",
+       rpad(s.scheduler, 3, ' ')||' '||rpad(s.excluded, 3, ' ')|| ' '|| s.lang as "sch-exc",
+       --s.start,
        string_agg(distinct k.keyword, ',' order by k.keyword) as keyword,
-       string_agg(distinct e.word, ',' order by e.word)       as excluding,
-       s.period                                               as "key",
-       s.period_all                                           as "all",
-       s.period_top                                           as "top",
-       s.scheduler,
-       s.excluded                                             as "excl",
-       s.lang,
-       u.is_active                                            as "1/0",
-       s.start
+       string_agg(distinct t.word, ',' order by t.word)       as top,
+       string_agg(distinct e.word, ',' order by e.word)       as excluding
 from users u
          left join settings s on u.chat_id = s.chat_id
          left join keywords k on u.chat_id = k.chat_id
          left join excluding_terms e on u.chat_id = e.chat_id
+         left join top_excluded t on u.chat_id = t.chat_id
 where u.chat_id not in (1254981379 /* я */ /*,1020961767 /* Лена */, 6455565758 /* Вика */, 6128707071 /* Саша */*/)
   and u.is_active = 1
 group by u.chat_id, u.first_name, s.period, s.period_all, s.scheduler, s.start, s.excluded, s.lang, s.period_top,

@@ -514,8 +514,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, text);
     }
 
-    private String getRssList() {
-        Iterable<RssList> sources = rssRepository.findAllActiveSources();
+    private String getRssList(long chatId) {
+        String lang = settingsRepository.getLangByChatId(chatId);
+        Iterable<RssList> sources = rssRepository.findAllActiveSources(lang);
 
         StringJoiner joiner = new StringJoiner(", ");
         for (RssList item : sources) {
@@ -1202,7 +1203,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("FEEDBACK", sendIdeaText);
         buttons.put("START_SEARCH", "» » »");
-        sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(),
+        sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(chatId),
                 InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
