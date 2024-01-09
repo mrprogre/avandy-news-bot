@@ -516,11 +516,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private String getRssList(long chatId) {
         String lang = settingsRepository.getLangByChatId(chatId);
-        Iterable<RssList> sources = rssRepository.findAllActiveSources(lang);
+        List<String> sources = rssRepository.findAllActiveSources(lang);
 
         StringJoiner joiner = new StringJoiner(", ");
-        for (RssList item : sources) {
-            joiner.add(item.getSource());
+        for (String source : sources) {
+            joiner.add(source);
         }
 
         return "<b>" + rssSourcesText + "</b>\n" + joiner;
