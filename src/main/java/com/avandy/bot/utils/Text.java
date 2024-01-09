@@ -7,7 +7,7 @@ import com.vdurmont.emoji.EmojiParser;
 public class Text {
     public static String greetingText, letsStartText, noText, yesText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText, listRssText,
-            deleteUserText, addText, delText, excludeWordText, searchText, excludedText,
+            deleteUserText, addText, delText, excludeWordText, searchText, excludedText, listKeywordsButtonText,
             updateTopText, updateTopText2, undefinedCommandText, changesSavedText, jaroWinklerSwitcherText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText, initSearchTemplateText,
@@ -32,7 +32,11 @@ public class Text {
             yesText = "Да";
             infoText = "Информация о приложении";
             settingText = "Настройки";
-            listKeywordsText = "Ключевые слова";
+            listKeywordsText = "<b>Ключевые слова</b>\n" +
+                    "Можно использовать символ *, который обозначает одну любую букву. " +
+                    "Так, например, ключевое слово <b>мёд*</b> найдёт новости со словами <b>мёд, мёда</b>, " +
+                    "но не <b>мёдом</b>. Чтобы находить и <b>мёдом</b> тоже, надо добавить ещё одну звёздочку <b>мёд**</b>";
+            listKeywordsButtonText = "Ключевые слова";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
             top20Text2 = "<b>Top 20</b> слов за ";
@@ -121,7 +125,10 @@ public class Text {
             yesText = "Yes";
             infoText = "Application information";
             settingText = "Settings";
-            listKeywordsText = "Keywords";
+            listKeywordsText = "<b>Keywords</b>\n" +
+                    "You can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxes, taxi</b> " +
+                    "but not <b>taxcom</b>";
+            listKeywordsButtonText = "Keywords";
             findSelectText = "Search types";
             top20Text = "Frequently used words by period";
             top20Text2 = "<b>Top 20</b> words in ";

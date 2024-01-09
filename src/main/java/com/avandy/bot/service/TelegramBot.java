@@ -595,7 +595,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         String joinerKeywords = getKeywordsList(chatId);
 
         if (joinerKeywords != null && joinerKeywords.length() != 0) {
-            showKeywordButtons(chatId, "<b>" + listKeywordsText + "</b>\n" + joinerKeywords);
+            showKeywordButtons(chatId, listKeywordsText + "\n" + joinerKeywords);
         } else {
             showAddKeywordsButton(chatId, setupKeywordsText);
         }
@@ -1210,7 +1210,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void nextButtonAfterKeywordsSearch(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("SET_PERIOD", intervalText);
-        buttons.put("LIST_KEYWORDS", listKeywordsText);
+        buttons.put("LIST_KEYWORDS", initSearchTemplateText);
         buttons.put("FIND_BY_KEYWORDS", searchText);
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
