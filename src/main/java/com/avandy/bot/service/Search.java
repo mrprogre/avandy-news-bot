@@ -82,6 +82,7 @@ public class Search {
                         if (title.length() > 15) {
                             if (dateDiff != 0) {
                                 if (!showedNewsHash.contains(hash)) {
+                                    findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
                                     headlinesToShow.add(new Headline(rss, title, link, date, chatId, 4, hash));
                                 }
                             }
@@ -123,21 +124,13 @@ public class Search {
                     if (title.length() > 15) {
                         if (!showedNewsHash.contains(hash)) {
                             // Filtering out similar news. Only for keyword search (O=n*n)
-                            for (Headline headline : headlinesToShow) {
-                                int compare = jwd.compare(title, headline.getTitle());
-                                if (compare >= 80) headlinesForDeleteFromShowJW.add(headline);
-                            }
+                            findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
 
                             headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
 
                         }
                     }
                 }
-            }
-
-            /* DEBUG */
-            for (Headline headline : headlinesForDeleteFromShowJW) {
-                log.warn("Удалена дублирующая новость. Id " + chatId + ": " + headline.getTitle());
             }
         }
 
@@ -162,8 +155,14 @@ public class Search {
                 Date date = news.getPubDate();
                 String link = news.getLink();
 
+                findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
                 headlinesToShow.add(new Headline(rss, title, link, date, chatId, -2, hash));
             }
+        }
+
+        /* DEBUG */
+        for (Headline headline : headlinesForDeleteFromShowJW) {
+            log.warn("Удалена дублирующая новость. Id " + chatId + ": " + headline.getTitle());
         }
 
         totalNewsCounter = headlinesToShow.size();
@@ -176,10 +175,8 @@ public class Search {
             }
         }
 
-        // Filtering out similar news
-        if (isKeywordSearch) {
-            headlinesToShow.removeAll(headlinesForDeleteFromShowJW);
-        }
+        // Delete similar news
+        headlinesToShow.removeAll(headlinesForDeleteFromShowJW);
 
         filteredNewsCounter = headlinesToShow.size();
 
@@ -201,6 +198,14 @@ public class Search {
         }
 
         return headlinesToShow;
+    }
+
+    // Filtering out similar news
+    private void findSimilarNews(Set<Headline> headlinesToShow, Set<Headline> headlinesForDeleteFromShowJW, String title) {
+        for (Headline headline : headlinesToShow) {
+            int compare = jwd.compare(title, headline.getTitle());
+            if (compare >= 75) headlinesForDeleteFromShowJW.add(headline);
+        }
     }
 
     @Scheduled(cron = "${cron.fill.database}")
@@ -255,8 +260,7 @@ public class Search {
                 }
             }
             newsListRepository.saveAll(newsList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("downloadNewsByRome Exception: " + e.getMessage());
         }
         return newsList.size();
