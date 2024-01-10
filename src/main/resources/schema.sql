@@ -80,6 +80,7 @@ create table if not exists showed_news
     chat_id    bigint,
     title_hash varchar(10),
     type       integer,
+    add_date   timestamp default current_timestamp::timestamp,
     constraint fk_headlines_chat_id foreign key (chat_id) references users (chat_id) on delete cascade,
     constraint ui_showed_news unique (chat_id, title_hash, type)
 );
