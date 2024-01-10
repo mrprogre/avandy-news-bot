@@ -2,7 +2,7 @@
 -- Мой: 1254981379, Лена: 1020961767, Вика: 6455565758, Саша: 6128707071
 select u.chat_id,
        u.first_name,
-       rpad(s.period, 3, ' ') ||lpad(s.period_all, 4, ' ')||'  '||s.period_top                                       as "key-all-top",
+       rpad(s.period, 5, ' ') ||rpad(s.period_all, 3, ' ')||'  '||s.period_top                                       as "key-all-top",
        rpad(s.scheduler, 3, ' ')||' '||rpad(s.excluded, 3, ' ')|| ' '|| s.lang as "sch-exc",
        --s.start,
        string_agg(distinct k.keyword, ',' order by k.keyword) as keyword,

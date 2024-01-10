@@ -830,7 +830,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setScheduler("on");
         settings.setStart(LocalTime.of(10, 0));
         settings.setExcluded("on");
-        settings.setLang("ru");
+        settings.setLang("en");
         settings.setJaroWinkler("on");
         settingsRepository.save(settings);
     }
@@ -1414,10 +1414,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<BotCommand> listOfCommands = new LinkedList<>();
         listOfCommands.add(new BotCommand("/settings", settingText));
         //listOfCommands.add(new BotCommand("/excluding", listExcludedText));
-        //listOfCommands.add(new BotCommand("/keywords", listKeywordsText));
+        listOfCommands.add(new BotCommand("/keywords", listKeywordsButtonText));
         listOfCommands.add(new BotCommand("/search", findSelectText));
         listOfCommands.add(new BotCommand("/info", infoText));
-        listOfCommands.add(new BotCommand("/top", top20Text));
+//        listOfCommands.add(new BotCommand("/top", top20Text));
         //listOfCommands.add(new BotCommand("/rss", listRssText));
         //listOfCommands.add(new BotCommand("/delete", deleteUserText));
         //listOfCommands.add(new BotCommand("/start", startText));
