@@ -103,6 +103,7 @@ public class Search {
             String period = periodMinutes + " minutes";
 
             Set<NewsList> newsList;
+//            JaroWinklerDistance jwd = new JaroWinklerDistance();
             for (String keyword : keywords) {
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
@@ -116,6 +117,11 @@ public class Search {
                     String hash = Common.getHash(title);
                     Date date = news.getPubDate();
                     String link = news.getLink();
+
+//                    for (Headline headline : headlinesToShow) {
+//                        int compare = jwd.compare(title, headline.getTitle());
+//                        if (compare >= 70) System.out.println(title);
+//                    }
 
                     if (title.length() > 15) {
                         if (!showedNewsHash.contains(hash)) {

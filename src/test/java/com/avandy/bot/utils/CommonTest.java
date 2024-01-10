@@ -11,6 +11,13 @@ public class CommonTest {
     private final JaroWinklerDistance jwd = new JaroWinklerDistance();
 
     @Test
+    public void checkJaroWinkler() {
+        String s1 = "Кабмин РФ не поддержал законопроект об увеличении выплаты при рождении ребенка";
+        String s2 = "Правительство не поддержит законопроекты о увеличении выплат при рождении";
+        System.out.println(jwd.compare(s1, s2));
+    }
+
+    @Test
     public void checkJaroWinklerDistanceCompare() {
         String s1 = "CRATE", s2 = "TRACE", s3 = "DwAyNE", s4 = "DuANE";
         assertEquals(73, jwd.compare(s1, s2));
