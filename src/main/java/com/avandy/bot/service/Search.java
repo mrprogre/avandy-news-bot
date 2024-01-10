@@ -3,7 +3,6 @@ package com.avandy.bot.service;
 import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
-import com.avandy.bot.utils.JaroWinklerDistance;
 import com.avandy.bot.utils.Parser;
 import com.avandy.bot.utils.ParserJsoup;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -28,7 +27,7 @@ public class Search {
     private final ExcludingTermsRepository excludingTermsRepository;
     private final NewsListRepository newsListRepository;
     public static ArrayList<Headline> headlinesTopTen;
-    private final JaroWinklerDistance jwd = new JaroWinklerDistance();
+    //private final JaroWinklerDistance jwd = new JaroWinklerDistance();
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
@@ -50,7 +49,7 @@ public class Search {
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         settings.ifPresentOrElse(value -> userLanguage = value.getLang(), () -> userLanguage = "en");
         Set<Headline> headlinesToShow = new TreeSet<>();
-        Set<Headline> headlinesForDeleteFromShowJW = new HashSet<>();
+        //Set<Headline> headlinesForDeleteFromShowJW = new HashSet<>();
 
 
         if (isTopSearch) {
@@ -82,7 +81,7 @@ public class Search {
                         if (title.length() > 15) {
                             if (dateDiff != 0) {
                                 if (!showedNewsHash.contains(hash)) {
-                                    findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
+                                    //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
                                     headlinesToShow.add(new Headline(rss, title, link, date, chatId, 4, hash));
                                 }
                             }
@@ -124,7 +123,7 @@ public class Search {
                     if (title.length() > 15) {
                         if (!showedNewsHash.contains(hash)) {
                             // Filtering out similar news. Only for keyword search (O=n*n)
-                            findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
+                            //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
 
                             headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
                         }
@@ -154,7 +153,7 @@ public class Search {
                 Date date = news.getPubDate();
                 String link = news.getLink();
 
-                findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
+                //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
                 headlinesToShow.add(new Headline(rss, title, link, date, chatId, -2, hash));
             }
         }
@@ -171,13 +170,13 @@ public class Search {
 
         // Delete similar news
         /* DEBUG */
-        if (headlinesToShow.size() > 0) {
-            for (Headline headline : headlinesForDeleteFromShowJW) {
-                log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " +
-                        headline.getTitle());
-            }
-            headlinesToShow.removeAll(headlinesForDeleteFromShowJW);
-        }
+//        if (headlinesToShow.size() > 0) {
+//            for (Headline headline : headlinesForDeleteFromShowJW) {
+//                log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " +
+//                        headline.getTitle());
+//            }
+//            headlinesToShow.removeAll(headlinesForDeleteFromShowJW);
+//        }
 
         filteredNewsCounter = headlinesToShow.size();
 
@@ -202,12 +201,12 @@ public class Search {
     }
 
     // Filtering out similar news
-    private void findSimilarNews(Set<Headline> headlinesToShow, Set<Headline> headlinesForDeleteFromShowJW, String title) {
-        for (Headline headline : headlinesToShow) {
-            int compare = jwd.compare(title, headline.getTitle());
-            if (compare >= 80) headlinesForDeleteFromShowJW.add(headline);
-        }
-    }
+//    private void findSimilarNews(Set<Headline> headlinesToShow, Set<Headline> headlinesForDeleteFromShowJW, String title) {
+//        for (Headline headline : headlinesToShow) {
+//            int compare = jwd.compare(title, headline.getTitle());
+//            if (compare >= 80) headlinesForDeleteFromShowJW.add(headline);
+//        }
+//    }
 
     @Scheduled(cron = "${cron.fill.database}")
     public void scheduler() {
