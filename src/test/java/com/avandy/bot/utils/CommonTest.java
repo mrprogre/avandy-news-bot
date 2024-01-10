@@ -12,8 +12,8 @@ public class CommonTest {
 
     @Test
     public void checkJaroWinkler() {
-        String s1 = "Кабмин РФ не поддержал законопроект об увеличении выплаты при рождении ребенка";
-        String s2 = "Правительство не поддержит законопроекты о увеличении выплат при рождении";
+        String s1 = "Путин впервые приехал на Чукотку";
+        String s2 = "Путин впервые посетил Чукотку";
         System.out.println(jwd.compare(s1, s2));
     }
 

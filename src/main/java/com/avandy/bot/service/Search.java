@@ -160,11 +160,6 @@ public class Search {
             }
         }
 
-        /* DEBUG */
-        for (Headline headline : headlinesForDeleteFromShowJW) {
-            log.warn("Удалена дублирующая новость. Id " + chatId + ": " + headline.getTitle());
-        }
-
         totalNewsCounter = headlinesToShow.size();
         // remove titles contains excluding terms
         if (isAllSearch && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
@@ -176,6 +171,11 @@ public class Search {
         }
 
         // Delete similar news
+        /* DEBUG */
+        for (Headline headline : headlinesForDeleteFromShowJW) {
+            log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " +
+                    headline.getTitle());
+        }
         headlinesToShow.removeAll(headlinesForDeleteFromShowJW);
 
         filteredNewsCounter = headlinesToShow.size();
@@ -204,7 +204,7 @@ public class Search {
     private void findSimilarNews(Set<Headline> headlinesToShow, Set<Headline> headlinesForDeleteFromShowJW, String title) {
         for (Headline headline : headlinesToShow) {
             int compare = jwd.compare(title, headline.getTitle());
-            if (compare >= 75) headlinesForDeleteFromShowJW.add(headline);
+            if (compare >= 80) headlinesForDeleteFromShowJW.add(headline);
         }
     }
 
