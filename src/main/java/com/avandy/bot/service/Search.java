@@ -169,7 +169,6 @@ public class Search {
             }
         }
 
-
         // Удаление одного из похожих по смыслу заголовков (применяется только для ключевых слов, т.к. O=n*n)
         if (isKeywordSearch) {
             // Filtering out similar news
