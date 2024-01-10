@@ -176,7 +176,7 @@ public class Search {
             for (Headline headline1 : headlinesToShow) {
                 for (Headline headline2 : headlinesToShow) {
                     int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
-                    if (compare >= 80 && compare != 100) {
+                    if (compare >= 85 && compare != 100) {
                         headlinesDeleteJw.add(headline1);
                         headlinesDeleteJw.remove(headline2);
                     }
