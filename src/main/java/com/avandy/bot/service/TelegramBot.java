@@ -42,7 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final int TOP_TEN_LIST_LIMIT = 60;
     private static final int EXCLUDING_TERMS_LIST_LIMIT = 60;
     private static final int EXCLUDED_LIMIT = 100;
-    private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 200;
+    private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 100;
     private static final int SLEEP_BETWEEN_SENDING_MESSAGES = 50;
     private final BotConfig config;
     private Search search;

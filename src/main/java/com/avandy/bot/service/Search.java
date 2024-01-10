@@ -3,6 +3,7 @@ package com.avandy.bot.service;
 import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
+import com.avandy.bot.utils.JaroWinklerDistance;
 import com.avandy.bot.utils.Parser;
 import com.avandy.bot.utils.ParserJsoup;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -27,7 +28,7 @@ public class Search {
     private final ExcludingTermsRepository excludingTermsRepository;
     private final NewsListRepository newsListRepository;
     public static ArrayList<Headline> headlinesTopTen;
-    //private final JaroWinklerDistance jwd = new JaroWinklerDistance();
+    private final JaroWinklerDistance jwd = new JaroWinklerDistance();
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
@@ -49,7 +50,7 @@ public class Search {
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         settings.ifPresentOrElse(value -> userLanguage = value.getLang(), () -> userLanguage = "en");
         Set<Headline> headlinesToShow = new TreeSet<>();
-        //Set<Headline> headlinesForDeleteFromShowJW = new HashSet<>();
+        Set<Headline> headlinesDeleteJw = new HashSet<>();
 
 
         if (isTopSearch) {
@@ -168,15 +169,26 @@ public class Search {
             }
         }
 
-        // Delete similar news
-        /* DEBUG */
-//        if (headlinesToShow.size() > 0) {
-//            for (Headline headline : headlinesForDeleteFromShowJW) {
-//                log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " +
-//                        headline.getTitle());
-//            }
-//            headlinesToShow.removeAll(headlinesForDeleteFromShowJW);
-//        }
+
+        // Удаление одного из похожих по смыслу заголовков (применяется только для ключевых слов, т.к. O=n*n)
+        if (isKeywordSearch) {
+            // Filtering out similar news
+            for (Headline headline1 : headlinesToShow) {
+                for (Headline headline2 : headlinesToShow) {
+                    int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
+                    if (compare >= 80 && compare != 100) {
+                        headlinesDeleteJw.add(headline1);
+                        headlinesDeleteJw.remove(headline2);
+                    }
+                }
+            }
+
+            // Delete similar news
+            for (Headline headline : headlinesDeleteJw) {
+                log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " + headline.getTitle());
+            }
+            headlinesToShow.removeAll(headlinesDeleteJw);
+        }
 
         filteredNewsCounter = headlinesToShow.size();
 
@@ -199,14 +211,6 @@ public class Search {
 
         return headlinesToShow;
     }
-
-    // Filtering out similar news
-//    private void findSimilarNews(Set<Headline> headlinesToShow, Set<Headline> headlinesForDeleteFromShowJW, String title) {
-//        for (Headline headline : headlinesToShow) {
-//            int compare = jwd.compare(title, headline.getTitle());
-//            if (compare >= 80) headlinesForDeleteFromShowJW.add(headline);
-//        }
-//    }
 
     @Scheduled(cron = "${cron.fill.database}")
     public void scheduler() {

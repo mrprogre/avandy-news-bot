@@ -12,8 +12,8 @@ public class CommonTest {
 
     @Test
     public void checkJaroWinkler() {
-        String s1 = "Путин впервые приехал на Чукотку";
-        String s2 = "Путин впервые посетил Чукотку";
+        String s1 = "Россиян попросили не ждать снижения цен на яйца";
+        String s2 = "Россиян призвали не ждать снижения цен на яйца";
         System.out.println(jwd.compare(s1, s2));
     }
 
