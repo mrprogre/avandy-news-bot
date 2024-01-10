@@ -127,7 +127,6 @@ public class Search {
                             findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
 
                             headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
-
                         }
                     }
                 }
@@ -172,11 +171,13 @@ public class Search {
 
         // Delete similar news
         /* DEBUG */
-        for (Headline headline : headlinesForDeleteFromShowJW) {
-            log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " +
-                    headline.getTitle());
+        if (headlinesToShow.size() > 0) {
+            for (Headline headline : headlinesForDeleteFromShowJW) {
+                log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " +
+                        headline.getTitle());
+            }
+            headlinesToShow.removeAll(headlinesForDeleteFromShowJW);
         }
-        headlinesToShow.removeAll(headlinesForDeleteFromShowJW);
 
         filteredNewsCounter = headlinesToShow.size();
 
