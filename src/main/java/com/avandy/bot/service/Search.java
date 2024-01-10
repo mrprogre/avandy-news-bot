@@ -169,25 +169,20 @@ public class Search {
             }
         }
 
-        // Удаление одного из похожих по смыслу заголовков (применяется только для ключевых слов, т.к. O=n*n)
-        if (isKeywordSearch) {
-            // Filtering out similar news
-            for (Headline headline1 : headlinesToShow) {
-                for (Headline headline2 : headlinesToShow) {
-                    int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
-                    if (compare >= 85 && compare != 100) {
-                        headlinesDeleteJw.add(headline1);
-                        headlinesDeleteJw.remove(headline2);
-                    }
-                }
+        // Filtering out similar news: O(n²)
+        headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.parallelStream().forEach(headline2 -> {
+            int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
+            if (compare >= 85 && compare != 100) {
+                headlinesDeleteJw.add(headline1);
+                headlinesDeleteJw.remove(headline2);
             }
+        }));
 
-            // Delete similar news
-            for (Headline headline : headlinesDeleteJw) {
-                log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " + headline.getTitle());
-            }
-            headlinesToShow.removeAll(headlinesDeleteJw);
+        // Delete similar news
+        for (Headline headline : headlinesDeleteJw) {
+            log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " + headline.getTitle());
         }
+        headlinesToShow.removeAll(headlinesDeleteJw);
 
         filteredNewsCounter = headlinesToShow.size();
 
