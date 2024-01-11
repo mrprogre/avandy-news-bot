@@ -18,10 +18,18 @@ public class Monitoring {
     }
 
 
-    @Scheduled(cron = "${cron.monitoring.save.news}")
-    void getStat() {
-        if (newsListRepository.getNewsListCountBy6Hours() < 10) {
+    @Scheduled(cron = "${cron.monitoring.no.save.news}")
+    void getStatNoSaveNews() {
+        if (newsListRepository.getNewsListCountBy6Hours("2 hours") < 10) {
             log.error("За 2 часа не сохранено ни одной новости! Проверить!");
+        }
+    }
+
+    @Scheduled(cron = "${cron.monitoring.save.news}")
+    void getStatSaveNews() {
+        int newsListCountBy6Hours = newsListRepository.getNewsListCountBy6Hours("6 hours");
+        if (newsListCountBy6Hours > 0) {
+            log.warn("За 6 часов сохранено {} новостей!", newsListCountBy6Hours);
         }
     }
 }
