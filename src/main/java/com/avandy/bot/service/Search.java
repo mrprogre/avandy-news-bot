@@ -28,7 +28,6 @@ public class Search {
     private final ExcludingTermsRepository excludingTermsRepository;
     private final NewsListRepository newsListRepository;
     public static ArrayList<Headline> headlinesTopTen;
-    private final JaroWinklerDistance jwd = new JaroWinklerDistance();
 
     @Autowired
     public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
@@ -170,13 +169,16 @@ public class Search {
         }
 
         // Filtering out similar news: O(n²)
-        headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.forEach(headline2 -> {
-            int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
-            if (compare >= 85 && compare != 100) {
-                headlinesDeleteJw.add(headline1);
-                headlinesDeleteJw.remove(headline2);
-            }
-        }));
+        JaroWinklerDistance jwd = new JaroWinklerDistance();
+        headlinesToShow.parallelStream()
+                .forEach(headline1 -> headlinesToShow
+                        .forEach(headline2 -> {
+                            int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
+                            if (compare >= 85 && compare != 100) {
+                                headlinesDeleteJw.add(headline1);
+                                headlinesDeleteJw.remove(headline2);
+                            }
+                        }));
 
         // Delete similar news
         List<Headline> uniqueJw = headlinesDeleteJw.stream().distinct().toList();
