@@ -78,30 +78,37 @@ public class CommonTest {
     @Test
     public void shouldReturnTwoUniqueTitles() {
         Set<Headline> headlinesToShow = new HashSet<>();
-        headlinesToShow.add(new Headline("111", "Заголовок для отсева 100% совпадения, но разных источников",
+        headlinesToShow.add(new Headline("111", "Росимущество получило в прямое распоряжение 59,8% акций ТГК-2",
                 "link1",
                 new Date(), 1L, 1, "hash1"));
-        headlinesToShow.add(new Headline("222", "Заголовок для отсева 100% совпадения, но разных источников",
+        headlinesToShow.add(new Headline("222", "Росимущество получило в прямое распоряжение 59,8% акций ТГК-2",
                 "link2",
-                new Date(), 1L, 2, "hash2"));
-        headlinesToShow.add(new Headline("333", "Отличающаяся информация",
+                new Date(), 1L, 1, "hash1"));
+        headlinesToShow.add(new Headline("333", "Росимущество получило в прямое распоряжение 59,8% акций ТГК-2",
+                "link2",
+                new Date(), 1L, 1, "hash1"));
+        headlinesToShow.add(new Headline("444", "Росимущество получило в прямое распоряжение 59,8% акций ТГК-2",
+                "link2",
+                new Date(), 1L, 1, "hash1"));
+        headlinesToShow.add(new Headline("555", "Отличающаяся информация",
                 "link3",
                 new Date(), 1L, 3, "hash3"));
 
-        Set<Headline> headlinesDeleteJw = new HashSet<>();
-
-        headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.parallelStream().forEach(headline2 -> {
+        List<Headline> headlinesDeleteJw = new ArrayList<>();
+        headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.forEach(headline2 -> {
             int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
-            boolean isSource = headline1.getSource().equals(headline2.getSource());
 
-            if (compare >= 85 && ((compare != 100 && isSource)) || (compare == 100 && !isSource)) {
+            if (compare >= 85 && compare != 100) {
                 headlinesDeleteJw.add(headline1);
                 headlinesDeleteJw.remove(headline2);
             }
         }));
 
-        headlinesToShow.removeAll(headlinesDeleteJw);
+        List<Headline> collect = headlinesDeleteJw.stream().distinct().toList();
+        collect.forEach(System.out::println);
+        System.out.println("--------------------");
+        collect.forEach(headlinesToShow::remove);
+        headlinesToShow.forEach(System.out::println);
         assertEquals(2, headlinesToShow.size());
-
     }
 }

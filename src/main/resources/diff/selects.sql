@@ -1,3 +1,5 @@
+delete from showed_news where chat_id = 1254981379 and type = 4; -- full search
+
 -- Данные пользователей
 -- Мой: 1254981379, Лена: 1020961767, Вика: 6455565758, Саша: 6128707071
 select u.chat_id,
@@ -19,10 +21,10 @@ group by u.chat_id, u.first_name, s.period, s.period_all, s.scheduler, s.start, 
          u.is_active;
 
 -- Новости, которые получил пользователь
-select source, title, pub_date, extract(minute from (pub_date - add_date)) as "pub-add"
+select source, title, pub_date, extract(minute from (n.pub_date - n.add_date)) as "pub-add"
 from news_list n
          join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 975260763
+              on n.title_hash = s.title_hash and s.chat_id = 333808055
 where pub_date > '2024-01-09'::date
 order by n.id desc;
 

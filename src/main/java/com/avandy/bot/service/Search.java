@@ -50,7 +50,7 @@ public class Search {
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         settings.ifPresentOrElse(value -> userLanguage = value.getLang(), () -> userLanguage = "en");
         Set<Headline> headlinesToShow = new TreeSet<>();
-        Set<Headline> headlinesDeleteJw = new HashSet<>();
+        List<Headline> headlinesDeleteJw = new ArrayList<>();
 
 
         if (isTopSearch) {
@@ -170,21 +170,20 @@ public class Search {
         }
 
         // Filtering out similar news: O(n²)
-        headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.parallelStream().forEach(headline2 -> {
+        headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.forEach(headline2 -> {
             int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
-            boolean isSource = headline1.getSource().equals(headline2.getSource());
-
-            if (compare >= 85 && ((compare != 100 && isSource)) || (compare == 100 && !isSource)) {
+            if (compare >= 85 && compare != 100) {
                 headlinesDeleteJw.add(headline1);
                 headlinesDeleteJw.remove(headline2);
             }
         }));
 
         // Delete similar news
-        for (Headline headline : headlinesDeleteJw) {
-            log.warn("Удалена дублирующая новость. " + chatId + ": " + ", source: " + headline.getSource() + ", " + headline.getTitle());
+        List<Headline> uniqueJw = headlinesDeleteJw.stream().distinct().toList();
+        for (Headline headline : uniqueJw) {
+            log.warn("Удалена дублирующая новость. " + chatId + ", source: " + headline.getSource() + ", " + headline.getTitle());
         }
-        headlinesToShow.removeAll(headlinesDeleteJw);
+        uniqueJw.forEach(headlinesToShow::remove);
 
         filteredNewsCounter = headlinesToShow.size();
 
