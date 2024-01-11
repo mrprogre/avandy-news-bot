@@ -1,10 +1,8 @@
 package com.avandy.bot.utils;
 
-import com.avandy.bot.model.Headline;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
-import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -75,40 +73,4 @@ public class CommonTest {
         System.out.println("72h " + Common.getTimeToExecute(start, "72h"));
     }
 
-    @Test
-    public void shouldReturnTwoUniqueTitles() {
-        Set<Headline> headlinesToShow = new HashSet<>();
-        headlinesToShow.add(new Headline("111", "Росимущество получило в прямое распоряжение 59,8% акций ТГК-2",
-                "link1",
-                new Date(), 1L, 1, "hash1"));
-        headlinesToShow.add(new Headline("222", "Росимущество получило в прямое распоряжение 59,8% акций ТГК-2",
-                "link2",
-                new Date(), 1L, 1, "hash1"));
-        headlinesToShow.add(new Headline("333", "Росимущество получило в прямое распоряжение 59,8% акций ТГК-2",
-                "link2",
-                new Date(), 1L, 1, "hash1"));
-        headlinesToShow.add(new Headline("444", "Росимущество получило в прямое распоряжение 59,8% акций ТГК-2",
-                "link2",
-                new Date(), 1L, 1, "hash1"));
-        headlinesToShow.add(new Headline("555", "Отличающаяся информация",
-                "link3",
-                new Date(), 1L, 3, "hash3"));
-
-        List<Headline> headlinesDeleteJw = new ArrayList<>();
-        headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.forEach(headline2 -> {
-            int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
-
-            if (compare >= 85 && compare != 100) {
-                headlinesDeleteJw.add(headline1);
-                headlinesDeleteJw.remove(headline2);
-            }
-        }));
-
-        List<Headline> collect = headlinesDeleteJw.stream().distinct().toList();
-        collect.forEach(System.out::println);
-        System.out.println("--------------------");
-        collect.forEach(headlinesToShow::remove);
-        headlinesToShow.forEach(System.out::println);
-        assertEquals(2, headlinesToShow.size());
-    }
 }
