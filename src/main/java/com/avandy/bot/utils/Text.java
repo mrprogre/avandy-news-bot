@@ -32,12 +32,11 @@ public class Text {
             yesText = "Да";
             infoText = "Информация о приложении";
             settingText = "Настройки";
-            listKeywordsText = "<b>Ключевые слова</b>\n" +
-                    "- - - - - -\n" +
-                    "Для гибкости можно использовать символ *, который обозначает одну любую букву. " +
-                    "Так, например, ключевое слово <b>курс**</b> найдёт новости со словами <b>курс, курсы, курсом</b>, " +
-                    "но не найдёт массу лишних новостей о <b>Курской</b> области. Однако найдёт, если сделаете три звезды <b>курс***</b>\n" +
-                    "- - - - - -";
+            listKeywordsText = """
+                    <b>Ключевые слова</b>
+                    - - - - - -
+                    Для гибкости можно использовать символ *, который обозначает одну любую букву. Так, например, ключевое слово <b>курс**</b> найдёт новости со словами <b>курс, курсы, курсом</b>, но не найдёт массу лишних новостей о <b>Курской</b> области. Однако найдёт, если сделаете три звезды <b>курс***</b>
+                    - - - - - -""";
             listKeywordsButtonText = "Ключевые слова";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
@@ -77,7 +76,7 @@ public class Text {
             excludedListText = "Удалённое";
             delFromTopText = "Удалить из топа";
             top20ByPeriodText = "<b>Top 20 слов</b> за ";
-            allowCommasAndNumbersText = "Допустимы только цифры или запятые";
+            allowCommasAndNumbersText = "Укажите порядковый номер слова (разделять запятой)";
             startSearchBeforeText = "Топ необходимо обновить. Нажмите на /top";
             keywordsSearchText = "По словам";
             fullSearchText = "Полный";
@@ -127,11 +126,11 @@ public class Text {
             yesText = "Yes";
             infoText = "Application information";
             settingText = "Settings";
-            listKeywordsText = "<b>Keywords</b>\n" +
-                    "- - - - - -\n" +
-                    "For more flexibility you can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxes, taxi</b> " +
-                    "but not <b>taxcom</b>.\n" +
-                    "- - - - - -";
+            listKeywordsText = """
+                    <b>Keywords</b>
+                    - - - - - -
+                    For more flexibility you can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxes, taxi</b> but not <b>taxcom</b>.
+                    - - - - - -""";
             listKeywordsButtonText = "Keywords";
             findSelectText = "Search types";
             top20Text = "Frequently used words by period";
