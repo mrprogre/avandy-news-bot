@@ -172,7 +172,9 @@ public class Search {
         // Filtering out similar news: O(n²)
         headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.parallelStream().forEach(headline2 -> {
             int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
-            if (compare >= 85 && compare != 100) {
+            boolean isSource = headline1.getSource().equals(headline2.getSource());
+
+            if (compare >= 85 && ((compare != 100 && isSource)) || (compare == 100 && !isSource)) {
                 headlinesDeleteJw.add(headline1);
                 headlinesDeleteJw.remove(headline2);
             }

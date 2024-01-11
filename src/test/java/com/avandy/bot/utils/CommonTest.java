@@ -1,8 +1,10 @@
 package com.avandy.bot.utils;
 
+import com.avandy.bot.model.Headline;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -71,5 +73,35 @@ public class CommonTest {
         System.out.println("24h " + Common.getTimeToExecute(start, "24h"));
         System.out.println("48h " + Common.getTimeToExecute(start, "48h"));
         System.out.println("72h " + Common.getTimeToExecute(start, "72h"));
+    }
+
+    @Test
+    public void shouldReturnTwoUniqueTitles() {
+        Set<Headline> headlinesToShow = new HashSet<>();
+        headlinesToShow.add(new Headline("111", "Заголовок для отсева 100% совпадения, но разных источников",
+                "link1",
+                new Date(), 1L, 1, "hash1"));
+        headlinesToShow.add(new Headline("222", "Заголовок для отсева 100% совпадения, но разных источников",
+                "link2",
+                new Date(), 1L, 2, "hash2"));
+        headlinesToShow.add(new Headline("333", "Отличающаяся информация",
+                "link3",
+                new Date(), 1L, 3, "hash3"));
+
+        Set<Headline> headlinesDeleteJw = new HashSet<>();
+
+        headlinesToShow.parallelStream().forEach(headline1 -> headlinesToShow.parallelStream().forEach(headline2 -> {
+            int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
+            boolean isSource = headline1.getSource().equals(headline2.getSource());
+
+            if (compare >= 85 && ((compare != 100 && isSource)) || (compare == 100 && !isSource)) {
+                headlinesDeleteJw.add(headline1);
+                headlinesDeleteJw.remove(headline2);
+            }
+        }));
+
+        headlinesToShow.removeAll(headlinesDeleteJw);
+        assertEquals(2, headlinesToShow.size());
+
     }
 }
