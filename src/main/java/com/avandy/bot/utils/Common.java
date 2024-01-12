@@ -12,6 +12,12 @@ import java.util.*;
 @UtilityClass
 public class Common {
     public static final String ERROR_TEXT = "Error occurred: ";
+    public static final String ICON_SEARCH = "\uD83C\uDFB2";
+    public static final String ICON_NEWS_FOUNDED = "\uD83C\uDF3F";
+    public static final String ICON_END_SEARCH_NOT_FOUND = "\uD83D\uDCA4";
+    public static final String ICON_GOOD_BYE = "\uD83D\uDC4B";
+    public static final String ICON_SETTINGS = "\uD83C\uDF0D";
+    public static final String ICON_TOP_20_FIRE = "\uD83D\uDD25";
 
     // Compare dates to find news by period
     public static int compareDates(Date now, Date in, int minutes) {

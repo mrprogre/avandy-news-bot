@@ -5,6 +5,7 @@ import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
 import com.avandy.bot.utils.InlineKeyboards;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,7 @@ import static com.avandy.bot.utils.Text.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
     public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
     private static final int JARO_WINKLER_LEVEL = 85;
@@ -42,63 +44,33 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final int TOP_TEN_LIST_LIMIT = 60;
     private static final int EXCLUDING_TERMS_LIST_LIMIT = 60;
     private static final int EXCLUDED_LIMIT = 100;
-    private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 100;
+    private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 120;
     private static final int SLEEP_BETWEEN_SENDING_MESSAGES = 100;
     private final BotConfig config;
-    private Search search;
-    private UserRepository userRepository;
-    private KeywordRepository keywordRepository;
-    private SettingsRepository settingsRepository;
-    private ExcludingTermsRepository excludingTermsRepository;
-    private RssRepository rssRepository;
-    private TopTenRepository topTenRepository;
+    private final Search search;
+    private final UserRepository userRepository;
+    private final KeywordRepository keywordRepository;
+    private final SettingsRepository settingsRepository;
+    private final ExcludingTermsRepository excludingTermsRepository;
+    private final RssRepository rssRepository;
+    private final TopTenRepository topTenRepository;
     private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
     private StringBuilder stringBuilderTop;
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
-    private static final String ICON_SEARCH = "\uD83C\uDFB2";
-    private static final String ICON_NEWS_FOUNDED = "\uD83C\uDF3F";
-    public static final String ICON_END_SEARCH_NOT_FOUND = "\uD83D\uDCA4";
-    public static final String ICON_GOOD_BYE = "\uD83D\uDC4B";
-    public static final String ICON_SETTINGS = "\uD83C\uDF0D";
-    public static final String ICON_TOP_20_FIRE = "\uD83D\uDD25";
 
-    public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config) {
+    @Autowired
+    public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
+                       Search search, UserRepository userRepository, KeywordRepository keywordRepository,
+                       SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
+                       RssRepository rssRepository, TopTenRepository topTenRepository) {
         super(botToken);
         this.config = config;
-    }
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setConsoleSearch(Search search) {
         this.search = search;
-    }
-
-    @Autowired
-    public void setKeywordRepository(KeywordRepository keywordRepository) {
+        this.userRepository = userRepository;
         this.keywordRepository = keywordRepository;
-    }
-
-    @Autowired
-    public void setSettingsRepository(SettingsRepository settingsRepository) {
         this.settingsRepository = settingsRepository;
-    }
-
-    @Autowired
-    public void setExcludedRepository(ExcludingTermsRepository excludingTermsRepository) {
         this.excludingTermsRepository = excludingTermsRepository;
-    }
-
-    @Autowired
-    public void setRssRepository(RssRepository rssRepository) {
         this.rssRepository = rssRepository;
-    }
-
-    @Autowired
-    public void setTopTenRepository(TopTenRepository topTenRepository) {
         this.topTenRepository = topTenRepository;
     }
 
@@ -545,7 +517,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 settingsRepository.getPeriodTopByChatId(chatId), topTenRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
 
-        String text = "<b>" + searchNewsHeaderText + "</b> " + ICON_SEARCH +
+        String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
                 "\n- - - - - -\n" +
                 keywordsText +
                 "\n- - - - - -\n" +
@@ -882,7 +854,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             nextButtonAfterAllSearch(chatId, foundNewsText + " <b>" + Search.totalNewsCounter + "</b> (" +
                     excludedNewsText + " <b>" + (Search.totalNewsCounter - headlines.size()) + "</b>) " +
-                    ICON_NEWS_FOUNDED);
+                    Common.ICON_NEWS_FOUNDED);
         } else {
             nextButtonAfterAllSearch(chatId, headlinesNotFound);
         }
@@ -927,7 +899,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (!isAutoSearch.get()) {
                 nextButtonAfterKeywordsSearch(chatId,
-                        foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b> " + ICON_NEWS_FOUNDED);
+                        foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b> " + Common.ICON_NEWS_FOUNDED);
             }
         } else {
             if (!isAutoSearch.get()) {
@@ -1286,7 +1258,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             String period = settingsRepository.getPeriodTopByChatId(chatId);
 
-            showTopTenButtons(chatId, String.format("%s<b>%s</b> " + ICON_TOP_20_FIRE + " \n%s", top20ByPeriodText,
+            showTopTenButtons(chatId, String.format("%s<b>%s</b> " + Common.ICON_TOP_20_FIRE + " \n%s", top20ByPeriodText,
                     period, stringBuilderTop));
         } else {
             showTopTenButton(chatId, updateTopText);

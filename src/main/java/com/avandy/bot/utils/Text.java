@@ -1,7 +1,6 @@
 package com.avandy.bot.utils;
 
 import com.avandy.bot.model.Settings;
-import com.avandy.bot.service.TelegramBot;
 import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
@@ -53,7 +52,7 @@ public class Text {
             updateTopText2 = "Top 20";
             undefinedCommandText = "Данная команда не существует или Вы не нажали кнопку Добавить перед вводом текста";
             changesSavedText = "Сохранено ✔️";
-            headlinesNotFound = "» новости не найдены " + TelegramBot.ICON_END_SEARCH_NOT_FOUND;
+            headlinesNotFound = "» новости не найдены " + Common.ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 2 символов";
             deleteAllWordsText = "❌ все слова удалены";
@@ -68,7 +67,7 @@ public class Text {
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>. Если интересуют новости, связанные с ипотекой, то добавь слово со звёздочкой <b>ипотек*</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b>. Одна звездочка это одна любая буква.
                     - - - - - -
                     Нажми кнопку "Добавить".""";
-            buyButtonText = "Пока, друг! " + TelegramBot.ICON_GOOD_BYE;
+            buyButtonText = "Пока, друг! " + Common.ICON_GOOD_BYE;
             intervalText = "Интервал";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
@@ -145,7 +144,7 @@ public class Text {
             excludedText = "Excluded";
             undefinedCommandText = "Command not defined";
             changesSavedText = "Done ✔️";
-            headlinesNotFound = "» no news headlines found " + TelegramBot.ICON_END_SEARCH_NOT_FOUND;
+            headlinesNotFound = "» no news headlines found " + Common.ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 2 characters";
             deleteAllWordsText = "❌ all words removed";
@@ -160,7 +159,7 @@ public class Text {
                     The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax**</b> to get all the headlines containing: <b>tax, taxes</b>, etc., but not <b>taxcom</b>. One * is equal to any one word character.
                     - - - - - -
                     Click the "Add" button.""";
-            buyButtonText = "Good buy! " + TelegramBot.ICON_GOOD_BYE;
+            buyButtonText = "Good buy! " + Common.ICON_GOOD_BYE;
             intervalText = "Interval";
             autoSearchText = "Auto search";
             exclusionText = "News exclusion";
@@ -226,7 +225,7 @@ public class Text {
                 schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
             }
 
-            return "<b>Настройки</b> " + TelegramBot.ICON_SETTINGS + " \n" +
+            return "<b>Настройки</b> " + Common.ICON_SETTINGS + " \n" +
                     "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
                     "Автоматический запуск поиска по <b>ключевым словам</b> за интервал в п.2" + "\n" +
                     "- - - - - -\n" +
@@ -254,7 +253,7 @@ public class Text {
                 schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
             }
 
-            return "<b>Settings</b> " + TelegramBot.ICON_SETTINGS + " \n" +
+            return "<b>Settings</b> " + Common.ICON_SETTINGS + " \n" +
                     "<b>1. Auto search: " + x.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
