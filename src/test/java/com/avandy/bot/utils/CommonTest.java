@@ -12,8 +12,8 @@ public class CommonTest {
 
     @Test
     public void checkJaroWinkler() {
-        String s1 = "Путин поделился впечатлениями от поездки на снегоболотоходе";
-        String s2 = "Путин поделился впечатлениями от поездки на вездеходе по Чукотке";
+        String s1 = "BlackRock объявила о приобретении инвестфонда GIP за $12,5 млрд";
+        String s2 = "BlackRock покупает инвестфонд Global Infrastructure Partners за $12,5 млрд";
         System.out.println(jwd.compare(s1, s2));
     }
 
