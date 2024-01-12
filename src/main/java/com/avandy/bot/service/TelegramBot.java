@@ -82,9 +82,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
 
+            // DEBUG
             if (config.getBotOwner() != chatId) {
                 String firstName = update.getMessage().getChat().getFirstName();
-                log.warn(firstName + ": [" + messageText + "]");
+                log.warn("{}, {}: message: {}", chatId, firstName, messageText);
             }
 
             /* SEND TO ALL FROM BOT OWNER */
@@ -808,6 +809,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void findAllNews(long chatId) {
+        // DEBUG
+        if (config.getBotOwner() != chatId) {
+            log.warn("{}: Запуск полного поиска", chatId);
+        }
+
         getReplyKeywordWithSearch(chatId, fullSearchStartText);
         //sendMessage(chatId, fullSearchStartText);
 
@@ -861,6 +867,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private int findNewsByKeywords(long chatId) {
+        // DEBUG
+        if (!isAutoSearch.get() && config.getBotOwner() != chatId) {
+            log.warn("{}: Запуск поиска по ключам", chatId);
+        }
+
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
         if (isAutoSearch.get() && keywordsByChatId.isEmpty()) {
@@ -910,6 +921,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void wordSearch(long chatId, String word) {
+        // DEBUG
+        if (config.getBotOwner() != chatId) {
+            log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
+        }
+
         Set<Headline> headlines = search.start(chatId, word);
 
         int showCounter = 1;
