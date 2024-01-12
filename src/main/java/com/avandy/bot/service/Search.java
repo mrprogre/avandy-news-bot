@@ -137,7 +137,7 @@ public class Search {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
 
-            String type = searchType.replaceAll(TelegramBot.REPLACE_ALL_TOP, "");
+            String type = searchType.replaceAll(Common.REPLACE_ALL_TOP, "");
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
             if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {

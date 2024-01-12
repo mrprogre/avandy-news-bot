@@ -38,34 +38,26 @@ import static com.avandy.bot.utils.Text.*;
 @Service
 @RequiredArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
-    public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
-    private static final int JARO_WINKLER_LEVEL = 85;
-    private static final int TOP_TEN_SHOW_LIMIT = 20;
-    private static final int TOP_TEN_LIST_LIMIT = 60;
-    private static final int EXCLUDING_TERMS_LIST_LIMIT = 60;
-    private static final int EXCLUDED_LIMIT = 100;
-    private static final int LIMIT_FOR_BREAKING_INTO_PARTS = 120;
-    private static final int SLEEP_BETWEEN_SENDING_MESSAGES = 100;
+    private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
+    private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
+    private StringBuilder stringBuilderTop;
+    private final Search searchNews;
     private final BotConfig config;
-    private final Search search;
+    private final RssRepository rssRepository;
     private final UserRepository userRepository;
+    private final TopTenRepository topTenRepository;
     private final KeywordRepository keywordRepository;
     private final SettingsRepository settingsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
-    private final RssRepository rssRepository;
-    private final TopTenRepository topTenRepository;
-    private final AtomicBoolean isAutoSearch = new AtomicBoolean(false);
-    private StringBuilder stringBuilderTop;
-    private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
 
     @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
-                       Search search, UserRepository userRepository, KeywordRepository keywordRepository,
+                       Search searchNews, UserRepository userRepository, KeywordRepository keywordRepository,
                        SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
                        RssRepository rssRepository, TopTenRepository topTenRepository) {
         super(botToken);
         this.config = config;
-        this.search = search;
+        this.searchNews = searchNews;
         this.userRepository = userRepository;
         this.keywordRepository = keywordRepository;
         this.settingsRepository = settingsRepository;
@@ -395,7 +387,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (NumberFormatException n) {
             sendMessage(chatId, allowCommasAndNumbersText);
         } catch (NullPointerException npe) {
-            sendMessage(chatId, "click /keywords" + TOP_TEN_SHOW_LIMIT);
+            sendMessage(chatId, "click /keywords" + Common.TOP_TEN_SHOW_LIMIT);
         }
     }
 
@@ -592,7 +584,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int excludedCount = excludedByChatId.size();
 
         if (excludedByChatId.size() >= 400) {
-            excludedByChatId = excludingTermsRepository.findExcludedByChatIdLimit(chatId, EXCLUDED_LIMIT);
+            excludedByChatId = excludingTermsRepository.findExcludedByChatIdLimit(chatId, Common.EXCLUDED_LIMIT);
         }
 
         if (!excludedByChatId.isEmpty()) {
@@ -600,7 +592,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             int counter = 0;
             for (String item : excludedByChatId) {
                 joiner.add(item);
-                if (++counter == EXCLUDING_TERMS_LIST_LIMIT) break;
+                if (++counter == Common.EXCLUDING_TERMS_LIST_LIMIT) break;
             }
             showExcludedButtons(chatId, "<b>" + exclusionWordsText + "</b> [" + excludedCount + "]\n" +
                     joiner);
@@ -817,13 +809,13 @@ public class TelegramBot extends TelegramLongPollingBot {
         getReplyKeywordWithSearch(chatId, fullSearchStartText);
         //sendMessage(chatId, fullSearchStartText);
 
-        Set<Headline> headlines = search.start(chatId, "all");
+        Set<Headline> headlines = searchNews.start(chatId, "all");
 
         int counterParts = 1;
         int showAllCounter = 1;
         if (headlines.size() > 0) {
 
-            if (headlines.size() > LIMIT_FOR_BREAKING_INTO_PARTS) {
+            if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
                 // 10 message in 1
                 StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
                 for (Headline headline : headlines) {
@@ -889,7 +881,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Search
-        Set<Headline> headlines = search.start(chatId, "keywords");
+        Set<Headline> headlines = searchNews.start(chatId, "keywords");
 
         int showCounter = 1;
         if (headlines.size() > 0) {
@@ -926,7 +918,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 
-        Set<Headline> headlines = search.start(chatId, word);
+        Set<Headline> headlines = searchNews.start(chatId, word);
 
         int showCounter = 1;
         if (headlines.size() > 0) {
@@ -949,7 +941,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private static void sleepBetweenSendMessage() {
         try {
-            Thread.sleep(SLEEP_BETWEEN_SENDING_MESSAGES);
+            Thread.sleep(Common.SLEEP_BETWEEN_SENDING_MESSAGES);
         } catch (InterruptedException e) {
             log.error(e.getMessage());
         }
@@ -1249,7 +1241,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         showTopTenListButtons(chatId, "<b>" + listOfDeletedFromTopText + "</b> [" + items.size() + "]\n" +
                 items.stream()
-                        .limit(TOP_TEN_LIST_LIMIT)
+                        .limit(Common.TOP_TEN_LIST_LIMIT)
                         .toList()
                         .toString()
                         .replace("[", "")
@@ -1260,7 +1252,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void showTop(long chatId) {
         // init
         int x = 1;
-        search.start(chatId, "top");
+        searchNews.start(chatId, "top");
 
         List<String> topTen = getTopTen(chatId);
         if (topTen.size() > 0) {
@@ -1287,7 +1279,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (Headline headline : Search.headlinesTopTen) {
             // Удаление ненужных знаков
             String[] titles = headline.getTitle()
-                    .replaceAll(REPLACE_ALL_TOP, "")
+                    .replaceAll(Common.REPLACE_ALL_TOP, "")
                     .toLowerCase()
                     .split(" ");
 
@@ -1303,7 +1295,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
         if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
-            wordsCount = Common.fillTopWithoutDuplicates(wordsCount, JARO_WINKLER_LEVEL);
+            wordsCount = Common.fillTopWithoutDuplicates(wordsCount, Common.JARO_WINKLER_LEVEL);
         }
 
         // Удаление исключённых слов из мап для анализа
@@ -1314,7 +1306,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         return wordsCount.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .limit(TOP_TEN_SHOW_LIMIT)
+                .limit(Common.TOP_TEN_SHOW_LIMIT)
                 .map(x -> String.format("%s [<b>%d</b>]", x.getKey(), x.getValue()) + "\n")
                 .toList();
     }
