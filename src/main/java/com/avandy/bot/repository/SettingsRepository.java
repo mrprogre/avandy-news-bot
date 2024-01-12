@@ -38,7 +38,7 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE settings SET period = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
-    void updatePeriod(String value, long chatId);
+    void updateKeywordsPeriod(String value, long chatId);
 
     @Transactional
     @Modifying(clearAutomatically = true)
