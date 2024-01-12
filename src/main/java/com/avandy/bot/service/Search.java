@@ -48,9 +48,9 @@ public class Search {
         boolean isSearchByOneWordFromTop = !isAllSearch && !isKeywordSearch && !isTopSearch;
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         settings.ifPresentOrElse(value -> userLanguage = value.getLang(), () -> userLanguage = "en");
+        Set<ShowedNews> showedNewsToSave = new HashSet<>();
         Set<Headline> headlinesToShow = new TreeSet<>();
         List<Headline> headlinesDeleteJw = new ArrayList<>();
-
 
         if (isTopSearch) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
@@ -171,27 +171,30 @@ public class Search {
         // Filtering out similar news: O(n²)
         JaroWinklerDistance jwd = new JaroWinklerDistance();
         headlinesToShow.parallelStream()
-                .forEach(headline1 -> headlinesToShow
-                        .forEach(headline2 -> {
-                            int compare = jwd.compare(headline1.getTitle(), headline2.getTitle());
+                .forEach(h1 -> headlinesToShow
+                        .forEach(h2 -> {
+                            int compare = jwd.compare(h1.getTitle(), h2.getTitle());
                             if (compare >= 85 && compare != 100) {
-                                headlinesDeleteJw.add(headline1);
-                                headlinesDeleteJw.remove(headline2);
+                                headlinesDeleteJw.add(h1);
+                                headlinesDeleteJw.remove(h2);
+                                // Не показывать при следующих поисках
+                                if (!showedNewsHash.contains(h1.getTitleHash())) {
+                                    showedNewsToSave.add(new ShowedNews(h1.getChatId(), h1.getType(), h1.getTitleHash()));
+                                }
                             }
                         }));
 
-        // Delete similar news
+        // Deleting news of the same meaning
         List<Headline> uniqueJw = headlinesDeleteJw.stream().distinct().toList();
         for (Headline headline : uniqueJw) {
-            log.warn("Удалена дублирующая новость. " + chatId + ", source: " + headline.getSource() + ", " + headline.getTitle());
+            log.warn("Дублирующая новость: " + chatId + ", source: " + headline.getSource() + ", " + headline.getTitle());
         }
         uniqueJw.forEach(headlinesToShow::remove);
 
         filteredNewsCounter = headlinesToShow.size();
 
+        // Все поиски, кроме поиска новостей по Топу, не дают дублирующих заголовков
         if (!isSearchByOneWordFromTop) {
-            Set<ShowedNews> showedNewsToSave = new HashSet<>();
-
             ShowedNews showedNewsRow;
             for (Headline line : headlinesToShow) {
                 showedNewsRow = new ShowedNews();

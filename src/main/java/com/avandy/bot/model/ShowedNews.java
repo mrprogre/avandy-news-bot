@@ -22,6 +22,12 @@ public class ShowedNews {
     @Size(max = 10)
     private String titleHash;
 
+    public ShowedNews(Long chatId, Integer type, String titleHash) {
+        this.chatId = chatId;
+        this.type = type;
+        this.titleHash = titleHash;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
