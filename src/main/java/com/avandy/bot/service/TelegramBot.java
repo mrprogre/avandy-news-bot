@@ -74,6 +74,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
+            usersIsAutoSearch.put(chatId, new AtomicBoolean(false));
 
             // DEBUG
             if (config.getBotOwner() != chatId) {
@@ -155,6 +156,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             String callbackData = update.getCallbackQuery().getData();
             Long chatId = update.getCallbackQuery().getMessage().getChatId();
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+            usersIsAutoSearch.put(chatId, new AtomicBoolean(false));
 
             switch (callbackData) {
                 case "FEEDBACK" -> {
