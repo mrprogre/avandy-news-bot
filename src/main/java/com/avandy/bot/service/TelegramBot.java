@@ -72,6 +72,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
+            String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
+            log.warn(userTelegramLanguageCode);
+
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
             usersIsAutoSearch.put(chatId, new AtomicBoolean(false));
@@ -138,7 +141,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else {
                 /* Команды без параметров */
                 switch (messageText) {
-                    case "/start" -> startActions(update, chatId);
+                    case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
                     case "/settings" -> getSettings(chatId);
                     case "/search" -> initSearchesKeyboard(chatId);
                     case "/info" -> infoKeyboard(chatId);
@@ -1206,9 +1209,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Добавление пользователя, запись настроек по умолчанию, установка языка интерфейса (/start)
-    private void startActions(Update update, long chatId) {
+    private void startActions(Update update, long chatId, String telegramLang) {
         addUser(update.getMessage());
-        showLanguagesKeyboard(chatId, "Select news language");
+
+        String chooseNewsLangQuestion = "Select news language!";
+        if (telegramLang != null && telegramLang.equals("ru")) {
+            chooseNewsLangQuestion = "Выберите язык получаемых новостей";
+        }
+        showLanguagesKeyboard(chatId, chooseNewsLangQuestion);
+
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
     }
 
