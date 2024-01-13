@@ -633,7 +633,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 
-    /* FULL SEARCH & EXCLUDING TERMS */
+    /* FULL SEARCH */
     // Полный поиск
     private void fullSearch(long chatId) {
         // DEBUG
@@ -700,6 +700,31 @@ public class TelegramBot extends TelegramLongPollingBot {
         initSearchesKeyboard(chatId);
     }
 
+    // KEYBOARDS
+    // Кнопки выбора глубины полного поиска
+    public void fullSearchPeriodChangeKeyboard(long chatId) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("BUTTON_1_ALL", "1");
+        buttons.put("BUTTON_2_ALL", "2");
+        buttons.put("BUTTON_4_ALL", "4");
+        buttons.put("BUTTON_6_ALL", "6");
+        buttons.put("BUTTON_8_ALL", "8");
+        buttons.put("BUTTON_12_ALL", "12");
+        buttons.put("BUTTON_24_ALL", "24");
+        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
+    // Кнопки после итогов полного поиска
+    private void afterFullSearchKeyboard(long chatId, String text) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("SET_PERIOD_ALL", intervalText);
+        buttons.put("EXCLUDE", excludeWordText);
+        buttons.put("FIND_ALL", searchText);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
+
+    /* EXCLUDING TERMS */
     // Список слов-исключений
     private void getExcludedList(long chatId) {
         List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
@@ -805,28 +830,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("EXCLUDE", addText);
         sendMessage(chatId, excludedWordsNotSetText, InlineKeyboards.inlineKeyboardMaker(buttons));
-    }
-
-    // Кнопки выбора глубины полного поиска
-    public void fullSearchPeriodChangeKeyboard(long chatId) {
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("BUTTON_1_ALL", "1");
-        buttons.put("BUTTON_2_ALL", "2");
-        buttons.put("BUTTON_4_ALL", "4");
-        buttons.put("BUTTON_6_ALL", "6");
-        buttons.put("BUTTON_8_ALL", "8");
-        buttons.put("BUTTON_12_ALL", "12");
-        buttons.put("BUTTON_24_ALL", "24");
-        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
-    }
-
-    // Кнопки после итогов полного поиска
-    private void afterFullSearchKeyboard(long chatId, String text) {
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("SET_PERIOD_ALL", intervalText);
-        buttons.put("EXCLUDE", excludeWordText);
-        buttons.put("FIND_ALL", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
 
@@ -1127,6 +1130,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
+    // Включение и выключение применения механизма Джаро-Винклера
+    public void showOnOffJaroWinklerKeyboard(long chatId) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("JARO_WINKLER_OFF", "Off");
+        buttons.put("JARO_WINKLER_ON", "On");
+
+        String isActiveJw = settingsRepository.getJaroWinklerByChatId(chatId);
+        isActiveJw = setOnOffRus(isActiveJw, chatId);
+
+        sendMessage(chatId, jaroWinklerSwitcherText + "<b>" + isActiveJw +
+                "</b>", InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
 
     /* SETTINGS */
     // Получение списка настроек пользователя
@@ -1189,12 +1205,30 @@ public class TelegramBot extends TelegramLongPollingBot {
         return config.getBotName();
     }
 
-    // Пользователь нажал команду /start
-    // Добавление пользователя, запись настроек по умолчанию, установка языка интерфейса
+    // /start: Добавление пользователя, запись настроек по умолчанию, установка языка интерфейса
     private void startActions(Update update, long chatId) {
         addUser(update.getMessage());
         showLanguagesKeyboard(chatId, "Select news language");
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+    }
+
+    // Выбор языка новостей
+    public void showLanguagesKeyboard(long chatId, String text) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("DE_BUTTON", "de");
+        buttons.put("FR_BUTTON", "fr");
+        buttons.put("ES_BUTTON", "es");
+        buttons.put("RU_BUTTON", "ru");
+        buttons.put("EN_BUTTON", "en");
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
+    // Предложение пользователю продолжить работу в боте на старте
+    public void showYesNoOnStartKeyboard(long chatId, String text) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("NO_BUTTON", noText);
+        buttons.put("YES_BUTTON", yesText);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     // Сохранение пользователя в БД
@@ -1220,7 +1254,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    // Удаление пользователя
+    // Установка языка интерфейса
+    private void setLang(long chatId, String lang) {
+        setInterfaceLanguage(lang);
+        settingsRepository.updateLanguage(lang, chatId);
+        setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+        getReplyKeyboardWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
+        showYesNoOnStartKeyboard(chatId, letsStartText);
+        createMenuCommands();
+    }
+
+    // Удаление пользователя из БД
     private void deleteUser(long chatId) {
         log.warn("User {} deleted account", userRepository.findById(chatId));
         userRepository.deleteById(chatId);
@@ -1356,19 +1400,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(1254981379, "<b>Message</b> from user: " + userName + ", id: " + chatId + "\n" + text);
     }
 
-    // Включение и выключение применения механизма Джаро-Винклера
-    public void showOnOffJaroWinklerKeyboard(long chatId) {
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("JARO_WINKLER_OFF", "Off");
-        buttons.put("JARO_WINKLER_ON", "On");
-
-        String isActiveJw = settingsRepository.getJaroWinklerByChatId(chatId);
-        isActiveJw = setOnOffRus(isActiveJw, chatId);
-
-        sendMessage(chatId, jaroWinklerSwitcherText + "<b>" + isActiveJw +
-                "</b>", InlineKeyboards.inlineKeyboardMaker(buttons));
-    }
-
     // Преобразование on/off в русские слова
     private String setOnOffRus(String value, long chatId) {
         String lang = settingsRepository.getLangByChatId(chatId);
@@ -1376,25 +1407,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             value = value.equals("on") ? "вкл [on]" : "выкл [off]";
         }
         return value;
-    }
-
-    // Предложение пользователю продолжить работу в боте на старте
-    public void showYesNoOnStartKeyboard(long chatId, String text) {
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("NO_BUTTON", noText);
-        buttons.put("YES_BUTTON", yesText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
-    }
-
-    // Выбор языка новостей
-    public void showLanguagesKeyboard(long chatId, String text) {
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("DE_BUTTON", "de");
-        buttons.put("FR_BUTTON", "fr");
-        buttons.put("ES_BUTTON", "es");
-        buttons.put("RU_BUTTON", "ru");
-        buttons.put("EN_BUTTON", "en");
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     // Кнопка отмены ввода слов
@@ -1418,16 +1430,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("START_SEARCH", "» » »");
         sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(chatId),
                 InlineKeyboards.inlineKeyboardMaker(buttons));
-    }
-
-    // Установка языка интерфейса
-    private void setLang(long chatId, String lang) {
-        setInterfaceLanguage(lang);
-        settingsRepository.updateLanguage(lang, chatId);
-        setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-        getReplyKeyboardWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
-        showYesNoOnStartKeyboard(chatId, letsStartText);
-        createMenuCommands();
     }
 
     // Дополнительная клавиатура с тремя видами поиска на старте приложения с приветствием пользователя
