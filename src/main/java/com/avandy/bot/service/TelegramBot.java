@@ -204,7 +204,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 /* SETTINGS */
                 case "GET_SETTINGS" -> getSettings(chatId);
-                case "SET_PERIOD" -> keywordsPeriodKeyboard(chatId);
+                case "SET_PERIOD" -> keywordsChangePeriodKeyboard(chatId);
                 case "SET_PERIOD_ALL" -> fullSearchPeriodChangeKeyboard(chatId);
                 case "SET_PERIOD_TOP" -> topPeriodsKeyboard(chatId);
                 case "SET_EXCLUDED" -> excludeOnOffKeyboard(chatId);
@@ -573,7 +573,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
-    public void keywordsPeriodKeyboard(long chatId) {
+    public void keywordsChangePeriodKeyboard(long chatId) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("BUTTON_1", "1");
         buttons.put("BUTTON_2", "2");
@@ -633,7 +633,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 
-    /* FULL SEARCH & EXCLUDING TERMS*/
+    /* FULL SEARCH & EXCLUDING TERMS */
     // Полный поиск
     private void fullSearch(long chatId) {
         // DEBUG
@@ -807,7 +807,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, excludedWordsNotSetText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
-    // KEYBOARDS
     // Кнопки выбора глубины полного поиска
     public void fullSearchPeriodChangeKeyboard(long chatId) {
         Map<String, String> buttons = new LinkedHashMap<>();
