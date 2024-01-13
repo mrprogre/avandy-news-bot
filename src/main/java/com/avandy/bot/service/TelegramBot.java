@@ -73,7 +73,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
             String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
-            log.warn(userTelegramLanguageCode);
 
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
@@ -1214,7 +1213,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         String chooseNewsLangQuestion = "Select news language!";
         if (telegramLang != null && telegramLang.equals("ru")) {
-            chooseNewsLangQuestion = "Выберите язык получаемых новостей";
+            chooseNewsLangQuestion = "Выберите язык новостей";
         }
         showLanguagesKeyboard(chatId, chooseNewsLangQuestion);
 
