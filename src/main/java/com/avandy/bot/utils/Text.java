@@ -5,7 +5,7 @@ import com.vdurmont.emoji.EmojiParser;
 
 public class Text {
     public static String greetingText, letsStartText, noText, yesText,
-            infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText, listRssText,
+            infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText,
             deleteUserText, addText, delText, excludeWordText, searchText, excludedText, listKeywordsButtonText,
             updateTopText, updateTopText2, undefinedCommandText, changesSavedText, jaroWinklerSwitcherText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
@@ -41,7 +41,6 @@ public class Text {
             top20Text = "Часто употребляемые слова";
             top20Text2 = "<b>Top 20</b> слов за ";
             listExcludedText = "Слова-исключения";
-            listRssText = "Источники RSS";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
             delText = "Удалить";
@@ -135,7 +134,6 @@ public class Text {
             top20Text = "Frequently used words by period";
             top20Text2 = "<b>Top 20</b> words in ";
             listExcludedText = "Excluding terms";
-            listRssText = "News sources";
             deleteUserText = "Delete user data";
             addText = "Add";
             delText = "Delete";
