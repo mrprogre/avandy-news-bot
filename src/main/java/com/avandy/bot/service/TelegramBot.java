@@ -882,9 +882,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
 
-        // Отсев слов, число повторений которых меньше четырёх
+        // Отсев слов, число повторений которых меньше трёх
         wordsCount = wordsCount.entrySet().stream()
-                .filter(x -> x.getValue() > 3)
+                .filter(x -> x.getValue() >= 3)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
         // Проверка включен ли метод Джаро-Винклера (в интерфейсе для простоты назван "Удаление окончаний")
