@@ -68,6 +68,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        // Проверка наличия не пустого сообщения
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
@@ -75,8 +76,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             UserState userState = userStates.get(chatId);
             usersIsAutoSearch.put(chatId, new AtomicBoolean(false));
 
-            // DEBUG
-            if (1254981379L != chatId) {
+            // DEBUG: запись действий пользователя для анализа
+            if (Common.DEV_ID != chatId) {
                 String firstName = update.getMessage().getChat().getFirstName();
                 log.warn("{}, {}: message: {}", chatId, firstName, messageText);
             }
@@ -351,6 +352,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "SET_START_22" -> keywordsUpdateSearchStartTime(22, chatId);
                 case "SET_START_23" -> keywordsUpdateSearchStartTime(23, chatId);
             }
+        } else {
+            log.warn("Message is empty!");
         }
     }
 
@@ -383,7 +386,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Поиск по ключевым словам
     private int findNewsByKeywords(long chatId) {
         // DEBUG
-        if (!usersIsAutoSearch.get(chatId).get() && 1254981379L != chatId) {
+        if (!usersIsAutoSearch.get(chatId).get() && Common.DEV_ID != chatId) {
             log.warn("{}: Запуск поиска по ключам", chatId);
         }
 
@@ -634,7 +637,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Полный поиск
     private void fullSearch(long chatId) {
         // DEBUG
-        if (1254981379L != chatId) {
+        if (Common.DEV_ID != chatId) {
             log.warn("{}: Запуск полного поиска", chatId);
         }
 
@@ -924,7 +927,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Механизм поиска по слову из Топа
     private void wordSearch(long chatId, String word) {
         // DEBUG
-        if (1254981379L != chatId) {
+        if (Common.DEV_ID != chatId) {
             log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 

@@ -11,7 +11,7 @@ import java.util.*;
 @Slf4j
 @UtilityClass
 public class Common {
-    public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
+    public static final long DEV_ID = 1254981379L;
     public static final int JARO_WINKLER_LEVEL = 85;
     public static final int TOP_TEN_SHOW_LIMIT = 20;
     public static final int TOP_TEN_LIST_LIMIT = 60;
@@ -26,6 +26,7 @@ public class Common {
     public static final String ICON_GOOD_BYE = "\uD83D\uDC4B";
     public static final String ICON_SETTINGS = "\uD83C\uDF0D";
     public static final String ICON_TOP_20_FIRE = "\uD83D\uDD25";
+    public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
 
     // Compare dates to find news by period
     public static int compareDates(Date now, Date in, int minutes) {
