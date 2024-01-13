@@ -18,12 +18,12 @@ public class Monitoring {
     @Scheduled(cron = "${cron.monitoring.no.save.news}")
     void getStatNoSaveNews() {
         int newsListCounts = newsListRepository.getNewsListCountBy6Hours("2 hours");
-        if (newsListCounts < 10) {
+        if (newsListCounts < 5) {
             log.error("За 6 часов сохранено новостей: {}. Проверить!", newsListCounts);
         }
     }
 
-    // warn: Мониторинг количества загруженных новостей: раз в 6 часов
+    // info: Мониторинг количества загруженных новостей: раз в 6 часов
     @Scheduled(cron = "${cron.monitoring.save.news}")
     void getStatSaveNews() {
         int newsListCounts = newsListRepository.getNewsListCountBy6Hours("6 hours");
