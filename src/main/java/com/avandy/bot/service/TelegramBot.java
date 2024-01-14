@@ -97,33 +97,33 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatToSend, textToSend);
 
                 /* USER INPUT BLOCK */
-            } else if (userState != null && "SEND_FEEDBACK".equals(userState.getState())) {
+            } else if (userState != null && States.SEND_FEEDBACK.equals(userState.getState())) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
                 sendFeedback(chatId, feedback);
 
-            } else if (userState != null && "ADD_KEYWORDS".equals(userState.getState())) {
+            } else if (userState != null && States.ADD_KEYWORDS.equals(userState.getState())) {
                 String keywords = messageText.trim().toLowerCase();
                 String[] words = keywords.split(",");
                 addKeyword(chatId, words);
                 showKeywordsList(chatId);
 
-            } else if (userState != null && "DEL_KEYWORDS".equals(userState.getState())) {
+            } else if (userState != null && States.DEL_KEYWORDS.equals(userState.getState())) {
                 String keywords = messageText.trim().toLowerCase();
                 deleteKeywords(keywords, chatId);
 
-            } else if (userState != null && "ADD_EXCLUDED".equals(userState.getState())) {
+            } else if (userState != null && States.ADD_EXCLUDED.equals(userState.getState())) {
                 String exclude = messageText.trim().toLowerCase();
                 String[] words = exclude.split(",");
                 addExclude(chatId, words);
                 getExcludedList(chatId);
 
-            } else if (userState != null && "DEL_EXCLUDED".equals(userState.getState())) {
+            } else if (userState != null && States.DEL_EXCLUDED.equals(userState.getState())) {
                 String excluded = messageText.trim().toLowerCase();
                 String[] words = excluded.split(",");
                 delExcluded(chatId, words);
                 getExcludedList(chatId);
 
-            } else if (userState != null && "DEL_TOP".equals(userState.getState())) {
+            } else if (userState != null && States.DEL_TOP.equals(userState.getState())) {
                 String text = messageText.trim().toLowerCase();
                 String[] words = text.split(",");
                 topListDelete(chatId, words);
@@ -162,7 +162,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (callbackData) {
                 case "FEEDBACK" -> {
-                    userStates.put(chatId, new UserState("SEND_FEEDBACK"));
+                    userStates.put(chatId, new UserState(States.SEND_FEEDBACK));
                     cancelKeyboard(chatId, sendMessageForDevText);
                 }
 
@@ -170,11 +170,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatId)).start();
                 case "LIST_KEYWORDS" -> showKeywordsList(chatId);
                 case "ADD" -> {
-                    userStates.put(chatId, new UserState("ADD_KEYWORDS"));
+                    userStates.put(chatId, new UserState(States.ADD_KEYWORDS));
                     cancelKeyboard(chatId, addInListText);
                 }
                 case "DELETE" -> {
-                    userStates.put(chatId, new UserState("DEL_KEYWORDS"));
+                    userStates.put(chatId, new UserState(States.DEL_KEYWORDS));
                     cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
                 }
 
@@ -186,11 +186,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* EXCLUDED */
                 case "LIST_EXCLUDED" -> getExcludedList(chatId);
                 case "EXCLUDE" -> {
-                    userStates.put(chatId, new UserState("ADD_EXCLUDED"));
+                    userStates.put(chatId, new UserState(States.ADD_EXCLUDED));
                     cancelKeyboard(chatId, addInListText);
                 }
                 case "DELETE_EXCLUDED" -> {
-                    userStates.put(chatId, new UserState("DEL_EXCLUDED"));
+                    userStates.put(chatId, new UserState(States.DEL_EXCLUDED));
                     cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
                 }
 
@@ -200,7 +200,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "GET_TOP" -> showTop(chatId);
                 case "WORD_SEARCH" -> new Thread(() -> topSearchKeyboard(chatId)).start();
                 case "DELETE_TOP" -> {
-                    userStates.put(chatId, new UserState("DEL_TOP"));
+                    userStates.put(chatId, new UserState(States.DEL_TOP));
                     cancelKeyboard(chatId, removeFromTopTenListText);
                 }
 
@@ -237,11 +237,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
                 // Language
-                case "DE_BUTTON" -> setLang(chatId, "de");
-                case "ES_BUTTON" -> setLang(chatId, "es");
-                case "FR_BUTTON" -> setLang(chatId, "fr");
-                case "RU_BUTTON" -> setLang(chatId, "ru");
-                case "EN_BUTTON" -> setLang(chatId, "en");
+                case "DE_BUTTON" -> setLangAndMenuCreate(chatId, "de");
+                case "ES_BUTTON" -> setLangAndMenuCreate(chatId, "es");
+                case "FR_BUTTON" -> setLangAndMenuCreate(chatId, "fr");
+                case "RU_BUTTON" -> setLangAndMenuCreate(chatId, "ru");
+                case "EN_BUTTON" -> setLangAndMenuCreate(chatId, "en");
 
                 // Обновление периода поиска по ключевым словам
                 case "BUTTON_1" -> keywordsUpdatePeriod(1, chatId);
@@ -1262,8 +1262,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    // Установка языка интерфейса
-    private void setLang(long chatId, String lang) {
+    // Установка языка интерфейса и создание меню
+    private void setLangAndMenuCreate(long chatId, String lang) {
         setInterfaceLanguage(lang);
         settingsRepository.updateLanguage(lang, chatId);
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));

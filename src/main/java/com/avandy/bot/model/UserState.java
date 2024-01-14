@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserState {
-    private String state;
+    private States state;
 
-    public UserState(String state) {
+    public UserState(States state) {
         this.state = state;
     }
 }
