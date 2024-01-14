@@ -130,16 +130,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                 topListDelete(chatId, words);
                 getTopTenWordsList(chatId);
 
-            } else if (messageText.startsWith(keywordsSearchText)) {
+                // Поиск по трём кнопкам меню
+            } else if (messageText.equals(keywordsSearchText)) {
                 new Thread(() -> findNewsByKeywords(chatId)).start();
 
-            } else if (messageText.startsWith(updateTopText2)) {
+            } else if (messageText.equals(updateTopText2)) {
                 new Thread(() -> showTop(chatId)).start();
 
-            } else if (messageText.startsWith(fullSearchText)) {
+            } else if (messageText.equals(fullSearchText)) {
                 new Thread(() -> fullSearch(chatId)).start();
             } else {
-                /* Команды без параметров */
+                /* Основные команды без параметров */
                 switch (messageText) {
                     case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
                     case "/settings" -> getSettings(chatId);
