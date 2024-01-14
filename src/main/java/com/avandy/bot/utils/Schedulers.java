@@ -2,6 +2,7 @@ package com.avandy.bot.utils;
 
 import com.avandy.bot.repository.NewsListRepository;
 import com.avandy.bot.repository.ShowedNewsRepository;
+import com.avandy.bot.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,8 +12,24 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class Schedulers {
+    private final SearchService searchService;
     private final NewsListRepository newsListRepository;
     private final ShowedNewsRepository showedNewsRepository;
+
+    // Сохранение всех новостей в БД по всем источникам каждые 10 минут
+    @Scheduled(cron = "${cron.fill.database}")
+    public void scheduler() {
+        long start = System.currentTimeMillis();
+
+        int countRome = searchService.downloadNewsByRome();
+        int countJsoup = searchService.downloadNewsByJsoup();
+
+        long searchTime = System.currentTimeMillis() - start;
+        if (countRome > 0 || countJsoup > 0) {
+            log.info("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
+                    countRome, countJsoup, searchTime);
+        }
+    }
 
     // error: Мониторинг работы загрузчика новостей: раз в 2 часа
     @Scheduled(cron = "${cron.monitoring.no.save.news}")
@@ -33,7 +50,7 @@ public class Schedulers {
     }
 
     // info: Очистка таблицы news_list раз в сутки в 8 утра
-    @Scheduled(cron = "${cron.delete.old.news.list}")
+    @Scheduled(cron = "${cron.delete.old.news}")
     void deleteOldNewsList() {
         int newsListCounts = newsListRepository.deleteNews72h();
         if (newsListCounts > 0) {

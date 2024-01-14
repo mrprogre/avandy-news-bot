@@ -41,7 +41,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
     private final Map<Long, AtomicBoolean> usersIsAutoSearch = new ConcurrentHashMap<>();
-    private final Search searchNews;
+    private final SearchService searchService;
     private final BotConfig config;
     private final RssRepository rssRepository;
     private final UserRepository userRepository;
@@ -52,12 +52,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
-                       Search searchNews, UserRepository userRepository, KeywordRepository keywordRepository,
+                       SearchService searchService, UserRepository userRepository, KeywordRepository keywordRepository,
                        SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
                        RssRepository rssRepository, TopTenRepository topTenRepository) {
         super(botToken);
         this.config = config;
-        this.searchNews = searchNews;
+        this.searchService = searchService;
         this.userRepository = userRepository;
         this.keywordRepository = keywordRepository;
         this.settingsRepository = settingsRepository;
@@ -409,7 +409,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Search
-        Set<Headline> headlines = searchNews.start(chatId, "keywords");
+        Set<Headline> headlines = searchService.start(chatId, "keywords");
 
         int showCounter = 1;
         if (headlines.size() > 0) {
@@ -646,7 +646,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         getReplyKeyboardWithSearch(chatId, fullSearchStartText);
         //sendMessage(chatId, fullSearchStartText);
 
-        Set<Headline> headlines = searchNews.start(chatId, "all");
+        Set<Headline> headlines = searchService.start(chatId, "all");
 
         int counterParts = 1;
         int showAllCounter = 1;
@@ -840,7 +840,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void showTop(long chatId) {
         // init
         int x = 1;
-        searchNews.start(chatId, "top");
+        searchService.start(chatId, "top");
 
         List<String> topTen = topWordsPrepare(chatId);
         if (topTen.size() > 0) {
@@ -935,7 +935,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 
-        Set<Headline> headlines = searchNews.start(chatId, word);
+        Set<Headline> headlines = searchService.start(chatId, word);
 
         int showCounter = 1;
         if (headlines.size() > 0) {

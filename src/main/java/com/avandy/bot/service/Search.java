@@ -9,24 +9,23 @@ import com.avandy.bot.utils.ParserJsoup;
 import com.rometools.rome.feed.synd.SyndEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Slf4j
 @Service
-public class Search {
+public class Search implements SearchService {
     private int periodMinutes = 1440;
     private String userLanguage;
-    public static int totalNewsCounter;
-    public static int filteredNewsCounter;
     private final SettingsRepository settingsRepository;
     private final KeywordRepository keywordRepository;
     private final RssRepository rssRepository;
     private final ShowedNewsRepository showedNewsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
     private final NewsListRepository newsListRepository;
+    public static int totalNewsCounter;
+    public static int filteredNewsCounter;
     public static ArrayList<Headline> headlinesTopTen;
 
     @Autowired
@@ -41,6 +40,7 @@ public class Search {
         this.newsListRepository = newsListRepository;
     }
 
+    @Override
     public Set<Headline> start(Long chatId, String searchType) {
         boolean isAllSearch = searchType.equals("all");
         boolean isKeywordSearch = searchType.equals("keywords");
@@ -212,20 +212,7 @@ public class Search {
         return headlinesToShow;
     }
 
-    @Scheduled(cron = "${cron.fill.database}")
-    public void scheduler() {
-        long start = System.currentTimeMillis();
-
-        int countRome = downloadNewsByRome();
-        int countJsoup = downloadNewsByJsoup();
-
-        long searchTime = System.currentTimeMillis() - start;
-        if (countRome > 0 || countJsoup > 0) {
-            log.info("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
-                    countRome, countJsoup, searchTime);
-        }
-    }
-
+    @Override
     public int downloadNewsByRome() {
         Set<NewsList> newsList = new LinkedHashSet<>();
         LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
@@ -270,6 +257,7 @@ public class Search {
         return newsList.size();
     }
 
+    @Override
     public int downloadNewsByJsoup() {
         Set<NewsList> newsList = new LinkedHashSet<>();
         LinkedHashSet<String> newsListAllHash = newsListRepository.getNewsListAllHash();
