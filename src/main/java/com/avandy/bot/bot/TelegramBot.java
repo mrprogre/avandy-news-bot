@@ -141,7 +141,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (messageText.equals(fullSearchText)) {
                 new Thread(() -> fullSearch(chatId)).start();
             } else {
-                /* Основные команды без параметров */
+                /* Основные команды */
                 switch (messageText) {
                     case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
                     case "/settings" -> getSettings(chatId);
@@ -172,11 +172,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* KEYWORDS */
                 case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatId)).start();
                 case "LIST_KEYWORDS" -> showKeywordsList(chatId);
-                case "ADD" -> {
+                case "ADD_KEYWORD" -> {
                     userStates.put(chatId, UserState.ADD_KEYWORDS);
                     cancelKeyboard(chatId, addInListText);
                 }
-                case "DELETE" -> {
+                case "DELETE_KEYWORD" -> {
                     userStates.put(chatId, UserState.DEL_KEYWORDS);
                     cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
                 }
@@ -188,7 +188,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 /* EXCLUDED */
                 case "LIST_EXCLUDED" -> getExcludedList(chatId);
-                case "EXCLUDE" -> {
+                case "ADD_EXCLUDED" -> {
                     userStates.put(chatId, UserState.ADD_EXCLUDED);
                     cancelKeyboard(chatId, addInListText);
                 }
@@ -201,7 +201,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "DEL_FROM_TOP" -> topDeleteKeyboard(chatId);
                 case "LIST_TOP" -> getTopTenWordsList(chatId);
                 case "GET_TOP" -> showTop(chatId);
-                case "WORD_SEARCH" -> new Thread(() -> topSearchKeyboard(chatId)).start();
+                case "SEARCH_BY_TOP_WORD" -> new Thread(() -> topSearchKeyboard(chatId)).start();
                 case "DELETE_TOP" -> {
                     userStates.put(chatId, UserState.DEL_TOP);
                     cancelKeyboard(chatId, removeFromTopTenListText);
@@ -574,7 +574,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // KEYBOARDS
     private void addKeywordsKeyboard(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("ADD", addText);
+        buttons.put("ADD_KEYWORD", addText);
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
@@ -593,8 +593,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void keywordsListKeyboard(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
 
-        buttons.put("DELETE", delText);
-        buttons.put("ADD", addText);
+        buttons.put("DELETE_KEYWORD", delText);
+        buttons.put("ADD_KEYWORD", addText);
         buttons.put("FIND_BY_KEYWORDS", searchText);
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
@@ -723,7 +723,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void afterFullSearchKeyboard(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("SET_PERIOD_ALL", intervalText);
-        buttons.put("EXCLUDE", excludeWordText);
+        buttons.put("ADD_EXCLUDED", excludeWordText);
         buttons.put("FIND_ALL", searchText);
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
@@ -825,7 +825,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
 
         buttons.put("DELETE_EXCLUDED", delText);
-        buttons.put("EXCLUDE", addText);
+        buttons.put("ADD_EXCLUDED", addText);
         buttons.put("FIND_ALL", searchText);
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
@@ -833,7 +833,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Одна кнопка с добавлением в слова-исключения
     private void excludeKeyboard(long chatId) {
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("EXCLUDE", addText);
+        buttons.put("ADD_EXCLUDED", addText);
         sendMessage(chatId, excludedWordsNotSetText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
@@ -1048,7 +1048,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons2.put("SET_PERIOD_TOP", intervalText);
         buttons2.put("GET_TOP", updateTopText);
         buttons3.put("JARO_WINKLER_MODE", jaroWinklerText);
-        buttons3.put("WORD_SEARCH", searchText);
+        buttons3.put("SEARCH_BY_TOP_WORD", searchText);
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
     }
 
