@@ -2,7 +2,7 @@ package com.avandy.bot.utils;
 
 import com.avandy.bot.repository.NewsListRepository;
 import com.avandy.bot.repository.ShowedNewsRepository;
-import com.avandy.bot.service.SearchService;
+import com.avandy.bot.search.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,4 +1,4 @@
-package com.avandy.bot.service;
+package com.avandy.bot.search;
 
 import com.avandy.bot.model.Headline;
 

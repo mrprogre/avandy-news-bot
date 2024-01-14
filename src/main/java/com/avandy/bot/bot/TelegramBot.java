@@ -1,10 +1,11 @@
-package com.avandy.bot.service;
+package com.avandy.bot.bot;
 
 import com.avandy.bot.config.BotConfig;
 import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
+import com.avandy.bot.search.Search;
+import com.avandy.bot.search.SearchService;
 import com.avandy.bot.utils.Common;
-import com.avandy.bot.utils.InlineKeyboards;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import static com.avandy.bot.utils.Text.*;
+import static com.avandy.bot.bot.TextInterface.*;
 
 @Slf4j
 @Service

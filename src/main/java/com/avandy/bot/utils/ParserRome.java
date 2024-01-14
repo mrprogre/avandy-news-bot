@@ -11,7 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 @Slf4j
-public class Parser {
+public class ParserRome {
 
     public SyndFeed parseFeed(String url) throws FeedException {
         XmlReader reader = null;

@@ -1,9 +1,10 @@
-package com.avandy.bot.utils;
+package com.avandy.bot.bot;
 
 import com.avandy.bot.model.Settings;
+import com.avandy.bot.utils.Common;
 import com.vdurmont.emoji.EmojiParser;
 
-public class Text {
+public class TextInterface {
     public static String greetingText, letsStartText, noText, yesText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText,
             deleteUserText, addText, delText, excludeWordText, searchText, excludedText, listKeywordsButtonText,

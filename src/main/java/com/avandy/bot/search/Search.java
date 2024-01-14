@@ -1,10 +1,10 @@
-package com.avandy.bot.service;
+package com.avandy.bot.search;
 
 import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
 import com.avandy.bot.utils.JaroWinklerDistance;
-import com.avandy.bot.utils.Parser;
+import com.avandy.bot.utils.ParserRome;
 import com.avandy.bot.utils.ParserJsoup;
 import com.rometools.rome.feed.synd.SyndEntry;
 import lombok.extern.slf4j.Slf4j;
@@ -222,7 +222,7 @@ public class Search implements SearchService {
             for (RssList source : sources) {
                 List<SyndEntry> entries;
                 try {
-                    entries = new Parser().parseFeed(source.getLink()).getEntries();
+                    entries = new ParserRome().parseFeed(source.getLink()).getEntries();
                 } catch (Exception e) {
                     if (e.getMessage().contains("Invalid XML")) {
                         log.info("Invalid XML: " + source.getSource());

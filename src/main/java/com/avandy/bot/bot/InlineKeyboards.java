@@ -1,4 +1,4 @@
-package com.avandy.bot.utils;
+package com.avandy.bot.bot;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
