@@ -85,46 +85,47 @@ public class TelegramBot extends TelegramLongPollingBot {
                 log.warn("{}, {}: message: {}", chatId, firstName, messageText);
             }
 
-            /* SEND TO ALL FROM BOT OWNER */
+            // SEND TO ALL FROM BOT OWNER
             if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
                 String textToSend = messageText.substring(messageText.indexOf(" "));
                 List<User> users = userRepository.findAllByIsActive();
                 for (User user : users) {
                     sendMessage(user.getChatId(), textToSend);
                 }
+                // SEND TO CHAT_ID FROM BOT OWNER
             } else if (messageText.startsWith("@") && config.getBotOwner() == chatId) {
                 long chatToSend = Long.parseLong(messageText.substring(1, messageText.indexOf(" ")));
                 String textToSend = messageText.substring(messageText.indexOf(" "));
                 sendMessage(chatToSend, textToSend);
 
                 /* USER INPUT BLOCK */
-            } else if (userState != null && States.SEND_FEEDBACK.equals(userState.getState())) {
+            } else if (UserState.SEND_FEEDBACK.equals(userState)) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
                 sendFeedback(chatId, feedback);
 
-            } else if (userState != null && States.ADD_KEYWORDS.equals(userState.getState())) {
+            } else if (UserState.ADD_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
                 String[] words = keywords.split(",");
                 addKeyword(chatId, words);
                 showKeywordsList(chatId);
 
-            } else if (userState != null && States.DEL_KEYWORDS.equals(userState.getState())) {
+            } else if (UserState.DEL_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
                 deleteKeywords(keywords, chatId);
 
-            } else if (userState != null && States.ADD_EXCLUDED.equals(userState.getState())) {
+            } else if (UserState.ADD_EXCLUDED.equals(userState)) {
                 String exclude = messageText.trim().toLowerCase();
                 String[] words = exclude.split(",");
                 addExclude(chatId, words);
                 getExcludedList(chatId);
 
-            } else if (userState != null && States.DEL_EXCLUDED.equals(userState.getState())) {
+            } else if (UserState.DEL_EXCLUDED.equals(userState)) {
                 String excluded = messageText.trim().toLowerCase();
                 String[] words = excluded.split(",");
                 delExcluded(chatId, words);
                 getExcludedList(chatId);
 
-            } else if (userState != null && States.DEL_TOP.equals(userState.getState())) {
+            } else if (UserState.DEL_TOP.equals(userState)) {
                 String text = messageText.trim().toLowerCase();
                 String[] words = text.split(",");
                 topListDelete(chatId, words);
@@ -164,7 +165,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (callbackData) {
                 case "FEEDBACK" -> {
-                    userStates.put(chatId, new UserState(States.SEND_FEEDBACK));
+                    userStates.put(chatId, UserState.SEND_FEEDBACK);
                     cancelKeyboard(chatId, sendMessageForDevText);
                 }
 
@@ -172,11 +173,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatId)).start();
                 case "LIST_KEYWORDS" -> showKeywordsList(chatId);
                 case "ADD" -> {
-                    userStates.put(chatId, new UserState(States.ADD_KEYWORDS));
+                    userStates.put(chatId, UserState.ADD_KEYWORDS);
                     cancelKeyboard(chatId, addInListText);
                 }
                 case "DELETE" -> {
-                    userStates.put(chatId, new UserState(States.DEL_KEYWORDS));
+                    userStates.put(chatId, UserState.DEL_KEYWORDS);
                     cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
                 }
 
@@ -188,11 +189,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* EXCLUDED */
                 case "LIST_EXCLUDED" -> getExcludedList(chatId);
                 case "EXCLUDE" -> {
-                    userStates.put(chatId, new UserState(States.ADD_EXCLUDED));
+                    userStates.put(chatId, UserState.ADD_EXCLUDED);
                     cancelKeyboard(chatId, addInListText);
                 }
                 case "DELETE_EXCLUDED" -> {
-                    userStates.put(chatId, new UserState(States.DEL_EXCLUDED));
+                    userStates.put(chatId, UserState.DEL_EXCLUDED);
                     cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
                 }
 
@@ -202,7 +203,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "GET_TOP" -> showTop(chatId);
                 case "WORD_SEARCH" -> new Thread(() -> topSearchKeyboard(chatId)).start();
                 case "DELETE_TOP" -> {
-                    userStates.put(chatId, new UserState(States.DEL_TOP));
+                    userStates.put(chatId, UserState.DEL_TOP);
                     cancelKeyboard(chatId, removeFromTopTenListText);
                 }
 
