@@ -22,7 +22,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -407,7 +406,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!usersIsAutoSearch.get(chatId).get()) {
-            getReplyKeyboardWithSearch(chatId, searchByKeywordsStartText);
+            getReplyKeyboard(chatId, searchByKeywordsStartText, "");
             //sendMessage(chatId, searchByKeywordsStartText);
         }
 
@@ -646,7 +645,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.warn("{}: Запуск полного поиска", chatId);
         }
 
-        getReplyKeyboardWithSearch(chatId, fullSearchStartText);
+        getReplyKeyboard(chatId, fullSearchStartText, "");
         //sendMessage(chatId, fullSearchStartText);
 
         Set<Headline> headlines = searchService.start(chatId, "all");
@@ -1270,7 +1269,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         setInterfaceLanguage(lang);
         settingsRepository.updateLanguage(lang, chatId);
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-        getReplyKeyboardWithSearch(chatId, greetingText, userRepository.findNameByChatId(chatId));
+        getReplyKeyboard(chatId, greetingText, userRepository.findNameByChatId(chatId));
         showYesNoOnStartKeyboard(chatId, letsStartText);
         createMenuCommands();
     }
@@ -1443,42 +1442,19 @@ public class TelegramBot extends TelegramLongPollingBot {
                 InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
-    // Дополнительная клавиатура с тремя видами поиска на старте приложения с приветствием пользователя
-    private void getReplyKeyboardWithSearch(long chatId, String textToSend, String firstName) {
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        keyboardMarkup.setResizeKeyboard(true);
-        keyboardMarkup.setSelective(false);
+    // Дополнительная клавиатура с тремя видами поиска (с приветствием пользователя)
+    private void getReplyKeyboard(long chatId, String textToSend, String firstName) {
+        String text = textToSend;
 
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
-
-        KeyboardRow row = new KeyboardRow();
-        row.add(keywordsSearchText);
-        row.add(fullSearchText);
-        row.add(updateTopText2);
-
-        keyboardRows.add(row);
-        keyboardMarkup.setKeyboard(keyboardRows);
-
-        sendMessage(chatId, String.format(textToSend, firstName), keyboardMarkup);
-    }
-
-    // Дополнительная клавиатура с тремя видами поиска
-    private void getReplyKeyboardWithSearch(long chatId, String textToSend) {
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        keyboardMarkup.setResizeKeyboard(true);
-        keyboardMarkup.setSelective(false);
-
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        if (firstName != null) {
+            text = String.format(textToSend, firstName);
+        }
 
         KeyboardRow row = new KeyboardRow();
         row.add(keywordsSearchText);
         row.add(fullSearchText);
         row.add(updateTopText2);
-
-        keyboardRows.add(row);
-        keyboardMarkup.setKeyboard(keyboardRows);
-
-        sendMessage(chatId, textToSend, keyboardMarkup);
+        sendMessage(chatId, text, ReplyKeyboards.replyKeyboardMaker(row));
     }
 
     // Создание кнопок меню
