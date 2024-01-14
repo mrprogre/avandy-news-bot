@@ -356,8 +356,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "SET_START_22" -> keywordsUpdateSearchStartTime(22, chatId);
                 case "SET_START_23" -> keywordsUpdateSearchStartTime(23, chatId);
             }
-        } else {
-            log.warn("Message is empty!");
         }
     }
 
