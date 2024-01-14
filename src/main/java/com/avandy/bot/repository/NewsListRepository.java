@@ -1,6 +1,8 @@
 package com.avandy.bot.repository;
 
 import com.avandy.bot.model.NewsList;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -32,8 +34,14 @@ public interface NewsListRepository extends CrudRepository<NewsList, Long> {
             , nativeQuery = true)
     TreeSet<NewsList> getNewsWithLike(String period, String word, String lang);
 
-    /* Monitoring */
+    /* Schedulers */
     @Query(value = "SELECT count(*) FROM news_list WHERE pub_date > (current_timestamp - cast(:interval as interval))",
             nativeQuery = true)
     int getNewsListCountBy6Hours(String interval);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "DELETE FROM news_list WHERE add_date < (current_timestamp - cast('72 hours' as interval))",
+            nativeQuery = true)
+    int deleteNews72h();
 }

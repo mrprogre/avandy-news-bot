@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class Monitoring {
+public class Schedulers {
     private final NewsListRepository newsListRepository;
     private final ShowedNewsRepository showedNewsRepository;
 
@@ -19,7 +19,7 @@ public class Monitoring {
     void getStatNoSaveNews() {
         int newsListCounts = newsListRepository.getNewsListCountBy6Hours("2 hours");
         if (newsListCounts < 5) {
-            log.error("За 6 часов сохранено новостей: {}. Проверить!", newsListCounts);
+            log.error("Загрузчик новостей не работает, сохранено новостей: {}!", newsListCounts);
         }
     }
 
@@ -32,12 +32,21 @@ public class Monitoring {
         }
     }
 
+    // info: Очистка таблицы news_list раз в сутки в 8 утра
+    @Scheduled(cron = "${cron.delete.old.news.list}")
+    void deleteOldNewsList() {
+        int newsListCounts = newsListRepository.deleteNews72h();
+        if (newsListCounts > 0) {
+            log.warn("Очистка таблицы news_list, удалено записей: {}", newsListCounts);
+        }
+    }
+
     // info: Очистка таблицы showed_news раз в сутки в 6 утра
     @Scheduled(cron = "${cron.delete.old.showed.news}")
     void deleteOldShowedNews() {
-        int newsListCounts = showedNewsRepository.deleteOldShowedNews();
+        int newsListCounts = showedNewsRepository.deleteNews72h();
         if (newsListCounts > 0) {
-            log.warn("Очистка таблицы showed_news, удалено: {} новостей!", newsListCounts);
+            log.warn("Очистка таблицы showed_news, удалено записей: {}", newsListCounts);
         }
     }
 }
