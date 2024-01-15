@@ -1,12 +1,19 @@
 package com.avandy.bot.utils;
 
+import com.avandy.bot.bot.TelegramBot;
+import com.avandy.bot.model.Settings;
 import com.avandy.bot.repository.NewsListRepository;
+import com.avandy.bot.repository.SettingsRepository;
 import com.avandy.bot.repository.ShowedNewsRepository;
+import com.avandy.bot.repository.UserRepository;
 import com.avandy.bot.search.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalTime;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -15,6 +22,31 @@ public class Schedulers {
     private final SearchService searchService;
     private final NewsListRepository newsListRepository;
     private final ShowedNewsRepository showedNewsRepository;
+    private final SettingsRepository settingsRepository;
+    private final UserRepository userRepository;
+    private final TelegramBot telegramBot;
+
+    @Scheduled(cron = "${cron.search.keywords}")
+    protected void autoSearchByKeywords() {
+        Integer hourNow = LocalTime.now().getHour();
+
+        List<Settings> usersSettings = settingsRepository.findAllByScheduler();
+        for (Settings setting : usersSettings) {
+            List<Integer> timeToExecute = Common.getTimeToExecute(setting.getStart(), setting.getPeriod());
+            String username = userRepository.findNameByChatId(setting.getChatId());
+
+            if (timeToExecute.contains(hourNow)) {
+                Long chatId = setting.getChatId();
+
+                if (userRepository.isActive(chatId) == 1) {
+                    int counter = telegramBot.findNewsByKeywords(chatId, "on");
+
+                    if (counter > 0)
+                        log.warn("Автопоиск ключевых слов. Пользователь: {}, найдено {}", username, counter);
+                }
+            }
+        }
+    }
 
     // Сохранение всех новостей в БД по всем источникам каждые 10 минут
     @Scheduled(cron = "${cron.fill.database}")

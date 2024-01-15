@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -29,7 +27,6 @@ import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.avandy.bot.bot.TextInterface.*;
@@ -40,7 +37,6 @@ import static com.avandy.bot.bot.TextInterface.*;
 public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
-    private final Map<Long, AtomicBoolean> usersIsAutoSearch = new ConcurrentHashMap<>();
     private final SearchService searchService;
     private final BotConfig config;
     private final RssRepository rssRepository;
@@ -76,7 +72,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
-            usersIsAutoSearch.put(chatId, new AtomicBoolean(false));
 
             // DEBUG: запись действий пользователя для анализа
             if (Common.DEV_ID != chatId) {
@@ -132,7 +127,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 // Поиск по трём кнопкам меню
             } else if (messageText.equals(keywordsSearchText)) {
-                new Thread(() -> findNewsByKeywords(chatId)).start();
+                new Thread(() -> findNewsByKeywords(chatId, "off")).start();
 
             } else if (messageText.equals(updateTopText2)) {
                 new Thread(() -> showTop(chatId)).start();
@@ -160,7 +155,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             String callbackData = update.getCallbackQuery().getData();
             Long chatId = update.getCallbackQuery().getMessage().getChatId();
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-            usersIsAutoSearch.put(chatId, new AtomicBoolean(false));
 
             switch (callbackData) {
                 case "FEEDBACK" -> {
@@ -169,7 +163,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
                 /* KEYWORDS */
-                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatId)).start();
+                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatId, "off")).start();
                 case "LIST_KEYWORDS" -> showKeywordsList(chatId);
                 case "ADD_KEYWORD" -> {
                     userStates.put(chatId, UserState.ADD_KEYWORDS);
@@ -360,50 +354,25 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     /* KEYWORDS */
-    @Async
-    @Scheduled(cron = "${cron.search.keywords}")
-    protected void autoSearchByKeywords() {
-        Integer hourNow = LocalTime.now().getHour();
-
-        List<Settings> usersSettings = settingsRepository.findAllByScheduler();
-        for (Settings setting : usersSettings) {
-            List<Integer> timeToExecute = Common.getTimeToExecute(setting.getStart(), setting.getPeriod());
-            String username = userRepository.findNameByChatId(setting.getChatId());
-
-            if (timeToExecute.contains(hourNow)) {
-                Long chatId = setting.getChatId();
-
-                if (userRepository.isActive(chatId) == 1) {
-                    usersIsAutoSearch.put(chatId, new AtomicBoolean(true));
-                    int counter = findNewsByKeywords(chatId);
-                    usersIsAutoSearch.put(chatId, new AtomicBoolean(false));
-
-                    if (counter > 0)
-                        log.warn("Автопоиск ключевых слов. Пользователь: {}, найдено {}", username, counter);
-                }
-            }
-        }
-    }
-
     // Поиск по ключевым словам
-    private int findNewsByKeywords(long chatId) {
+    public int findNewsByKeywords(long chatId, String isAutoSearch) {
         // DEBUG
-        if (!usersIsAutoSearch.get(chatId).get() && Common.DEV_ID != chatId) {
-            log.warn("{}: Запуск поиска по ключам", chatId);
+        if (isAutoSearch.equals("off") && Common.DEV_ID != chatId) {
+            log.warn("{}: Запуск поиска по ключевым словам", chatId);
         }
 
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
-        if (usersIsAutoSearch.get(chatId).get() && keywordsByChatId.isEmpty()) {
+        if (isAutoSearch.equals("on") && keywordsByChatId.isEmpty()) {
             return 0;
         }
 
-        if (!usersIsAutoSearch.get(chatId).get() && keywordsByChatId.isEmpty()) {
+        if (isAutoSearch.equals("off") && keywordsByChatId.isEmpty()) {
             addKeywordsKeyboard(chatId, setupKeywordsText);
             return 0;
         }
 
-        if (!usersIsAutoSearch.get(chatId).get()) {
+        if (isAutoSearch.equals("off")) {
             getReplyKeyboard(chatId, searchByKeywordsStartText, "");
             //sendMessage(chatId, searchByKeywordsStartText);
         }
@@ -420,7 +389,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>";
 
-                if (!usersIsAutoSearch.get(chatId).get()) {
+                if (isAutoSearch.equals("off")) {
                     text = showCounter++ + ". " + text;
                 }
 
@@ -428,12 +397,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, text);
             }
 
-            if (!usersIsAutoSearch.get(chatId).get()) {
+            if (isAutoSearch.equals("off")) {
                 afterKeywordsSearchKeyboard(chatId,
                         foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b> " + Common.ICON_NEWS_FOUNDED);
             }
         } else {
-            if (!usersIsAutoSearch.get(chatId).get()) {
+            if (isAutoSearch.equals("off")) {
                 afterKeywordsSearchKeyboard(chatId, headlinesNotFound);
             }
         }
