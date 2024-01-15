@@ -187,7 +187,7 @@ public class Search implements SearchService {
         // Deleting news of the same meaning
         List<Headline> uniqueJw = headlinesDeleteJw.stream().distinct().toList();
         for (Headline headline : uniqueJw) {
-            log.warn("Дублирующая новость: " + chatId + ", source: " + headline.getSource() + ", " + headline.getTitle());
+            log.info("Дублирующая новость: " + chatId + ", source: " + headline.getSource() + ", " + headline.getTitle());
         }
         uniqueJw.forEach(headlinesToShow::remove);
 
