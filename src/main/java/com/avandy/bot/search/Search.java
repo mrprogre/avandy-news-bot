@@ -197,7 +197,6 @@ public class Search implements SearchService {
             Date date = news.getPubDate();
             String link = news.getLink();
 
-            //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
             headlinesToShow.add(new Headline(rss, title, link, date, chatId, -2, hash));
         }
         return headlinesToShow;
