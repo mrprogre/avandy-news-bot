@@ -26,6 +26,7 @@ public class Search implements SearchService {
     private final NewsListRepository newsListRepository;
     public static int totalNewsCounter;
     public static int filteredNewsCounter;
+    public static int keywordsNewsCounter;
     public static ArrayList<Headline> headlinesTopTen;
 
     @Autowired
@@ -112,6 +113,7 @@ public class Search implements SearchService {
 
                 //newsList = newsListRepository.getNewsWithLike(period, keyword, userLanguage);
                 newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage);
+                keywordsNewsCounter += newsList.size();
 
                 for (NewsList news : newsList) {
                     String rss = news.getSource();

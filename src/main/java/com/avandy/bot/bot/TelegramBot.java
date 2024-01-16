@@ -399,7 +399,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (isAutoSearch.equals("off")) {
                 afterKeywordsSearchKeyboard(chatId,
-                        foundNewsText + ": <b>" + Search.filteredNewsCounter + "</b> " + Common.ICON_NEWS_FOUNDED);
+                        foundNewsText + ": <b>" + Search.keywordsNewsCounter + "</b> " + Common.ICON_NEWS_FOUNDED);
             }
         } else {
             if (isAutoSearch.equals("off")) {
@@ -916,7 +916,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 sleepBetweenSendMessage();
                 sendMessage(chatId, text);
-
             }
 
             topSearchKeyboard(chatId);
