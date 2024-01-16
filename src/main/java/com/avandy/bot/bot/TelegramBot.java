@@ -909,7 +909,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 
-        Set<Headline> headlines = searchService.searchByWordFromTop(chatId, word);
+        Set<Headline> headlines = searchService.start(chatId, word);
 
         int showCounter = 1;
         if (headlines.size() > 0) {
