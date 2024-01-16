@@ -876,25 +876,30 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Поиск новостей по слову из Топа
     private void searchNewsTop(int wordNum, long chatId) {
-        String word = "empty";
-
         try {
-            String[] split = usersTop.get(chatId).toString().split("\n");
-
-            for (String row : split) {
-                int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                row = row.replaceAll("\\s", "");
-                row = row.substring(row.indexOf(".") + 1, row.indexOf("["));
-
-                if (wordNum == rowNum) {
-                    word = row;
-                }
-            }
-
+            String word = getWordByNumber(wordNum, chatId);
             wordSearch(chatId, word);
         } catch (NullPointerException npe) {
             sendMessage(chatId, startSearchBeforeText);
         }
+    }
+
+    // Преобразование порядковых номеров слов в списке в слова
+    private String getWordByNumber(int wordNum, long chatId) {
+        String word = "";
+
+        String[] split = usersTop.get(chatId).toString().split("\n");
+
+        for (String row : split) {
+            int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
+            row = row.replaceAll("\\s", "");
+            row = row.substring(row.indexOf(".") + 1, row.indexOf("["));
+
+            if (wordNum == rowNum) {
+                word = row;
+            }
+        }
+        return word;
     }
 
     // Механизм поиска по слову из Топа
@@ -904,7 +909,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 
-        Set<Headline> headlines = searchService.start(chatId, word);
+        Set<Headline> headlines = searchService.searchByWordFromTop(chatId, word);
 
         int showCounter = 1;
         if (headlines.size() > 0) {
@@ -940,21 +945,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Быстрое удаление слова из показа в Топе по кнопке
     private void topDelete(int wordNum, long chatId) {
-        String word = "empty";
-
         try {
-            String[] split = usersTop.get(chatId).toString().split("\n");
-
-            for (String row : split) {
-                int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                row = row.replaceAll("\\s", "");
-                row = row.substring(row.indexOf(".") + 1, row.indexOf("["));
-
-                if (wordNum == rowNum) {
-                    word = row;
-                }
-            }
-
+            String word = getWordByNumber(wordNum, chatId);
             Set<String> topTenWordsByChatId = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
 
             TopExcluded topExcluded;

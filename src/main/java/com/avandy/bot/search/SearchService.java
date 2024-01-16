@@ -10,4 +10,6 @@ public interface SearchService {
     int downloadNewsByRome();
 
     int downloadNewsByJsoup();
+
+    Set<Headline> searchByWordFromTop(long chatId, String word);
 }
