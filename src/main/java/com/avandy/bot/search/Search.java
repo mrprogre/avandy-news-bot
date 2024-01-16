@@ -4,20 +4,22 @@ import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
 import com.avandy.bot.utils.JaroWinklerDistance;
-import com.avandy.bot.utils.ParserRome;
 import com.avandy.bot.utils.ParserJsoup;
+import com.avandy.bot.utils.ParserRome;
 import com.rometools.rome.feed.synd.SyndEntry;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Search implements SearchService {
-    private int periodMinutes = 1440;
+    private final Set<Headline> headlinesToShow;
     private String userLanguage;
+    private int periodMinutes = 1440;
     private final SettingsRepository settingsRepository;
     private final KeywordRepository keywordRepository;
     private final RssRepository rssRepository;
@@ -29,28 +31,14 @@ public class Search implements SearchService {
     public static int keywordsNewsCounter;
     public static ArrayList<Headline> headlinesTopTen;
 
-    @Autowired
-    public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
-                  RssRepository rssRepository, ShowedNewsRepository showedNewsRepository,
-                  ExcludingTermsRepository excludingTermsRepository, NewsListRepository newsListRepository) {
-        this.settingsRepository = settingsRepository;
-        this.keywordRepository = keywordRepository;
-        this.rssRepository = rssRepository;
-        this.showedNewsRepository = showedNewsRepository;
-        this.excludingTermsRepository = excludingTermsRepository;
-        this.newsListRepository = newsListRepository;
-    }
-
     @Override
     public Set<Headline> start(Long chatId, String searchType) {
         boolean isAllSearch = searchType.equals("all");
         boolean isKeywordSearch = searchType.equals("keywords");
         boolean isTopSearch = searchType.equals("top");
-        //boolean isSearchByOneWordFromTop = !isAllSearch && !isKeywordSearch && !isTopSearch;
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         settings.ifPresentOrElse(value -> userLanguage = value.getLang(), () -> userLanguage = "en");
         Set<ShowedNews> showedNewsToSave = new HashSet<>();
-        Set<Headline> headlinesToShow = new TreeSet<>();
         List<Headline> headlinesDeleteJw = new ArrayList<>();
 
         if (isTopSearch) {
@@ -82,7 +70,6 @@ public class Search implements SearchService {
                         if (title.length() > 15) {
                             if (dateDiff != 0) {
                                 if (!showedNewsHash.contains(hash)) {
-                                    //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
                                     headlinesToShow.add(new Headline(rss, title, link, date, chatId, 4, hash));
                                 }
                             }
@@ -124,41 +111,12 @@ public class Search implements SearchService {
 
                     if (title.length() > 15) {
                         if (!showedNewsHash.contains(hash)) {
-                            // Filtering out similar news. Only for keyword search (O=n*n)
-                            //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
-
                             headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
                         }
                     }
                 }
             }
         }
-
-        /* SEARCH BY ONE WORD FROM TOP (this case searchType is word for search)*/
-//        if (isSearchByOneWordFromTop) {
-//            settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
-//                    () -> periodMinutes = 1440);
-//
-//            String type = searchType.replaceAll(Common.REPLACE_ALL_TOP, "");
-//            String period = periodMinutes + " minutes";
-//            TreeSet<NewsList> newsList;
-//            if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
-//                newsList = newsListRepository.getNewsWithLike(period, type, userLanguage);
-//            } else {
-//                newsList = newsListRepository.getNewsWithRegexp(period, type, userLanguage);
-//            }
-//
-//            for (NewsList news : newsList) {
-//                String rss = news.getSource();
-//                String title = news.getTitle().trim();
-//                String hash = Common.getHash(title);
-//                Date date = news.getPubDate();
-//                String link = news.getLink();
-//
-//                //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
-//                headlinesToShow.add(new Headline(rss, title, link, date, chatId, -2, hash));
-//            }
-//        }
 
         totalNewsCounter = headlinesToShow.size();
         // remove titles contains excluding terms
@@ -196,7 +154,7 @@ public class Search implements SearchService {
         filteredNewsCounter = headlinesToShow.size();
 
         // Все поиски, кроме поиска новостей по Топу, не дают дублирующих заголовков
-        //if (!isSearchByOneWordFromTop) {
+        if (!isTopSearch) {
             ShowedNews showedNewsRow;
             for (Headline line : headlinesToShow) {
                 showedNewsRow = new ShowedNews();
@@ -209,7 +167,7 @@ public class Search implements SearchService {
             if (showedNewsToSave.size() > 0) {
                 showedNewsRepository.saveAll(showedNewsToSave);
             }
-        //}
+        }
 
         return headlinesToShow;
     }
@@ -218,13 +176,13 @@ public class Search implements SearchService {
     public Set<Headline> searchByWordFromTop(long chatId, String word) {
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         settings.ifPresentOrElse(value -> userLanguage = value.getLang(), () -> userLanguage = "en");
-        Set<Headline> headlinesToShow = new TreeSet<>();
 
         settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                 () -> periodMinutes = 1440);
 
         word = word.replaceAll(Common.REPLACE_ALL_TOP, "");
         String period = periodMinutes + " minutes";
+
         TreeSet<NewsList> newsList;
         if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
             newsList = newsListRepository.getNewsWithLike(period, word, userLanguage);
