@@ -4,17 +4,18 @@ import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
 import com.avandy.bot.utils.JaroWinklerDistance;
-import com.avandy.bot.utils.ParserRome;
 import com.avandy.bot.utils.ParserJsoup;
+import com.avandy.bot.utils.ParserRome;
 import com.rometools.rome.feed.synd.SyndEntry;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Search implements SearchService {
     private int periodMinutes = 1440;
     private String userLanguage;
@@ -28,18 +29,6 @@ public class Search implements SearchService {
     public static int filteredNewsCounter;
     public static int keywordsNewsCounter;
     public static ArrayList<Headline> headlinesTopTen;
-
-    @Autowired
-    public Search(SettingsRepository settingsRepository, KeywordRepository keywordRepository,
-                  RssRepository rssRepository, ShowedNewsRepository showedNewsRepository,
-                  ExcludingTermsRepository excludingTermsRepository, NewsListRepository newsListRepository) {
-        this.settingsRepository = settingsRepository;
-        this.keywordRepository = keywordRepository;
-        this.rssRepository = rssRepository;
-        this.showedNewsRepository = showedNewsRepository;
-        this.excludingTermsRepository = excludingTermsRepository;
-        this.newsListRepository = newsListRepository;
-    }
 
     @Override
     public Set<Headline> start(Long chatId, String searchType) {
@@ -82,7 +71,6 @@ public class Search implements SearchService {
                         if (title.length() > 15) {
                             if (dateDiff != 0) {
                                 if (!showedNewsHash.contains(hash)) {
-                                    //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
                                     headlinesToShow.add(new Headline(rss, title, link, date, chatId, 4, hash));
                                 }
                             }
@@ -111,7 +99,6 @@ public class Search implements SearchService {
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
 
-                //newsList = newsListRepository.getNewsWithLike(period, keyword, userLanguage);
                 newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage);
                 keywordsNewsCounter += newsList.size();
 
@@ -124,9 +111,6 @@ public class Search implements SearchService {
 
                     if (title.length() > 15) {
                         if (!showedNewsHash.contains(hash)) {
-                            // Filtering out similar news. Only for keyword search (O=n*n)
-                            //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
-
                             headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
                         }
                     }
@@ -155,7 +139,6 @@ public class Search implements SearchService {
                 Date date = news.getPubDate();
                 String link = news.getLink();
 
-                //findSimilarNews(headlinesToShow, headlinesForDeleteFromShowJW, title);
                 headlinesToShow.add(new Headline(rss, title, link, date, chatId, -2, hash));
             }
         }
