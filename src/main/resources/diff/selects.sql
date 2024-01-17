@@ -25,7 +25,7 @@ select source, title, pub_date::time, n.add_date::time, extract(minute from (n.p
 from news_list n
          join showed_news s
               on n.title_hash = s.title_hash and s.chat_id = 388921319
-where n.add_date >= '2024-01-17 11:00:00'::timestamp
+where n.add_date >= '2024-01-17 12:00:00'::timestamp
 order by n.id desc;
 
 -- Rows count
