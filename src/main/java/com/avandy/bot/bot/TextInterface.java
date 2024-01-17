@@ -102,7 +102,7 @@ public class TextInterface {
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
             chooseSearchDepthText = "Глубина поиска новостей (интервал поиска равен текущему моменту минус глубина в часах).\n" +
                     "Выберите глубину поиска.";
-            sendIdeaText = "Предложить идею";
+            sendIdeaText = "Оставить отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             searchByKeywordsStartText = "» поиск по ключевым словам";
             fullSearchStartText = "» поиск всех новостей";
