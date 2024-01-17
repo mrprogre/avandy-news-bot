@@ -6,7 +6,6 @@ import com.avandy.bot.repository.*;
 import com.avandy.bot.search.Search;
 import com.avandy.bot.search.SearchService;
 import com.avandy.bot.utils.Common;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +32,6 @@ import static com.avandy.bot.bot.TextInterface.*;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
