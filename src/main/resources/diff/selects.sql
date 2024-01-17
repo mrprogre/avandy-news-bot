@@ -24,8 +24,8 @@ group by u.chat_id, u.first_name, s.period, s.period_all, s.scheduler, s.start, 
 select source, title, pub_date::time, n.add_date::time, extract(minute from (n.pub_date - n.add_date)) as "pub-add"
 from news_list n
          join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 388921319
-where n.add_date >= '2024-01-17 12:00:00'::timestamp
+              on n.title_hash = s.title_hash and s.chat_id = 220605449
+where n.add_date >= '2024-01-16 12:00:00'::timestamp
 order by n.id desc;
 
 -- Rows count

@@ -12,13 +12,13 @@ import java.util.List;
 public interface SettingsRepository extends JpaRepository<Settings, Long> {
 
     @Query(value = "SELECT period FROM settings WHERE chat_id = :chatId", nativeQuery = true)
-    String getPeriodByChatId(long chatId);
+    String getKeywordsPeriod(long chatId);
 
     @Query(value = "SELECT period_all FROM settings WHERE chat_id = :chatId", nativeQuery = true)
-    String getPeriodAllByChatId(long chatId);
+    String getFullSearchPeriod(long chatId);
 
     @Query(value = "SELECT period_top FROM settings WHERE chat_id = :chatId", nativeQuery = true)
-    String getPeriodTopByChatId(long chatId);
+    String getTopPeriod(long chatId);
 
     @Query(value = "SELECT scheduler FROM settings WHERE chat_id = :chatId", nativeQuery = true)
     String getSchedulerOnOffByChatId(long chatId);

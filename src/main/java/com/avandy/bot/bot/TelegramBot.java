@@ -383,7 +383,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         int showCounter = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Автопоиск: {}, {}, найдено {}", chatId, userRepository.findNameByChatId(chatId), headlines.size());
+            log.warn("Автопоиск: {}, {}, найдено {} за {}", chatId, userRepository.findNameByChatId(chatId),
+                    headlines.size(), settingsRepository.getKeywordsPeriod(chatId));
 
             for (Headline headline : headlines) {
                 String text = "<b>" + headline.getSource() + "</b> [" +
@@ -823,7 +824,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
             usersTop.put(chatId, stringBuilderTop);
 
-            String period = settingsRepository.getPeriodTopByChatId(chatId);
+            String period = settingsRepository.getTopPeriod(chatId);
 
             topActionsKeyboard(chatId, String.format("%s<b>%s</b> " + Common.ICON_TOP_20_FIRE + " \n%s", top20ByPeriodText,
                     period, stringBuilderTop));
@@ -1265,15 +1266,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Кнопки всех видов поиска (/search)
     private void initSearchesKeyboard(long chatId) {
         String keywordsText = String.format("1" + initSearchTemplateText, keywordSearchText,
-                settingsRepository.getPeriodByChatId(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
+                settingsRepository.getKeywordsPeriod(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
                 keywordSearch2Text);
 
         String fullText = String.format("2" + initSearchTemplateText, searchWithFilterText,
-                settingsRepository.getPeriodAllByChatId(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
+                settingsRepository.getFullSearchPeriod(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
                 searchWithFilter2Text);
 
         String topText = String.format("3" + initSearchTemplateText, top20Text2,
-                settingsRepository.getPeriodTopByChatId(chatId), topTenRepository.deleteFromTopTenCount(chatId),
+                settingsRepository.getTopPeriod(chatId), topTenRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
