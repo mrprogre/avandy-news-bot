@@ -406,7 +406,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 afterKeywordsSearchKeyboard(chatId, headlinesNotFound);
             }
         }
-        return Search.filteredNewsCounter;
+        return Search.keywordsNewsCounter;
     }
 
     // Формирование списка ключевых слов в виде строки
