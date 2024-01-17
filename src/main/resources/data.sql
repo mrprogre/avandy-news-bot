@@ -1,6 +1,10 @@
 --DELETE FROM showed_news;
-DELETE FROM rss_list;
 
+DELETE FROM admin;
+INSERT INTO admin (key, value) VALUES ('showed_news_clear_scheduler', 'on');
+INSERT INTO admin (key, value) VALUES ('news_list_clear_scheduler', 'off');
+
+DELETE FROM rss_list;
 INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'The City Paper Bogota', 'https://thecitypaperbogota.com/feed/', 1, 100, '2024-01-07 11:24:28.810182', 'Colombia', 'rss', 'es');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'France24', 'https://www.france24.com/en/rss', 1, 3, '2024-01-07 13:26:22.874888', 'France', 'rss', 'fr');
 INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'Mediapart', 'https://www.mediapart.fr/articles/feed', 1, 2, '2024-01-07 13:26:22.868361', 'France', 'rss', 'fr');

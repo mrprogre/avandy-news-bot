@@ -2,10 +2,7 @@ package com.avandy.bot.utils;
 
 import com.avandy.bot.bot.TelegramBot;
 import com.avandy.bot.model.Settings;
-import com.avandy.bot.repository.NewsListRepository;
-import com.avandy.bot.repository.SettingsRepository;
-import com.avandy.bot.repository.ShowedNewsRepository;
-import com.avandy.bot.repository.UserRepository;
+import com.avandy.bot.repository.*;
 import com.avandy.bot.search.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +22,8 @@ public class Schedulers {
     private final SettingsRepository settingsRepository;
     private final UserRepository userRepository;
     private final TelegramBot telegramBot;
+    private final AdminRepository adminRepository;
+
 
     @Scheduled(cron = "${cron.search.keywords}")
     protected void autoSearchByKeywords() {
@@ -84,18 +83,22 @@ public class Schedulers {
     // info: Очистка таблицы news_list раз в сутки в 8 утра
     @Scheduled(cron = "${cron.delete.old.news}")
     void deleteOldNewsList() {
-        int newsListCounts = newsListRepository.deleteNews72h();
-        if (newsListCounts > 0) {
-            log.warn("Очистка таблицы news_list, удалено записей: {}", newsListCounts);
+        if (adminRepository.findValueByKey("news_list_clear_scheduler").equals("on")) {
+            int newsListCounts = newsListRepository.deleteNews72h();
+            if (newsListCounts > 0) {
+                log.warn("Очистка таблицы news_list, удалено записей: {}", newsListCounts);
+            }
         }
     }
 
     // info: Очистка таблицы showed_news раз в сутки в 6 утра
     @Scheduled(cron = "${cron.delete.old.showed.news}")
     void deleteOldShowedNews() {
-        int newsListCounts = showedNewsRepository.deleteNews72h();
-        if (newsListCounts > 0) {
-            log.warn("Очистка таблицы showed_news, удалено записей: {}", newsListCounts);
+        if (adminRepository.findValueByKey("showed_news_clear_scheduler").equals("on")) {
+            int newsListCounts = showedNewsRepository.deleteNews72h();
+            if (newsListCounts > 0) {
+                log.warn("Очистка таблицы showed_news, удалено записей: {}", newsListCounts);
+            }
         }
     }
 }
