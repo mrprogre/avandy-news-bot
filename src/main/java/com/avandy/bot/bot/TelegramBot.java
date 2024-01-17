@@ -355,7 +355,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     /* KEYWORDS */
     // Поиск по ключевым словам
-    public int findNewsByKeywords(long chatId, String isAutoSearch) {
+    public void findNewsByKeywords(long chatId, String isAutoSearch) {
         // DEBUG
         if (isAutoSearch.equals("off") && Common.DEV_ID != chatId) {
             log.warn("{}: Запуск поиска по ключевым словам", chatId);
@@ -364,12 +364,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
         if (isAutoSearch.equals("on") && keywordsByChatId.isEmpty()) {
-            return 0;
+            return;
         }
 
         if (isAutoSearch.equals("off") && keywordsByChatId.isEmpty()) {
             addKeywordsKeyboard(chatId, setupKeywordsText);
-            return 0;
+            return;
         }
 
         if (isAutoSearch.equals("off")) {
@@ -382,6 +382,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int showCounter = 1;
         if (headlines.size() > 0) {
+            // INFO
+            log.warn("Автопоиск по ключевым словам: {}, найдено {}",
+                    userRepository.findNameByChatId(chatId), headlines.size());
 
             for (Headline headline : headlines) {
                 String text = "<b>" + headline.getSource() + "</b> [" +
@@ -406,7 +409,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 afterKeywordsSearchKeyboard(chatId, headlinesNotFound);
             }
         }
-        return Search.keywordsNewsCounter;
     }
 
     // Формирование списка ключевых слов в виде строки

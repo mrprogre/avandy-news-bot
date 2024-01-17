@@ -32,16 +32,12 @@ public class Schedulers {
         List<Settings> usersSettings = settingsRepository.findAllByScheduler();
         for (Settings setting : usersSettings) {
             List<Integer> timeToExecute = Common.getTimeToExecute(setting.getStart(), setting.getPeriod());
-            String username = userRepository.findNameByChatId(setting.getChatId());
 
             if (timeToExecute.contains(hourNow)) {
                 Long chatId = setting.getChatId();
 
                 if (userRepository.isActive(chatId) == 1) {
-                    int counter = telegramBot.findNewsByKeywords(chatId, "on");
-
-                    if (counter > 0)
-                        log.warn("Автопоиск ключевых слов. Пользователь: {}, найдено {}", username, counter);
+                    telegramBot.findNewsByKeywords(chatId, "on");
                 }
             }
         }
