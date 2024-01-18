@@ -1150,6 +1150,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Кнопки для раздела настроек (/settings)
     private void settingsKeyboard(long chatId, String text) {
         boolean isOn = settingsRepository.getSchedulerOnOffByChatId(chatId).equals("on");
+        int isPremium = userRepository.isPremiumByChatId(chatId);
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
@@ -1159,7 +1160,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons2.put("SET_EXCLUDED", "3. " + exclusionText);
         buttons2.put("SET_PERIOD_ALL", "4. " + intervalText);
 
-        if (isOn) {
+        if (isOn && isPremium != 1) {
             buttons3.put("SCHEDULER_START", "5. " + startSettingsText);
             buttons3.put("START_SEARCH", "» » »");
         } else {

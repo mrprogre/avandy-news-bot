@@ -234,7 +234,7 @@ public class TextInterface {
 
         if (lang.equals("ru")) {
             String schedSettings = "";
-            if (x.getScheduler().contains("on")) {
+            if (x.getScheduler().contains("on") && isPremium != 1) {
                 String text = switch (x.getPeriod()) {
                     case "1h" -> " (запуск каждый час)\n";
                     case "2h" -> " (запуск каждые 2 часа)\n";
@@ -255,22 +255,24 @@ public class TextInterface {
 
             return "<b>Настройки</b> " + Common.ICON_SETTINGS + " \n" +
                     "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
-                    "Автоматический запуск поиска по <b>ключевым словам</b> за интервал в п.2" + "\n" +
+                    "Автоматический запуск поиска по <b>ключевым словам</b>\n" +
                     "- - - - - -\n" +
-                    "<b>2. Интервал автопоиска:</b> " + premiumPeriod + "\n" +
-                    "Интервал равен текущему времени минус глубина поиска в часах" + premiumMessage + "\n" +
+                    "<b>2. Частота автопоиска:</b> " + premiumPeriod + "\n" +
+                    "Глубина поиска равна текущему времени минус <b>" + x.getPeriod() + "</b>" +
+                    premiumMessage + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "Исключение новостей, которые содержат слова-исключения\n" +
                     "- - - - - -\n" +
-                    "<b>4. Интервал полного поиска: " + x.getPeriodAll() + "</b>\n" +
-                    "Интервал равен текущему времени минус глубина поиска в часах" + "\n" +
+                    "<b>4. Глубина полного поиска</b>\n" +
+                    "Глубина равна текущему времени минус <b>" + x.getPeriodAll() + "</b>\n" +
                     schedSettings +
                     "- - - - - -\n" +
                     "Параметры меняются после нажатия на кнопки";
         } else {
             String schedSettings = "";
-            if (x.getScheduler().contains("on")) {
+
+            if (x.getScheduler().contains("on") && isPremium != 1) {
                 String text = switch (x.getPeriod()) {
                     case "1h" -> " (launch every hour)\n";
                     case "2h" -> " (launch every 2 hours)\n";
@@ -293,8 +295,9 @@ public class TextInterface {
                     "<b>1. Auto search: " + x.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
-                    "<b>2. Auto search interval: " + premiumPeriod + "</b>\n" +
-                    "The search period is equal to the current moment minus hours" + premiumMessage + "\n" +
+                    "<b>2. Auto search frequency: " + premiumPeriod + "</b>\n" +
+                    "The search period is equal to the current moment minus <b>" + x.getPeriod() + "</b>" +
+                    premiumMessage + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "Excluding news that contains excluding terms\n" +
@@ -305,6 +308,5 @@ public class TextInterface {
                     "Parameters change after pressing buttons";
         }
     }
-
 
 }
