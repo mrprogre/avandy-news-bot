@@ -25,6 +25,10 @@ public class ParserRome {
                 log.info("Connect timed out, url: {}", url);
             } else if (e.getMessage().contains("Connection reset")) {
                 log.info("Connection reset, url: {}", url);
+            } else if (e.getMessage().contains("Remote host terminated")) {
+                log.info("Remote host terminated, url: {}", url);
+            } else if (e.getMessage().contains("Server returned HTTP response code")) {
+                log.info("Server returned HTTP response code, url: {}, {}", url, e.getMessage());
             } else {
                 log.error("Error parseFeed, url: {}, error {}", url, e.getMessage());
             }

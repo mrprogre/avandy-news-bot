@@ -30,7 +30,7 @@ public class Schedulers {
         searchNewsByKeywords(settingsRepository.findAllSchedulerOn());
     }
 
-    // Премиум пользователи: поиск новостей каждую минуту
+    // Премиум пользователи: поиск новостей каждые 2 минуты
     @Scheduled(cron = "${cron.search.keywords.premium}")
     protected void autoSearchByKeywordsPremium() {
         searchNewsByKeywords(settingsRepository.findAllSchedulerOnPremium());
@@ -52,7 +52,7 @@ public class Schedulers {
         }
     }
 
-    // Сохранение всех новостей в БД по всем источникам каждую минуту
+    // Сохранение всех новостей в БД по всем источникам каждые 2 минуты
     @Scheduled(cron = "${cron.fill.database}")
     public void scheduler() {
         long start = System.currentTimeMillis();
