@@ -123,11 +123,11 @@ public class TextInterface {
                     Оплатить премиум (<b>900р.</b> в год)?
                     """;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
-            premiumIsActive = "(активирован премиум " + Common.ICON_PREMIUM_IS_ACTIVE + ")";
+            premiumIsActive = "активирован премиум " + Common.ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Премиум активирован " + Common.ICON_PREMIUM_IS_ACTIVE;
         } else {
             premiumIsActive2 = "Premium is active " + Common.ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive = "(premium is active " + Common.ICON_PREMIUM_IS_ACTIVE + ")";
+            premiumIsActive = "premium is active " + Common.ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>";
             getPremiumYesOrNowText = """
                     On the <b>premium</b> tariff, news search by keywords is performed <b>every 2 minutes</b>. So you <b>will be the first</b> to receive the <b>most up-to-date information</b> \uD83D\uDC8E
@@ -246,7 +246,7 @@ public class TextInterface {
             }
 
             if (isPremium == 1) {
-                premiumPeriod = "<b>2 min</b> " + premiumIsActive;
+                premiumPeriod = "<b>2 min</b>, " + premiumIsActive;
                 premiumMessage = "";
             } else {
                 premiumPeriod = x.getPeriod();
@@ -284,7 +284,7 @@ public class TextInterface {
             }
 
             if (isPremium == 1) {
-                premiumPeriod = "<b>2 min</b> " + premiumIsActive;
+                premiumPeriod = "<b>2 min</b>, " + premiumIsActive;
                 premiumMessage = "";
             } else {
                 premiumPeriod = x.getPeriod();
