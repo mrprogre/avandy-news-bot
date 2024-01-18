@@ -118,7 +118,7 @@ public class TextInterface {
             jaroWinklerText = "Окончания";
             premiumText = "для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты";
             getPremiumText = "Премиум";
-            getPremiumYesOrNowText = "Оплатить премиум (<b>900</b> рублей в год)?";
+            getPremiumYesOrNowText = "Оплатить премиум (<b>900</b>р. в год)?";
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
         } else {
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>";
