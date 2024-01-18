@@ -156,6 +156,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
 
             switch (callbackData) {
+                case "GET_PREMIUM" -> {
+                    sendMessage(Common.DEV_ID, String.format("Заявка на премиум! chat_id: %d", chatId));
+                    sendMessage(chatId, getPremiumRequestText);
+                }
+
                 case "FEEDBACK" -> {
                     userStates.put(chatId, UserState.SEND_FEEDBACK);
                     cancelKeyboard(chatId, sendMessageForDevText);
@@ -1396,6 +1401,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void infoKeyboard(long chatId) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("FEEDBACK", sendIdeaText);
+        buttons.put("GET_PREMIUM", getPremiumText);
         buttons.put("START_SEARCH", "» » »");
         sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(chatId),
                 InlineKeyboards.inlineKeyboardMaker(buttons));

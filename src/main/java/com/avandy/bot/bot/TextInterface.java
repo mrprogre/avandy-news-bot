@@ -5,15 +5,15 @@ import com.avandy.bot.utils.Common;
 import com.vdurmont.emoji.EmojiParser;
 
 public class TextInterface {
-    public static String greetingText, letsStartText, noText, yesText,
+    public static String greetingText, letsStartText, noText, yesText, getPremiumRequestText,
             infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText,
             deleteUserText, addText, delText, excludeWordText, searchText, excludedText, listKeywordsButtonText,
             updateTopText, updateTopText2, undefinedCommandText, changesSavedText, jaroWinklerSwitcherText,
             headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText, initSearchTemplateText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
-            excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText,
-            startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
+            excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText, premiumText,
+            startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText, getPremiumText,
             addInListText, delFromListText, removeAllText, sendMessageForDevText, searchNewsHeaderText,
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
@@ -102,7 +102,7 @@ public class TextInterface {
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
             chooseSearchDepthText = "Глубина поиска новостей (интервал поиска равен текущему моменту минус глубина в часах).\n" +
                     "Выберите глубину поиска.";
-            sendIdeaText = "Оставить отзыв";
+            sendIdeaText = "Отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             searchByKeywordsStartText = "» поиск по ключевым словам";
             fullSearchStartText = "» поиск всех новостей";
@@ -115,7 +115,13 @@ public class TextInterface {
                     Пример: в Top 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
                     Текущий статус:\s""";
             jaroWinklerText = "Окончания";
+            premiumText = "для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты";
+            getPremiumText = "Премиум";
+            getPremiumRequestText = "Заявка принята! Мы свяжемся с Вами в ближайшее время!";
         } else {
+            getPremiumRequestText = "Thanks! We will contact you shortly!";
+            getPremiumText = "Premium";
+            premiumText = "for a <b>premium account</b>, the search starts every 2 minutes";
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
             searchNewsHeaderText = "Search news";
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
@@ -229,7 +235,7 @@ public class TextInterface {
                     "Автоматический запуск поиска по <b>ключевым словам</b> за интервал в п.2" + "\n" +
                     "- - - - - -\n" +
                     "<b>2. Интервал автопоиска: " + x.getPeriod() + "</b>\n" +
-                    "Интервал равен текущему времени минус глубина поиска в часах" + "\n" +
+                    "Интервал равен текущему времени минус глубина поиска в часах (" + premiumText + ")\n" +
                     "- - - - - -\n" +
                     "<b>3. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "Исключение новостей, которые содержат слова-исключения\n" +
@@ -257,7 +263,7 @@ public class TextInterface {
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
                     "<b>2. Auto search interval: " + x.getPeriod() + "</b>\n" +
-                    "The search period is equal to the current moment minus hours" + "\n" +
+                    "The search period is equal to the current moment minus hours (" + premiumText + ")\n" +
                     "- - - - - -\n" +
                     "<b>3. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "Excluding news that contains excluding terms\n" +
