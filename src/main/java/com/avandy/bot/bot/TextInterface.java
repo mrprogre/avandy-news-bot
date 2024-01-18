@@ -5,11 +5,12 @@ import com.avandy.bot.utils.Common;
 import com.vdurmont.emoji.EmojiParser;
 
 public class TextInterface {
-    public static String greetingText, letsStartText, noText, yesText, getPremiumRequestText,
-            infoText, settingText, listKeywordsText, findSelectText, top20Text, top20Text2, listExcludedText,
-            deleteUserText, addText, delText, excludeWordText, searchText, excludedText, listKeywordsButtonText,
-            updateTopText, updateTopText2, undefinedCommandText, changesSavedText, jaroWinklerSwitcherText,
-            headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
+    public static String
+            getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>",
+            greetingText, letsStartText, noText, yesText, infoText, settingText, listKeywordsText, findSelectText,
+            top20Text, top20Text2, listExcludedText, deleteUserText, addText, delText, excludeWordText, searchText,
+            excludedText, listKeywordsButtonText, updateTopText, updateTopText2, undefinedCommandText, changesSavedText,
+            jaroWinklerSwitcherText, headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
             wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText, initSearchTemplateText,
             yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
             excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText, premiumText,
@@ -118,11 +119,9 @@ public class TextInterface {
             jaroWinklerText = "Окончания";
             premiumText = "для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты";
             getPremiumText = "Премиум";
-            getPremiumRequestText = "Заявка принята! Мы свяжемся с Вами в ближайшее время!";
-            getPremiumYesOrNowText = "Отправить заявку на Премиум?";
+            getPremiumYesOrNowText = "Оплатить подписку на Премиум (900 рублей в год)?";
         } else {
-            getPremiumYesOrNowText = "Submit a request for Premium?";
-            getPremiumRequestText = "Thanks! We will contact you shortly!";
+            getPremiumYesOrNowText = "Pay for a Premium subscription (50$ per year)";
             getPremiumText = "Premium";
             premiumText = "for a <b>premium account</b>, the search starts every 2 minutes";
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
