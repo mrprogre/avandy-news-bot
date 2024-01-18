@@ -157,9 +157,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (callbackData) {
                 case "GET_PREMIUM" -> showYesNoGetPremium(chatId,getPremiumYesOrNowText);
-
                 case "YES_PREMIUM" -> {
-                    sendMessage(Common.DEV_ID, String.format("Заявка на премиум!\nChat id: %d", chatId));
+                    sendMessage(Common.DEV_ID, String.format("Заявка на премиум от \nchat id: %d", chatId));
                     sendMessage(chatId, getPremiumRequestText);
                 }
 
