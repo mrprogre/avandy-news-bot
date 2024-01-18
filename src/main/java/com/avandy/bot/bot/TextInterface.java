@@ -6,22 +6,21 @@ import com.vdurmont.emoji.EmojiParser;
 
 public class TextInterface {
     public static String
-            getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>",
             greetingText, letsStartText, noText, yesText, infoText, settingText, listKeywordsText, findSelectText,
             top20Text, top20Text2, listExcludedText, deleteUserText, addText, delText, excludeWordText, searchText,
             excludedText, listKeywordsButtonText, updateTopText, updateTopText2, undefinedCommandText, changesSavedText,
-            jaroWinklerSwitcherText, headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText, jaroWinklerText,
-            wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText, initSearchTemplateText,
-            yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, startSettingsText,
-            excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText, premiumText,
-            startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText, getPremiumText,
-            addInListText, delFromListText, removeAllText, sendMessageForDevText, searchNewsHeaderText,
+            jaroWinklerSwitcherText, headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText,
+            jaroWinklerText, wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText,
+            initSearchTemplateText, yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText,
+            startSettingsText, excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText,
+            premiumText, startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
+            getPremiumText, addInListText, delFromListText, removeAllText, sendMessageForDevText, searchNewsHeaderText,
             actionCanceledText, removeFromTopTenListText, rssSourcesText, fullSearchStartText, chooseNumberWordFromTop,
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
-            foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
-            listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop, removedFromTopText,
-            chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
-            getPremiumYesOrNowText;
+            foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText,
+            wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
+            removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
+            getPremiumYesOrNowText, getPremiumRequestText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -119,9 +118,11 @@ public class TextInterface {
             jaroWinklerText = "Окончания";
             premiumText = "для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты";
             getPremiumText = "Премиум";
-            getPremiumYesOrNowText = "Оплатить подписку на Премиум (900 рублей в год)?";
+            getPremiumYesOrNowText = "Оплатить премиум (<b>900</b> рублей в год)?";
+            getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
         } else {
-            getPremiumYesOrNowText = "Pay for a Premium subscription (50$ per year)";
+            getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>";
+            getPremiumYesOrNowText = "Pay for a Premium subscription (<b>50$</b> per year)";
             getPremiumText = "Premium";
             premiumText = "for a <b>premium account</b>, the search starts every 2 minutes";
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
