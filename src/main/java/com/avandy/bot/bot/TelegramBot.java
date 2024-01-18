@@ -1196,8 +1196,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("DE_BUTTON", "de");
         buttons.put("FR_BUTTON", "fr");
         buttons.put("ES_BUTTON", "es");
-        buttons.put("RU_BUTTON", "ru");
         buttons.put("EN_BUTTON", "en");
+        buttons.put("RU_BUTTON", "ru");
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 

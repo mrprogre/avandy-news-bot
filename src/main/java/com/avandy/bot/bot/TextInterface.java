@@ -69,7 +69,7 @@ public class TextInterface {
                     - - - - - -
                     Нажми кнопку "Добавить".""";
             buyButtonText = "Пока, друг! " + Common.ICON_GOOD_BYE;
-            intervalText = "Интервал";
+            intervalText = "Глубина";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
             startSettingsText = "Старт";
