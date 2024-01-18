@@ -24,12 +24,21 @@ public class Schedulers {
     private final TelegramBot telegramBot;
     private final AdminRepository adminRepository;
 
-
+    // Поиск новостей каждый час
     @Scheduled(cron = "${cron.search.keywords}")
     protected void autoSearchByKeywords() {
+        searchNewsByKeywords(settingsRepository.findAllSchedulerOn());
+    }
+
+    // Премиум пользователи: поиск новостей каждую минуту
+    @Scheduled(cron = "${cron.search.keywords.premium}")
+    protected void autoSearchByKeywordsPremium() {
+        searchNewsByKeywords(settingsRepository.findAllSchedulerOnPremium());
+    }
+
+    private void searchNewsByKeywords(List<Settings> usersSettings) {
         Integer hourNow = LocalTime.now().getHour();
 
-        List<Settings> usersSettings = settingsRepository.findAllByScheduler();
         for (Settings setting : usersSettings) {
             List<Integer> timeToExecute = Common.getTimeToExecute(setting.getStart(), setting.getPeriod());
 
@@ -43,7 +52,7 @@ public class Schedulers {
         }
     }
 
-    // Сохранение всех новостей в БД по всем источникам каждые 10 минут
+    // Сохранение всех новостей в БД по всем источникам каждую минуту
     @Scheduled(cron = "${cron.fill.database}")
     public void scheduler() {
         long start = System.currentTimeMillis();
@@ -52,9 +61,9 @@ public class Schedulers {
         int countJsoup = searchService.downloadNewsByJsoup();
 
         long searchTime = System.currentTimeMillis() - start;
-        if (countRome > 0 || countJsoup > 0) {
-            log.info("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} ms", countRome + countJsoup,
-                    countRome, countJsoup, searchTime);
+        if ((countRome > 0 || countJsoup > 0) && searchTime > 50000L) {
+            log.warn("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} s", countRome + countJsoup,
+                    countRome, countJsoup, searchTime/1000);
         }
     }
 

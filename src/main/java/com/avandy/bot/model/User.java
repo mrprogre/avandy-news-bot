@@ -16,4 +16,5 @@ public class User {
     private String userName;
     private Timestamp registeredAt;
     private Integer isActive;
+    private Integer isPremium;
 }

@@ -29,8 +29,13 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Query(value = "SELECT lang FROM settings WHERE chat_id = :chatId", nativeQuery = true)
     String getLangByChatId(long chatId);
 
-    @Query(value = "FROM settings WHERE scheduler = 'on'")
-    List<Settings> findAllByScheduler();
+    @Query(value = "select s.* from settings s join users u on s.chat_id = u.chat_id " +
+            "where s.scheduler = 'on' and u.is_premium = 0", nativeQuery = true)
+    List<Settings> findAllSchedulerOn();
+
+    @Query(value = "select s.* from settings s join users u on s.chat_id = u.chat_id " +
+            "where s.scheduler = 'on' and u.is_premium = 1", nativeQuery = true)
+    List<Settings> findAllSchedulerOnPremium();
 
     @Query(value = "SELECT jaro_winkler FROM settings WHERE chat_id = :chatId", nativeQuery = true)
     String getJaroWinklerByChatId(long chatId);
