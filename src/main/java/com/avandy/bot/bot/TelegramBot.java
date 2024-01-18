@@ -1224,6 +1224,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         user.setUserName(chat.getUserName());
         user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
         user.setIsActive(1);
+        user.setIsPremium(0);
 
         if (userRepository.isUserExistsByChatId(message.getChatId()) == 0) {
             userRepository.save(user);
