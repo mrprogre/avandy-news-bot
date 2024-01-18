@@ -31,7 +31,7 @@ public class TextInterface {
             letsStartText = "Продолжим?";
             noText = "Нет";
             yesText = "Да";
-            infoText = "Информация о приложении";
+            infoText = "Информация и подписка";
             settingText = "Настройки";
             listKeywordsText = """
                     <b>Ключевые слова</b>
@@ -118,7 +118,7 @@ public class TextInterface {
             jaroWinklerText = "Окончания";
             premiumText = "для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты";
             getPremiumText = "Премиум";
-            getPremiumYesOrNowText = "Оплатить премиум (<b>900</b>р. в год)?";
+            getPremiumYesOrNowText = "Оплатить премиум (<b>900р.</b> в год)?";
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
         } else {
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>";
@@ -132,7 +132,7 @@ public class TextInterface {
             letsStartText = "Continue?";
             noText = "No";
             yesText = "Yes";
-            infoText = "Application information";
+            infoText = "App info and premium";
             settingText = "Settings";
             listKeywordsText = """
                     <b>Keywords</b>
