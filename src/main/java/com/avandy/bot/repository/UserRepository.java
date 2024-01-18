@@ -13,6 +13,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query(value = "SELECT count(1) FROM users WHERE chat_id = :chatId", nativeQuery = true)
     int isUserExistsByChatId(Long chatId);
 
+    @Query(value = "SELECT is_premium FROM users WHERE chat_id = :chatId", nativeQuery = true)
+    int isPremiumByChatId(Long chatId);
+
     @Query(value = "SELECT coalesce(first_name, user_name) as name FROM users WHERE chat_id = :chatId",
             nativeQuery = true)
     String findNameByChatId(Long chatId);

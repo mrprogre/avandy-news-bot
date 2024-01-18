@@ -20,7 +20,7 @@ public class TextInterface {
             foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText,
             wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
-            getPremiumYesOrNowText, getPremiumRequestText;
+            getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -116,20 +116,22 @@ public class TextInterface {
                     Пример: в Top 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
                     Текущий статус:\s""";
             jaroWinklerText = "Окончания";
-            premiumText = "для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты";
+            premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты)";
             getPremiumText = "Премиум";
             getPremiumYesOrNowText = """
                     На тарифе <b>премиум</b> поиск новостей по ключевым словам производится <b>каждые 2 минуты</b>. Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>!
                     Оплатить премиум (<b>900р.</b> в год)?
                     """;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
+            premiumIsActive = "(активирован премиум)";
         } else {
+            premiumIsActive = "(premium is active)";
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>";
             getPremiumYesOrNowText = """
                     On the <b>premium</b> tariff, news search by keywords is performed <b>every 2 minutes</b>. So you <b>will be the first</b> to receive the <b>most up-to-date information</b>!
                     Pay for a Premium subscription (<b>50$</b> per year)""";
             getPremiumText = "Premium";
-            premiumText = "for a <b>premium account</b>, the search starts every 2 minutes";
+            premiumText = " (for a <b>premium account</b>, the search starts every 2 minutes)";
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
             searchNewsHeaderText = "Search news";
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
@@ -224,7 +226,10 @@ public class TextInterface {
         }
     }
 
-    public static String getSettingsText(Settings x, String lang) {
+    public static String getSettingsText(Settings x, String lang, int isPremium) {
+        String premiumPeriod;
+        String premiumMessage;
+
         if (lang.equals("ru")) {
             String schedSettings = "";
             if (x.getScheduler().contains("on")) {
@@ -238,12 +243,20 @@ public class TextInterface {
                 schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
             }
 
+            if (isPremium == 1) {
+                premiumPeriod = "<b>2 min</b> " + premiumIsActive;
+                premiumMessage = "";
+            } else {
+                premiumPeriod = x.getPeriod();
+                premiumMessage = premiumText;
+            }
+
             return "<b>Настройки</b> " + Common.ICON_SETTINGS + " \n" +
                     "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
                     "Автоматический запуск поиска по <b>ключевым словам</b> за интервал в п.2" + "\n" +
                     "- - - - - -\n" +
-                    "<b>2. Интервал автопоиска: " + x.getPeriod() + "</b>\n" +
-                    "Интервал равен текущему времени минус глубина поиска в часах (" + premiumText + ")\n" +
+                    "<b>2. Интервал автопоиска:</b> " + premiumPeriod + "\n" +
+                    "Интервал равен текущему времени минус глубина поиска в часах" + premiumMessage + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "Исключение новостей, которые содержат слова-исключения\n" +
@@ -266,12 +279,20 @@ public class TextInterface {
                 schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
             }
 
+            if (isPremium == 1) {
+                premiumPeriod = "<b>2 min</b> " + premiumIsActive;
+                premiumMessage = "";
+            } else {
+                premiumPeriod = x.getPeriod();
+                premiumMessage = premiumText;
+            }
+
             return "<b>Settings</b> " + Common.ICON_SETTINGS + " \n" +
                     "<b>1. Auto search: " + x.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
-                    "<b>2. Auto search interval: " + x.getPeriod() + "</b>\n" +
-                    "The search period is equal to the current moment minus hours (" + premiumText + ")\n" +
+                    "<b>2. Auto search interval: " + premiumPeriod + "</b>\n" +
+                    "The search period is equal to the current moment minus hours" + premiumMessage + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
                     "Excluding news that contains excluding terms\n" +

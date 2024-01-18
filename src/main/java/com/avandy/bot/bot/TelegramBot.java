@@ -1118,12 +1118,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void getSettings(long chatId) {
         Optional<Settings> sets = settingsRepository.findById(chatId).stream().findFirst();
         String lang = settingsRepository.getLangByChatId(chatId);
+        int isPremium = userRepository.isPremiumByChatId(chatId);
 
         sets.ifPresentOrElse(x -> {
                     x.setScheduler(setOnOffRus(x.getScheduler(), chatId));
                     x.setExcluded(setOnOffRus(x.getExcluded(), chatId));
 
-                    String text = getSettingsText(x, lang);
+                    String text = getSettingsText(x, lang, isPremium);
                     settingsKeyboard(chatId, text);
                 },
                 () -> sendMessage(chatId, settingsNotFoundText)
