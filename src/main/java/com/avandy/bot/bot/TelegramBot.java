@@ -156,7 +156,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
 
             switch (callbackData) {
-                case "GET_PREMIUM" -> showYesNoGetPremium(chatId,getPremiumYesOrNowText);
+                case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
                 case "YES_PREMIUM" -> {
                     sendMessage(Common.DEV_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
                             userRepository.findNameByChatId(chatId)));
@@ -1208,11 +1208,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
-    public void showYesNoGetPremium(long chatId, String text) {
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("NO_PREMIUM", noText);
-        buttons.put("YES_PREMIUM", yesText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+    public void showYesNoGetPremium(long chatId) {
+        if (userRepository.isPremiumByChatId(chatId) == 1) {
+            sendMessage(chatId, premiumIsActive2);
+        } else {
+            Map<String, String> buttons = new LinkedHashMap<>();
+            buttons.put("NO_PREMIUM", noText);
+            buttons.put("YES_PREMIUM", yesText);
+            sendMessage(chatId, getPremiumYesOrNowText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        }
     }
 
     // Сохранение пользователя в БД

@@ -26,6 +26,7 @@ public class Common {
     public static final String ICON_GOOD_BYE = "\uD83D\uDC4B";
     public static final String ICON_SETTINGS = "\uD83C\uDF0D";
     public static final String ICON_TOP_20_FIRE = "\uD83D\uDD25";
+    public static final String ICON_PREMIUM_IS_ACTIVE = "\uD83D\uDC8E";
     public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
 
     // Compare dates to find news by period
