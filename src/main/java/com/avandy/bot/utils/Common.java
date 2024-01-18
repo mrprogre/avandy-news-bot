@@ -17,8 +17,8 @@ public class Common {
     public static final int TOP_TEN_LIST_LIMIT = 60;
     public static final int EXCLUDING_TERMS_LIST_LIMIT = 60;
     public static final int EXCLUDED_LIMIT = 100;
-    public static final int LIMIT_FOR_BREAKING_INTO_PARTS = 150;
-    public static final int SLEEP_BETWEEN_SENDING_MESSAGES = 125;
+    public static final int LIMIT_FOR_BREAKING_INTO_PARTS = 60;
+    public static final int SLEEP_BETWEEN_SENDING_MESSAGES = 150;
     public static final String ERROR_TEXT = "Error occurred: ";
     public static final String ICON_SEARCH = "\uD83C\uDFB2";
     public static final String ICON_NEWS_FOUNDED = "\uD83C\uDF3F";

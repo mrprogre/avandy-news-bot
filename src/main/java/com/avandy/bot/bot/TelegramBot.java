@@ -156,7 +156,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
 
             switch (callbackData) {
-                case "GET_PREMIUM" -> {
+                case "GET_PREMIUM" -> showYesNoGetPremium(chatId,getPremiumYesOrNowText);
+
+                case "YES_PREMIUM" -> {
                     sendMessage(Common.DEV_ID, String.format("Заявка на премиум!\n" +
                             "Chat id: %d", chatId));
                     sendMessage(chatId, getPremiumRequestText);
@@ -179,7 +181,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
                 }
 
-                case "START_SEARCH", "DELETE_NO" -> initSearchesKeyboard(chatId);
+                case "START_SEARCH", "DELETE_NO", "NO_PREMIUM" -> initSearchesKeyboard(chatId);
 
                 /* FULL SEARCH */
                 case "FIND_ALL" -> new Thread(() -> fullSearch(chatId)).start();
@@ -1203,6 +1205,13 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("NO_BUTTON", noText);
         buttons.put("YES_BUTTON", yesText);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
+    public void showYesNoGetPremium(long chatId, String text) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("NO_PREMIUM", noText);
+        buttons.put("YES_PREMIUM", yesText);
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 

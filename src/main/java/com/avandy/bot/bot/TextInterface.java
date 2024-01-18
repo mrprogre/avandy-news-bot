@@ -19,7 +19,8 @@ public class TextInterface {
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText, wordIsNotInTheListText,
             listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop, removedFromTopText,
-            chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText;
+            chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
+            getPremiumYesOrNowText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -118,7 +119,9 @@ public class TextInterface {
             premiumText = "для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты";
             getPremiumText = "Премиум";
             getPremiumRequestText = "Заявка принята! Мы свяжемся с Вами в ближайшее время!";
+            getPremiumYesOrNowText = "Отправить заявку на Премиум?";
         } else {
+            getPremiumYesOrNowText = "Submit a request for Premium?";
             getPremiumRequestText = "Thanks! We will contact you shortly!";
             getPremiumText = "Premium";
             premiumText = "for a <b>premium account</b>, the search starts every 2 minutes";
