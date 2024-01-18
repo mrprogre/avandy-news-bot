@@ -118,11 +118,16 @@ public class TextInterface {
             jaroWinklerText = "Окончания";
             premiumText = "для <b>премиум аккаунта</b> запуск поиска производится каждые 2 минуты";
             getPremiumText = "Премиум";
-            getPremiumYesOrNowText = "Оплатить премиум (<b>900р.</b> в год)?";
+            getPremiumYesOrNowText = """
+                    На тарифе <b>премиум</b> поиск новостей по ключевым словам производится <b>каждые 2 минуты</b>. Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>!
+                    Оплатить премиум (<b>900р.</b> в год)?
+                    """;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
         } else {
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>";
-            getPremiumYesOrNowText = "Pay for a Premium subscription (<b>50$</b> per year)";
+            getPremiumYesOrNowText = """
+                    On the <b>premium</b> tariff, news search by keywords is performed <b>every 2 minutes</b>. So you <b>will be the first</b> to receive the <b>most up-to-date information</b>!
+                    Pay for a Premium subscription (<b>50$</b> per year)""";
             getPremiumText = "Premium";
             premiumText = "for a <b>premium account</b>, the search starts every 2 minutes";
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
