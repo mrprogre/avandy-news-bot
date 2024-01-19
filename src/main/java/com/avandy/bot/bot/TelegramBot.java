@@ -364,7 +364,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void findNewsByKeywords(long chatId, String isAutoSearch) {
         // DEBUG
         if (isAutoSearch.equals("off") && Common.DEV_ID != chatId) {
-            log.warn("{}: Запуск поиска по ключевым словам", chatId);
+            log.warn("{}: Ручной запуск поиска по ключевым словам", chatId);
         }
 
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
@@ -389,9 +389,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         int showCounter = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Поиск по ключевым словам: {}, {}, найдено {} за {}", chatId,
-                    userRepository.findNameByChatId(chatId), headlines.size(),
-                    settingsRepository.getKeywordsPeriod(chatId));
+            if (isAutoSearch.equals("on")) {
+                log.warn("Автопоиск: {}, {}, найдено {} за {}", chatId,
+                        userRepository.findNameByChatId(chatId), headlines.size(),
+                        settingsRepository.getKeywordsPeriod(chatId));
+            } else {
+                log.warn("Найдено: {}, {}, новостей {}, глубина {}", chatId,
+                        userRepository.findNameByChatId(chatId), headlines.size(),
+                        settingsRepository.getKeywordsPeriod(chatId));
+            }
 
             for (Headline headline : headlines) {
                 String text = "<b>" + headline.getSource() + "</b> [" +
