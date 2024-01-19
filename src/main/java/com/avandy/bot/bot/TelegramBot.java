@@ -389,8 +389,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         int showCounter = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Автопоиск: {}, {}, найдено {} за {}", chatId, userRepository.findNameByChatId(chatId),
-                    headlines.size(), settingsRepository.getKeywordsPeriod(chatId));
+            log.warn("Поиск по ключевым словам: {}, {}, найдено {} за {}", chatId,
+                    userRepository.findNameByChatId(chatId), headlines.size(),
+                    settingsRepository.getKeywordsPeriod(chatId));
 
             for (Headline headline : headlines) {
                 String text = "<b>" + headline.getSource() + "</b> [" +
