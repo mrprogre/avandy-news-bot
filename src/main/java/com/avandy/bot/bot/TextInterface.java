@@ -83,7 +83,7 @@ public class TextInterface {
             addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
             delFromListText = "Укажите номера слов для удаления (разделять запятой)";
             removeAllText = "удалить всё";
-            sendMessageForDevText = "Напишите свои предложения разработчику";
+            sendMessageForDevText = "Напишите разработчику";
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
