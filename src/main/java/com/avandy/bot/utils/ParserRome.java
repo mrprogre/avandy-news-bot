@@ -25,6 +25,8 @@ public class ParserRome {
                 log.info("Connect timed out, url: {}", url);
             } else if (e.getMessage().contains("Connection reset")) {
                 log.info("Connection reset, url: {}", url);
+            } else if (e.getMessage().contains("Connection refused")) {
+                log.info("Connection refused, url: {}", url);
             } else if (e.getMessage().contains("Remote host terminated")) {
                 log.info("Remote host terminated, url: {}", url);
             } else if (e.getMessage().contains("Server returned HTTP response code")) {
