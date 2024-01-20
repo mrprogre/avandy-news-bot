@@ -4,7 +4,7 @@ import com.avandy.bot.model.Settings;
 import com.avandy.bot.utils.Common;
 import com.vdurmont.emoji.EmojiParser;
 
-public class TextInterface {
+public class Text extends Common {
     public static String
             greetingText, letsStartText, noText, yesText, infoText, settingText, listKeywordsText, findSelectText,
             top20Text, top20Text2, listExcludedText, deleteUserText, addText, delText, excludeWordText, searchText,
@@ -51,9 +51,10 @@ public class TextInterface {
             excludedText = "Исключённое";
             updateTopText = "Обновить топ";
             updateTopText2 = "Top 20";
-            undefinedCommandText = "Данная команда не существует или Вы не нажали кнопку Добавить перед вводом текста";
+            undefinedCommandText = "Данная команда не существует, либо Вы не нажали кнопку перед вводом текста " +
+                    ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Сохранено ✔️";
-            headlinesNotFound = "» новости не найдены " + Common.ICON_END_SEARCH_NOT_FOUND;
+            headlinesNotFound = "» новости не найдены " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 2 символов";
             deleteAllWordsText = "❌ все слова удалены";
@@ -68,7 +69,7 @@ public class TextInterface {
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>. Если интересуют новости, связанные с ипотекой, то добавь слово со звёздочкой <b>ипотек*</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b>. Одна звездочка это одна любая буква.
                     - - - - - -
                     Нажми кнопку "Добавить".""";
-            buyButtonText = "Пока, друг! " + Common.ICON_GOOD_BYE;
+            buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
             intervalText = "Глубина";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
@@ -116,24 +117,24 @@ public class TextInterface {
                     Пример: в Top 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
                     Текущий статус:\s""";
             jaroWinklerText = "Окончания";
-            premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b>) " + Common.ICON_PREMIUM_IS_ACTIVE;
+            premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b>) " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumText = "Премиум";
             getPremiumYesOrNowText = """
                     На тарифе <b>премиум</b> поиск новостей по ключевым словам производится <b>каждые 2 минуты</b>. Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b> \uD83D\uDC8E
                     Оплатить премиум (<b>900р.</b> в год)?
                     """;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
-            premiumIsActive = "активирован премиум " + Common.ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive2 = "Премиум активирован " + Common.ICON_PREMIUM_IS_ACTIVE;
+            premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
+            premiumIsActive2 = "Премиум активирован " + ICON_PREMIUM_IS_ACTIVE;
         } else {
-            premiumIsActive2 = "Premium is active " + Common.ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive = "premium is active " + Common.ICON_PREMIUM_IS_ACTIVE;
+            premiumIsActive2 = "Premium is active " + ICON_PREMIUM_IS_ACTIVE;
+            premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>";
             getPremiumYesOrNowText = """
                     On the <b>premium</b> tariff, news search by keywords is performed <b>every 2 minutes</b>. So you <b>will be the first</b> to receive the <b>most up-to-date information</b> \uD83D\uDC8E
                     Pay for a Premium subscription (<b>50$</b> per year)""";
             getPremiumText = "Premium";
-            premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b>) " + Common.ICON_PREMIUM_IS_ACTIVE;
+            premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b>) " + ICON_PREMIUM_IS_ACTIVE;
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
             searchNewsHeaderText = "Search news";
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
@@ -159,9 +160,10 @@ public class TextInterface {
             excludeWordText = "Exclude term";
             searchText = "Search";
             excludedText = "Excluded";
-            undefinedCommandText = "Command not defined";
+            undefinedCommandText = "This command doesn't exist or you did not click the button before entering text! " +
+                    "However, I will see your message in the journal " + ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Done ✔️";
-            headlinesNotFound = "» no news headlines found " + Common.ICON_END_SEARCH_NOT_FOUND;
+            headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 2 characters";
             deleteAllWordsText = "❌ all words removed";
@@ -176,7 +178,7 @@ public class TextInterface {
                     The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax**</b> to get all the headlines containing: <b>tax, taxes</b>, etc., but not <b>taxcom</b>. One * is equal to any one word character.
                     - - - - - -
                     Click the "Add" button.""";
-            buyButtonText = "Good buy! " + Common.ICON_GOOD_BYE;
+            buyButtonText = "Good buy! " + ICON_GOOD_BYE;
             intervalText = "Interval";
             autoSearchText = "Auto search";
             exclusionText = "News exclusion";
@@ -240,7 +242,7 @@ public class TextInterface {
                     case "2h" -> " (запуск каждые 2 часа)\n";
                     case "24h", "48h", "72h" -> " (запуск один раз в сутки)\n";
                     default ->
-                            " (часы запуска: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
+                            " (часы запуска: <b>" + getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
                 };
                 schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
             }
@@ -253,7 +255,7 @@ public class TextInterface {
                 premiumMessage = premiumText;
             }
 
-            return "<b>Настройки</b> " + Common.ICON_SETTINGS + " \n" +
+            return "<b>Настройки</b> " + ICON_SETTINGS + " \n" +
                     "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
                     "Автоматический запуск поиска по <b>ключевым словам</b>\n" +
                     "- - - - - -\n" +
@@ -278,7 +280,7 @@ public class TextInterface {
                     case "2h" -> " (launch every 2 hours)\n";
                     case "24h", "48h", "72h" -> " (launch once a day)\n";
                     default ->
-                            " (start time: <b>" + Common.getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
+                            " (start time: <b>" + getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
                 };
                 schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
             }
@@ -291,7 +293,7 @@ public class TextInterface {
                 premiumMessage = premiumText;
             }
 
-            return "<b>Settings</b> " + Common.ICON_SETTINGS + " \n" +
+            return "<b>Settings</b> " + ICON_SETTINGS + " \n" +
                     "<b>1. Auto search: " + x.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +

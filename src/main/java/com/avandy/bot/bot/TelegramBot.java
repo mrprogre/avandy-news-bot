@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static com.avandy.bot.bot.TextInterface.*;
+import static com.avandy.bot.bot.Text.*;
 
 @Slf4j
 @Service
@@ -873,7 +873,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // Проверка включен ли метод Джаро-Винклера (в интерфейсе для простоты назван "Удаление окончаний")
         if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
-            wordsCount = Common.fillTopWithoutDuplicates(wordsCount, Common.JARO_WINKLER_LEVEL);
+            Common.fillTopWithoutDuplicates(wordsCount, Common.JARO_WINKLER_LEVEL);
         }
 
         // Удаление исключённых слов из мап для анализа

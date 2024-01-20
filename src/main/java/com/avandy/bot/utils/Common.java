@@ -1,6 +1,5 @@
 package com.avandy.bot.utils;
 
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
@@ -9,7 +8,6 @@ import java.time.LocalTime;
 import java.util.*;
 
 @Slf4j
-@UtilityClass
 public class Common {
     public static final long DEV_ID = 1254981379L;
     public static final int JARO_WINKLER_LEVEL = 85;
@@ -27,6 +25,7 @@ public class Common {
     public static final String ICON_SETTINGS = "\uD83C\uDF0D";
     public static final String ICON_TOP_20_FIRE = "\uD83D\uDD25";
     public static final String ICON_PREMIUM_IS_ACTIVE = "\uD83D\uDC8E";
+    public static final String ICON_SMILE_UPSIDE_DOWN = "\uD83D\uDE43";
     public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
 
     // Compare dates to find news by period
@@ -104,7 +103,7 @@ public class Common {
     }
 
     // поиск общей подстроки (полно всяких: ный, ять, акой, ать)
-    private String longestCommonSubstring(String s, String t) {
+    private static String longestCommonSubstring(String s, String t) {
         int[][] table = new int[s.length()][t.length()];
         int longest = 0;
         String result = "";
@@ -131,7 +130,7 @@ public class Common {
     // output: level < 87 : атак-10
     // output: level = 87 : атак-5 [атаку-2, атаке-3]
     // output: level > 87 : null
-    public Map<String, Integer> fillTopWithoutDuplicates(Map<String, Integer> wordsCount, int jaroWinklerLevel) {
+    public static void fillTopWithoutDuplicates(Map<String, Integer> wordsCount, int jaroWinklerLevel) {
 
         Map<String, Integer> topMap = new TreeMap<>();
         List<String> forDeleteFromMap = new ArrayList<>();
@@ -160,8 +159,6 @@ public class Common {
 
         // добавление обобщённого слова в общую коллекцию слов
         wordsCount.putAll(topMap);
-
-        return wordsCount;
     }
 
 }
