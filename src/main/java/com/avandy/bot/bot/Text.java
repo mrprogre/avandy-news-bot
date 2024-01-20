@@ -125,9 +125,9 @@ public class Text extends Common {
                     """;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive2 = "Премиум активирован " + ICON_PREMIUM_IS_ACTIVE;
+            premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
         } else {
-            premiumIsActive2 = "Premium is active " + ICON_PREMIUM_IS_ACTIVE;
+            premiumIsActive2 = "Premium activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Pay link</a>";
             getPremiumYesOrNowText = """
@@ -260,7 +260,7 @@ public class Text extends Common {
                     "Автоматический запуск поиска по <b>ключевым словам</b>\n" +
                     "- - - - - -\n" +
                     "<b>2. Частота автопоиска:</b> " + premiumPeriod + "\n" +
-                    "Глубина поиска равна текущему времени минус <b>" + x.getPeriod() + "</b>" +
+                    "Глубина поиска совпадает с частотой и равна текущему времени минус <b>" + x.getPeriod() + "</b>" +
                     premiumMessage + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
@@ -298,7 +298,7 @@ public class Text extends Common {
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
                     "<b>2. Auto search frequency: " + premiumPeriod + "</b>\n" +
-                    "The search period is equal to the current moment minus <b>" + x.getPeriod() + "</b>" +
+                    "The search period coincides with the search frequency and is equal to the current time minus <b>" + x.getPeriod() + "</b>" +
                     premiumMessage + "\n" +
                     "- - - - - -\n" +
                     "<b>3. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +

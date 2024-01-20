@@ -1219,8 +1219,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void showYesNoGetPremium(long chatId) {
+        String premiumExpire = dateFormat(userRepository.findPremiumExpDateByChatId(chatId));
+
         if (userRepository.isPremiumByChatId(chatId) == 1) {
-            sendMessage(chatId, premiumIsActive2);
+            sendMessage(chatId, String.format(premiumIsActive2, premiumExpire));
         } else {
             Map<String, String> buttons = new LinkedHashMap<>();
             buttons.put("NO_PREMIUM", noText);

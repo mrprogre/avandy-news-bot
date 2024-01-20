@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Date;
 import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Long> {
@@ -23,6 +24,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users WHERE is_active = 1", nativeQuery = true)
     List<User> findAllByIsActive();
+
+    @Query(value = "SELECT prem_exp_date FROM users WHERE chat_id = :chatId", nativeQuery = true)
+    Date findPremiumExpDateByChatId(Long chatId);
 
     @Query(value = "SELECT is_active FROM users WHERE chat_id = :chatId", nativeQuery = true)
     int isActive(Long chatId);

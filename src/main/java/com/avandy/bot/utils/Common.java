@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -159,6 +160,10 @@ public class Common {
 
         // добавление обобщённого слова в общую коллекцию слов
         wordsCount.putAll(topMap);
+    }
+
+    public static String dateFormat(Date date) {
+        return new SimpleDateFormat("dd.MM.yyyy").format(date);
     }
 
 }
