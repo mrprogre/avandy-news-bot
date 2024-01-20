@@ -7,9 +7,11 @@ create table if not exists users
     registered_at timestamp,
     is_active     integer default 1,
     is_premium    integer default 0,
+    prem_exp_date date,
     constraint pk_users_chat_id primary key (chat_id)
 );
 comment on table users is 'Список пользователей Telegram';
+comment on column users.prem_exp_date is 'Дата окончания срока действия Premium';
 
 create table if not exists settings
 (

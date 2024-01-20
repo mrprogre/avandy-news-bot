@@ -23,6 +23,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1238,6 +1239,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
         user.setIsActive(1);
         user.setIsPremium(0);
+        user.setPremExpDate(LocalDate.of(2020, 1, 1));
 
         if (userRepository.isUserExistsByChatId(message.getChatId()) == 0) {
             userRepository.save(user);

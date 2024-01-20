@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @Entity(name = "users")
@@ -17,4 +18,5 @@ public class User {
     private Timestamp registeredAt;
     private Integer isActive;
     private Integer isPremium;
+    private LocalDate premExpDate;
 }
