@@ -129,7 +129,7 @@ public class Text extends Common {
         } else {
             premiumIsActive2 = "Premium activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
-            getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Pay pal link</a>";
+            getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Paypal link</a>";
             getPremiumYesOrNowText = """
                     On the <b>premium</b> tariff, news search by keywords is performed <b>every 2 minutes</b>. So you <b>will be the first</b> to receive the <b>most up-to-date information</b> \uD83D\uDC8E
                     Pay for a Premium subscription (<b>50$</b> per year)""";
