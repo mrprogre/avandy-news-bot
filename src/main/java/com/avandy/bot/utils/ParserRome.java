@@ -17,7 +17,7 @@ public class ParserRome {
         XmlReader reader = null;
         try {
             URLConnection urlConnection = new URL(url).openConnection();
-            urlConnection.setConnectTimeout(3000);
+            urlConnection.setConnectTimeout(2000);
             InputStream inputStream = urlConnection.getInputStream();
             reader = new XmlReader(inputStream);
         } catch (Exception e) {

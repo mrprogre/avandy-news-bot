@@ -27,7 +27,7 @@ public class ParserJsoup {
 
         try {
             Document document = Jsoup.connect(url)
-                    .timeout(3600)
+                    .timeout(2000)
                     .get();
 
             Elements news = document.getElementsByTag("item");
