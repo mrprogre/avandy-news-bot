@@ -31,6 +31,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query(value = "SELECT is_active FROM users WHERE chat_id = :chatId", nativeQuery = true)
     int isActive(Long chatId);
 
+    @Query(value = "SELECT count(1) FROM users WHERE is_active = 1", nativeQuery = true)
+    int activeUsersCount();
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE users SET is_active = :value WHERE chat_id = :chatId", nativeQuery = true)

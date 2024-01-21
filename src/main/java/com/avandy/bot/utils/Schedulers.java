@@ -63,7 +63,7 @@ public class Schedulers {
         long searchTime = System.currentTimeMillis() - start;
         if ((countRome > 0 || countJsoup > 0) && searchTime > 50000L) {
             log.warn("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} s", countRome + countJsoup,
-                    countRome, countJsoup, searchTime/1000);
+                    countRome, countJsoup, searchTime / 1000);
         }
     }
 
@@ -106,4 +106,14 @@ public class Schedulers {
             }
         }
     }
+
+    // info: Количество активных пользователей: раз в сутки в 12 дня
+    @Scheduled(cron = "${cron.active.users.count}")
+    void activeUsersCount() {
+        int usersCount = userRepository.activeUsersCount();
+        if (usersCount > 0) {
+            log.warn("Количество активных пользователей: {}", usersCount);
+        }
+    }
+
 }
