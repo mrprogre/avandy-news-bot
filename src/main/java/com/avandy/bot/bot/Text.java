@@ -123,7 +123,8 @@ public class Text extends Common {
                     На тарифе <b>премиум</b> поиск новостей по ключевым словам производится <b>каждые 2 минуты</b>. Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b> \uD83D\uDC8E
                     Оплатить премиум (<b>900р.</b> в год)?
                     """;
-            getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Оплата через СБП</a>";
+            getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">1. Оплата через СБП (всё официально, мы платим налоги)</a>\n" +
+                    "<a href=\"https://avandy-news.ru/refund.html\">2. Правила возврата средств</a>";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
         } else {
