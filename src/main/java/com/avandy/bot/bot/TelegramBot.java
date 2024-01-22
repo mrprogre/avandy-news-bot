@@ -417,7 +417,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (isAutoSearch.equals("off")) {
                 afterKeywordsSearchKeyboard(chatId,
-                        foundNewsText + ": <b>" + Search.keywordsNewsCounter + "</b> " + Common.ICON_NEWS_FOUNDED);
+                        foundNewsText + ": <b>" + headlines.size() + "</b> " + Common.ICON_NEWS_FOUNDED);
             }
         } else {
             if (isAutoSearch.equals("off")) {

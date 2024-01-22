@@ -26,8 +26,6 @@ public class Search implements SearchService {
     private final ExcludingTermsRepository excludingTermsRepository;
     private final NewsListRepository newsListRepository;
     public static int totalNewsCounter;
-    public static int filteredNewsCounter;
-    public static int keywordsNewsCounter;
     public static ArrayList<Headline> headlinesTopTen;
 
     @Override
@@ -100,7 +98,6 @@ public class Search implements SearchService {
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
 
                 newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage);
-                keywordsNewsCounter += newsList.size();
 
                 for (NewsList news : newsList) {
                     String rss = news.getSource();
@@ -175,8 +172,6 @@ public class Search implements SearchService {
             log.info("Дублирующая новость: " + chatId + ", source: " + headline.getSource() + ", " + headline.getTitle());
         }
         uniqueJw.forEach(headlinesToShow::remove);
-
-        filteredNewsCounter = headlinesToShow.size();
 
         // Все поиски, кроме поиска новостей по Топу, не дают дублирующих заголовков
         if (!isSearchByOneWordFromTop) {
