@@ -1,8 +1,15 @@
-delete
-from showed_news
-where chat_id = 1254981379
-  and type = 4;
--- full search
+-- Количество новостей, которые получили все пользователи
+select s.chat_id,
+       u.user_name,
+       u.first_name,
+       case s.type when 2 then 'keywords' else 'full' end as type, count(title) as cnt
+from news_list n
+    join showed_news s
+on n.title_hash = s.title_hash
+    join users u on s.chat_id = u.chat_id
+where n.add_date >= '2024-01-22 10:00:00'::timestamp
+group by s.chat_id, u.user_name, u.first_name, type
+order by type desc, cnt desc;
 
 -- Данные пользователей
 -- Мой: 1254981379, Лена: 1020961767, Вика: 6455565758, Саша: 6128707071
@@ -60,3 +67,9 @@ where source = 'EL PAÍS'
 SELECT count(*)
 FROM news_list
 WHERE pub_date > (current_timestamp - cast('6 hours' as interval));
+
+-- Очистить full search
+delete
+from showed_news
+where chat_id = 1254981379
+  and type = 4;

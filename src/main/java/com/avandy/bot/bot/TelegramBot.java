@@ -145,7 +145,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/excluding" -> getExcludedList(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/top" -> showTop(chatId);
-                    default -> sendMessage(chatId, undefinedCommandText);
+                    default -> undefinedKeyboard(chatId);
                 }
             }
             userStates.remove(chatId);
@@ -1433,6 +1433,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("START_SEARCH", "» » »");
         sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(chatId),
                 InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
+    // После ввода пользователем несуществующей команды предложить добавить слова или выбрать поиск
+    void undefinedKeyboard(long chatId) {
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons3 = new LinkedHashMap<>();
+        buttons1.put("ADD_KEYWORD", addText2);
+        buttons2.put("ADD_EXCLUDED", excludeWordText2);
+        buttons3.put("START_SEARCH", findSelectText);
+
+        sendMessageWithPreview(chatId, undefinedCommandText,
+                InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
     }
 
     // Дополнительная клавиатура с тремя видами поиска (с приветствием пользователя)

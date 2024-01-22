@@ -10,7 +10,7 @@ public class Text extends Common {
             top20Text, top20Text2, listExcludedText, deleteUserText, addText, delText, excludeWordText, searchText,
             excludedText, listKeywordsButtonText, updateTopText, updateTopText2, undefinedCommandText, changesSavedText,
             jaroWinklerSwitcherText, headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText,
-            jaroWinklerText, wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText,
+            jaroWinklerText, wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText, addText2,
             initSearchTemplateText, yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText,
             startSettingsText, excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText,
             premiumText, startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
@@ -20,7 +20,7 @@ public class Text extends Common {
             foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText,
             wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
-            getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2;
+            getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -45,8 +45,10 @@ public class Text extends Common {
             listExcludedText = "Слова-исключения";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
+            addText2 = "Добавить ключевые слова";
             delText = "Удалить";
             excludeWordText = "Исключить";
+            excludeWordText2 = "Добавить слова-исключения";
             searchText = "Поиск";
             excludedText = "Исключённое";
             updateTopText = "Обновить";
@@ -157,8 +159,10 @@ public class Text extends Common {
             listExcludedText = "Excluding terms";
             deleteUserText = "Delete user data";
             addText = "Add";
+            addText2 = "Add keywords";
             delText = "Delete";
             excludeWordText = "Exclude term";
+            excludeWordText2 = "Add excluding terms";
             searchText = "Search";
             excludedText = "Excluded";
             undefinedCommandText = "This command doesn't exist or you did not click the button before entering text! " +
