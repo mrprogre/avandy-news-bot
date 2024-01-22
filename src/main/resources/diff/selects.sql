@@ -1,15 +1,20 @@
-delete from showed_news where chat_id = 1254981379 and type = 4; -- full search
+delete
+from showed_news
+where chat_id = 1254981379
+  and type = 4;
+-- full search
 
 -- Данные пользователей
 -- Мой: 1254981379, Лена: 1020961767, Вика: 6455565758, Саша: 6128707071
 select u.chat_id,
        u.first_name,
-       rpad(s.period, 5, ' ') ||rpad(s.period_all, 3, ' ')||'  '||s.period_top                                       as "key-all-top",
-       rpad(s.scheduler, 3, ' ')||' '||rpad(s.excluded, 3, ' ')|| ' '|| s.lang as "sch-exc",
+       rpad(s.period, 5, ' ') || rpad(s.period_all, 3, ' ') || '  ' || s.period_top  as "key-all-top",
+       rpad(s.scheduler, 3, ' ') || ' ' || rpad(s.excluded, 3, ' ') || ' ' || s.lang as "sch-exc",
        --s.start,
-       string_agg(distinct k.keyword, ',' order by k.keyword) as keyword,
-       string_agg(distinct t.word, ',' order by t.word)       as top,
-       string_agg(distinct e.word, ',' order by e.word)       as excluding
+       string_agg(distinct k.keyword, ',' order by k.keyword)                        as keyword,
+       string_agg(distinct t.word, ',' order by t.word)                              as top,
+       string_agg(distinct e.word, ',' order by e.word)                              as excluding,
+       u.registered_at                                                               as reg
 from users u
          left join settings s on u.chat_id = s.chat_id
          left join keywords k on u.chat_id = k.chat_id
@@ -18,7 +23,8 @@ from users u
 where u.chat_id not in (1254981379 /* я */ /*,1020961767 /* Лена */, 6455565758 /* Вика */, 6128707071 /* Саша */*/)
   and u.is_active = 1
 group by u.chat_id, u.first_name, s.period, s.period_all, s.scheduler, s.start, s.excluded, s.lang, s.period_top,
-         u.is_active;
+         u.is_active, u.registered_at
+order by u.registered_at desc;
 
 -- Новости, которые получил пользователь
 select source, title, pub_date::time, n.add_date::time, extract(minute from (n.pub_date - n.add_date)) as "pub-add"

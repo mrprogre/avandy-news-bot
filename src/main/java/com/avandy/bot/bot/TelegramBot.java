@@ -1145,7 +1145,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addDefaultSettings(long chatId) {
         Settings settings = new Settings();
         settings.setChatId(chatId);
-        settings.setPeriod("1h");
+        settings.setPeriod("12h");
         settings.setPeriodAll("1h");
         settings.setPeriodTop("12h");
         settings.setScheduler("on");
