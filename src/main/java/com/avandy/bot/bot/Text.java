@@ -49,7 +49,7 @@ public class Text extends Common {
             excludeWordText = "Исключить";
             searchText = "Поиск";
             excludedText = "Исключённое";
-            updateTopText = "Обновить топ";
+            updateTopText = "Обновить";
             updateTopText2 = "Top 20";
             undefinedCommandText = "Данная команда не существует, либо Вы не нажали кнопку перед вводом текста " +
                     ICON_SMILE_UPSIDE_DOWN;
@@ -75,7 +75,7 @@ public class Text extends Common {
             exclusionText = "Исключение";
             startSettingsText = "Старт";
             excludedListText = "Удалённое";
-            delFromTopText = "Удалить из топа";
+            delFromTopText = "Удалить";
             top20ByPeriodText = "<b>Top 20 слов</b> за ";
             allowCommasAndNumbersText = "Укажите порядковый номер слова (разделять запятой)";
             startSearchBeforeText = "Топ необходимо обновить. Нажмите на /top";
