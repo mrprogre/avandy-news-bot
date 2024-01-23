@@ -364,11 +364,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Ручной поиск по ключевым словам
     public void findNewsByKeywordsManual(long chatId) {
         String nameByChatId = userRepository.findNameByChatId(chatId);
-        String keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
 
         // DEBUG
         if (Common.DEV_ID != chatId) {
-            log.warn("Ручной запуск поиска по ключевым словам: {}, {} за {}", chatId, nameByChatId, keywordsPeriod);
+            log.warn("Ручной запуск поиска по ключевым словам: {}, {} за сутки", chatId, nameByChatId);
         }
 
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
@@ -381,21 +380,46 @@ public class TelegramBot extends TelegramLongPollingBot {
         getReplyKeyboard(chatId, searchByKeywordsStartText, "");
 
         // Search
-        Set<Headline> headlines = searchService.start(chatId, "keywords");
+        Set<Headline> headlines = searchService.start(chatId, "keywords-manual");
 
         int showCounter = 1;
+        int counterParts = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Найдено: {}, {}, новостей {}, глубина {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
+            log.warn("Найдено: {}, {}, новостей {} за сутки", chatId, nameByChatId, headlines.size());
 
-            for (Headline headline : headlines) {
-                String text = "<b>" + headline.getSource() + "</b> [" +
-                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>";
+            if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
+                // 10 message in 1
+                StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
 
-                text = showCounter++ + ". " + text;
-                sendMessage(chatId, text);
+                for (Headline headline : headlines) {
+                    joiner.add(showCounter++ + ". " + "<b>" + headline.getSource() + "</b> [" +
+                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                            headline.getTitle() + " " +
+                            "<a href=\"" + headline.getLink() + "\">link</a>");
+
+                    if (counterParts == 10) {
+                        sendMessage(chatId, String.valueOf(joiner));
+                        joiner = new StringJoiner("\n- - - - - -\n");
+                        counterParts = 0;
+                    }
+                    counterParts++;
+                }
+
+                // отправить оставшиеся новости
+                if (counterParts != 0) {
+                    sendMessage(chatId, String.valueOf(joiner));
+                }
+
+            } else {
+                for (Headline headline : headlines) {
+                    String text = showCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                            headline.getTitle() + " " +
+                            "<a href=\"" + headline.getLink() + "\">link</a>";
+
+                    sendMessage(chatId, text);
+                }
             }
 
             afterKeywordsSearchKeyboard(chatId,
@@ -419,18 +443,46 @@ public class TelegramBot extends TelegramLongPollingBot {
         // Search
         Set<Headline> headlines = searchService.start(chatId, "keywords");
 
+        int counterParts = 1;
+        int showAllCounter = 1;
         if (headlines.size() > 0) {
             // INFO
             log.warn("Автопоиск: {}, {}, найдено {} за {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
 
-            for (Headline headline : headlines) {
-                String text = "<b>" + headline.getSource() + "</b> [" +
-                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>";
+            if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
+                // 10 message in 1
+                StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
 
-                sendMessage(chatId, text);
+                for (Headline headline : headlines) {
+                    joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
+                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                            headline.getTitle() + " " +
+                            "<a href=\"" + headline.getLink() + "\">link</a>");
+
+                    if (counterParts == 10) {
+                        sendMessage(chatId, String.valueOf(joiner));
+                        joiner = new StringJoiner("\n- - - - - -\n");
+                        counterParts = 0;
+                    }
+                    counterParts++;
+                }
+
+                // отправить оставшиеся новости
+                if (counterParts != 0) {
+                    sendMessage(chatId, String.valueOf(joiner));
+                }
+
+            } else {
+                for (Headline headline : headlines) {
+                    String text = "<b>" + headline.getSource() + "</b> [" +
+                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                            headline.getTitle() + " " +
+                            "<a href=\"" + headline.getLink() + "\">link</a>";
+
+                    sendMessage(chatId, text);
+                }
             }
+
         }
     }
 
@@ -1149,7 +1201,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addDefaultSettings(long chatId) {
         Settings settings = new Settings();
         settings.setChatId(chatId);
-        settings.setPeriod("12h");
+        settings.setPeriod("1h");
         settings.setPeriodAll("1h");
         settings.setPeriodTop("12h");
         settings.setScheduler("on");
