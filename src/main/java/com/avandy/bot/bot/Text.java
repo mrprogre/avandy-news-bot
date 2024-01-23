@@ -123,8 +123,10 @@ public class Text extends Common {
             premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b>) " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumText = "Премиум";
             getPremiumYesOrNowText = """
-                    На тарифе <b>премиум</b> поиск новостей по ключевым словам производится <b>каждые 2 минуты</b>. Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b> \uD83D\uDC8E
-                    Оплатить премиум (<b>900р.</b> в год)?
+                    На тарифе <b>Premium</b>
+                    1. Поиск новостей по ключевым словам производится <b>каждые 2 минуты</b>. Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>.
+                    2. Возможность добавить <b>более 10</b> ключевых слов.
+                    Оплатить премиум (<b>900р.</b> в год)? \uD83D\uDC8E
                     """;
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">1. Оплата через СБП (всё официально, мы платим налоги)</a>\n" +
                     "<a href=\"https://avandy-news.ru/refund.html\">2. Правила возврата средств</a>";
@@ -137,8 +139,10 @@ public class Text extends Common {
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Paypal link</a>";
             getPremiumYesOrNowText = """
-                    On the <b>premium</b> tariff, news search by keywords is performed <b>every 2 minutes</b>. So you <b>will be the first</b> to receive the <b>most up-to-date information</b> \uD83D\uDC8E
-                    Pay for a Premium subscription (<b>50$</b> per year)""";
+                    On the <b>premium</b> tariff:
+                    1. News search by keywords is performed <b>every 2 minutes</b>. So you <b>will be the first</b> to receive the <b>most up-to-date information</b>.
+                    2. You can add <b>more than 10</b> keywords.
+                    Pay for a Premium subscription (<b>50$</b> per year) \uD83D\uDC8E""";
             getPremiumText = "Premium";
             premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b>) " + ICON_PREMIUM_IS_ACTIVE;
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
