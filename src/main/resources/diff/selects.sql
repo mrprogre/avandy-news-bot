@@ -2,11 +2,12 @@
 select s.chat_id,
        u.user_name,
        u.first_name,
-       case s.type when 2 then 'keywords' else 'full' end as type, count(title) as cnt
+       case s.type when 2 then 'keywords' else 'full' end as type,
+       count(title)                                       as cnt
 from news_list n
-    join showed_news s
-on n.title_hash = s.title_hash
-    join users u on s.chat_id = u.chat_id
+         join showed_news s
+              on n.title_hash = s.title_hash
+         join users u on s.chat_id = u.chat_id
 where n.add_date >= '2024-01-22 10:00:00'::timestamp
 group by s.chat_id, u.user_name, u.first_name, type
 order by type desc, cnt desc;
@@ -21,7 +22,8 @@ select u.chat_id,
        string_agg(distinct k.keyword, ',' order by k.keyword)                        as keyword,
        string_agg(distinct t.word, ',' order by t.word)                              as top,
        string_agg(distinct e.word, ',' order by e.word)                              as excluding,
-       u.registered_at                                                               as reg
+       u.registered_at                                                               as reg,
+       start
 from users u
          left join settings s on u.chat_id = s.chat_id
          left join keywords k on u.chat_id = k.chat_id

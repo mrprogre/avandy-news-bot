@@ -46,7 +46,7 @@ public class Schedulers {
                 Long chatId = setting.getChatId();
 
                 if (userRepository.isActive(chatId) == 1) {
-                    telegramBot.findNewsByKeywords(chatId, "on");
+                    telegramBot.autoSearchNewsByKeywords(chatId);
                 }
             }
         }

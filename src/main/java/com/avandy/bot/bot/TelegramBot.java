@@ -127,7 +127,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 // Поиск по трём кнопкам меню
             } else if (messageText.equals(keywordsSearchText)) {
-                new Thread(() -> findNewsByKeywords(chatId, "off")).start();
+                new Thread(() -> findNewsByKeywordsManual(chatId)).start();
 
             } else if (messageText.equals(updateTopText2)) {
                 new Thread(() -> showTop(chatId)).start();
@@ -170,7 +170,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
                 /* KEYWORDS */
-                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywords(chatId, "off")).start();
+                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywordsManual(chatId)).start();
                 case "LIST_KEYWORDS" -> showKeywordsList(chatId);
                 case "ADD_KEYWORD" -> {
                     userStates.put(chatId, UserState.ADD_KEYWORDS);
@@ -361,31 +361,24 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     /* KEYWORDS */
-    // Поиск по ключевым словам
-    public void findNewsByKeywords(long chatId, String isAutoSearch) {
+    // Ручной поиск по ключевым словам
+    public void findNewsByKeywordsManual(long chatId) {
         String nameByChatId = userRepository.findNameByChatId(chatId);
         String keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
 
         // DEBUG
-        if (isAutoSearch.equals("off") && Common.DEV_ID != chatId) {
+        if (Common.DEV_ID != chatId) {
             log.warn("Ручной запуск поиска по ключевым словам: {}, {} за {}", chatId, nameByChatId, keywordsPeriod);
         }
 
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
 
-        if (isAutoSearch.equals("on") && keywordsByChatId.isEmpty()) {
-            return;
-        }
-
-        if (isAutoSearch.equals("off") && keywordsByChatId.isEmpty()) {
+        if (keywordsByChatId.isEmpty()) {
             addKeywordsKeyboard(chatId, setupKeywordsText);
             return;
         }
 
-        if (isAutoSearch.equals("off")) {
-            getReplyKeyboard(chatId, searchByKeywordsStartText, "");
-            //sendMessage(chatId, searchByKeywordsStartText);
-        }
+        getReplyKeyboard(chatId, searchByKeywordsStartText, "");
 
         // Search
         Set<Headline> headlines = searchService.start(chatId, "keywords");
@@ -393,13 +386,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int showCounter = 1;
         if (headlines.size() > 0) {
             // INFO
-            if (isAutoSearch.equals("on")) {
-                log.warn("Автопоиск: {}, {}, найдено {} за {}", chatId,
-                        nameByChatId, headlines.size(), keywordsPeriod);
-            } else {
-                log.warn("Найдено: {}, {}, новостей {}, глубина {}", chatId,
-                        nameByChatId, headlines.size(), keywordsPeriod);
-            }
+            log.warn("Найдено: {}, {}, новостей {}, глубина {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
 
             for (Headline headline : headlines) {
                 String text = "<b>" + headline.getSource() + "</b> [" +
@@ -407,21 +394,42 @@ public class TelegramBot extends TelegramLongPollingBot {
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>";
 
-                if (isAutoSearch.equals("off")) {
-                    text = showCounter++ + ". " + text;
-                }
-
-                sleepBetweenSendMessage();
+                text = showCounter++ + ". " + text;
                 sendMessage(chatId, text);
             }
 
-            if (isAutoSearch.equals("off")) {
-                afterKeywordsSearchKeyboard(chatId,
-                        foundNewsText + ": <b>" + headlines.size() + "</b> " + Common.ICON_NEWS_FOUNDED);
-            }
+            afterKeywordsSearchKeyboard(chatId,
+                    foundNewsText + ": <b>" + headlines.size() + "</b> " + Common.ICON_NEWS_FOUNDED);
+
         } else {
-            if (isAutoSearch.equals("off")) {
-                afterKeywordsSearchKeyboard(chatId, headlinesNotFound);
+            afterKeywordsSearchKeyboard(chatId, headlinesNotFound);
+        }
+    }
+
+    // Автоматический поиск по ключевым словам
+    public void autoSearchNewsByKeywords(long chatId) {
+        String nameByChatId = userRepository.findNameByChatId(chatId);
+        String keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
+        List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
+
+        if (keywordsByChatId.isEmpty()) {
+            return;
+        }
+
+        // Search
+        Set<Headline> headlines = searchService.start(chatId, "keywords");
+
+        if (headlines.size() > 0) {
+            // INFO
+            log.warn("Автопоиск: {}, {}, найдено {} за {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
+
+            for (Headline headline : headlines) {
+                String text = "<b>" + headline.getSource() + "</b> [" +
+                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() + " " +
+                        "<a href=\"" + headline.getLink() + "\">link</a>";
+
+                sendMessage(chatId, text);
             }
         }
     }
@@ -649,7 +657,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                             "<a href=\"" + headline.getLink() + "\">link</a>");
 
                     if (counterParts == 10) {
-                        sleepBetweenSendMessage();
                         sendMessage(chatId, String.valueOf(joiner));
                         joiner = new StringJoiner("\n- - - - - -\n");
                         counterParts = 0;
@@ -659,12 +666,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
 
                 if (counterParts != 0) {
-                    sleepBetweenSendMessage();
                     sendMessage(chatId, String.valueOf(joiner));
                 }
             } else {
                 for (Headline headline : headlines) {
-                    sleepBetweenSendMessage();
 
                     sendMessage(chatId, showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
                             Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
@@ -936,7 +941,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>";
 
-                sleepBetweenSendMessage();
                 sendMessage(chatId, text);
             }
 
@@ -1377,6 +1381,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void executeMessage(SendMessage message) {
         try {
             execute(message);
+
+            // Предупреждение выброса исключения, что много сообщений в секунду
+            try {
+                Thread.sleep(Common.SLEEP_BETWEEN_SENDING_MESSAGES);
+            } catch (InterruptedException e) {
+                log.error(e.getMessage());
+            }
+
         } catch (TelegramApiException e) {
             if (e.getMessage().contains("bot was blocked by the user")) {
                 userRepository.updateIsActive(0, Long.parseLong(message.getChatId()));
@@ -1384,15 +1396,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else {
                 log.warn(e.getMessage() + String.format("[chat_id: %s]", message.getChatId()));
             }
-        }
-    }
-
-    // Предупреждение выброса исключения Телеграма о том, что отправляется > 20 сообщений в секунду
-    private static void sleepBetweenSendMessage() {
-        try {
-            Thread.sleep(Common.SLEEP_BETWEEN_SENDING_MESSAGES);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage());
         }
     }
 
