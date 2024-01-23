@@ -44,7 +44,8 @@ where n.add_date >= '2024-01-21 22:00:00'::timestamp
 order by n.id desc;
 
 -- Rows count
--- 05.01.2024: 2747, 25, 25470, 32, 5291, 205, 9
+-- 05.01.2024: 2747,  25, 25470, 32, 5291, 205, 9
+-- 23.01.2024: 2966, 103, 45878, 47, 1925, 376, 40
 select (select count(*) from excluding_terms) as excluded,
        (select count(*) from keywords)        as keywords,
        (select count(*) from news_list)       as news_list,

@@ -101,7 +101,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String keywords = messageText.trim().toLowerCase();
                 String[] words = keywords.split(",");
                 addKeyword(chatId, words);
-                showKeywordsList(chatId);
 
             } else if (UserState.DEL_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
@@ -514,7 +513,16 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Добавление ключевых слов
     private void addKeyword(long chatId, String[] keywords) {
         int counter = 0;
+        int isPremium = userRepository.isPremiumByChatId(chatId);
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
+        int currentKeywordsCount = keywordRepository.getKeywordsCountByChatId(chatId);
+        int totalKeywordsCount = currentKeywordsCount + keywords.length;
+
+        if (isPremium != 1 && totalKeywordsCount >= 10) {
+            sendMessage(chatId, premiumIsActive3);
+            showYesNoGetPremium(chatId);
+            return;
+        }
 
         Keyword word;
         for (String keyword : keywords) {
@@ -546,6 +554,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             sendMessage(chatId, wordsIsNotAddedText);
         }
+        showKeywordsList(chatId);
     }
 
     // Изменение периода поиска
