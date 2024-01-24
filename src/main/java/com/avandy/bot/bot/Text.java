@@ -113,7 +113,7 @@ public class Text extends Common {
             fullSearchStartText = "» поиск всех новостей";
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
-            chooseSearchStartText = "Выберите час дял расчёта времени запуска автопоиска по ключевым словам";
+            chooseSearchStartText = "Выберите час для расчёта времени запуска автопоиска по ключевым словам";
             removedFromTopText = "удалено из Топа";
             jaroWinklerSwitcherText = """
                     Чтобы объединить одинаковые слова для исключения повторений можно включить удаление окончаний.
