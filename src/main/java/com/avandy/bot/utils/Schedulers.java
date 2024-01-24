@@ -120,7 +120,8 @@ public class Schedulers {
     @Scheduled(cron = "${cron.delete.users.blocked}")
     void deleteBlockedUsers() {
         int count = userRepository.deleteBlockedUsers();
-        log.warn("# Удалено неактивных пользователей: " + count);
+        if (count > 0)
+            log.warn("# Удалено неактивных пользователей: " + count);
     }
 
 }
