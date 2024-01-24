@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -36,6 +38,7 @@ import static com.avandy.bot.bot.Text.*;
 public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> usersTopPage = new ConcurrentHashMap<>();
     private final SearchService searchService;
     private final BotConfig config;
     private final RssRepository rssRepository;
@@ -44,6 +47,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final KeywordRepository keywordRepository;
     private final SettingsRepository settingsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
+    private final int offset = 60;
 
     @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
@@ -68,6 +72,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
             String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
+            usersTopPage.putIfAbsent(chatId, 0);
 
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
@@ -153,9 +158,34 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
             Long chatId = update.getCallbackQuery().getMessage().getChatId();
+            Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+            usersTopPage.putIfAbsent(chatId, 0);
 
             switch (callbackData) {
+
+                case "NEXT_PAGE" -> {
+                    Set<String> items = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+                    Integer i = usersTopPage.get(chatId);
+                    usersTopPage.put(chatId, i += offset);
+                    if (i >= items.size()) usersTopPage.put(chatId, i - offset);
+
+                    List<String> excludedWordsPage = topTenRepository.findExcludedWordsPage(chatId,
+                            usersTopPage.get(chatId), offset);
+                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage);
+                }
+
+                case "BEFORE_PAGE" -> {
+                    Integer i = usersTopPage.get(chatId);
+                    usersTopPage.put(chatId, i -= offset);
+                    if (i <= 0) usersTopPage.put(chatId, 0);
+
+                    Set<String> items = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+                    List<String> excludedWordsPage = topTenRepository.findExcludedWordsPage(chatId,
+                            usersTopPage.get(chatId), offset);
+                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage);
+                }
+
                 case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
                 case "YES_PREMIUM" -> {
                     sendMessage(Common.DEV_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
@@ -1015,13 +1045,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void getTopTenWordsList(long chatId) {
         Set<String> items = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
 
-        topDeletedListKeyboard(chatId, "<b>" + listOfDeletedFromTopText + "</b> [" + items.size() + "]\n" +
+        getPaginationKeyboard(chatId, "<b>" + listOfDeletedFromTopText + "</b> [" + items.size() + "]\n" +
                 items.stream()
-                        .limit(Common.TOP_TEN_LIST_LIMIT)
+                        .limit(offset)
                         .toList()
                         .toString()
                         .replace("[", "")
-                        .replace("]", "")
+                        .replace("]", ""),
+                items.size()
         );
     }
 
@@ -1071,6 +1102,33 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, "❌ " + word);
             } else {
                 sendMessage(chatId, String.format(wordIsNotInTheListText, word));
+            }
+        }
+    }
+
+    // Меняющееся сообщение со списком исключённых слов из Топа по страницам
+    private void getExcludedWordsPage(Long chatId, Integer messageId, Set<String> items, List<String> excludedWordsPage) {
+        String text = "<b>" + listOfDeletedFromTopText + "</b> [" + items.size() + "]\n" +
+                excludedWordsPage.stream()
+                        .toList()
+                        .toString()
+                        .replace("[", "")
+                        .replace("]", "");
+
+        EditMessageText editOptions = new EditMessageText();
+        editOptions.setChatId(chatId);
+        editOptions.setMessageId(messageId);
+        editOptions.setText(text);
+        editOptions.enableHtml(true);
+        editOptions.setReplyMarkup(getPaginationKeyboard(chatId, "", items.size()));
+
+        try {
+            execute(editOptions);
+        } catch (TelegramApiException e) {
+            if (e.getMessage().contains("message is not modified")) {
+                log.debug("[400] Bad Request: message is not modified");
+            } else {
+                log.error(e.getMessage());
             }
         }
     }
@@ -1164,14 +1222,25 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
-    // Кнопки для списка удалённых слов из топа
-    private void topDeletedListKeyboard(long chatId, String text) {
-        Map<String, String> buttons = new LinkedHashMap<>();
+    // Кнопки для просмотра списка удалённых слов из Топ по страницам
+    private InlineKeyboardMarkup getPaginationKeyboard(long chatId, String text, int wordsCount) {
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
 
-        buttons.put("DELETE_TOP", delText);
-        buttons.put("DEL_FROM_TOP", addText);
-        buttons.put("GET_TOP", updateTopText2);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        buttons1.put("DELETE_TOP", delText);
+        buttons1.put("DEL_FROM_TOP", addText);
+        buttons1.put("GET_TOP", updateTopText2);
+
+        if (wordsCount > offset) {
+            buttons2.put("BEFORE_PAGE", "« before");
+            buttons2.put("NEXT_PAGE", "next »");
+        }
+
+        if (!text.isBlank()) {
+            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+            return null;
+        }
+        return InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null);
     }
 
     // Включение и выключение применения механизма Джаро-Винклера

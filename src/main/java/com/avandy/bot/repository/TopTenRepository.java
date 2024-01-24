@@ -6,13 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Set;
 
 public interface TopTenRepository extends JpaRepository<TopExcluded, Long> {
 
-    @Query(value = "SELECT lower(word) as word FROM top_excluded " +
-            "WHERE chat_id = :chatId OR chat_id IS NULL " +
-            "ORDER BY id DESC",
+    @Query(value = "SELECT lower(word) as word FROM top_excluded WHERE chat_id = :chatId ORDER BY id DESC",
             nativeQuery = true)
     Set<String> findAllExcludedFromTopTenByChatId(Long chatId);
 
@@ -22,6 +21,10 @@ public interface TopTenRepository extends JpaRepository<TopExcluded, Long> {
 
     @Query(value = "SELECT count(word) FROM top_excluded WHERE chat_id = :chatId", nativeQuery = true)
     int deleteFromTopTenCount(Long chatId);
+
+    @Query(value = "SELECT word FROM top_excluded WHERE chat_id = :chatId order by id desc offset :offset limit :limit",
+            nativeQuery = true)
+    List<String> findExcludedWordsPage(Long chatId, int offset, int limit);
 
     @Transactional
     @Modifying(clearAutomatically = true)

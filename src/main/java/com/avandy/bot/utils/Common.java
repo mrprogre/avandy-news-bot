@@ -13,7 +13,6 @@ public class Common {
     public static final long DEV_ID = 1254981379L;
     public static final int JARO_WINKLER_LEVEL = 85;
     public static final int TOP_TEN_SHOW_LIMIT = 20;
-    public static final int TOP_TEN_LIST_LIMIT = 60;
     public static final int EXCLUDING_TERMS_LIST_LIMIT = 60;
     public static final int EXCLUDED_LIMIT = 100;
     public static final int LIMIT_FOR_BREAKING_INTO_PARTS = 50;
