@@ -9,7 +9,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface ExcludingTermsRepository extends CrudRepository<ExcludingTerm, Long> {
-    @Query(value = "SELECT lower(word) as word FROM excluding_terms WHERE chat_id = :chatId", nativeQuery = true)
+    @Query(value = "SELECT lower(word) as word FROM excluding_terms WHERE chat_id = :chatId ORDER BY id DESC",
+            nativeQuery = true)
     List<String> findExcludedByChatId(Long chatId);
 
     @Query(value = "SELECT lower(word) as word FROM excluding_terms WHERE chat_id = :chatId ORDER BY id DESC LIMIT :limit",
@@ -22,6 +23,10 @@ public interface ExcludingTermsRepository extends CrudRepository<ExcludingTerm, 
     @Query(value = "SELECT count(word) FROM excluding_terms WHERE lower(word) = lower(:word) and chat_id = :chatId"
             , nativeQuery = true)
     int isWordExists(Long chatId, String word);
+
+    @Query(value = "SELECT word FROM excluding_terms WHERE chat_id = :chatId order by id desc offset :offset limit :limit",
+            nativeQuery = true)
+    List<String> findExcludingTermsPage(Long chatId, int offset, int limit);
 
     @Transactional
     @Modifying(clearAutomatically = true)

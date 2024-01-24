@@ -39,6 +39,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
     private final Map<Long, Integer> usersTopPage = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> usersExclTermsPage = new ConcurrentHashMap<>();
     private final SearchService searchService;
     private final BotConfig config;
     private final RssRepository rssRepository;
@@ -73,6 +74,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
             String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
             usersTopPage.putIfAbsent(chatId, 0);
+            usersExclTermsPage.putIfAbsent(chatId, 0);
 
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
@@ -161,8 +163,33 @@ public class TelegramBot extends TelegramLongPollingBot {
             Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             usersTopPage.putIfAbsent(chatId, 0);
+            usersExclTermsPage.putIfAbsent(chatId, 0);
 
             switch (callbackData) {
+
+                case "NEXT_EXCL_PAGE" -> {
+                    List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
+
+                    Integer i = usersExclTermsPage.get(chatId);
+                    usersExclTermsPage.put(chatId, i += offset);
+                    if (i >= items.size()) usersExclTermsPage.put(chatId, i - offset);
+
+                    List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
+                            usersExclTermsPage.get(chatId), offset);
+                    getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
+                }
+
+                case "BEFORE_EXCL_PAGE" -> {
+                    List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
+
+                    Integer i = usersExclTermsPage.get(chatId);
+                    usersExclTermsPage.put(chatId, i -= offset);
+                    if (i <= 0) usersExclTermsPage.put(chatId, 0);
+
+                    List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
+                            usersExclTermsPage.get(chatId), offset);
+                    getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
+                }
 
                 case "NEXT_PAGE" -> {
                     Set<String> items = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
@@ -172,7 +199,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     List<String> excludedWordsPage = topTenRepository.findExcludedWordsPage(chatId,
                             usersTopPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage);
+                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
                 }
 
                 case "BEFORE_PAGE" -> {
@@ -183,7 +210,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     Set<String> items = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
                     List<String> excludedWordsPage = topTenRepository.findExcludedWordsPage(chatId,
                             usersTopPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage);
+                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
                 }
 
                 case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
@@ -823,10 +850,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             int counter = 0;
             for (String item : excludedByChatId) {
                 joiner.add(item);
-                if (++counter == Common.EXCLUDING_TERMS_LIST_LIMIT) break;
+                if (++counter == offset) break;
             }
             excludeListKeyboard(chatId, "<b>" + exclusionWordsText + "</b> [" + excludedCount + "]\n" +
-                    joiner);
+                    joiner, excludedCount);
         } else {
             excludeKeyboard(chatId);
         }
@@ -900,13 +927,34 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Кнопки дял списка исключённых слов
-    private void excludeListKeyboard(long chatId, String text) {
-        Map<String, String> buttons = new LinkedHashMap<>();
+//    private void excludeListKeyboard(long chatId, String text) {
+//        Map<String, String> buttons = new LinkedHashMap<>();
+//
+//        buttons.put("DELETE_EXCLUDED", delText);
+//        buttons.put("ADD_EXCLUDED", addText);
+//        buttons.put("FIND_ALL", searchText);
+//        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+//    }
 
-        buttons.put("DELETE_EXCLUDED", delText);
-        buttons.put("ADD_EXCLUDED", addText);
-        buttons.put("FIND_ALL", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+    // Кнопки для просмотра списка слов-исключений
+    private InlineKeyboardMarkup excludeListKeyboard(long chatId, String text, int wordsCount) {
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
+
+        buttons1.put("DELETE_EXCLUDED", delText);
+        buttons1.put("ADD_EXCLUDED", addText);
+        buttons1.put("FIND_ALL", searchText);
+
+        if (wordsCount > offset) {
+            buttons2.put("BEFORE_EXCL_PAGE", "« before");
+            buttons2.put("NEXT_EXCL_PAGE", "next »");
+        }
+
+        if (!text.isBlank()) {
+            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+            return null;
+        }
+        return InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null);
     }
 
     // Одна кнопка с добавлением в слова-исключения
@@ -1106,10 +1154,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    // Меняющееся сообщение со списком исключённых слов из Топа по страницам
-    private void getExcludedWordsPage(Long chatId, Integer messageId, Set<String> items, List<String> excludedWordsPage) {
-        String text = "<b>" + listOfDeletedFromTopText + "</b> [" + items.size() + "]\n" +
-                excludedWordsPage.stream()
+    // Меняющееся сообщение со списками слов из Топа по страницам
+    private void getExcludedWordsPage(Long chatId, Integer messageId, Collection<String> items,
+                                      List<String> words, String title) {
+        String text = "<b>" + title + "</b> [" + items.size() + "]\n" +
+                words.stream()
                         .toList()
                         .toString()
                         .replace("[", "")
@@ -1120,7 +1169,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         editOptions.setMessageId(messageId);
         editOptions.setText(text);
         editOptions.enableHtml(true);
-        editOptions.setReplyMarkup(getPaginationKeyboard(chatId, "", items.size()));
+
+        if (title.equals(listOfDeletedFromTopText)) {
+            editOptions.setReplyMarkup(getPaginationKeyboard(chatId, "", items.size()));
+        } else {
+            editOptions.setReplyMarkup(excludeListKeyboard(chatId, "", items.size()));
+        }
 
         try {
             execute(editOptions);
