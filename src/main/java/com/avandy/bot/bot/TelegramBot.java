@@ -385,7 +385,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int counterParts = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Найдено: {}, {}, новостей {} за сутки", chatId, nameByChatId, headlines.size());
+            log.warn("Найдено за 24h: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
 
             if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
                 // 10 message in 1
