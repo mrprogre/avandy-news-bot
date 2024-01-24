@@ -518,7 +518,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int currentKeywordsCount = keywordRepository.getKeywordsCountByChatId(chatId);
         int totalKeywordsCount = currentKeywordsCount + keywords.length;
 
-        if (isPremium != 1 && totalKeywordsCount >= 10) {
+        if (isPremium != 1 && totalKeywordsCount > 10) {
             sendMessage(chatId, premiumIsActive3);
             showYesNoGetPremium(chatId);
             return;
