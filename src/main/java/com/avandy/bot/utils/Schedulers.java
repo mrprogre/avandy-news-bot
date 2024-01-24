@@ -116,4 +116,11 @@ public class Schedulers {
         }
     }
 
+    // Удаление пользователей, заблокировавших бота, каждые 40 минут
+    @Scheduled(cron = "${cron.delete.users.blocked}")
+    void deleteBlockedUsers() {
+        int count = userRepository.deleteBlockedUsers();
+        log.warn("# Удалено неактивных пользователей: " + count);
+    }
+
 }

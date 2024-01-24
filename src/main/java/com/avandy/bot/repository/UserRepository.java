@@ -39,4 +39,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query(value = "UPDATE users SET is_active = :value WHERE chat_id = :chatId", nativeQuery = true)
     void updateIsActive(int value, long chatId);
 
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "DELETE FROM users WHERE is_active = 0", nativeQuery = true)
+    int deleteBlockedUsers();
+
 }

@@ -45,7 +45,7 @@ order by n.id desc;
 
 -- Rows count
 -- 05.01.2024: 2747,  25, 25470, 32, 5291, 205, 9
--- 23.01.2024: 2966, 103, 45878, 47, 1925, 376, 40
+-- 23.01.2024: 2966, 101, 49180, 47, 4199, 379, 42
 select (select count(*) from excluding_terms) as excluded,
        (select count(*) from keywords)        as keywords,
        (select count(*) from news_list)       as news_list,
