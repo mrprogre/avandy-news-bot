@@ -48,7 +48,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final KeywordRepository keywordRepository;
     private final SettingsRepository settingsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
-    private final int offset = 60; //60
+    private final int offset = 60;
+    private final String delimiter = " : ";
 
     @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
@@ -991,7 +992,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > offset) {
             buttons2.put("FIRST_EXCL_PAGE", "««");
             buttons2.put("BEFORE_EXCL_PAGE", "«");
-            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1)/offset) + "/" +
+            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1)/offset) + delimiter +
                     (int) Math.ceil((double) wordsCount/offset));
             buttons2.put("NEXT_EXCL_PAGE", "»");
             buttons2.put("LAST_EXCL_PAGE", "»»");
@@ -1337,7 +1338,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > offset) {
             buttons2.put("FIRST_TOP_PAGE", "««");
             buttons2.put("BEFORE_TOP_PAGE", "«");
-            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1)/offset) + "/" +
+            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1)/offset) + delimiter +
                     (int) Math.ceil((double) wordsCount/offset));
             buttons2.put("NEXT_TOP_PAGE", "»");
             buttons2.put("LAST_TOP_PAGE", "»»");
