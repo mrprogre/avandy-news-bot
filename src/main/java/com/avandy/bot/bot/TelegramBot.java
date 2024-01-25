@@ -986,7 +986,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("ADD_EXCLUDED", addText);
         buttons1.put("FIND_ALL", searchText);
 
-        int i = usersExclTermsPage.get(chatId) + 10 + 1;
+        int i = usersExclTermsPage.get(chatId) + offset + 1;
 
         if (wordsCount > offset) {
             buttons2.put("FIRST_EXCL_PAGE", "««");
@@ -1331,7 +1331,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("DEL_FROM_TOP", addText);
         buttons1.put("GET_TOP", updateTopText2);
 
-        int i = usersTopPage.get(chatId) + 10 + 1;
+        int i = usersTopPage.get(chatId) + offset + 1;
 
         if (wordsCount > offset) {
             buttons2.put("FIRST_TOP_PAGE", "««");
