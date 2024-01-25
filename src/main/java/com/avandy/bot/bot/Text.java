@@ -34,27 +34,6 @@ public class Text extends Common {
             yesText = "Да";
             infoText = "Информация и подписка";
             settingText = "Настройки";
-            listKeywordsText = """
-                    <b>Ключевые слова</b>
-                    - - - - - -
-                    Поиск новостей производится по полному совпадению с ключевым словом.
-                    - - - - - -
-                    Однако, можно использовать символ *, который обозначает одну любую букву в слове.
-                      <b>курс</b> найдёт: курс
-                      <b>курс*</b> найдёт: курс, курсА
-                      <b>курс**</b> найдёт: курс, курсА, курсОМ
-                    - - - - - -""";
-            yesButtonText = """
-                    Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
-                    - - - - - -
-                    Поиск новостей производится по полному совпадению с ключевым словом.
-                    - - - - - -
-                    Однако, можно использовать символ *, который обозначает одну любую букву в слове.
-                      <b>курс</b> найдёт: курс
-                      <b>курс*</b> найдёт: курс, курсА
-                      <b>курс**</b> найдёт: курс, курсА, курсОМ
-                    - - - - - -
-                    Нажми кнопку "Добавить".""";
             listKeywordsButtonText = "Ключевые слова";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
@@ -145,22 +124,45 @@ public class Text extends Common {
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление более 10 ключевых слов возможно в <b>Premium</b> режиме";
+            yesButtonText = """
+                    Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
+                    - - - - - -
+                    Поиск новостей производится по полному совпадению с ключевым словом.
+                    - - - - - -
+                    Однако, можно использовать символ *, который обозначает одну любую букву в слове.
+                      <b>курс</b> найдёт: курс
+                      <b>курс*</b> найдёт: курс, курсА
+                      <b>курс**</b> найдёт: курс, курсА, курсОМ
+                    - - - - - -
+                    Нажми кнопку "Добавить".""";
+            listKeywordsText = """
+                    <b>Ключевые слова</b>
+                    - - - - - -
+                    <b>Настройки</b> автопоиска /settings
+                    - - - - - -
+                    <b>курс</b> найдёт: курс
+                    <b>курс*</b> найдёт: курс, курсА
+                    <b>курс**</b> найдёт: курс, курсА, курсОМ
+                    - - - - - -""";
             inputExceptionText = "Бот ожидал ввода слов. Для продолжения работы нажмите повторно ";
         } else {
             inputExceptionText = "The bot was waiting for words to be entered. To continue, click again ";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - -
-                    The search for news is carried out based on a complete match with the keyword.
+                    Auto search <b>settings</b> /settings
                     - - - - - -
-                    However you can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
+                    <b>tax</b> will find all news only with <b>tax</b>
+                    <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
                     - - - - - -""";
             yesButtonText = """
                     The first thing to do is add <b>keywords</b>.
                     - - - - - -
                     The search for news is carried out based on a complete match with the keyword.
                     - - - - - -
-                    However you can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
+                    However you can use the * symbol:
+                    1. <b>tax</b> will find all news only with <b>tax</b> but not <b>taxes, taxcom</b>.
+                    2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
                     - - - - - -
                     Click the "Add" button.""";
             premiumIsActive3 = "Adding more than 10 keywords is possible in <b>Premium</b> mode";

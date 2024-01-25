@@ -76,3 +76,6 @@ delete
 from showed_news
 where chat_id = 1254981379
   and type = 4;
+
+-- топ ключевых слов по всем пользователям
+select keyword, count(keyword) cnt from keywords  group by keyword having count(keyword) > 1 order by cnt desc
