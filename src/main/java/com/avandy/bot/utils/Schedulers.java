@@ -100,7 +100,7 @@ public class Schedulers {
     @Scheduled(cron = "${cron.delete.old.showed.news}")
     void deleteOldShowedNews() {
         if (adminRepository.findValueByKey("showed_news_clear_scheduler").equals("on")) {
-            int newsListCounts = showedNewsRepository.deleteNews72h();
+            int newsListCounts = showedNewsRepository.deleteOldNews();
             if (newsListCounts > 0) {
                 log.warn("Очистка таблицы showed_news, удалено записей: {}", newsListCounts);
             }
