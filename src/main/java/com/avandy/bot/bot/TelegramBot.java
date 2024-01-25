@@ -107,7 +107,13 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (UserState.ADD_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
                 String[] words = keywords.split(",");
-                addKeyword(chatId, words);
+
+                if (words[0].contains("/")) {
+                    userStates.remove(chatId);
+                    sendMessage(chatId, inputExceptionText + words[0]);
+                } else {
+                    addKeyword(chatId, words);
+                }
 
             } else if (UserState.DEL_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
@@ -116,8 +122,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (UserState.ADD_EXCLUDED.equals(userState)) {
                 String exclude = messageText.trim().toLowerCase();
                 String[] words = exclude.split(",");
-                addExclude(chatId, words);
-                getExcludedList(chatId);
+
+                if (words[0].contains("/")) {
+                    userStates.remove(chatId);
+                    sendMessage(chatId, inputExceptionText + words[0]);
+                } else {
+                    addExclude(chatId, words);
+                    getExcludedList(chatId);
+                }
 
             } else if (UserState.DEL_EXCLUDED.equals(userState)) {
                 String excluded = messageText.trim().toLowerCase();
@@ -128,8 +140,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else if (UserState.DEL_TOP.equals(userState)) {
                 String text = messageText.trim().toLowerCase();
                 String[] words = text.split(",");
-                topListDelete(chatId, words);
-                getTopTenWordsList(chatId);
+
+                if (words[0].contains("/")) {
+                    userStates.remove(chatId);
+                    sendMessage(chatId, inputExceptionText + words[0]);
+                } else {
+                    topListDelete(chatId, words);
+                    getTopTenWordsList(chatId);
+                }
 
                 // Поиск по трём кнопкам меню
             } else if (messageText.equals(keywordsSearchText)) {

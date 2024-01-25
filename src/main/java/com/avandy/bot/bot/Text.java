@@ -21,7 +21,7 @@ public class Text extends Common {
             wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
-            premiumIsActive3;
+            premiumIsActive3, inputExceptionText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -145,7 +145,9 @@ public class Text extends Common {
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление более 10 ключевых слов возможно в <b>Premium</b> режиме";
+            inputExceptionText = "Бот ожидал ввода слов. Для продолжения работы нажмите повторно ";
         } else {
+            inputExceptionText = "The bot was waiting for words to be entered. To continue, click again ";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - -
