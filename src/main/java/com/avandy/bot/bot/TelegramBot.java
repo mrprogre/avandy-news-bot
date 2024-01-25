@@ -48,7 +48,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final KeywordRepository keywordRepository;
     private final SettingsRepository settingsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
-    private final int offset = 60;
+    private final int offset = 60; //60
 
     @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
@@ -986,9 +986,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("ADD_EXCLUDED", addText);
         buttons1.put("FIND_ALL", searchText);
 
+        int i = usersExclTermsPage.get(chatId) + 10 + 1;
+
         if (wordsCount > offset) {
             buttons2.put("FIRST_EXCL_PAGE", "««");
             buttons2.put("BEFORE_EXCL_PAGE", "«");
+            buttons2.put("EXCL_PAGE", (i - offset) + " - " + (i - 1));
             buttons2.put("NEXT_EXCL_PAGE", "»");
             buttons2.put("LAST_EXCL_PAGE", "»»");
         }
@@ -1328,9 +1331,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("DEL_FROM_TOP", addText);
         buttons1.put("GET_TOP", updateTopText2);
 
+        int i = usersTopPage.get(chatId) + 10 + 1;
+
         if (wordsCount > offset) {
             buttons2.put("FIRST_TOP_PAGE", "««");
             buttons2.put("BEFORE_TOP_PAGE", "«");
+            buttons2.put("TOP_PAGE", (i - offset) + " - " + (i - 1));
             buttons2.put("NEXT_TOP_PAGE", "»");
             buttons2.put("LAST_TOP_PAGE", "»»");
         }
