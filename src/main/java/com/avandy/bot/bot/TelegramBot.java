@@ -44,7 +44,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig config;
     private final RssRepository rssRepository;
     private final UserRepository userRepository;
-    private final TopTenRepository topTenRepository;
+    private final TopTenRepository topRepository;
     private final KeywordRepository keywordRepository;
     private final SettingsRepository settingsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
@@ -54,7 +54,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
                        SearchService searchService, UserRepository userRepository, KeywordRepository keywordRepository,
                        SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
-                       RssRepository rssRepository, TopTenRepository topTenRepository) {
+                       RssRepository rssRepository, TopTenRepository topRepository) {
         super(botToken);
         this.config = config;
         this.searchService = searchService;
@@ -63,7 +63,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.settingsRepository = settingsRepository;
         this.excludingTermsRepository = excludingTermsRepository;
         this.rssRepository = rssRepository;
-        this.topTenRepository = topTenRepository;
+        this.topRepository = topRepository;
     }
 
     @Override
@@ -185,6 +185,24 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (callbackData) {
 
+                case "FIRST_EXCL_PAGE" -> {
+                    usersExclTermsPage.put(chatId, 0);
+                    List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
+
+                    List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
+                            usersExclTermsPage.get(chatId), offset);
+                    getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
+                }
+
+                case "LAST_EXCL_PAGE" -> {
+                    List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
+                    usersExclTermsPage.put(chatId, items.size() - offset);
+
+                    List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
+                            usersExclTermsPage.get(chatId), offset);
+                    getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
+                }
+
                 case "NEXT_EXCL_PAGE" -> {
                     List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
 
@@ -209,24 +227,39 @@ public class TelegramBot extends TelegramLongPollingBot {
                     getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
                 }
 
-                case "NEXT_PAGE" -> {
-                    Set<String> items = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+                case "FIRST_TOP_PAGE" -> {
+                    usersTopPage.put(chatId, 0);
+                    Set<String> items = topRepository.findAllByChatId(chatId);
+                    List<String> excludedWordsPage = topRepository.getPage(chatId, usersTopPage.get(chatId), offset);
+                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
+                }
+
+                case "LAST_TOP_PAGE" -> {
+                    Set<String> items = topRepository.findAllByChatId(chatId);
+                    usersTopPage.put(chatId, items.size() - offset);
+
+                    List<String> excludedWordsPage = topRepository.getPage(chatId, usersTopPage.get(chatId), offset);
+                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
+                }
+
+                case "NEXT_TOP_PAGE" -> {
+                    Set<String> items = topRepository.findAllByChatId(chatId);
                     Integer i = usersTopPage.get(chatId);
                     usersTopPage.put(chatId, i += offset);
                     if (i >= items.size()) usersTopPage.put(chatId, i - offset);
 
-                    List<String> excludedWordsPage = topTenRepository.findExcludedWordsPage(chatId,
+                    List<String> excludedWordsPage = topRepository.getPage(chatId,
                             usersTopPage.get(chatId), offset);
                     getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
                 }
 
-                case "BEFORE_PAGE" -> {
+                case "BEFORE_TOP_PAGE" -> {
                     Integer i = usersTopPage.get(chatId);
                     usersTopPage.put(chatId, i -= offset);
                     if (i <= 0) usersTopPage.put(chatId, 0);
 
-                    Set<String> items = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
-                    List<String> excludedWordsPage = topTenRepository.findExcludedWordsPage(chatId,
+                    Set<String> items = topRepository.findAllByChatId(chatId);
+                    List<String> excludedWordsPage = topRepository.getPage(chatId,
                             usersTopPage.get(chatId), offset);
                     getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
                 }
@@ -944,16 +977,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, exclusionText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
-    // Кнопки дял списка исключённых слов
-//    private void excludeListKeyboard(long chatId, String text) {
-//        Map<String, String> buttons = new LinkedHashMap<>();
-//
-//        buttons.put("DELETE_EXCLUDED", delText);
-//        buttons.put("ADD_EXCLUDED", addText);
-//        buttons.put("FIND_ALL", searchText);
-//        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
-//    }
-
     // Кнопки для просмотра списка слов-исключений
     private InlineKeyboardMarkup excludeListKeyboard(long chatId, String text, int wordsCount) {
         Map<String, String> buttons1 = new LinkedHashMap<>();
@@ -964,8 +987,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("FIND_ALL", searchText);
 
         if (wordsCount > offset) {
-            buttons2.put("BEFORE_EXCL_PAGE", "« before");
-            buttons2.put("NEXT_EXCL_PAGE", "next »");
+            buttons2.put("FIRST_EXCL_PAGE", "««");
+            buttons2.put("BEFORE_EXCL_PAGE", "«");
+            buttons2.put("NEXT_EXCL_PAGE", "»");
+            buttons2.put("LAST_EXCL_PAGE", "»»");
         }
 
         if (!text.isBlank()) {
@@ -1041,7 +1066,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Удаление исключённых слов из мап для анализа
-        Set<String> excludedWordsFromAnalysis = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+        Set<String> excludedWordsFromAnalysis = topRepository.findAllByChatId(chatId);
         for (String word : excludedWordsFromAnalysis) {
             wordsCount.remove(word);
         }
@@ -1109,7 +1134,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Список удалённых слов из Топа
     private void getTopTenWordsList(long chatId) {
-        Set<String> items = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+        Set<String> items = topRepository.findAllByChatId(chatId);
 
         getPaginationKeyboard(chatId, "<b>" + listOfDeletedFromTopText + "</b> [" + items.size() + "]\n" +
                 items.stream()
@@ -1126,7 +1151,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void topDelete(int wordNum, long chatId) {
         try {
             String word = getWordByNumber(wordNum, chatId);
-            Set<String> topTenWordsByChatId = topTenRepository.findAllExcludedFromTopTenByChatId(chatId);
+            Set<String> topTenWordsByChatId = topRepository.findAllByChatId(chatId);
 
             TopExcluded topExcluded;
             if (!topTenWordsByChatId.contains(word)) {
@@ -1135,7 +1160,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 topExcluded.setWord(word);
 
                 try {
-                    topTenRepository.save(topExcluded);
+                    topRepository.save(topExcluded);
                     sendMessage(chatId, "❌ " + word);
                 } catch (Exception e) {
                     if (e.getMessage().contains("ui_top_ten_excluded")) {
@@ -1163,8 +1188,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String word : words) {
             word = word.trim().toLowerCase();
 
-            if (topTenRepository.isWordExists(chatId, word) > 0) {
-                topTenRepository.deleteWordByChatId(chatId, word);
+            if (topRepository.isWordExists(chatId, word) > 0) {
+                topRepository.deleteWordByChatId(chatId, word);
                 sendMessage(chatId, "❌ " + word);
             } else {
                 sendMessage(chatId, String.format(wordIsNotInTheListText, word));
@@ -1304,8 +1329,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("GET_TOP", updateTopText2);
 
         if (wordsCount > offset) {
-            buttons2.put("BEFORE_PAGE", "« before");
-            buttons2.put("NEXT_PAGE", "next »");
+            buttons2.put("FIRST_TOP_PAGE", "««");
+            buttons2.put("BEFORE_TOP_PAGE", "«");
+            buttons2.put("NEXT_TOP_PAGE", "»");
+            buttons2.put("LAST_TOP_PAGE", "»»");
         }
 
         if (!text.isBlank()) {
@@ -1512,7 +1539,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 searchWithFilter2Text);
 
         String topText = String.format("3" + initSearchTemplateText, top20Text2,
-                settingsRepository.getTopPeriod(chatId), topTenRepository.deleteFromTopTenCount(chatId),
+                settingsRepository.getTopPeriod(chatId), topRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +

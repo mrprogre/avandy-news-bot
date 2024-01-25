@@ -13,7 +13,7 @@ public interface TopTenRepository extends JpaRepository<TopExcluded, Long> {
 
     @Query(value = "SELECT lower(word) as word FROM top_excluded WHERE chat_id = :chatId ORDER BY id DESC",
             nativeQuery = true)
-    Set<String> findAllExcludedFromTopTenByChatId(Long chatId);
+    Set<String> findAllByChatId(Long chatId);
 
     @Query(value = "SELECT count(word) FROM top_excluded WHERE lower(word) = lower(:keyword) and chat_id = :chatId",
             nativeQuery = true)
@@ -24,7 +24,7 @@ public interface TopTenRepository extends JpaRepository<TopExcluded, Long> {
 
     @Query(value = "SELECT word FROM top_excluded WHERE chat_id = :chatId order by id desc offset :offset limit :limit",
             nativeQuery = true)
-    List<String> findExcludedWordsPage(Long chatId, int offset, int limit);
+    List<String> getPage(Long chatId, int offset, int limit);
 
     @Transactional
     @Modifying(clearAutomatically = true)

@@ -8,7 +8,7 @@ from news_list n
          join showed_news s
               on n.title_hash = s.title_hash
          join users u on s.chat_id = u.chat_id
-where n.add_date >= '2024-01-22 10:00:00'::timestamp
+where n.add_date >= '2024-01-25 00:00:00'::timestamp
 group by s.chat_id, u.user_name, u.first_name, type
 order by type desc, cnt desc;
 
@@ -30,6 +30,7 @@ from users u
          left join excluding_terms e on u.chat_id = e.chat_id
          left join top_excluded t on u.chat_id = t.chat_id
 where u.chat_id not in (1254981379 /* я */ /*,1020961767 /* Лена */, 6455565758 /* Вика */, 6128707071 /* Саша */*/)
+  --and u.chat_id = 1255366791
   and u.is_active = 1
 group by u.chat_id, u.first_name, s.period, s.period_all, s.scheduler, s.start, s.excluded, s.lang, s.period_top,
          u.is_active, u.registered_at
@@ -39,8 +40,8 @@ order by u.registered_at desc;
 select source, title, pub_date::time, n.add_date::time, extract(minute from (n.pub_date - n.add_date)) as "pub-add"
 from news_list n
          join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 388921319
-where n.add_date >= '2024-01-21 22:00:00'::timestamp
+              on n.title_hash = s.title_hash and s.chat_id = 1255366791
+where n.add_date >= '2024-01-25 00:00:00'::timestamp
 order by n.id desc;
 
 -- Rows count
@@ -78,4 +79,8 @@ where chat_id = 1254981379
   and type = 4;
 
 -- топ ключевых слов по всем пользователям
-select keyword, count(keyword) cnt from keywords  group by keyword having count(keyword) > 1 order by cnt desc
+select keyword, count(keyword) cnt
+from keywords
+group by keyword
+having count(keyword) > 1
+order by cnt desc
