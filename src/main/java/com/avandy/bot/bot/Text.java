@@ -37,8 +37,24 @@ public class Text extends Common {
             listKeywordsText = """
                     <b>Ключевые слова</b>
                     - - - - - -
-                    Для гибкости можно использовать символ *, который обозначает одну любую букву. Так, например, ключевое слово <b>курс**</b> найдёт новости со словами <b>курс, курсы, курсом</b>, но не найдёт массу лишних новостей о <b>Курской</b> области. Однако найдёт, если сделаете три звезды <b>курс***</b>
+                    Поиск новостей производится по полному совпадению с ключевым словом.
+                    - - - - - -
+                    Однако, можно использовать символ *, который обозначает одну любую букву в слове.
+                      <b>курс</b> найдёт: курс
+                      <b>курс*</b> найдёт: курс, курсА
+                      <b>курс**</b> найдёт: курс, курсА, курсОМ
                     - - - - - -""";
+            yesButtonText = """
+                    Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
+                    - - - - - -
+                    Поиск новостей производится по полному совпадению с ключевым словом.
+                    - - - - - -
+                    Однако, можно использовать символ *, который обозначает одну любую букву в слове.
+                      <b>курс</b> найдёт: курс
+                      <b>курс*</b> найдёт: курс, курсА
+                      <b>курс**</b> найдёт: курс, курсА, курсОМ
+                    - - - - - -
+                    Нажми кнопку "Добавить".""";
             listKeywordsButtonText = "Ключевые слова";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
@@ -68,10 +84,6 @@ public class Text extends Common {
                     <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>Почта</b>: rps_project@mail.ru
                     <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
-            yesButtonText = """
-                    Первое, что нужно сделать, - добавить <b>ключевые слова</b>. Если интересуют новости, связанные с ипотекой, то добавь слово со звёздочкой <b>ипотек*</b>, чтобы получить все заголовки, содержащие: <b>ипотекА, ипотекУ</b>. Одна звездочка это одна любая буква.
-                    - - - - - -
-                    Нажми кнопку "Добавить".""";
             buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
             intervalText = "Глубина";
             autoSearchText = "Автопоиск";
@@ -134,6 +146,21 @@ public class Text extends Common {
             premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление более 10 ключевых слов возможно в <b>Premium</b> режиме";
         } else {
+            listKeywordsText = """
+                    <b>Keywords</b>
+                    - - - - - -
+                    The search for news is carried out based on a complete match with the keyword.
+                    - - - - - -
+                    However you can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
+                    - - - - - -""";
+            yesButtonText = """
+                    The first thing to do is add <b>keywords</b>.
+                    - - - - - -
+                    The search for news is carried out based on a complete match with the keyword.
+                    - - - - - -
+                    However you can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
+                    - - - - - -
+                    Click the "Add" button.""";
             premiumIsActive3 = "Adding more than 10 keywords is possible in <b>Premium</b> mode";
             premiumIsActive2 = "Premium activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
@@ -154,11 +181,6 @@ public class Text extends Common {
             yesText = "Yes";
             infoText = "App info and premium";
             settingText = "Settings";
-            listKeywordsText = """
-                    <b>Keywords</b>
-                    - - - - - -
-                    For more flexibility you can use the * symbol. Keyword <b>tax**</b> will find all news with <b>tax, taxes, taxi</b> but not <b>taxcom</b>.
-                    - - - - - -""";
             listKeywordsButtonText = "Keywords";
             findSelectText = "Search types";
             top20Text = "Frequently used words by period";
@@ -186,10 +208,6 @@ public class Text extends Common {
                     <b>Developer</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>E-mail</b>: rps_project@mail.ru
                     <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
-            yesButtonText = """
-                    The first thing to do is add <b>keywords</b>. If you are interested in news related to taxes, for example, then you need to add the word <b>tax**</b> to get all the headlines containing: <b>tax, taxes</b>, etc., but not <b>taxcom</b>. One * is equal to any one word character.
-                    - - - - - -
-                    Click the "Add" button.""";
             buyButtonText = "Good buy! " + ICON_GOOD_BYE;
             intervalText = "Interval";
             autoSearchText = "Auto search";
