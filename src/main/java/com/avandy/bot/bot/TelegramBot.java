@@ -991,7 +991,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > offset) {
             buttons2.put("FIRST_EXCL_PAGE", "««");
             buttons2.put("BEFORE_EXCL_PAGE", "«");
-            buttons2.put("EXCL_PAGE", (i - offset) + "-" + (i - 1));
+            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1)/offset) + "/" +
+                    (int) Math.ceil((double) wordsCount/offset));
             buttons2.put("NEXT_EXCL_PAGE", "»");
             buttons2.put("LAST_EXCL_PAGE", "»»");
         }
@@ -1336,7 +1337,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > offset) {
             buttons2.put("FIRST_TOP_PAGE", "««");
             buttons2.put("BEFORE_TOP_PAGE", "«");
-            buttons2.put("TOP_PAGE", (i - offset) + "-" + (i - 1));
+            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1)/offset) + "/" +
+                    (int) Math.ceil((double) wordsCount/offset));
             buttons2.put("NEXT_TOP_PAGE", "»");
             buttons2.put("LAST_TOP_PAGE", "»»");
         }
