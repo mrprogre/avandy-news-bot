@@ -138,7 +138,9 @@ public class Text extends Common {
             listKeywordsText = """
                     <b>Ключевые слова</b>
                     - - - - - -
-                    <b>Настройки</b> автопоиска /settings
+                    Автопоиск <b>%s</b>
+                    Запуск поиска раз в <b>%s</b>
+                    <b>Настройки</b> /settings
                     - - - - - -
                     <b>курс</b> найдёт: курс
                     <b>курс*</b> найдёт: курс, курсА
@@ -150,7 +152,9 @@ public class Text extends Common {
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - -
-                    Auto search <b>settings</b> /settings
+                    Auto search <b>%s</b>
+                    The search runs every <b>%s</b>
+                    Auto search <b>/settings</b>
                     - - - - - -
                     <b>tax</b> will find all news only with <b>tax</b>
                     <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
