@@ -610,10 +610,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Показ ключевых слов в Телеграме (/keywords)
     private void showKeywordsList(long chatId) {
+
         String joinerKeywords = getKeywordsList(chatId);
 
         if (joinerKeywords != null && joinerKeywords.length() != 0) {
-            keywordsListKeyboard(chatId, listKeywordsText + "\n" + joinerKeywords);
+            keywordsListKeyboard(chatId, String.format(listKeywordsText + "\n" + joinerKeywords,
+                            setOnOffRus(settingsRepository.getSchedulerOnOffByChatId(chatId), chatId),
+                            settingsRepository.getKeywordsPeriod(chatId)
+                    )
+            );
         } else {
             addKeywordsKeyboard(chatId, setupKeywordsText);
         }
@@ -992,8 +997,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > offset) {
             buttons2.put("FIRST_EXCL_PAGE", "««");
             buttons2.put("BEFORE_EXCL_PAGE", "«");
-            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1)/offset) + delimiter +
-                    (int) Math.ceil((double) wordsCount/offset));
+            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1) / offset) + delimiter +
+                    (int) Math.ceil((double) wordsCount / offset));
             buttons2.put("NEXT_EXCL_PAGE", "»");
             buttons2.put("LAST_EXCL_PAGE", "»»");
         }
@@ -1142,12 +1147,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         Set<String> items = topRepository.findAllByChatId(chatId);
 
         getPaginationKeyboard(chatId, "<b>" + listOfDeletedFromTopText + "</b> [" + items.size() + "]\n" +
-                items.stream()
-                        .limit(offset)
-                        .toList()
-                        .toString()
-                        .replace("[", "")
-                        .replace("]", ""),
+                        items.stream()
+                                .limit(offset)
+                                .toList()
+                                .toString()
+                                .replace("[", "")
+                                .replace("]", ""),
                 items.size()
         );
     }
@@ -1338,8 +1343,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > offset) {
             buttons2.put("FIRST_TOP_PAGE", "««");
             buttons2.put("BEFORE_TOP_PAGE", "«");
-            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1)/offset) + delimiter +
-                    (int) Math.ceil((double) wordsCount/offset));
+            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1) / offset) + delimiter +
+                    (int) Math.ceil((double) wordsCount / offset));
             buttons2.put("NEXT_TOP_PAGE", "»");
             buttons2.put("LAST_TOP_PAGE", "»»");
         }
