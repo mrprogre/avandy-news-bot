@@ -634,6 +634,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         String keywordsPeriod;
         if (isPremium != 1) {
             keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
+        } else if (settingsRepository.getPremiumSearchByChatId(chatId).equals("off")) {
+            keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
         } else {
             keywordsPeriod = "2 min";
         }

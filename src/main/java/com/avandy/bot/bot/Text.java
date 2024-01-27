@@ -291,7 +291,8 @@ public class Text extends Common {
             }
 
             if (isPremium == 1) {
-                premiumPeriod = "<b>2 min</b>, " + premiumIsActive;
+                String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
+                premiumPeriod = "<b>" + period + "</b>, " + premiumIsActive;
                 premiumMessage = "";
                 String rus = settings.getPremiumSearch().equals("on") ? "<b>вкл [on]</b>" : "<b>выкл [off]</b>";
                 premiumSettings = "- - - - - -\n<b>5. Премиум поиск:</b> " + rus + "\n" +
@@ -333,7 +334,8 @@ public class Text extends Common {
             }
 
             if (isPremium == 1) {
-                premiumPeriod = "<b>2 min</b>, " + premiumIsActive;
+                String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
+                premiumPeriod = "<b>" + period + "</b>, " + premiumIsActive;
                 premiumMessage = "";
                 premiumSettings = "- - - - - -\n<b>5. Premium search: " + settings.getPremiumSearch() + "</b>\n" +
                         "Enable or disable auto search every 2 minutes (will be launched in accordance with step 2)\n";
