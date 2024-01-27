@@ -100,6 +100,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String textToSend = messageText.substring(messageText.indexOf(" "));
                 sendMessage(chatToSend, textToSend);
 
+                // DEACTIVATE SOURCE
+            } else if (messageText.startsWith("-") && config.getBotOwner() == chatId) {
+                String link = messageText.substring(messageText.indexOf("-") + 1, messageText.indexOf("="));
+                int value = Integer.parseInt(messageText.substring(messageText.indexOf("=") + 1));
+                int count = rssRepository.updateIsActiveRss(value, link);
+                if (count == 1) {
+                    sendMessage(chatId, "Активность источника переключена на: " + value);
+                }
+
                 /* USER INPUT BLOCK */
             } else if (UserState.SEND_FEEDBACK.equals(userState)) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
