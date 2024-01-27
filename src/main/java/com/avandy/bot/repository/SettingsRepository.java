@@ -30,11 +30,11 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     String getLangByChatId(long chatId);
 
     @Query(value = "select s.* from settings s join users u on s.chat_id = u.chat_id " +
-            "where s.scheduler = 'on' and u.is_premium = 0", nativeQuery = true)
+            "where s.scheduler = 'on' and (u.is_premium = 0 or (u.is_premium = 1 and s.premium_search = 'off'))", nativeQuery = true)
     List<Settings> findAllSchedulerOn();
 
     @Query(value = "select s.* from settings s join users u on s.chat_id = u.chat_id " +
-            "where s.scheduler = 'on' and u.is_premium = 1", nativeQuery = true)
+            "where s.scheduler = 'on' and u.is_premium = 1 and s.premium_search = 'on'", nativeQuery = true)
     List<Settings> findAllSchedulerOnPremium();
 
     @Query(value = "SELECT jaro_winkler FROM settings WHERE chat_id = :chatId", nativeQuery = true)
@@ -79,4 +79,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE settings SET jaro_winkler = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
     void updateJaroWinkler(String value, long chatId);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE settings SET premium_search = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
+    void updatePremiumSearch(String value, long chatId);
 }

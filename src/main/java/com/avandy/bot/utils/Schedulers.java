@@ -34,6 +34,7 @@ public class Schedulers {
     @Scheduled(cron = "${cron.search.keywords.premium}")
     protected void autoSearchByKeywordsPremium() {
         searchNewsByKeywords(settingsRepository.findAllSchedulerOnPremium());
+
     }
 
     private void searchNewsByKeywords(List<Settings> usersSettings) {

@@ -15,15 +15,16 @@ comment on column users.prem_exp_date is 'Дата окончания срока
 
 create table if not exists settings
 (
-    chat_id      bigint,
-    period       varchar(8) default '1h'::character varying,
-    period_all   varchar(8) default '1h'::character varying,
-    scheduler    varchar(3) default 'on'::character varying,
-    start        time       default '10:00'::time,
-    excluded     varchar(3) default 'on'::character varying,
-    lang         varchar(2) default 'ru'::character varying,
-    period_top   varchar(8) default '12h'::character varying,
-    jaro_winkler varchar(3) default 'on'::character varying,
+    chat_id        bigint,
+    period         varchar(8) default '1h'::character varying,
+    period_all     varchar(8) default '1h'::character varying,
+    scheduler      varchar(3) default 'on'::character varying,
+    start          time       default '10:00'::time,
+    excluded       varchar(3) default 'on'::character varying,
+    lang           varchar(2) default 'ru'::character varying,
+    period_top     varchar(8) default '12h'::character varying,
+    jaro_winkler   varchar(3) default 'on'::character varying,
+    premium_search varchar(3) default 'on'::character varying,
     constraint fk_settings_chat_id foreign key (chat_id) references users (chat_id) on delete cascade
 );
 comment on column settings.period is 'Глубина поиска по ключевым словам';

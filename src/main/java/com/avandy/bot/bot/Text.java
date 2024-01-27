@@ -21,7 +21,7 @@ public class Text extends Common {
             wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
-            premiumIsActive3, premiumIsActive4, inputExceptionText;
+            premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -148,7 +148,9 @@ public class Text extends Common {
                     <b>курс**</b> найдёт: курс, курсА, курсОМ
                     - - - - - -""";
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
+            premiumSearchSettingsText = "Премиум поиск";
         } else {
+            premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             listKeywordsText = """
                     <b>Keywords</b>
@@ -270,82 +272,90 @@ public class Text extends Common {
         }
     }
 
-    public static String getSettingsText(Settings x, String lang, int isPremium) {
+    public static String getSettingsText(Settings settings, String lang, int isPremium) {
         String premiumPeriod;
         String premiumMessage;
+        String premiumSettings = "";
 
         if (lang.equals("ru")) {
             String schedSettings = "";
-            if (x.getScheduler().contains("on") && isPremium != 1) {
-                String text = switch (x.getPeriod()) {
+            if (settings.getScheduler().contains("on") && isPremium != 1) {
+                String text = switch (settings.getPeriod()) {
                     case "1h" -> " (запуск каждый час)\n";
                     case "2h" -> " (запуск каждые 2 часа)\n";
                     case "24h", "48h", "72h" -> " (запуск один раз в сутки)\n";
                     default ->
-                            " (часы запуска: <b>" + getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
+                            " (часы запуска: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n" + "<b>5. Старт</b> автопоиска: <b>" + x.getStart() + "</b>" + text;
+                schedSettings = "- - - - - -\n<b>5. Старт</b> автопоиска: <b>" + settings.getStart() + "</b>" + text;
             }
 
             if (isPremium == 1) {
                 premiumPeriod = "<b>2 min</b>, " + premiumIsActive;
                 premiumMessage = "";
+                String rus = settings.getPremiumSearch().equals("on") ? "<b>вкл [on]</b>" : "<b>выкл [off]</b>";
+                premiumSettings = "- - - - - -\n<b>5. Премиум поиск:</b> " + rus + "\n" +
+                        "Включить или выключить автопоиск каждые 2 минуты (будет запускаться в соответствии с п.2)\n";
             } else {
-                premiumPeriod = x.getPeriod();
+                premiumPeriod = settings.getPeriod();
                 premiumMessage = premiumText;
             }
 
             return "<b>Настройки</b> " + ICON_SETTINGS + " \n" +
-                    "<b>1. Автопоиск: " + x.getScheduler() + "</b>\n" +
+                    "<b>1. Автопоиск: " + settings.getScheduler() + "</b>\n" +
                     "Автоматический запуск поиска по <b>ключевым словам</b>\n" +
                     "- - - - - -\n" +
                     "<b>2. Частота автопоиска:</b> " + premiumPeriod + "\n" +
-                    "Глубина поиска совпадает с частотой и равна текущему времени минус <b>" + x.getPeriod() + "</b>" +
+                    "Глубина поиска совпадает с частотой и равна текущему времени минус <b>" + settings.getPeriod() + "</b>" +
                     premiumMessage + "\n" +
                     "- - - - - -\n" +
-                    "<b>3. Исключение</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "<b>3. Исключение</b>: <b>" + settings.getExcluded() + "</b>\n" +
                     "Исключение новостей, которые содержат слова-исключения\n" +
                     "- - - - - -\n" +
                     "<b>4. Глубина полного поиска</b>\n" +
-                    "Глубина равна текущему времени минус <b>" + x.getPeriodAll() + "</b>\n" +
+                    "Глубина равна текущему времени минус <b>" + settings.getPeriodAll() + "</b>\n" +
                     schedSettings +
+                    premiumSettings +
                     "- - - - - -\n" +
                     "Параметры меняются после нажатия на кнопки";
         } else {
             String schedSettings = "";
 
-            if (x.getScheduler().contains("on") && isPremium != 1) {
-                String text = switch (x.getPeriod()) {
+            if (settings.getScheduler().contains("on") && isPremium != 1) {
+                String text = switch (settings.getPeriod()) {
                     case "1h" -> " (launch every hour)\n";
                     case "2h" -> " (launch every 2 hours)\n";
                     case "24h", "48h", "72h" -> " (launch once a day)\n";
                     default ->
-                            " (start time: <b>" + getTimeToExecute(x.getStart(), x.getPeriod()) + ":00</b>)\n";
+                            " (start time: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + x.getStart() + "</b>" + text;
+                schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + settings.getStart() + "</b>" + text;
             }
 
             if (isPremium == 1) {
                 premiumPeriod = "<b>2 min</b>, " + premiumIsActive;
                 premiumMessage = "";
+                premiumSettings = "- - - - - -\n<b>5. Premium search: " + settings.getPremiumSearch() + "</b>\n" +
+                        "Enable or disable auto search every 2 minutes (will be launched in accordance with step 2)\n";
             } else {
-                premiumPeriod = x.getPeriod();
+                premiumPeriod = settings.getPeriod();
                 premiumMessage = premiumText;
             }
 
             return "<b>Settings</b> " + ICON_SETTINGS + " \n" +
-                    "<b>1. Auto search: " + x.getScheduler() + "</b>\n" +
+                    "<b>1. Auto search: " + settings.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
                     "- - - - - -\n" +
                     "<b>2. Auto search frequency: " + premiumPeriod + "</b>\n" +
-                    "The search period coincides with the search frequency and is equal to the current time minus <b>" + x.getPeriod() + "</b>" +
+                    "The search period coincides with the search frequency and is equal to the current time minus <b>" + settings.getPeriod() + "</b>" +
                     premiumMessage + "\n" +
                     "- - - - - -\n" +
-                    "<b>3. Excluding</b>: <b>" + x.getExcluded() + "</b>\n" +
+                    "<b>3. Excluding</b>: <b>" + settings.getExcluded() + "</b>\n" +
                     "Excluding news that contains excluding terms\n" +
                     "- - - - - -\n" +
-                    "<b>4. Full search interval: " + x.getPeriodAll() + "</b>\n" +
+                    "<b>4. Full search interval: " + settings.getPeriodAll() + "</b>\n" +
                     schedSettings +
+                    premiumSettings +
                     "- - - - - -\n" +
                     "Parameters change after pressing buttons";
         }

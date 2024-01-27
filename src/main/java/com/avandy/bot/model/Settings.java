@@ -26,4 +26,6 @@ public class Settings {
     private String periodTop;
     @Size(max = 3)
     private String jaroWinkler;
+    @Size(max = 3)
+    private String premiumSearch;
 }

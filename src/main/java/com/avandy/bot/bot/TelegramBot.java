@@ -457,6 +457,20 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "SET_START_21" -> keywordsUpdateSearchStartTime(21, chatId);
                 case "SET_START_22" -> keywordsUpdateSearchStartTime(22, chatId);
                 case "SET_START_23" -> keywordsUpdateSearchStartTime(23, chatId);
+
+                // Премиум поиск каждые 2 минуты
+                case "PREMIUM_SEARCH" -> premiumSearchOnOffSchedulerKeyboard(chatId);
+                case "PREMIUM_SEARCH_ON" -> {
+                    settingsRepository.updatePremiumSearch("on", chatId);
+                    sendMessage(chatId, changesSavedText);
+                    getSettings(chatId);
+                }
+                case "PREMIUM_SEARCH_OFF" -> {
+                    settingsRepository.updatePremiumSearch("off", chatId);
+                    sendMessage(chatId, changesSavedText);
+                    getSettings(chatId);
+                }
+
             }
         }
     }
@@ -614,13 +628,20 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Показ ключевых слов в Телеграме (/keywords)
     private void showKeywordsList(long chatId) {
-
+        int isPremium = userRepository.isPremiumByChatId(chatId);
         String joinerKeywords = getKeywordsList(chatId);
+
+        String keywordsPeriod;
+        if (isPremium != 1) {
+            keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
+        } else {
+            keywordsPeriod = "2 min";
+        }
 
         if (joinerKeywords != null && joinerKeywords.length() != 0) {
             keywordsListKeyboard(chatId, String.format(listKeywordsText + "\n" + joinerKeywords,
                     setOnOffRus(settingsRepository.getSchedulerOnOffByChatId(chatId), chatId),
-                    settingsRepository.getKeywordsPeriod(chatId)));
+                    keywordsPeriod));
         } else {
             addKeywordsKeyboard(chatId, setupKeywordsText);
         }
@@ -778,6 +799,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("SCHEDULER_OFF", "Off");
         buttons.put("SCHEDULER_ON", "On");
         sendMessage(chatId, autoSearchText, InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
+    // Кнопки включения и выключения авто запуска автопоиска
+    private void premiumSearchOnOffSchedulerKeyboard(long chatId) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("PREMIUM_SEARCH_OFF", "Off");
+        buttons.put("PREMIUM_SEARCH_ON", "On");
+        sendMessage(chatId, premiumSearchSettingsText, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     // Кнопки для выбора времени старта автопоиска (в часах)
@@ -1407,6 +1436,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setExcluded("on");
         settings.setLang("en");
         settings.setJaroWinkler("on");
+        settings.setPremiumSearch("on");
         settingsRepository.save(settings);
     }
 
@@ -1425,10 +1455,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (isOn && isPremium != 1) {
             buttons3.put("SCHEDULER_START", "5. " + startSettingsText);
-            buttons3.put("START_SEARCH", "» » »");
-        } else {
-            buttons3.put("START_SEARCH", "» » »");
+        } else if (isPremium == 1) {
+            buttons3.put("PREMIUM_SEARCH", "5. " + premiumSearchSettingsText);
         }
+        buttons3.put("START_SEARCH", "» » »");
 
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
     }
