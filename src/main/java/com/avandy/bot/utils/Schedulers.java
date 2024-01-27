@@ -125,4 +125,12 @@ public class Schedulers {
             log.warn("# Удалено неактивных пользователей: " + count);
     }
 
+    // Удаление пользователей, заблокировавших бота, каждыq 30 минут
+    @Scheduled(cron = "${cron.revoke.premium.when.expire}")
+    void autoRevokePremiumWhenExpire() {
+        int count = userRepository.autoRevokePremiumWhenExpire();
+        if (count > 0)
+            log.warn("# Деактивировано премиум подписок: " + count);
+    }
+
 }

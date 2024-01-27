@@ -41,6 +41,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE users SET is_premium = 0 WHERE prem_exp_date < current_date", nativeQuery = true)
+    int autoRevokePremiumWhenExpire();
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
     @Query(value = "DELETE FROM users WHERE is_active = 0", nativeQuery = true)
     int deleteBlockedUsers();
 
