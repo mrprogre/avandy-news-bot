@@ -109,7 +109,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String keywords = messageText.trim().toLowerCase();
                 String[] words = keywords.split(",");
 
-                if (words[0].contains("/")) {
+                if (words[0].startsWith("/")) {
                     userStates.remove(chatId);
                     sendMessage(chatId, inputExceptionText + words[0]);
                 } else {
@@ -124,7 +124,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String exclude = messageText.trim().toLowerCase();
                 String[] words = exclude.split(",");
 
-                if (words[0].contains("/")) {
+                if (words[0].startsWith("/")) {
                     userStates.remove(chatId);
                     sendMessage(chatId, inputExceptionText + words[0]);
                 } else {
@@ -142,7 +142,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String text = messageText.trim().toLowerCase();
                 String[] words = text.split(",");
 
-                if (words[0].contains("/")) {
+                if (words[0].startsWith("/")) {
                     userStates.remove(chatId);
                     sendMessage(chatId, inputExceptionText + words[0]);
                 } else {
