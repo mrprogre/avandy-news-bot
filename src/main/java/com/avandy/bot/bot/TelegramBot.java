@@ -103,52 +103,45 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* USER INPUT BLOCK */
             } else if (UserState.SEND_FEEDBACK.equals(userState)) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
+                if (checkUserInput(chatId, feedback)) return;
                 sendFeedback(chatId, feedback);
 
+                // Добавление ключевых слов
             } else if (UserState.ADD_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
+                if (checkUserInput(chatId, keywords)) return;
                 String[] words = keywords.split(",");
+                addKeyword(chatId, words);
 
-                if (words[0].startsWith("/")) {
-                    userStates.remove(chatId);
-                    sendMessage(chatId, inputExceptionText + words[0]);
-                } else {
-                    addKeyword(chatId, words);
-                }
-
+                // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
             } else if (UserState.DEL_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
+                if (checkUserInput(chatId, keywords)) return;
                 deleteKeywords(keywords, chatId);
 
+                // Добавление слов-исключений
             } else if (UserState.ADD_EXCLUDED.equals(userState)) {
                 String exclude = messageText.trim().toLowerCase();
+                if (checkUserInput(chatId, exclude)) return;
                 String[] words = exclude.split(",");
+                addExclude(chatId, words);
+                getExcludedList(chatId);
 
-                if (words[0].startsWith("/")) {
-                    userStates.remove(chatId);
-                    sendMessage(chatId, inputExceptionText + words[0]);
-                } else {
-                    addExclude(chatId, words);
-                    getExcludedList(chatId);
-                }
-
+                // Удаление слов-исключений
             } else if (UserState.DEL_EXCLUDED.equals(userState)) {
                 String excluded = messageText.trim().toLowerCase();
+                if (checkUserInput(chatId, excluded)) return;
                 String[] words = excluded.split(",");
                 delExcluded(chatId, words);
                 getExcludedList(chatId);
 
+                // Удаление слов из показа в Топе
             } else if (UserState.DEL_TOP.equals(userState)) {
                 String text = messageText.trim().toLowerCase();
+                if (checkUserInput(chatId, text)) return;
                 String[] words = text.split(",");
-
-                if (words[0].startsWith("/")) {
-                    userStates.remove(chatId);
-                    sendMessage(chatId, inputExceptionText + words[0]);
-                } else {
-                    topListDelete(chatId, words);
-                    getTopTenWordsList(chatId);
-                }
+                topListDelete(chatId, words);
+                getTopTenWordsList(chatId);
 
                 // Поиск по трём кнопкам меню
             } else if (messageText.equals(keywordsSearchText)) {
@@ -468,6 +461,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    // Пользователь нажимает кнопку добавления текста, но передумывает и нажимает на команду,
+    // которая как слово добавляется в БД
+    private boolean checkUserInput(long chatId, String text) {
+        if (text.startsWith("/")) {
+            userStates.remove(chatId);
+            sendMessage(chatId, inputExceptionText + text);
+            return true;
+        }
+        return false;
+    }
+
     /* KEYWORDS */
     // Ручной поиск по ключевым словам
     public void findNewsByKeywordsManual(long chatId) {
@@ -615,8 +619,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (joinerKeywords != null && joinerKeywords.length() != 0) {
             keywordsListKeyboard(chatId, String.format(listKeywordsText + "\n" + joinerKeywords,
-                            setOnOffRus(settingsRepository.getSchedulerOnOffByChatId(chatId), chatId),
-                            settingsRepository.getKeywordsPeriod(chatId)));
+                    setOnOffRus(settingsRepository.getSchedulerOnOffByChatId(chatId), chatId),
+                    settingsRepository.getKeywordsPeriod(chatId)));
         } else {
             addKeywordsKeyboard(chatId, setupKeywordsText);
         }
@@ -633,6 +637,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (isPremium != 1 && totalKeywordsCount > 10) {
             sendMessage(chatId, premiumIsActive3);
             showYesNoGetPremium(chatId);
+            return;
+        }
+
+        if (totalKeywordsCount > Common.MAX_KEYWORDS_COUNT) {
+            sendMessage(chatId, premiumIsActive4);
             return;
         }
 

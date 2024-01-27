@@ -21,7 +21,7 @@ public class Text extends Common {
             wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
-            premiumIsActive3, inputExceptionText;
+            premiumIsActive3, premiumIsActive4, inputExceptionText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -124,6 +124,7 @@ public class Text extends Common {
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление более 10 ключевых слов возможно в <b>Premium</b> режиме";
+            premiumIsActive4 = "Максимальное количество ключевых слов - " + MAX_KEYWORDS_COUNT;
             yesButtonText = """
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
                     - - - - - -
@@ -146,9 +147,9 @@ public class Text extends Common {
                     <b>курс*</b> найдёт: курс, курсА
                     <b>курс**</b> найдёт: курс, курсА, курсОМ
                     - - - - - -""";
-            inputExceptionText = "Бот ожидал ввода слов. Для продолжения работы нажмите повторно ";
+            inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
         } else {
-            inputExceptionText = "The bot was waiting for words to be entered. To continue, click again ";
+            inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - -
@@ -169,6 +170,7 @@ public class Text extends Common {
                     2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
                     - - - - - -
                     Click the "Add" button.""";
+            premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT;
             premiumIsActive3 = "Adding more than 10 keywords is possible in <b>Premium</b> mode";
             premiumIsActive2 = "Premium activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
