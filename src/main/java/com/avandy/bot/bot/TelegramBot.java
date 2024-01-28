@@ -664,7 +664,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (joinerKeywords != null && joinerKeywords.length() != 0) {
             keywordsListKeyboard(chatId, String.format(
                     listKeywordsText + "\n" + joinerKeywords,
-                    setOnOffRus(settingsRepository.getSchedulerOnOffByChatId(chatId), chatId),
+                    "<b>" + setOnOffRus(settingsRepository.getSchedulerOnOffByChatId(chatId), chatId) + "</b> /settings",
                     keywordsPeriod
             ));
         } else {
