@@ -130,7 +130,7 @@ public class Text extends Common {
             yesButtonText = """
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
                     - - - - - -
-                    Поиск новостей производится по полному совпадению с ключевым словом.
+                    Автопоиск новостей производится по полному совпадению с ключевым словом (запуск 1 раз в час по умолчанию).
                     - - - - - -
                     Однако, можно использовать символ *, который обозначает одну любую букву в слове.
                       <b>курс</b> найдёт: курс
@@ -169,7 +169,7 @@ public class Text extends Common {
             yesButtonText = """
                     The first thing to do is add <b>keywords</b>.
                     - - - - - -
-                    The search for news is carried out based on a complete match with the keyword.
+                    Automatic news search is performed based on a complete match with a keyword (runs once an hour by default).
                     - - - - - -
                     However you can use the * symbol:
                     1. <b>tax</b> will find all news only with <b>tax</b> but not <b>taxes, taxcom</b>.

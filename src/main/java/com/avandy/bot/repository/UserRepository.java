@@ -41,7 +41,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE users SET is_premium = 0 WHERE prem_exp_date < current_date", nativeQuery = true)
+    @Query(value = "UPDATE users SET is_premium = 0 WHERE prem_exp_date < current_date and is_premium = 1",
+            nativeQuery = true)
     int autoRevokePremiumWhenExpire();
 
     @Transactional
