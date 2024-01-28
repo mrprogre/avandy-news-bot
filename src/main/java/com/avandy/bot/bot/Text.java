@@ -52,7 +52,7 @@ public class Text extends Common {
             undefinedCommandText = "Данная команда не существует, либо Вы не нажали кнопку перед вводом текста " +
                     ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Сохранено ✔️";
-            headlinesNotFound = "» новости не найдены " + ICON_END_SEARCH_NOT_FOUND;
+            headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 2 символов и менее 18";
             deleteAllWordsText = "❌ все слова удалены";
@@ -63,7 +63,7 @@ public class Text extends Common {
                     <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>Почта</b>: rps_project@mail.ru
                     <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)
-                    <b>Помощь в тестировании:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">andrew.sereda</a>""";
+                    <b>Помощь в тестировании:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">Andrew Sereda</a>""";
             buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
             intervalText = "Глубина";
             autoSearchText = "Автопоиск";
@@ -101,7 +101,8 @@ public class Text extends Common {
                     "Выберите глубину поиска.";
             sendIdeaText = "Отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
-            searchByKeywordsStartText = "» поиск по ключевым словам";
+            searchByKeywordsStartText = "» ручной поиск по ключевым словам за " +
+                    Common.MANUAL_SEARCH_BY_KEYWORDS_PERIOD/60 + " часа";
             fullSearchStartText = "» поиск всех новостей";
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
@@ -223,7 +224,9 @@ public class Text extends Common {
             aboutDeveloperText = """
                     <b>Developer</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>E-mail</b>: rps_project@mail.ru
-                    <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
+                    <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)
+                    <b>Testing:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">Andrew Sereda</a>
+                    """;
             buyButtonText = "Good buy! " + ICON_GOOD_BYE;
             intervalText = "Interval";
             autoSearchText = "Auto search";
@@ -262,7 +265,8 @@ public class Text extends Common {
             chooseSearchDepthText = "Search time = current moment minus hours. Select time.";
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of deleted from the Top";
-            searchByKeywordsStartText = "» search by keywords";
+            searchByKeywordsStartText = "» manual search by keywords in " +
+                    Common.MANUAL_SEARCH_BY_KEYWORDS_PERIOD + " hours";
             fullSearchStartText = "» search all news";
             chooseNumberWordFromTop = "Click to search";
             chooseWordDelFromTop = "Click to delete";

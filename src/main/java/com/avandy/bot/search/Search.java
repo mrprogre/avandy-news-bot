@@ -94,7 +94,7 @@ public class Search implements SearchService {
                 settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriod()),
                         () -> periodMinutes = 1440);
             } else {
-                periodMinutes = 1440;
+                periodMinutes = Common.MANUAL_SEARCH_BY_KEYWORDS_PERIOD;
             }
             String period = periodMinutes + " minutes";
 
