@@ -172,6 +172,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/excluding" -> getExcludedList(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
                     case "/top" -> showTop(chatId);
+                    case "/premium" -> showYesNoGetPremium(chatId);
                     default -> undefinedKeyboard(chatId);
                 }
             }
@@ -642,17 +643,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         String keywordsPeriod;
         if (isPremium != 1) {
-            keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
+            keywordsPeriod = "<b>" + settingsRepository.getKeywordsPeriod(chatId) + "</b> /premium";
         } else if (settingsRepository.getPremiumSearchByChatId(chatId).equals("off")) {
-            keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
+            keywordsPeriod = "<b>" + settingsRepository.getKeywordsPeriod(chatId) + "</b> " + Common.ICON_PREMIUM_IS_ACTIVE;
         } else {
-            keywordsPeriod = "2 min";
+            keywordsPeriod = "<b>2 min</b> " + Common.ICON_PREMIUM_IS_ACTIVE;
         }
 
         if (joinerKeywords != null && joinerKeywords.length() != 0) {
-            keywordsListKeyboard(chatId, String.format(listKeywordsText + "\n" + joinerKeywords,
+            keywordsListKeyboard(chatId, String.format(
+                    listKeywordsText + "\n" + joinerKeywords,
                     setOnOffRus(settingsRepository.getSchedulerOnOffByChatId(chatId), chatId),
-                    keywordsPeriod));
+                    keywordsPeriod
+            ));
         } else {
             addKeywordsKeyboard(chatId, setupKeywordsText);
         }
@@ -666,13 +669,13 @@ public class TelegramBot extends TelegramLongPollingBot {
         int currentKeywordsCount = keywordRepository.getKeywordsCountByChatId(chatId);
         int totalKeywordsCount = currentKeywordsCount + keywords.length;
 
-        if (isPremium != 1 && totalKeywordsCount > 10) {
+        if (isPremium != 1 && totalKeywordsCount > Common.MAX_KEYWORDS_COUNT) {
             sendMessage(chatId, premiumIsActive3);
             showYesNoGetPremium(chatId);
             return;
         }
 
-        if (totalKeywordsCount > Common.MAX_KEYWORDS_COUNT) {
+        if (totalKeywordsCount > Common.MAX_KEYWORDS_COUNT_PREMIUM) {
             sendMessage(chatId, premiumIsActive4);
             return;
         }

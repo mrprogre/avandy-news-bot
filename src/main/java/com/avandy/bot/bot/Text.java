@@ -62,7 +62,8 @@ public class Text extends Common {
             aboutDeveloperText = """
                     <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>Почта</b>: rps_project@mail.ru
-                    <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)""";
+                    <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)
+                    <b>Помощь в тестировании:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">andrew.sereda</a>""";
             buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
             intervalText = "Глубина";
             autoSearchText = "Автопоиск";
@@ -113,18 +114,17 @@ public class Text extends Common {
             jaroWinklerText = "Окончания";
             premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b>) " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumText = "Премиум";
-            getPremiumYesOrNowText = """
-                    На тарифе <b>Premium</b>
-                    1. Поиск новостей по ключевым словам производится <b>каждые 2 минуты</b>. Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>.
-                    2. Возможность добавить <b>более 10</b> ключевых слов.
-                    Оплатить премиум (<b>900р.</b> в год)? \uD83D\uDC8E
-                    """;
+            getPremiumYesOrNowText = "На тарифе <b>Premium</b>\n" +
+                    "1. Поиск новостей по ключевым словам производится каждые <b>2 минуты</b>. " +
+                    "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>.\n" +
+                    "2. Возможность добавить <b>более " + MAX_KEYWORDS_COUNT + "</b> ключевых слов.\n" +
+                    "Оплатить премиум (<b>900р.</b> в год)? \uD83D\uDC8E";
             getPremiumRequestText = "<a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">1. Оплата через СБП (всё официально, мы платим налоги)</a>\n" +
                     "<a href=\"https://avandy-news.ru/refund.html\">2. Правила возврата средств</a>";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive3 = "Добавление более 10 ключевых слов возможно в <b>Premium</b> режиме";
-            premiumIsActive4 = "Максимальное количество ключевых слов - " + MAX_KEYWORDS_COUNT;
+            premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " ключевых слов возможно в <b>Premium</b> режиме";
+            premiumIsActive4 = "Максимальное количество ключевых слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             yesButtonText = """
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
                     - - - - - -
@@ -140,7 +140,7 @@ public class Text extends Common {
                     <b>Ключевые слова</b>
                     - - - - - -
                     Автопоиск <b>%s</b>
-                    Запуск поиска раз в <b>%s</b>
+                    Запуск поиска раз в %s
                     <b>Настройки</b> /settings
                     - - - - - -
                     <b>курс</b> найдёт: курс
@@ -172,16 +172,16 @@ public class Text extends Common {
                     2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
                     - - - - - -
                     Click the "Add" button.""";
-            premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT;
-            premiumIsActive3 = "Adding more than 10 keywords is possible in <b>Premium</b> mode";
+            premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
+            premiumIsActive3 = "Adding more than " + MAX_KEYWORDS_COUNT + " is possible in <b>Premium</b> mode";
             premiumIsActive2 = "Premium activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Paypal link</a>";
-            getPremiumYesOrNowText = """
-                    On the <b>premium</b> tariff:
-                    1. News search by keywords is performed <b>every 2 minutes</b>. So you <b>will be the first</b> to receive the <b>most up-to-date information</b>.
-                    2. You can add <b>more than 10</b> keywords.
-                    Pay for a Premium subscription (<b>50$</b> per year) \uD83D\uDC8E""";
+            getPremiumYesOrNowText = "On the <b>premium</b> tariff:\n" +
+                    "1. News search by keywords is performed every <b>2 minutes</b>. " +
+                    "So you <b>will be the first</b> to receive the <b>most up-to-date information</b>.\n" +
+                    "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords.\n" +
+                    "Pay for a Premium subscription (<b>50$</b> per year) \uD83D\uDC8E";
             getPremiumText = "Premium";
             premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b>) " + ICON_PREMIUM_IS_ACTIVE;
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
