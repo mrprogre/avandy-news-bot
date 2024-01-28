@@ -112,7 +112,8 @@ public class Text extends Common {
                     Пример: в Top 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
                     Текущий статус:\s""";
             jaroWinklerText = "Окончания";
-            premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b>) " + ICON_PREMIUM_IS_ACTIVE;
+            premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b> /premium) " +
+                    ICON_PREMIUM_IS_ACTIVE;
             getPremiumText = "Премиум";
             getPremiumYesOrNowText = "На тарифе <b>Premium</b>\n" +
                     "1. Поиск новостей по ключевым словам производится каждые <b>2 минуты</b>. " +
@@ -183,7 +184,8 @@ public class Text extends Common {
                     "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords.\n" +
                     "Pay for a Premium subscription (<b>50$</b> per year) \uD83D\uDC8E";
             getPremiumText = "Premium";
-            premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b>) " + ICON_PREMIUM_IS_ACTIVE;
+            premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b> /premium) " +
+                    ICON_PREMIUM_IS_ACTIVE;
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
             searchNewsHeaderText = "Search news";
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
