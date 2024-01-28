@@ -21,7 +21,7 @@ public class Text extends Common {
             wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
-            premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText;
+            premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -149,10 +149,12 @@ public class Text extends Common {
                     <b>курс**</b> найдёт: курс, курсА, курсОМ
                     - - - - - -""";
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
+            inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
         } else {
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
+            inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - -

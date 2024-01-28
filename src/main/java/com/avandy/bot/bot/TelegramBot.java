@@ -488,11 +488,22 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Пользователь нажимает кнопку добавления текста, но передумывает и нажимает на команду,
     // которая как слово добавляется в БД
     private boolean checkUserInput(long chatId, String text) {
+        log.warn(text);
+
         if (text.startsWith("/")) {
             userStates.remove(chatId);
             sendMessage(chatId, inputExceptionText + text);
             return true;
         }
+
+        if (text.equalsIgnoreCase(keywordsSearchText) ||
+                text.equalsIgnoreCase(updateTopText2) ||
+                text.equalsIgnoreCase(fullSearchText)) {
+            userStates.remove(chatId);
+            sendMessage(chatId, inputExceptionText2);
+            return true;
+        }
+
         return false;
     }
 
