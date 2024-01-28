@@ -20,4 +20,7 @@ public class BotConfig {
 
     @Value("${bot.owner}")
     Long botOwner;
+
+    @Value("${bot.webhook}")
+    String webHookPath;
 }

@@ -10,7 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -35,7 +36,7 @@ import static com.avandy.bot.bot.Text.*;
 
 @Slf4j
 @Service
-public class TelegramBot extends TelegramLongPollingBot {
+public class TelegramBot extends TelegramWebhookBot {
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
     private final Map<Long, Integer> usersTopPage = new ConcurrentHashMap<>();
@@ -50,6 +51,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final ExcludingTermsRepository excludingTermsRepository;
     private final int offset = 60;
     private final String delimiter = " : ";
+    String webHookPath;
 
     @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
@@ -67,8 +69,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.topRepository = topRepository;
     }
 
+
+
     @Override
-    public void onUpdateReceived(Update update) {
+    public String getBotPath() {
+        return webHookPath;
+    }
+
+    @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         // Проверка наличия не пустого сообщения
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
@@ -112,26 +121,26 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* USER INPUT BLOCK */
             } else if (UserState.SEND_FEEDBACK.equals(userState)) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
-                if (checkUserInput(chatId, messageText)) return;
+                if (checkUserInput(chatId, messageText)) return null;
                 sendFeedback(chatId, feedback);
 
                 // Добавление ключевых слов
             } else if (UserState.ADD_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, keywords)) return;
+                if (checkUserInput(chatId, keywords)) return null;
                 String[] words = keywords.split(",");
                 addKeyword(chatId, words);
 
                 // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
             } else if (UserState.DEL_KEYWORDS.equals(userState)) {
                 String keywords = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, keywords)) return;
+                if (checkUserInput(chatId, keywords)) return null;
                 deleteKeywords(keywords, chatId);
 
                 // Добавление слов-исключений
             } else if (UserState.ADD_EXCLUDED.equals(userState)) {
                 String exclude = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, exclude)) return;
+                if (checkUserInput(chatId, exclude)) return null;
                 String[] words = exclude.split(",");
                 addExclude(chatId, words);
                 getExcludedList(chatId);
@@ -139,7 +148,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 // Удаление слов-исключений
             } else if (UserState.DEL_EXCLUDED.equals(userState)) {
                 String excluded = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, excluded)) return;
+                if (checkUserInput(chatId, excluded)) return null;
                 String[] words = excluded.split(",");
                 delExcluded(chatId, words);
                 getExcludedList(chatId);
@@ -147,7 +156,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 // Удаление слов из показа в Топе
             } else if (UserState.DEL_TOP.equals(userState)) {
                 String text = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, text)) return;
+                if (checkUserInput(chatId, text)) return null;
                 String[] words = text.split(",");
                 topListDelete(chatId, words);
                 getTopTenWordsList(chatId);
@@ -484,6 +493,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             }
         }
+        return null;
     }
 
     // Пользователь нажимает кнопку добавления текста, но передумывает и нажимает на команду,
@@ -1792,5 +1802,4 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.error(Common.ERROR_TEXT + e.getMessage());
         }
     }
-
 }
