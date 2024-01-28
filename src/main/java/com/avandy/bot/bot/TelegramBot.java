@@ -164,15 +164,16 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else {
                 /* Основные команды */
                 switch (messageText) {
+                    case "/settings" -> new Thread(() -> getSettings(chatId)).start();
+                    case "/keywords" -> new Thread(() -> showKeywordsList(chatId)).start();
+                    case "/search" -> new Thread(() -> initSearchesKeyboard(chatId)).start();
+                    case "/info" ->  new Thread(() -> infoKeyboard(chatId)).start();
+                    // не использую в интерфейсе
                     case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
-                    case "/settings" -> getSettings(chatId);
-                    case "/search" -> initSearchesKeyboard(chatId);
-                    case "/info" -> infoKeyboard(chatId);
-                    case "/keywords" -> showKeywordsList(chatId);
                     case "/excluding" -> getExcludedList(chatId);
                     case "/delete" -> showYesNoOnDeleteUser(chatId);
-                    case "/top" -> showTop(chatId);
-                    case "/premium" -> showYesNoGetPremium(chatId);
+                    case "/top" -> new Thread(() -> showTop(chatId)).start();
+                    case "/premium" -> new Thread(() -> showYesNoGetPremium(chatId)).start();
                     default -> undefinedKeyboard(chatId);
                 }
             }
@@ -488,7 +489,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Пользователь нажимает кнопку добавления текста, но передумывает и нажимает на команду,
     // которая как слово добавляется в БД
     private boolean checkUserInput(long chatId, String text) {
-        log.warn(text);
 
         if (text.startsWith("/")) {
             userStates.remove(chatId);
