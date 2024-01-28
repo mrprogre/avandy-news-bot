@@ -810,12 +810,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void keywordsListKeyboard(long chatId, String text) {
-        Map<String, String> buttons = new LinkedHashMap<>();
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
 
-        buttons.put("DELETE_KEYWORD", delText);
-        buttons.put("ADD_KEYWORD", addText);
-        buttons.put("FIND_BY_KEYWORDS", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        buttons1.put("DELETE_KEYWORD", delText);
+        buttons1.put("ADD_KEYWORD", addText);
+        buttons2.put("SET_PERIOD", intervalText);
+        buttons2.put("FIND_BY_KEYWORDS", searchText);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }
 
     // Кнопки включения и выключения авто запуска автопоиска
