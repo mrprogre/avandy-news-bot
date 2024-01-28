@@ -1452,7 +1452,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Добавление настроек пользователя по умолчанию при его создании
-    private void addDefaultSettings(long chatId) {
+    private void addSettingsByDefault(long chatId) {
         Settings settings = new Settings();
         settings.setChatId(chatId);
         settings.setPeriod("1h");
@@ -1559,7 +1559,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             userRepository.save(user);
             log.warn(">>>  Добавлен новый пользователь: {}, {}, {}", user.getChatId(), user.getFirstName(),
                     user.getUserName());
-            addDefaultSettings(message.getChatId());
+            addSettingsByDefault(message.getChatId());
         } else if (userRepository.isActive(message.getChatId()) == 0) {
             userRepository.updateIsActive(1, message.getChatId());
             log.warn(">>> Пользователь снова активен: {}, {}, {}", user.getChatId(), user.getFirstName(),
