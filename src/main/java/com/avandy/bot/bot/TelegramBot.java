@@ -112,7 +112,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /* USER INPUT BLOCK */
             } else if (UserState.SEND_FEEDBACK.equals(userState)) {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
-                if (checkUserInput(chatId, feedback)) return;
+                if (checkUserInput(chatId, messageText)) return;
                 sendFeedback(chatId, feedback);
 
                 // Добавление ключевых слов
