@@ -20,9 +20,9 @@ select u.chat_id,
        rpad(s.scheduler, 3, ' ') || ' ' || rpad(s.excluded, 3, ' ') || ' ' || s.lang as "sch-exc",
        --s.start,
        string_agg(distinct k.keyword, ',' order by k.keyword)                        as keyword,
-       string_agg(distinct t.word, ',' order by t.word)                              as top,
-       string_agg(distinct e.word, ',' order by e.word)                              as excluding,
-       u.registered_at                                                               as reg,
+       count(t.word)                                                                 as top,
+       count(e.word)                                                                 as excluding,
+       u.registered_at::date                                                         as reg,
        start
 from users u
          left join settings s on u.chat_id = s.chat_id
@@ -30,7 +30,7 @@ from users u
          left join excluding_terms e on u.chat_id = e.chat_id
          left join top_excluded t on u.chat_id = t.chat_id
 where u.chat_id not in (1254981379 /* я */ /*,1020961767 /* Лена */, 6455565758 /* Вика */, 6128707071 /* Саша */*/)
-  --and u.chat_id = 1255366791
+--   and u.chat_id = 906152925
   and u.is_active = 1
 group by u.chat_id, u.first_name, s.period, s.period_all, s.scheduler, s.start, s.excluded, s.lang, s.period_top,
          u.is_active, u.registered_at

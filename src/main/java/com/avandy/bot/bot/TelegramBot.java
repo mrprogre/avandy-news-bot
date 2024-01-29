@@ -1335,15 +1335,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void topActionsKeyboard(long chatId, String text) {
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
-        Map<String, String> buttons3 = new LinkedHashMap<>();
 
         buttons1.put("LIST_TOP", excludedListText);
         buttons1.put("DEL_FROM_TOP", delFromTopText);
+        buttons1.put("GET_TOP", updateTopText);
+        buttons2.put("JARO_WINKLER_MODE", jaroWinklerText);
         buttons2.put("SET_PERIOD_TOP", intervalText);
-        buttons2.put("GET_TOP", updateTopText);
-        buttons3.put("JARO_WINKLER_MODE", jaroWinklerText);
-        buttons3.put("SEARCH_BY_TOP_WORD", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
+        buttons2.put("SEARCH_BY_TOP_WORD", searchText);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }
 
     // Кнопки со словами для быстрого поиска
