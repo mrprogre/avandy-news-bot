@@ -450,8 +450,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "TOP_DEL_20" -> topDelete(20, chatId);
 
                 case "TOP_INTERVAL_1" -> topUpdatePeriod(1, chatId);
+                case "TOP_INTERVAL_2" -> topUpdatePeriod(2, chatId);
                 case "TOP_INTERVAL_4" -> topUpdatePeriod(4, chatId);
-                case "TOP_INTERVAL_8" -> topUpdatePeriod(8, chatId);
                 case "TOP_INTERVAL_12" -> topUpdatePeriod(12, chatId);
                 case "TOP_INTERVAL_24" -> topUpdatePeriod(24, chatId);
                 case "TOP_INTERVAL_48" -> topUpdatePeriod(48, chatId);
@@ -1410,8 +1410,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void topPeriodsKeyboard(long chatId) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("TOP_INTERVAL_1", "1");
+        buttons.put("TOP_INTERVAL_2", "2");
         buttons.put("TOP_INTERVAL_4", "4");
-        buttons.put("TOP_INTERVAL_8", "8");
         buttons.put("TOP_INTERVAL_12", "12");
         buttons.put("TOP_INTERVAL_24", "24");
         buttons.put("TOP_INTERVAL_48", "48");
