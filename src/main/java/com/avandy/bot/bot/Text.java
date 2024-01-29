@@ -81,7 +81,7 @@ public class Text extends Common {
             addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
             delFromListText = "Укажите номера слов для удаления (разделять запятой)";
             removeAllText = "удалить всё";
-            sendMessageForDevText = "Написать сообщение разработчику (скриншот прилагать <b>как файл</b>, т.к. Telegram сильно сжимает фото)";
+            sendMessageForDevText = "Написать сообщение разработчику (просьба скриншот прилагать <b>как файл</b>, т.к. Telegram сильно сжимает фото)";
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";

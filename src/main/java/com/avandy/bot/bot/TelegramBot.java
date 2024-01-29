@@ -86,7 +86,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             // Отправка отзыва с приложением документа (скриншоты сильно сжимаются)
             if (UserState.SEND_FEEDBACK.equals(userStates.get(chatId))) {
                 if (update.getMessage().hasPhoto()) {
-                    sendFeedback(chatId, screenshotAsFileText);
+                    sendMessage(chatId, screenshotAsFileText);
                     return;
                 }
 
