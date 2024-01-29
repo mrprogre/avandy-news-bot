@@ -1336,11 +1336,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
 
+        buttons1.put("JARO_WINKLER_MODE", jaroWinklerText);
         buttons1.put("LIST_TOP", excludedListText);
-        buttons1.put("DEL_FROM_TOP", delFromTopText);
         buttons1.put("GET_TOP", updateTopText);
-        buttons2.put("JARO_WINKLER_MODE", jaroWinklerText);
+
         buttons2.put("SET_PERIOD_TOP", intervalText);
+        buttons2.put("DEL_FROM_TOP", delFromTopText);
         buttons2.put("SEARCH_BY_TOP_WORD", searchText);
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }
