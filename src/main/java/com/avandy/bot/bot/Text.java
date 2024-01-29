@@ -21,7 +21,8 @@ public class Text extends Common {
             wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchByKeywordsStartText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
-            premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2;
+            premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
+            screenshotAsFileText, sentText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -52,6 +53,7 @@ public class Text extends Common {
             undefinedCommandText = "Данная команда не существует, либо Вы не нажали кнопку перед вводом текста " +
                     ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Сохранено ✔️";
+            sentText = "Доставлено ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 2 символов и менее 18";
@@ -79,7 +81,7 @@ public class Text extends Common {
             addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
             delFromListText = "Укажите номера слов для удаления (разделять запятой)";
             removeAllText = "удалить всё";
-            sendMessageForDevText = "Напишите разработчику";
+            sendMessageForDevText = "Написать сообщение разработчику (скриншот прилагать <b>как файл</b>, т.к. Telegram сильно сжимает фото)";
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
@@ -102,7 +104,7 @@ public class Text extends Common {
             sendIdeaText = "Отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             searchByKeywordsStartText = "» ручной поиск по ключевым словам за " +
-                    Common.MANUAL_SEARCH_BY_KEYWORDS_PERIOD/60 + " часа";
+                    Common.MANUAL_SEARCH_BY_KEYWORDS_PERIOD / 60 + " часа";
             fullSearchStartText = "» поиск всех новостей";
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
@@ -151,7 +153,9 @@ public class Text extends Common {
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
+            screenshotAsFileText = "Просьба направить скриншот как файл!";
         } else {
+            screenshotAsFileText = "Please send the screenshot as a file!";
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
@@ -212,6 +216,7 @@ public class Text extends Common {
             undefinedCommandText = "This command doesn't exist or you did not click the button before entering text! " +
                     "However, I will see your message in the journal " + ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Done ✔️";
+            sentText = "Done ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 2 characters and less than 18";
@@ -242,7 +247,7 @@ public class Text extends Common {
             addInListText = "Input words to add (separated by comma) and send the message";
             delFromListText = "Input word numbers to remove (separated by comma)";
             removeAllText = "delete all";
-            sendMessageForDevText = "Write your feedback to the developer";
+            sendMessageForDevText = "Write a message to the developer (attach a screenshot <b>as a file</b>, since Telegram greatly compresses photos)";
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "News sources";

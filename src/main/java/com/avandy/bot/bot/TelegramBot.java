@@ -1,22 +1,24 @@
 package com.avandy.bot.bot;
 
 import com.avandy.bot.config.BotConfig;
+import com.avandy.bot.model.User;
 import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.search.Search;
 import com.avandy.bot.search.SearchService;
 import com.avandy.bot.utils.Common;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -24,6 +26,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -36,6 +42,8 @@ import static com.avandy.bot.bot.Text.*;
 @Slf4j
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
+    @Value("${bot.token}")
+    private String TOKEN;
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
     private final Map<Long, Integer> usersTopPage = new ConcurrentHashMap<>();
@@ -69,8 +77,26 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        // Проверка наличия не пустого сообщения
-        if (update.hasMessage() && update.getMessage().hasText()) {
+
+        // Отправка отзыва с приложением скриншота как документа
+        // Телеграм сильно сжимает фото и оно становится нечитаемым
+        if (update.hasMessage() && (update.getMessage().hasDocument() || update.getMessage().hasPhoto())) {
+            Long chatId = update.getMessage().getChatId();
+
+            // Отправка отзыва с приложением документа (скриншоты сильно сжимаются)
+            if (UserState.SEND_FEEDBACK.equals(userStates.get(chatId))) {
+                if (update.getMessage().hasPhoto()) {
+                    sendFeedback(chatId, screenshotAsFileText);
+                    return;
+                }
+
+                sendFeedbackWithDocument(update);
+                userStates.remove(chatId);
+                sendMessage(chatId, sentText);
+            }
+
+            // Основные команды бота
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
             String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
@@ -114,6 +140,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String feedback = messageText.substring(messageText.indexOf(" ") + 1);
                 if (checkUserInput(chatId, messageText)) return;
                 sendFeedback(chatId, feedback);
+                sendMessage(chatId, sentText);
 
                 // Добавление ключевых слов
             } else if (UserState.ADD_KEYWORDS.equals(userState)) {
@@ -167,7 +194,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "/settings" -> new Thread(() -> getSettings(chatId)).start();
                     case "/keywords" -> new Thread(() -> showKeywordsList(chatId)).start();
                     case "/search" -> new Thread(() -> initSearchesKeyboard(chatId)).start();
-                    case "/info" ->  new Thread(() -> infoKeyboard(chatId)).start();
+                    case "/info" -> new Thread(() -> infoKeyboard(chatId)).start();
                     // не использую в интерфейсе
                     case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
                     case "/excluding" -> getExcludedList(chatId);
@@ -1708,9 +1735,45 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Отправка сообщения разработчику
-    private void sendFeedback(long chatId, String text) {
-        String userName = userRepository.findNameByChatId(chatId);
-        sendMessage(1254981379, "<b>Message</b> from user: " + userName + ", id: " + chatId + "\n" + text);
+    private void sendFeedback(long chatIdFrom, String text) {
+        String userName = userRepository.findNameByChatId(chatIdFrom);
+        sendMessage(Common.DEV_ID, "Message from " + userName + ", " + chatIdFrom + ":\n" + text);
+    }
+
+    // Отправка сообщения разработчику с приложением скриншота как документа
+    private void sendFeedbackWithDocument(Update update) {
+        long chatIdFrom = update.getMessage().getChatId();
+        String userName = userRepository.findNameByChatId(chatIdFrom);
+        String caption = update.getMessage().getCaption();
+        if (caption == null) caption = "не удосужился..";
+
+        SendDocument sendDocument = new SendDocument();
+        sendDocument.setChatId(Common.DEV_ID);
+        sendDocument.setCaption("Message from " + userName + ", " + chatIdFrom + ":\n" + caption);
+
+        Document document = update.getMessage().getDocument();
+        if (document == null) return;
+        try {
+            String fileId = document.getFileId();
+            URL url = new URL("https://api.telegram.org/bot" + TOKEN + "/getFile?file_id=" + fileId);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            String res = in.readLine();
+            String filePath = new JSONObject(res).getJSONObject("result").getString("file_path");
+            String urlPhoto = "https://api.telegram.org/file/bot" + TOKEN + "/" + filePath;
+
+            URL url2 = new URL(urlPhoto);
+            BufferedImage img = ImageIO.read(url2);
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(img, "png", os);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+
+            sendDocument.setDocument(new InputFile(is, "screen.png"));
+            execute(sendDocument);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     // Преобразование on/off в русские слова
