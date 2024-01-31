@@ -29,7 +29,7 @@ public class Search implements SearchService {
     public static ArrayList<Headline> headlinesTopTen;
 
     @Override
-    public Set<Headline> start(Long chatId, String searchType) {
+    public LinkedList<Headline> start(Long chatId, String searchType) {
         boolean isAllSearch = searchType.equals("all");
         boolean isKeywordAutoSearch = searchType.equals("keywords");
         boolean isKeywordSearchManual = searchType.equals("keywords-manual");
@@ -195,7 +195,7 @@ public class Search implements SearchService {
             }
         }
 
-        return headlinesToShow;
+        return new LinkedList<>(headlinesToShow);
     }
 
     @Override

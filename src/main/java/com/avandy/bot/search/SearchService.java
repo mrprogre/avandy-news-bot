@@ -2,10 +2,10 @@ package com.avandy.bot.search;
 
 import com.avandy.bot.model.Headline;
 
-import java.util.Set;
+import java.util.LinkedList;
 
 public interface SearchService {
-    Set<Headline> start(Long chatId, String searchType);
+    LinkedList<Headline> start(Long chatId, String searchType);
 
     int downloadNewsByRome();
 

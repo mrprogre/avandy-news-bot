@@ -48,6 +48,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
     private final Map<Long, Integer> usersTopPage = new ConcurrentHashMap<>();
     private final Map<Long, Integer> usersExclTermsPage = new ConcurrentHashMap<>();
+    private final Map<Long, List<Headline>> newsListDataForPages = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> newsListMessageId = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> newsListCounter = new ConcurrentHashMap<>();
     private final SearchService searchService;
     private final BotConfig config;
     private final RssRepository rssRepository;
@@ -57,6 +60,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final SettingsRepository settingsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
     private final int offset = 60;
+    private final int searchOffset = 5;
     private final String delimiter = " : ";
 
     @Autowired
@@ -102,6 +106,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
             usersTopPage.putIfAbsent(chatId, 0);
             usersExclTermsPage.putIfAbsent(chatId, 0);
+            newsListCounter.putIfAbsent(chatId, 0);
 
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             UserState userState = userStates.get(chatId);
@@ -187,7 +192,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 new Thread(() -> showTop(chatId)).start();
 
             } else if (messageText.equals(fullSearchText)) {
-                new Thread(() -> fullSearch(chatId)).start();
+                new Thread(() -> fullSearchPage(chatId)).start();
             } else {
                 /* Основные команды */
                 switch (messageText) {
@@ -211,11 +216,16 @@ public class TelegramBot extends TelegramLongPollingBot {
             String callbackData = update.getCallbackQuery().getData();
             Long chatId = update.getCallbackQuery().getMessage().getChatId();
             Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
+            newsListMessageId.put(chatId, messageId);
             setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
             usersTopPage.putIfAbsent(chatId, 0);
             usersExclTermsPage.putIfAbsent(chatId, 0);
+            newsListCounter.putIfAbsent(chatId, 0);
 
             switch (callbackData) {
+
+                case "NEXT_NEWS" -> getNewsListPage(chatId,  searchOffset);
+                case "BEFORE_NEWS" -> getNewsListPage(chatId, -searchOffset);
 
                 case "FIRST_EXCL_PAGE" -> {
                     usersExclTermsPage.put(chatId, 0);
@@ -323,7 +333,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "START_SEARCH", "DELETE_NO", "NO_PREMIUM" -> initSearchesKeyboard(chatId);
 
                 /* FULL SEARCH */
-                case "FIND_ALL" -> new Thread(() -> fullSearch(chatId)).start();
+                case "FIND_ALL" -> new Thread(() -> fullSearchPage(chatId)).start();
 
                 /* EXCLUDED */
                 case "LIST_EXCLUDED" -> getExcludedList(chatId);
@@ -554,7 +564,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         getReplyKeyboard(chatId, searchByKeywordsStartText, "");
 
         // Search
-        Set<Headline> headlines = searchService.start(chatId, "keywords-manual");
+        List<Headline> headlines = searchService.start(chatId, "keywords-manual");
 
         int showCounter = 1;
         int counterParts = 1;
@@ -615,7 +625,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         // Search
-        Set<Headline> headlines = searchService.start(chatId, "keywords");
+        List<Headline> headlines = searchService.start(chatId, "keywords");
 
         int counterParts = 1;
         int showAllCounter = 1;
@@ -893,10 +903,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
-
     /* FULL SEARCH */
     // Полный поиск
-    private void fullSearch(long chatId) {
+    private void fullSearchPage(long chatId) {
+        newsListCounter.put(chatId, 0);
+
         // DEBUG
         if (Common.DEV_ID != chatId) {
             log.warn("{}: Запуск полного поиска", chatId);
@@ -905,49 +916,33 @@ public class TelegramBot extends TelegramLongPollingBot {
         getReplyKeyboard(chatId, fullSearchStartText, "");
         //sendMessage(chatId, fullSearchStartText);
 
-        Set<Headline> headlines = searchService.start(chatId, "all");
+        // Поиск и заполнение коллекции
+        List<Headline> headlines = searchService.start(chatId, "all");
+        // Делаем лист, чтобы можно было применять sublist (Set менять на List нельзя, т.к. сортировка объектов по дате)
+        newsListDataForPages.put(chatId, headlines);
 
         int counterParts = 1;
-        int showAllCounter = 1;
         if (headlines.size() > 0) {
+            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+            for (Headline headline : newsListDataForPages.get(chatId)) {
 
-            if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
-                // 10 message in 1
-                StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
-                for (Headline headline : headlines) {
+                joiner.add("<b>" + headline.getSource() + "</b> [" +
+                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() + " " +
+                        "<a href=\"" + headline.getLink() + "\">link</a>");
 
-                    joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
-                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                            headline.getTitle() + " " +
-                            "<a href=\"" + headline.getLink() + "\">link</a>");
-
-                    if (counterParts == 10) {
-                        sendMessage(chatId, String.valueOf(joiner));
-                        joiner = new StringJoiner("\n- - - - - -\n");
-                        counterParts = 0;
-                    }
-                    counterParts++;
-                }
-
-
-                if (counterParts != 0) {
-                    sendMessage(chatId, String.valueOf(joiner));
-                }
-            } else {
-                for (Headline headline : headlines) {
-
-                    sendMessage(chatId, showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
-                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                            headline.getTitle() + " " +
-                            "<a href=\"" + headline.getLink() + "\">link</a>");
-                }
+                if (counterParts++ == 5) break;
             }
 
-            afterFullSearchKeyboard(chatId, foundNewsText + " <b>" + headlines.size() + "</b> (" +
-                    excludedNewsText + " <b>" + (Search.totalNewsCounter - headlines.size()) + "</b>) " +
-                    Common.ICON_NEWS_FOUNDED);
+            if (counterParts != 0) {
+                sendMessage(chatId, foundNewsText + " <b>" + headlines.size() + "</b> (" +
+                        excludedNewsText + " <b>" + (Search.totalNewsCounter - headlines.size()) + "</b>) " +
+                        Common.ICON_NEWS_FOUNDED);
+            }
+
+            afterFullSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
         } else {
-            afterFullSearchKeyboard(chatId, headlinesNotFound);
+            afterFullSearchKeyboard(chatId, headlinesNotFound, 0);
         }
     }
 
@@ -973,14 +968,30 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Кнопки после итогов полного поиска
-    private void afterFullSearchKeyboard(long chatId, String text) {
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("SET_PERIOD_ALL", intervalText);
-        buttons.put("ADD_EXCLUDED", excludeWordText);
-        buttons.put("FIND_ALL", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
-    }
+    private InlineKeyboardMarkup afterFullSearchKeyboard(long chatId, String text, int wordsCount) {
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
 
+        int i = newsListCounter.get(chatId) + searchOffset + 1;
+
+        buttons1.put("SET_PERIOD_ALL", intervalText);
+        buttons1.put("ADD_EXCLUDED", excludeWordText);
+        buttons1.put("FIND_ALL", searchText);
+
+        if (wordsCount > searchOffset) {
+            buttons2.put("BEFORE_NEWS", "«");
+            buttons2.put("TOTAL_NEWS", (int) Math.ceil((double) (i - 1) / searchOffset) + delimiter +
+                    (int) Math.ceil((double) wordsCount / searchOffset));
+            buttons2.put("NEXT_NEWS", "»");
+        }
+
+        if (!text.isBlank()) {
+            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+            return null;
+        }
+
+        return InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null);
+    }
 
     /* EXCLUDING TERMS */
     // Список слов-исключений (/excluding)
@@ -1213,7 +1224,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 
-        Set<Headline> headlines = searchService.start(chatId, word);
+        List<Headline> headlines = searchService.start(chatId, word);
 
         int showCounter = 1;
         if (headlines.size() > 0) {
@@ -1297,9 +1308,69 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    private void getNewsListPage(Long chatId, int plusMinus) {
+        List<Headline> headlines = newsListDataForPages.get(chatId);
+        Integer messageId = newsListMessageId.get(chatId);
+
+        Integer i = newsListCounter.get(chatId);
+        i += plusMinus;
+        newsListCounter.put(chatId, i);
+
+        int current = newsListCounter.get(chatId);
+        if (current >= headlines.size()) {
+            current = current - searchOffset;
+        }
+
+        int next = newsListCounter.get(chatId) + searchOffset;
+
+        if (current < 0) {
+            current = 0;
+            next = 5;
+            newsListCounter.put(chatId, 0);
+        }
+
+        if (next >= headlines.size()) {
+            next = headlines.size();
+            newsListCounter.put(chatId, current);
+        }
+
+        //log.warn("current: " + current + ", next: " + next + ", listNewsPageCounter: " + newsListCounter.get(chatId));
+
+        int counterParts = 1;
+        StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+
+        if (headlines.size() > 0) {
+            for (Headline headline : headlines.subList(current, next)) {
+                joiner.add("<b>" + headline.getSource() + "</b> [" +
+                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() + " " +
+                        "<a href=\"" + headline.getLink() + "\">link</a>");
+
+                if (counterParts++ > 5) break;
+            }
+        }
+
+        EditMessageText editOptions = new EditMessageText();
+        editOptions.setChatId(chatId);
+        editOptions.setMessageId(messageId);
+        editOptions.setText(String.valueOf(joiner));
+        editOptions.enableHtml(true);
+        editOptions.disableWebPagePreview();
+        editOptions.setReplyMarkup(afterFullSearchKeyboard(chatId, "", headlines.size()));
+
+        try {
+            execute(editOptions);
+        } catch (TelegramApiException e) {
+            if (e.getMessage().contains("message is not modified")) {
+                log.debug("[400] Bad Request: message is not modified");
+            } else {
+                log.error(e.getMessage());
+            }
+        }
+    }
+
     // Меняющееся сообщение со списками слов из Топа по страницам
-    private void getExcludedWordsPage(Long chatId, Integer messageId, Collection<String> items,
-                                      List<String> words, String title) {
+    private void getExcludedWordsPage(Long chatId, Integer msg, Collection<String> items, List<String> words, String title) {
         String text = "<b>" + title + "</b> [" + items.size() + "]\n" +
                 words.stream()
                         .toList()
@@ -1309,7 +1380,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         EditMessageText editOptions = new EditMessageText();
         editOptions.setChatId(chatId);
-        editOptions.setMessageId(messageId);
+        editOptions.setMessageId(msg);
         editOptions.setText(text);
         editOptions.enableHtml(true);
 
