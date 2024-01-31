@@ -8,7 +8,7 @@ from news_list n
          join showed_news s
               on n.title_hash = s.title_hash
          join users u on s.chat_id = u.chat_id
-where n.add_date >= '2024-01-25 00:00:00'::timestamp
+where n.add_date >= current_date
 group by s.chat_id, u.user_name, u.first_name, type
 order by type desc, cnt desc;
 
@@ -40,8 +40,8 @@ order by u.registered_at desc;
 select source, title, pub_date::time, n.add_date::time, extract(minute from (n.pub_date - n.add_date)) as "pub-add"
 from news_list n
          join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 1255366791
-where n.add_date >= '2024-01-25 00:00:00'::timestamp
+              on n.title_hash = s.title_hash and s.chat_id = 220605449
+where n.add_date >= current_date - 1
 order by n.id desc;
 
 -- Rows count
