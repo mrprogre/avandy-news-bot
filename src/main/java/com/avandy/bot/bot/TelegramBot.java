@@ -1489,7 +1489,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!text.isBlank()) {
-            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+            Integer messageId = sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+            newsListTopSearchMessageId.put(chatId, messageId);
             return null;
         }
 
@@ -1812,15 +1813,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Отправка сообщения с дополнительной клавиатурой где три вида поиска на старте
-    private void sendMessage(long chatId, String textToSend, ReplyKeyboard keyboard) {
+    private Integer sendMessage(long chatId, String textToSend, ReplyKeyboard keyboard) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         if (textToSend != null) message.setText(textToSend);
-        else return;
+        else return -1;
         message.enableHtml(true);
         message.disableWebPagePreview();
         if (keyboard != null) message.setReplyMarkup(keyboard);
-        executeMessage(message);
+        return executeMessage(message);
     }
 
     // Отправка сообщения с включённым превью, т.е. если в сообщении есть ссылка, то покажет обложку новости
@@ -1835,9 +1836,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Механизм отправки сообщений
-    private void executeMessage(SendMessage message) {
+    private Integer executeMessage(SendMessage message) {
         try {
-            execute(message);
+            Message execute = execute(message);
 
             // Предупреждение выброса исключения, что много сообщений в секунду
             try {
@@ -1845,6 +1846,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             } catch (InterruptedException e) {
                 log.error(e.getMessage());
             }
+
+            return execute.getMessageId();
 
         } catch (TelegramApiException e) {
             if (e.getMessage().contains("bot was blocked by the user")) {
@@ -1855,6 +1858,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 log.warn(e.getMessage() + String.format("[chat_id: %s]", message.getChatId()));
             }
         }
+        return null;
     }
 
     // Отправка сообщения разработчику
