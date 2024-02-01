@@ -33,7 +33,8 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     String getPremiumSearchByChatId(long chatId);
 
     @Query(value = "select s.* from settings s join users u on s.chat_id = u.chat_id " +
-            "where s.scheduler = 'on' and (u.is_premium = 0 or (u.is_premium = 1 and s.premium_search = 'off'))", nativeQuery = true)
+            "where u.is_active = 1 and s.scheduler = 'on' " +
+            "and (u.is_premium = 0 or (u.is_premium = 1 and s.premium_search = 'off'))", nativeQuery = true)
     List<Settings> findAllSchedulerOn();
 
     @Query(value = "select s.* from settings s join users u on s.chat_id = u.chat_id " +
