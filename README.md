@@ -17,16 +17,11 @@ https://t.me/AvandyNewsBot
 
 **/top** (Show top)        - top 20 words in headlines for the period (list, adding, deleting, fast search)
 
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/4854cb60-a8ff-4513-8035-be356837a8ea)
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/71781f7a-2654-4384-b1c0-4d6ca6c19a9a)
-![image](https://github.com/mrprogre/avandy-news-bot/assets/45883640/2ae35bd1-647a-43c9-9c98-8562886931c1)
+![1](https://github.com/mrprogre/avandy-news-bot/assets/45883640/e65d787a-cdd4-4a05-97df-1bd82d871910)
 
-Word endings **off**
+Word endings **off** vs. **on**
 
 ![1](https://github.com/mrprogre/avandy-news-bot/assets/45883640/219d43d5-23ff-45eb-8296-963fecd40928)
-
-Word endings **on**
-
 ![2](https://github.com/mrprogre/avandy-news-bot/assets/45883640/064f01fd-b336-45a1-965b-5a901c182347)
 
 **/settings**   - setting search intervals and enabling auto search
