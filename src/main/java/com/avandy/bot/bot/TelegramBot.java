@@ -960,7 +960,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void getNewsListPage(Long chatId, int plusMinus, int messageId) {
         newsListFullSearchMessageId.putIfAbsent(chatId, messageId);
         List<Headline> headlines = newsListFullSearchData.get(chatId);
-        if (headlines.size() == 0) return;
+        if (headlines == null) return;
         messageId = newsListFullSearchMessageId.get(chatId);
 
         Integer i = newsListFullSearchCounter.get(chatId);
@@ -1194,7 +1194,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Меняющееся сообщение со всеми новостями по страницам
     private void getNewsListTopPage(Long chatId, int plusMinus, int messageId) {
         List<Headline> headlines = newsListTopSearchData.get(chatId);
-        if (headlines.size() == 0) return;
+        if (headlines == null) return;
 
 //        newsListTopSearchMessageId.put(chatId, messageId);
 //        messageId = newsListTopSearchMessageId.get(chatId);
