@@ -5,6 +5,7 @@ import com.avandy.bot.utils.Common;
 import com.vdurmont.emoji.EmojiParser;
 
 public class Text extends Common {
+    private static final String delimiterNews = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
     public static String
             greetingText, letsStartText, noText, yesText, infoText, settingText, listKeywordsText, findSelectText,
             top20Text, top20Text2, listExcludedText, deleteUserText, addText, delText, excludeWordText, searchText,
@@ -131,25 +132,25 @@ public class Text extends Common {
             premiumIsActive4 = "Максимальное количество ключевых слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             yesButtonText = """
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Автопоиск новостей производится по полному совпадению с ключевым словом (запуск 1 раз в час по умолчанию).
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Однако, можно использовать символ *, который обозначает одну любую букву в слове.
                       <b>курс</b> найдёт: курс
                       <b>курс*</b> найдёт: курс, курсА
                       <b>курс**</b> найдёт: курс, курсА, курсОМ
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Нажми кнопку "Добавить".""";
             listKeywordsText = """
                     <b>Ключевые слова</b>
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Автопоиск %s
                     Запуск поиска раз в %s
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     <b>курс</b> найдёт: курс
                     <b>курс*</b> найдёт: курс, курсА
                     <b>курс**</b> найдёт: курс, курсА, курсОМ
-                    - - - - - -""";
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -""";
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
@@ -161,22 +162,22 @@ public class Text extends Common {
             inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
             listKeywordsText = """
                     <b>Keywords</b>
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Auto search %s
                     The search runs every <b>%s</b>
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     <b>tax</b> will find all news only with <b>tax</b>
                     <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
-                    - - - - - -""";
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -""";
             yesButtonText = """
                     The first thing to do is add <b>keywords</b>.
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Automatic news search is performed based on a complete match with a keyword (runs once an hour by default).
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     However you can use the * symbol:
                     1. <b>tax</b> will find all news only with <b>tax</b> but not <b>taxes, taxcom</b>.
                     2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
-                    - - - - - -
+                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     Click the "Add" button.""";
             premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive3 = "Adding more than " + MAX_KEYWORDS_COUNT + " is possible in <b>Premium</b> mode";
@@ -298,7 +299,7 @@ public class Text extends Common {
                     default ->
                             " (часы запуска: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n<b>5. Старт</b> автопоиска: <b>" + settings.getStart() + "</b>" + text;
+                schedSettings = delimiterNews + "\n<b>5. Старт</b> автопоиска: <b>" + settings.getStart() + "</b>" + text;
             }
 
             if (isPremium == 1) {
@@ -306,7 +307,7 @@ public class Text extends Common {
                 premiumPeriod = "<b>" + period + "</b>, " + premiumIsActive;
                 premiumMessage = "";
                 String rus = settings.getPremiumSearch().equals("on") ? "<b>вкл [on]</b>" : "<b>выкл [off]</b>";
-                premiumSettings = "- - - - - -\n<b>5. Премиум поиск:</b> " + rus + "\n" +
+                premiumSettings = delimiterNews + "\n<b>5. Премиум поиск:</b> " + rus + "\n" +
                         "Включить или выключить автопоиск каждые 2 минуты (будет запускаться в соответствии с п.2)\n";
             } else {
                 premiumPeriod = settings.getPeriod();
@@ -316,19 +317,19 @@ public class Text extends Common {
             return "<b>Настройки</b> " + ICON_SETTINGS + " \n" +
                     "<b>1. Автопоиск: " + settings.getScheduler() + "</b>\n" +
                     "Автоматический запуск поиска по <b>ключевым словам</b>\n" +
-                    "- - - - - -\n" +
+                    delimiterNews + "\n" +
                     "<b>2. Частота автопоиска:</b> " + premiumPeriod + "\n" +
                     "Глубина поиска совпадает с частотой и равна текущему времени минус <b>" + settings.getPeriod() + "</b>" +
                     premiumMessage + "\n" +
-                    "- - - - - -\n" +
+                    delimiterNews + "\n" +
                     "<b>3. Исключение</b>: <b>" + settings.getExcluded() + "</b>\n" +
                     "Исключение новостей, которые содержат слова-исключения\n" +
-                    "- - - - - -\n" +
+                    delimiterNews + "\n" +
                     "<b>4. Глубина полного поиска</b>\n" +
                     "Глубина равна текущему времени минус <b>" + settings.getPeriodAll() + "</b>\n" +
                     schedSettings +
                     premiumSettings +
-                    "- - - - - -\n" +
+                    delimiterNews + "\n" +
                     "Параметры меняются после нажатия на кнопки";
         } else {
             String schedSettings = "";
@@ -341,14 +342,14 @@ public class Text extends Common {
                     default ->
                             " (start time: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = "- - - - - -\n" + "<b>5. Start</b> auto search by keywords: <b>" + settings.getStart() + "</b>" + text;
+                schedSettings = delimiterNews + "\n" + "<b>5. Start</b> auto search by keywords: <b>" + settings.getStart() + "</b>" + text;
             }
 
             if (isPremium == 1) {
                 String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
                 premiumPeriod = "<b>" + period + "</b>, " + premiumIsActive;
                 premiumMessage = "";
-                premiumSettings = "- - - - - -\n<b>5. Premium search: " + settings.getPremiumSearch() + "</b>\n" +
+                premiumSettings = delimiterNews + "\n<b>5. Premium search: " + settings.getPremiumSearch() + "</b>\n" +
                         "Enable or disable auto search every 2 minutes (will be launched in accordance with step 2)\n";
             } else {
                 premiumPeriod = settings.getPeriod();
@@ -358,18 +359,18 @@ public class Text extends Common {
             return "<b>Settings</b> " + ICON_SETTINGS + " \n" +
                     "<b>1. Auto search: " + settings.getScheduler() + "</b>\n" +
                     "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
-                    "- - - - - -\n" +
+                    delimiterNews + "\n" +
                     "<b>2. Auto search frequency: " + premiumPeriod + "</b>\n" +
                     "The search period coincides with the search frequency and is equal to the current time minus <b>" + settings.getPeriod() + "</b>" +
                     premiumMessage + "\n" +
-                    "- - - - - -\n" +
+                    delimiterNews + "\n" +
                     "<b>3. Excluding</b>: <b>" + settings.getExcluded() + "</b>\n" +
                     "Excluding news that contains excluding terms\n" +
-                    "- - - - - -\n" +
+                    delimiterNews + "\n" +
                     "<b>4. Full search interval: " + settings.getPeriodAll() + "</b>\n" +
                     schedSettings +
                     premiumSettings +
-                    "- - - - - -\n" +
+                    delimiterNews + "\n" +
                     "Parameters change after pressing buttons";
         }
     }

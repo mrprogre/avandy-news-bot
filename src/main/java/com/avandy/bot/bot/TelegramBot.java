@@ -64,8 +64,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final ExcludingTermsRepository excludingTermsRepository;
     private final int offset = 60;
     private final int searchOffset = 5;
-    private final int topSearchOffset = 5;
-    private final String delimiter = " : ";
+    private final int topSearchOffset = 3;
+    private final String delimiterPages = " : ";
+    private final String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+
 
     @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
@@ -582,7 +584,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
                 // 10 message in 1
-                StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+                StringJoiner joiner = new StringJoiner(delimiterNews);
 
                 for (Headline headline : headlines) {
                     joiner.add(showCounter++ + ". " + "<b>" + headline.getSource() + "</b> [" +
@@ -592,7 +594,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     if (counterParts == 10) {
                         sendMessage(chatId, String.valueOf(joiner));
-                        joiner = new StringJoiner("\n- - - - - -\n");
+                        joiner = new StringJoiner(delimiterNews);
                         counterParts = 0;
                     }
                     counterParts++;
@@ -643,7 +645,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
                 // 10 message in 1
-                StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+                StringJoiner joiner = new StringJoiner(delimiterNews);
 
                 for (Headline headline : headlines) {
                     joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
@@ -653,7 +655,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     if (counterParts == 10) {
                         sendMessage(chatId, String.valueOf(joiner));
-                        joiner = new StringJoiner("\n- - - - - -\n");
+                        joiner = new StringJoiner(delimiterNews);
                         counterParts = 0;
                     }
                     counterParts++;
@@ -931,7 +933,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int counterParts = 1;
         if (headlines.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+            StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListFullSearchData.get(chatId)) {
 
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
@@ -939,7 +941,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>");
 
-                if (counterParts++ == 5) break;
+                if (counterParts++ == searchOffset) break;
             }
 
             if (counterParts != 0) {
@@ -956,7 +958,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Меняющееся сообщение со всеми новостями по страницам
     private void getNewsListPage(Long chatId, int plusMinus, int messageId) {
-        newsListFullSearchMessageId.put(chatId, messageId);
+        newsListFullSearchMessageId.putIfAbsent(chatId, messageId);
         List<Headline> headlines = newsListFullSearchData.get(chatId);
         if (headlines.size() == 0) return;
         messageId = newsListFullSearchMessageId.get(chatId);
@@ -974,7 +976,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (current < 0) {
             current = 0;
-            next = 5;
+            next = searchOffset;
             newsListFullSearchCounter.put(chatId, 0);
         }
 
@@ -985,7 +987,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int counterParts = 1;
 
-        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts);
+        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts, searchOffset);
         getEditMessage(chatId, messageId, joiner, afterFullSearchKeyboard(chatId, "", headlines.size()));
     }
 
@@ -1106,7 +1108,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (wordsCount > searchOffset) {
             buttons2.put("BEFORE_NEWS", "« «");
-            buttons2.put("TOTAL_NEWS", (int) Math.ceil((double) (i - 1) / searchOffset) + delimiter +
+            buttons2.put("TOTAL_NEWS", (int) Math.ceil((double) (i - 1) / searchOffset) + delimiterPages +
                     (int) Math.ceil((double) wordsCount / searchOffset));
             buttons2.put("NEXT_NEWS", "» »");
         }
@@ -1141,7 +1143,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > offset) {
             buttons2.put("FIRST_EXCL_PAGE", "««");
             buttons2.put("BEFORE_EXCL_PAGE", "«");
-            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1) / offset) + delimiter +
+            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1) / offset) + delimiterPages +
                     (int) Math.ceil((double) wordsCount / offset));
             buttons2.put("NEXT_EXCL_PAGE", "»");
             buttons2.put("LAST_EXCL_PAGE", "»»");
@@ -1191,7 +1193,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Меняющееся сообщение со всеми новостями по страницам
     private void getNewsListTopPage(Long chatId, int plusMinus, int messageId) {
-        newsListTopSearchMessageId.put(chatId, messageId);
+        newsListTopSearchMessageId.putIfAbsent(chatId, messageId);
         List<Headline> headlines = newsListTopSearchData.get(chatId);
         if (headlines.size() == 0) return;
         messageId = newsListTopSearchMessageId.get(chatId);
@@ -1209,7 +1211,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (current < 0) {
             current = 0;
-            next = 5;
+            next = topSearchOffset;
             newsListTopSearchCounter.put(chatId, 0);
         }
 
@@ -1220,7 +1222,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int counterParts = 1;
 
-        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts);
+        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts, topSearchOffset);
         getEditMessage(chatId, messageId, joiner, afterTopSearchKeyboard(chatId, "", headlines.size()));
     }
 
@@ -1308,7 +1310,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int counterParts = 1;
         if (headlines.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+            StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListTopSearchData.get(chatId)) {
 
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
@@ -1316,11 +1318,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>");
 
-                if (counterParts++ == 5) break;
+                if (counterParts++ == topSearchOffset) break;
             }
 
             if (counterParts != 0) {
-                afterTopSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
+                Integer id = newsListTopSearchMessageId.get(chatId);
+                if (id == null) {
+                    afterTopSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
+                } else {
+                    getNewsListTopPage(chatId, 0, id);
+                }
             }
 
             //topSearchKeyboard(chatId);
@@ -1476,7 +1483,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (wordsCount > topSearchOffset) {
             buttons.put("BEFORE_TOP", "« «");
-            buttons.put("TOTAL_TOP", (int) Math.ceil((double) (i - 1) / topSearchOffset) + delimiter +
+            buttons.put("TOTAL_TOP", (int) Math.ceil((double) (i - 1) / topSearchOffset) + delimiterPages +
                    (int) Math.ceil((double) wordsCount / topSearchOffset));
             buttons.put("NEXT_TOP", "» »");
         }
@@ -1550,7 +1557,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > offset) {
             buttons2.put("FIRST_TOP_PAGE", "««");
             buttons2.put("BEFORE_TOP_PAGE", "«");
-            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1) / offset) + delimiter +
+            buttons2.put("TOP_PAGE", (int) Math.ceil((double) (i - 1) / offset) + delimiterPages +
                     (int) Math.ceil((double) wordsCount / offset));
             buttons2.put("NEXT_TOP_PAGE", "»");
             buttons2.put("LAST_TOP_PAGE", "»»");
@@ -1765,13 +1772,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 removedFromTopText);
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
-                "\n- - - - - -\n" +
+                delimiterNews +
                 keywordsText +
-                "\n- - - - - -\n" +
+                delimiterNews +
                 fullText +
-                "\n- - - - - -\n" +
-                topText +
-                "\n- - - - - -";
+                delimiterNews +
+                topText;
 
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
@@ -1955,8 +1961,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Текст новостей для пагинации
-    private static StringJoiner getHeadlinesText(List<Headline> headlines, int current, int next, int counterParts) {
-        StringJoiner joiner = new StringJoiner("\n- - - - - -\n");
+    private StringJoiner getHeadlinesText(List<Headline> headlines, int current, int next, int counterParts, int offset) {
+        StringJoiner joiner = new StringJoiner(delimiterNews);
         if (headlines.size() > 0) {
             for (Headline headline : headlines.subList(current, next)) {
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
@@ -1964,7 +1970,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         headline.getTitle() + " " +
                         "<a href=\"" + headline.getLink() + "\">link</a>");
 
-                if (counterParts++ > 5) break;
+                if (counterParts++ > offset) break;
             }
         }
         return joiner;
