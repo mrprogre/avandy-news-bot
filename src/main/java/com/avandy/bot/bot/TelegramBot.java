@@ -53,7 +53,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, Integer> newsListFullSearchMessageId = new ConcurrentHashMap<>();
     private final Map<Long, List<Headline>> newsListTopSearchData = new ConcurrentHashMap<>();
     private final Map<Long, Integer> newsListTopSearchCounter = new ConcurrentHashMap<>();
-    private final Map<Long, Integer> newsListTopSearchMessageId = new ConcurrentHashMap<>();
+    private Map<Long, Integer> newsListTopSearchMessageId = new ConcurrentHashMap<>();
     private final SearchService searchService;
     private final BotConfig config;
     private final RssRepository rssRepository;
@@ -1193,10 +1193,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Меняющееся сообщение со всеми новостями по страницам
     private void getNewsListTopPage(Long chatId, int plusMinus, int messageId) {
-        newsListTopSearchMessageId.putIfAbsent(chatId, messageId);
         List<Headline> headlines = newsListTopSearchData.get(chatId);
         if (headlines.size() == 0) return;
-        messageId = newsListTopSearchMessageId.get(chatId);
+
+//        newsListTopSearchMessageId.put(chatId, messageId);
+//        messageId = newsListTopSearchMessageId.get(chatId);
 
         Integer i = newsListTopSearchCounter.get(chatId);
         i += plusMinus;
@@ -1473,6 +1474,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 buttons5.put("TOP_NUM_" + x++, s);
         }
         sendMessage(chatId, chooseNumberWordFromTop, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
+        newsListTopSearchMessageId = new ConcurrentHashMap<>();
     }
 
     // Кнопки поиска по слову в Топ с кнопками пагинации
