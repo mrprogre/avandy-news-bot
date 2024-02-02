@@ -44,9 +44,8 @@ where n.add_date >= (current_timestamp - cast('2 hours' as interval))
 order by n.id desc;
 
 -- Rows count
--- 05.01.2024: 2747,  25, 25470, 5291, 205, 9
--- 23.01.2024: 2966, 101, 49180, 4199, 379, 42
--- 28.01.2024: 3054, 146, 69538, 1309, 419, 46
+-- 01.01.2024: 2747,  25, 25470, 5291, 205, 9
+-- 01.02.2024: 3150, 150, 97957, 2650, 441, 49 + 1 покупка
 select (select count(*) from excluding_terms) as excluded,
        (select count(*) from keywords)        as keywords,
        (select count(*) from news_list)       as news_list,
@@ -73,10 +72,12 @@ FROM news_list
 WHERE pub_date > (current_timestamp - cast('6 hours' as interval));
 
 -- Очистить full search
+--select count(*)
 delete
 from showed_news
 where chat_id = 1254981379
-  and type = 4;
+  and type = 4
+;
 
 -- топ ключевых слов по всем пользователям
 select keyword, count(keyword) cnt

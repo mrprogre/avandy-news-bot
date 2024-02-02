@@ -1889,11 +1889,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             Message execute = execute(message);
 
             // Предупреждение выброса исключения, что много сообщений в секунду
-            try {
-                Thread.sleep(Common.SLEEP_BETWEEN_SENDING_MESSAGES);
-            } catch (InterruptedException e) {
-                log.error(e.getMessage());
-            }
+//            try {
+//                Thread.sleep(Common.SLEEP_BETWEEN_SENDING_MESSAGES);
+//            } catch (InterruptedException e) {
+//                log.error(e.getMessage());
+//            }
 
             return execute.getMessageId();
 
