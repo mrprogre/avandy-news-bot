@@ -671,7 +671,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int showAllCounter = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Автопоиск: {}, {}, найдено {} за {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
+            log.info("Автопоиск: {}, {}, найдено {} за {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
 
             if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
                 // 10 message in 1
