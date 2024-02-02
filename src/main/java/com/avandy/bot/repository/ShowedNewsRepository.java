@@ -7,11 +7,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface ShowedNewsRepository extends JpaRepository<ShowedNews, Long> {
-
-    @Query(value = "select title_hash from showed_news where chat_id = :chatId", nativeQuery = true)
-    List<String> findShowedNewsHashByChatId(Long chatId);
 
     @Transactional
     @Modifying(clearAutomatically = true)
@@ -19,5 +17,19 @@ public interface ShowedNewsRepository extends JpaRepository<ShowedNews, Long> {
             "(type = 2 and add_date < (current_timestamp - cast('72 hours' as interval))) or" +
             "(type = 4 and add_date < (current_timestamp - cast('24 hours' as interval)))", nativeQuery = true)
     int deleteOldNews();
+
+    // Получить массив из 2 значений
+    @Query(value = "select title_hash, type from showed_news where chat_id = :chatId", nativeQuery = true)
+    Stream<Object[]> findShowedNewsHashByChatId(Long chatId);
+
+    // Объединяем полученные ранее значения в строки
+    @Transactional
+    default List<String> findHashAndType(Long chatId) {
+        return findShowedNewsHashByChatId(chatId)
+                .map(x -> x[0].toString() + x[1].toString())
+                .toList();
+    }
+
+
 
 }

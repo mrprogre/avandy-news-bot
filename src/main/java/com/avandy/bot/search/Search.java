@@ -49,7 +49,8 @@ public class Search implements SearchService {
                     () -> periodMinutes = 60);
         }
 
-        List<String> showedNewsHash = showedNewsRepository.findShowedNewsHashByChatId(chatId);
+        List<String> showedNewsHash = showedNewsRepository.findHashAndType(chatId);
+
         if (isAllSearch || isTopSearch) {
             headlinesTopTen = new ArrayList<>();
 
@@ -69,7 +70,7 @@ public class Search implements SearchService {
                     case "all" -> {
                         if (title.length() > 15) {
                             if (dateDiff != 0) {
-                                if (!showedNewsHash.contains(hash)) {
+                                if (!showedNewsHash.contains(hash + 4)) {
                                     headlinesToShow.add(new Headline(rss, title, link, date, chatId, 4, hash));
                                 }
                             }
@@ -113,7 +114,7 @@ public class Search implements SearchService {
                     String link = news.getLink();
 
                     if (title.length() > 15) {
-                        if (!showedNewsHash.contains(hash)) {
+                        if (!showedNewsHash.contains(hash + 2)) {
                             headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
                         }
                     }
