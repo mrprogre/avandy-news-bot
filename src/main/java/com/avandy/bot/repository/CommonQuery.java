@@ -19,10 +19,9 @@ public class CommonQuery {
     public void getShowedNewsByPeriod() {
         var rows = entityManager.createNativeQuery(
                 "select s.chat_id,  " +
-                        "       u.user_name,  " +
-                        "       u.first_name,  " +
-                        "       case s.type when 2 then 'keywords' else 'full' end as type,  " +
-                        "       count(1)                                           as cnt  " +
+                        "       coalesce(u.first_name, u.user_name),  " +
+                        "       case s.type when 2 then 'keys' else 'full' end as type,  " +
+                        "       count(1)                                       as cnt  " +
                         "from showed_news s  " +
                         "         join users u on s.chat_id = u.chat_id  " +
                         "where s.add_date > (current_timestamp - cast('12 hours' as interval))  " +
