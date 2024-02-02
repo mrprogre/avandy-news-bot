@@ -23,6 +23,8 @@ public class Schedulers {
     private final UserRepository userRepository;
     private final TelegramBot telegramBot;
     private final AdminRepository adminRepository;
+    private final CommonQuery commonQuery;
+
 
     // Поиск новостей каждый час
     @Scheduled(cron = "${cron.search.keywords}")
@@ -131,6 +133,12 @@ public class Schedulers {
         int count = userRepository.autoRevokePremiumWhenExpire();
         if (count > 0)
             log.warn("# Деактивировано премиум подписок: " + count);
+    }
+
+    // Статистика показанных пользователям новостей за период
+    @Scheduled(cron = "${cron.get.stat}")
+    void getStat() {
+        commonQuery.getShowedNewsByPeriod();
     }
 
 }

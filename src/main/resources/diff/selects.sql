@@ -3,12 +3,10 @@ select s.chat_id,
        u.user_name,
        u.first_name,
        case s.type when 2 then 'keywords' else 'full' end as type,
-       count(title)                                       as cnt
-from news_list n
-         join showed_news s
-              on n.title_hash = s.title_hash
+       count(1)                                           as cnt
+from showed_news s
          join users u on s.chat_id = u.chat_id
-where n.add_date >= current_date
+where s.add_date >= (current_timestamp - cast('12 hours' as interval))
 group by s.chat_id, u.user_name, u.first_name, type
 order by type desc, cnt desc;
 
