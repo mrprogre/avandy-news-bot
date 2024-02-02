@@ -3,7 +3,6 @@ package com.avandy.bot.search;
 import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
-import com.avandy.bot.utils.JaroWinklerDistance;
 import com.avandy.bot.utils.ParserJsoup;
 import com.avandy.bot.utils.ParserRome;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -153,17 +152,20 @@ public class Search implements SearchService {
             List<String> allExcludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
 
             for (String word : allExcludedByChatId) {
-                headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(word.toLowerCase()));
+                if (word.contains("*")) word = word.replace("*", "\\w?");
+
+                String finalWord = word;
+                headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(finalWord.toLowerCase()));
             }
         }
 
         // Filtering out similar news: O(n²)
-        JaroWinklerDistance jwd = new JaroWinklerDistance();
         headlinesToShow.parallelStream()
                 .forEach(h1 -> headlinesToShow
                         .forEach(h2 -> {
-                            int compare = jwd.compare(h1.getTitle(), h2.getTitle());
+                            double compare = Common.compare(h1.getTitle(), h2.getTitle());
                             if (compare >= 85 && compare != 100) {
+                                //log.warn(h1.getPubDate() + " " + h1.getTitle() + " + " + h2.getPubDate() + " " + h2.getTitle() + " = " + compare);
                                 headlinesDeleteJw.add(h1);
                                 headlinesDeleteJw.remove(h2);
                                 // Не показывать при следующих поисках
@@ -175,9 +177,6 @@ public class Search implements SearchService {
 
         // Deleting news of the same meaning
         List<Headline> uniqueJw = headlinesDeleteJw.stream().distinct().toList();
-        for (Headline headline : uniqueJw) {
-            log.info("Дублирующая новость: " + chatId + ", source: " + headline.getSource() + ", " + headline.getTitle());
-        }
         uniqueJw.forEach(headlinesToShow::remove);
 
         // Все поиски, кроме поиска новостей по Топу, не дают дублирующих заголовков

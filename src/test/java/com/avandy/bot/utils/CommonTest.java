@@ -8,35 +8,33 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class CommonTest {
-    private final JaroWinklerDistance jwd = new JaroWinklerDistance();
-
     @Test
     public void checkJaroWinkler() {
-        String s1 = "BlackRock объявила о приобретении инвестфонда GIP за $12,5 млрд";
-        String s2 = "BlackRock покупает инвестфонд Global Infrastructure Partners за $12,5 млрд";
-        System.out.println(jwd.compare(s1, s2));
+        String s1 = "BlackRock объявила о приобретении инвестфонда GIP за $12,5";
+        String s2 = "BlackRock объявила о приобретении инвестфонда GIP за";
+        System.out.println(Common.compare(s1, s2));
     }
 
     @Test
     public void checkJaroWinklerDistanceCompare() {
         String s1 = "CRATE", s2 = "TRACE", s3 = "DwAyNE", s4 = "DuANE";
-        assertEquals(73, jwd.compare(s1, s2));
-        assertEquals(82, jwd.compare(s3, s4));
+        assertEquals(73, Common.compare(s1, s2));
+        assertEquals(84, Common.compare(s3, s4));
 
         s1 = "атака";
         s2 = "атаке";
         s3 = "атаку";
         s4 = "атакован";
-        assertEquals(86, jwd.compare(s1, s2));
-        assertEquals(86, jwd.compare(s1, s3));
-        assertEquals(87, jwd.compare(s1, s4));
-        assertEquals(86, jwd.compare(s2, s3));
-        assertEquals(76, jwd.compare(s2, s4));
-        assertEquals(76, jwd.compare(s3, s4));
+        assertEquals(92, Common.compare(s1, s2));
+        assertEquals(92, Common.compare(s1, s3));
+        assertEquals(93, Common.compare(s1, s4));
+        assertEquals(92, Common.compare(s2, s3));
+        assertEquals(86, Common.compare(s2, s4));
+        assertEquals(86, Common.compare(s3, s4));
 
         s1 = "played";
         s2 = "player";
-        assertEquals(88, jwd.compare(s1, s2));
+        assertEquals(93, Common.compare(s1, s2));
     }
 
     @Test

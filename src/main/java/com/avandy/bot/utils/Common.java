@@ -1,6 +1,7 @@
 package com.avandy.bot.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.similarity.JaroWinklerDistance;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -140,7 +141,7 @@ public class Common {
 
         for (Map.Entry<String, Integer> word1 : wordsCount.entrySet()) {
             for (Map.Entry<String, Integer> word2 : wordsCount.entrySet()) {
-                int compare = new JaroWinklerDistance().compare(word1.getKey(), word2.getKey());
+                double compare = Common.compare(word1.getKey(), word2.getKey());
 
                 if (compare != 100 && compare >= jaroWinklerLevel && !excluded.contains(word1.getKey())) {
                     String string = longestCommonSubstring(word1.getKey(), word2.getKey());
@@ -165,6 +166,10 @@ public class Common {
 
     public static String dateFormat(Date date) {
         return new SimpleDateFormat("dd.MM.yyyy").format(date);
+    }
+
+    public static int compare(String text1, String text2) {
+        return (int) Math.round((1 - new JaroWinklerDistance().apply(text1, text2)) * 100);
     }
 
 }
