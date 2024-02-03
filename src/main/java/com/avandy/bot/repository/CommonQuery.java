@@ -23,7 +23,7 @@ public class CommonQuery {
                         "       coalesce(u.first_name, u.user_name)       as name, " +
                         "       s.chat_id                                 as chat_id " +
                         "from showed_news s join users u on s.chat_id = u.chat_id " +
-                        "where s.add_date >= (current_timestamp - cast('12 hours' as interval)) " +
+                        "where s.add_date >= (current_timestamp - cast('6 hours' as interval)) " +
                         "group by s.chat_id, u.user_name, u.first_name, type " +
                         "order by type desc, cnt desc")
                 .getResultList();
