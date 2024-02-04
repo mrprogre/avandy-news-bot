@@ -23,7 +23,7 @@ public class Text extends Common {
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
-            screenshotAsFileText, sentText;
+            screenshotAsFileText, sentText, searchByKeywordsStartText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -105,6 +105,7 @@ public class Text extends Common {
             sendIdeaText = "Отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             fullSearchStartText = "» поиск всех новостей";
+            searchByKeywordsStartText = "» поиск по ключевым словам";
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час для расчёта времени запуска автопоиска по ключевым словам";
@@ -268,6 +269,7 @@ public class Text extends Common {
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of deleted from the Top";
             fullSearchStartText = "» search all news";
+            searchByKeywordsStartText = "» search by keywords";
             chooseNumberWordFromTop = "Click to search";
             chooseWordDelFromTop = "Click to delete";
             chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";

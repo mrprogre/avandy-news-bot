@@ -588,7 +588,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             return;
         }
 
-        //getReplyKeyboard(chatId, searchByKeywordsStartText, "");
+        getReplyKeyboard(chatId, searchByKeywordsStartText, "");
 
         // Search
         List<Headline> headlines = searchService.start(chatId, "keywords-manual");
