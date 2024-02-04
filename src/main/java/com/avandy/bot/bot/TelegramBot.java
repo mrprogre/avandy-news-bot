@@ -94,453 +94,457 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        try {
 
-        // Отправка отзыва с приложением скриншота как документа
-        // Телеграм сильно сжимает фото и оно становится нечитаемым
-        if (update.hasMessage() && (update.getMessage().hasDocument() || update.getMessage().hasPhoto())) {
-            Long chatId = update.getMessage().getChatId();
+            // Отправка отзыва с приложением скриншота как документа
+            // Телеграм сильно сжимает фото и оно становится нечитаемым
+            if (update.hasMessage() && (update.getMessage().hasDocument() || update.getMessage().hasPhoto())) {
+                Long chatId = update.getMessage().getChatId();
 
-            // Отправка отзыва с приложением документа (скриншоты сильно сжимаются)
-            if (UserState.SEND_FEEDBACK.equals(userStates.get(chatId))) {
-                if (update.getMessage().hasPhoto()) {
-                    sendMessage(chatId, screenshotAsFileText);
-                    return;
-                }
+                // Отправка отзыва с приложением документа (скриншоты сильно сжимаются)
+                if (UserState.SEND_FEEDBACK.equals(userStates.get(chatId))) {
+                    if (update.getMessage().hasPhoto()) {
+                        sendMessage(chatId, screenshotAsFileText);
+                        return;
+                    }
 
-                sendFeedbackWithDocument(update);
-                userStates.remove(chatId);
-                sendMessage(chatId, sentText);
-            }
-
-            // Основные команды бота
-        } else if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
-            String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
-            usersTopPage.putIfAbsent(chatId, 0);
-            usersExclTermsPage.putIfAbsent(chatId, 0);
-            newsListFullSearchCounter.putIfAbsent(chatId, 0);
-            newsListTopSearchCounter.putIfAbsent(chatId, 0);
-            newsListKeySearchCounter.putIfAbsent(chatId, 0);
-
-            setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-            UserState userState = userStates.get(chatId);
-
-            // DEBUG: запись действий пользователя для анализа
-            if (Common.DEV_ID != chatId) {
-                if (userState != null) log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId),
-                        userState + " " + messageText);
-                else log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId), messageText);
-            }
-
-            // SEND TO ALL FROM BOT OWNER
-            if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
-                String textToSend = messageText.substring(messageText.indexOf(" "));
-                List<User> users = userRepository.findAllByIsActive();
-                for (User user : users) {
-                    sendMessage(user.getChatId(), textToSend);
-                }
-                // SEND TO CHAT_ID FROM BOT OWNER
-            } else if (messageText.startsWith("@") && config.getBotOwner() == chatId) {
-                long chatToSend = Long.parseLong(messageText.substring(1, messageText.indexOf(" ")));
-                String textToSend = messageText.substring(messageText.indexOf(" "));
-                sendMessage(chatToSend, textToSend);
-
-                // DEACTIVATE SOURCE
-            } else if (messageText.startsWith("-") && config.getBotOwner() == chatId) {
-                String link = messageText.substring(messageText.indexOf("-") + 1, messageText.indexOf("="));
-                int value = Integer.parseInt(messageText.substring(messageText.indexOf("=") + 1));
-                int count = rssRepository.updateIsActiveRss(value, link);
-                if (count == 1) {
-                    sendMessage(chatId, "Активность источника переключена на: " + value);
-                }
-
-                /* USER INPUT BLOCK */
-            } else if (UserState.SEND_FEEDBACK.equals(userState)) {
-                String feedback = messageText.substring(messageText.indexOf(" ") + 1);
-                if (checkUserInput(chatId, messageText)) return;
-                sendFeedback(chatId, feedback);
-                sendMessage(chatId, sentText);
-
-                // Добавление ключевых слов
-            } else if (UserState.ADD_KEYWORDS.equals(userState)) {
-                String keywords = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, keywords)) return;
-                String[] words = keywords.split(",");
-                addKeyword(chatId, words);
-
-                // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
-            } else if (UserState.DEL_KEYWORDS.equals(userState)) {
-                String keywords = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, keywords)) return;
-                deleteKeywords(keywords, chatId);
-
-                // Добавление слов-исключений
-            } else if (UserState.ADD_EXCLUDED.equals(userState)) {
-                String exclude = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, exclude)) return;
-                String[] words = exclude.split(",");
-                addExclude(chatId, words);
-                getExcludedList(chatId);
-
-                // Удаление слов-исключений
-            } else if (UserState.DEL_EXCLUDED.equals(userState)) {
-                String excluded = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, excluded)) return;
-                String[] words = excluded.split(",");
-                delExcluded(chatId, words);
-                getExcludedList(chatId);
-
-                // Удаление слов из показа в Топе
-            } else if (UserState.DEL_TOP.equals(userState)) {
-                String text = messageText.trim().toLowerCase();
-                if (checkUserInput(chatId, text)) return;
-                String[] words = text.split(",");
-                topListDelete(chatId, words);
-                getTopTenWordsList(chatId);
-
-                // Поиск по трём кнопкам меню
-            } else if (messageText.equals(keywordsSearchText)) {
-                new Thread(() -> findNewsByKeywordsManual(chatId)).start();
-
-            } else if (messageText.equals(updateTopText2)) {
-                new Thread(() -> showTop(chatId)).start();
-
-            } else if (messageText.equals(fullSearchText)) {
-                new Thread(() -> fullSearch(chatId)).start();
-            } else {
-                /* Основные команды */
-                switch (messageText) {
-                    case "/settings" -> new Thread(() -> getSettings(chatId)).start();
-                    case "/keywords" -> new Thread(() -> showKeywordsList(chatId)).start();
-                    case "/search" -> new Thread(() -> initSearchesKeyboard(chatId)).start();
-                    case "/info" -> new Thread(() -> infoKeyboard(chatId)).start();
-                    // не использую в интерфейсе
-                    case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
-                    case "/excluding" -> getExcludedList(chatId);
-                    case "/delete" -> showYesNoOnDeleteUser(chatId);
-                    case "/top" -> new Thread(() -> showTop(chatId)).start();
-                    case "/premium" -> new Thread(() -> showYesNoGetPremium(chatId)).start();
-                    default -> undefinedKeyboard(chatId);
-                }
-            }
-            userStates.remove(chatId);
-
-            /* CALLBACK DATA */
-        } else if (update.hasCallbackQuery()) {
-            String callbackData = update.getCallbackQuery().getData();
-            Long chatId = update.getCallbackQuery().getMessage().getChatId();
-            Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
-            setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-            usersTopPage.putIfAbsent(chatId, 0);
-            usersExclTermsPage.putIfAbsent(chatId, 0);
-            newsListFullSearchCounter.putIfAbsent(chatId, 0);
-            newsListKeySearchCounter.putIfAbsent(chatId, 0);
-            newsListTopSearchCounter.putIfAbsent(chatId, 0);
-
-            switch (callbackData) {
-                case "NEXT_NEWS" -> getNewsListPage(chatId, searchOffset, messageId);
-                case "BEFORE_NEWS" -> getNewsListPage(chatId, -searchOffset, messageId);
-
-                case "NEXT_KEY" -> getNewsListKeyPage(chatId, searchOffset, messageId);
-                case "BEFORE_KEY" -> getNewsListKeyPage(chatId, -searchOffset, messageId);
-
-                case "NEXT_TOP" -> getNewsListTopPage(chatId, topSearchOffset, messageId);
-                case "BEFORE_TOP" -> getNewsListTopPage(chatId, -topSearchOffset, messageId);
-
-                case "FIRST_EXCL_PAGE" -> {
-                    usersExclTermsPage.put(chatId, 0);
-                    List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
-
-                    List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
-                            usersExclTermsPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
-                }
-
-                case "LAST_EXCL_PAGE" -> {
-                    List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
-                    usersExclTermsPage.put(chatId, items.size() - offset);
-
-                    List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
-                            usersExclTermsPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
-                }
-
-                case "NEXT_EXCL_PAGE" -> {
-                    List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
-
-                    Integer i = usersExclTermsPage.get(chatId);
-                    usersExclTermsPage.put(chatId, i += offset);
-                    if (i >= items.size()) usersExclTermsPage.put(chatId, i - offset);
-
-                    List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
-                            usersExclTermsPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
-                }
-
-                case "BEFORE_EXCL_PAGE" -> {
-                    List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
-
-                    Integer i = usersExclTermsPage.get(chatId);
-                    usersExclTermsPage.put(chatId, i -= offset);
-                    if (i <= 0) usersExclTermsPage.put(chatId, 0);
-
-                    List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
-                            usersExclTermsPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
-                }
-
-                case "FIRST_TOP_PAGE" -> {
-                    usersTopPage.put(chatId, 0);
-                    Set<String> items = topRepository.findAllByChatId(chatId);
-                    List<String> excludedWordsPage = topRepository.getPage(chatId, usersTopPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
-                }
-
-                case "LAST_TOP_PAGE" -> {
-                    Set<String> items = topRepository.findAllByChatId(chatId);
-                    usersTopPage.put(chatId, items.size() - offset);
-
-                    List<String> excludedWordsPage = topRepository.getPage(chatId, usersTopPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
-                }
-
-                case "NEXT_TOP_PAGE" -> {
-                    Set<String> items = topRepository.findAllByChatId(chatId);
-                    Integer i = usersTopPage.get(chatId);
-                    usersTopPage.put(chatId, i += offset);
-                    if (i >= items.size()) usersTopPage.put(chatId, i - offset);
-
-                    List<String> excludedWordsPage = topRepository.getPage(chatId,
-                            usersTopPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
-                }
-
-                case "BEFORE_TOP_PAGE" -> {
-                    Integer i = usersTopPage.get(chatId);
-                    usersTopPage.put(chatId, i -= offset);
-                    if (i <= 0) usersTopPage.put(chatId, 0);
-
-                    Set<String> items = topRepository.findAllByChatId(chatId);
-                    List<String> excludedWordsPage = topRepository.getPage(chatId,
-                            usersTopPage.get(chatId), offset);
-                    getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
-                }
-
-                case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
-                case "YES_PREMIUM" -> {
-                    sendMessage(Common.DEV_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
-                            userRepository.findNameByChatId(chatId)));
-                    sendMessage(chatId, getPremiumRequestText);
-                }
-
-                case "FEEDBACK" -> {
-                    userStates.put(chatId, UserState.SEND_FEEDBACK);
-                    cancelKeyboard(chatId, sendMessageForDevText);
-                }
-
-                /* KEYWORDS */
-                case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywordsManual(chatId)).start();
-                case "LIST_KEYWORDS" -> showKeywordsList(chatId);
-                case "ADD_KEYWORD" -> {
-                    userStates.put(chatId, UserState.ADD_KEYWORDS);
-                    cancelKeyboard(chatId, addInListText);
-                }
-                case "DELETE_KEYWORD" -> {
-                    userStates.put(chatId, UserState.DEL_KEYWORDS);
-                    cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
-                }
-
-                case "START_SEARCH", "DELETE_NO", "NO_PREMIUM" -> initSearchesKeyboard(chatId);
-
-                /* FULL SEARCH */
-                case "FIND_ALL" -> new Thread(() -> fullSearch(chatId)).start();
-
-                /* EXCLUDED */
-                case "LIST_EXCLUDED" -> getExcludedList(chatId);
-                case "ADD_EXCLUDED" -> {
-                    userStates.put(chatId, UserState.ADD_EXCLUDED);
-                    cancelKeyboard(chatId, addInListText);
-                }
-                case "DELETE_EXCLUDED" -> {
-                    userStates.put(chatId, UserState.DEL_EXCLUDED);
-                    cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
-                }
-
-                /* TOP */
-                case "DEL_FROM_TOP" -> topDeleteKeyboard(chatId);
-                case "LIST_TOP" -> getTopTenWordsList(chatId);
-                case "GET_TOP" -> showTop(chatId);
-                case "SEARCH_BY_TOP_WORD" -> new Thread(() -> topSearchKeyboard(chatId)).start();
-                case "DELETE_TOP" -> {
-                    userStates.put(chatId, UserState.DEL_TOP);
-                    cancelKeyboard(chatId, removeFromTopTenListText);
-                }
-
-                /* SETTINGS */
-                case "GET_SETTINGS" -> getSettings(chatId);
-                case "SET_PERIOD" -> keywordsChangePeriodKeyboard(chatId);
-                case "SET_PERIOD_ALL" -> fullSearchPeriodChangeKeyboard(chatId);
-                case "SET_PERIOD_TOP" -> topPeriodsKeyboard(chatId);
-                case "SET_EXCLUDED" -> excludeOnOffKeyboard(chatId);
-                case "EXCLUDED_ON" -> {
-                    settingsRepository.updateExcluded("on", chatId);
-                    sendMessage(chatId, changesSavedText);
-                    getSettings(chatId);
-                }
-                case "EXCLUDED_OFF" -> {
-                    settingsRepository.updateExcluded("off", chatId);
-                    sendMessage(chatId, changesSavedText);
-                    getSettings(chatId);
-                }
-
-                case "JARO_WINKLER_MODE" -> showOnOffJaroWinklerKeyboard(chatId);
-                case "JARO_WINKLER_ON" -> {
-                    settingsRepository.updateJaroWinkler("on", chatId);
-                    sendMessage(chatId, changesSavedText);
-                }
-                case "JARO_WINKLER_OFF" -> {
-                    settingsRepository.updateJaroWinkler("off", chatId);
-                    sendMessage(chatId, changesSavedText);
-                }
-
-                case "CANCEL" -> {
+                    sendFeedbackWithDocument(update);
                     userStates.remove(chatId);
-                    nextKeyboard(chatId, actionCanceledText);
+                    sendMessage(chatId, sentText);
                 }
 
-                // Language
-                case "DE_BUTTON" -> setLangAndMenuCreate(chatId, "de");
-                case "ES_BUTTON" -> setLangAndMenuCreate(chatId, "es");
-                case "FR_BUTTON" -> setLangAndMenuCreate(chatId, "fr");
-                case "RU_BUTTON" -> setLangAndMenuCreate(chatId, "ru");
-                case "EN_BUTTON" -> setLangAndMenuCreate(chatId, "en");
+                // Основные команды бота
+            } else if (update.hasMessage() && update.getMessage().hasText()) {
+                String messageText = update.getMessage().getText();
+                long chatId = update.getMessage().getChatId();
+                String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
+                usersTopPage.putIfAbsent(chatId, 0);
+                usersExclTermsPage.putIfAbsent(chatId, 0);
+                newsListFullSearchCounter.putIfAbsent(chatId, 0);
+                newsListTopSearchCounter.putIfAbsent(chatId, 0);
+                newsListKeySearchCounter.putIfAbsent(chatId, 0);
 
-                // Обновление периода поиска по ключевым словам
-                case "BUTTON_1" -> keywordsUpdatePeriod(1, chatId);
-                case "BUTTON_2" -> keywordsUpdatePeriod(2, chatId);
-                case "BUTTON_4" -> keywordsUpdatePeriod(4, chatId);
-                case "BUTTON_12" -> keywordsUpdatePeriod(12, chatId);
-                case "BUTTON_24" -> keywordsUpdatePeriod(24, chatId);
-                case "BUTTON_48" -> keywordsUpdatePeriod(48, chatId);
-                case "BUTTON_72" -> keywordsUpdatePeriod(72, chatId);
+                setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+                UserState userState = userStates.get(chatId);
 
-                // Обновление периода поиска по всем новостям
-                case "BUTTON_1_ALL" -> fullSearchPeriodUpdate(1, chatId);
-                case "BUTTON_2_ALL" -> fullSearchPeriodUpdate(2, chatId);
-                case "BUTTON_4_ALL" -> fullSearchPeriodUpdate(4, chatId);
-                case "BUTTON_6_ALL" -> fullSearchPeriodUpdate(6, chatId);
-                case "BUTTON_8_ALL" -> fullSearchPeriodUpdate(8, chatId);
-                case "BUTTON_12_ALL" -> fullSearchPeriodUpdate(12, chatId);
-                case "BUTTON_24_ALL" -> fullSearchPeriodUpdate(24, chatId);
-
-                case "YES_BUTTON" -> addKeywordsKeyboard(chatId, yesButtonText);
-                case "NO_BUTTON" -> sendMessage(chatId, buyButtonText);
-                case "DELETE_YES" -> deleteUser(chatId);
-
-                case "TOP_NUM_1" -> searchNewsTop(1, chatId);
-                case "TOP_NUM_2" -> searchNewsTop(2, chatId);
-                case "TOP_NUM_3" -> searchNewsTop(3, chatId);
-                case "TOP_NUM_4" -> searchNewsTop(4, chatId);
-                case "TOP_NUM_5" -> searchNewsTop(5, chatId);
-                case "TOP_NUM_6" -> searchNewsTop(6, chatId);
-                case "TOP_NUM_7" -> searchNewsTop(7, chatId);
-                case "TOP_NUM_8" -> searchNewsTop(8, chatId);
-                case "TOP_NUM_9" -> searchNewsTop(9, chatId);
-                case "TOP_NUM_10" -> searchNewsTop(10, chatId);
-                case "TOP_NUM_11" -> searchNewsTop(11, chatId);
-                case "TOP_NUM_12" -> searchNewsTop(12, chatId);
-                case "TOP_NUM_13" -> searchNewsTop(13, chatId);
-                case "TOP_NUM_14" -> searchNewsTop(14, chatId);
-                case "TOP_NUM_15" -> searchNewsTop(15, chatId);
-                case "TOP_NUM_16" -> searchNewsTop(16, chatId);
-                case "TOP_NUM_17" -> searchNewsTop(17, chatId);
-                case "TOP_NUM_18" -> searchNewsTop(18, chatId);
-                case "TOP_NUM_19" -> searchNewsTop(19, chatId);
-                case "TOP_NUM_20" -> searchNewsTop(20, chatId);
-
-                case "TOP_DEL_1" -> topDelete(1, chatId);
-                case "TOP_DEL_2" -> topDelete(2, chatId);
-                case "TOP_DEL_3" -> topDelete(3, chatId);
-                case "TOP_DEL_4" -> topDelete(4, chatId);
-                case "TOP_DEL_5" -> topDelete(5, chatId);
-                case "TOP_DEL_6" -> topDelete(6, chatId);
-                case "TOP_DEL_7" -> topDelete(7, chatId);
-                case "TOP_DEL_8" -> topDelete(8, chatId);
-                case "TOP_DEL_9" -> topDelete(9, chatId);
-                case "TOP_DEL_10" -> topDelete(10, chatId);
-                case "TOP_DEL_11" -> topDelete(11, chatId);
-                case "TOP_DEL_12" -> topDelete(12, chatId);
-                case "TOP_DEL_13" -> topDelete(13, chatId);
-                case "TOP_DEL_14" -> topDelete(14, chatId);
-                case "TOP_DEL_15" -> topDelete(15, chatId);
-                case "TOP_DEL_16" -> topDelete(16, chatId);
-                case "TOP_DEL_17" -> topDelete(17, chatId);
-                case "TOP_DEL_18" -> topDelete(18, chatId);
-                case "TOP_DEL_19" -> topDelete(19, chatId);
-                case "TOP_DEL_20" -> topDelete(20, chatId);
-
-                case "TOP_INTERVAL_1" -> topUpdatePeriod(1, chatId);
-                case "TOP_INTERVAL_2" -> topUpdatePeriod(2, chatId);
-                case "TOP_INTERVAL_4" -> topUpdatePeriod(4, chatId);
-                case "TOP_INTERVAL_12" -> topUpdatePeriod(12, chatId);
-                case "TOP_INTERVAL_24" -> topUpdatePeriod(24, chatId);
-                case "TOP_INTERVAL_48" -> topUpdatePeriod(48, chatId);
-                case "TOP_INTERVAL_72" -> topUpdatePeriod(72, chatId);
-
-                /* AUTO SEARCH BY KEYWORDS */
-                case "SET_SCHEDULER" -> keywordsOnOffSchedulerKeyboard(chatId);
-                case "SCHEDULER_ON" -> {
-                    settingsRepository.updateScheduler("on", chatId);
-                    sendMessage(chatId, changesSavedText);
-                    getSettings(chatId);
-                }
-                case "SCHEDULER_OFF" -> {
-                    settingsRepository.updateScheduler("off", chatId);
-                    sendMessage(chatId, changesSavedText);
-                    getSettings(chatId);
-                }
-                case "SCHEDULER_START" -> startSearchTimeButtons(chatId);
-                // Set start time
-                case "SET_START_0" -> keywordsUpdateSearchStartTime(0, chatId);
-                case "SET_START_1" -> keywordsUpdateSearchStartTime(1, chatId);
-                case "SET_START_2" -> keywordsUpdateSearchStartTime(2, chatId);
-                case "SET_START_3" -> keywordsUpdateSearchStartTime(3, chatId);
-                case "SET_START_4" -> keywordsUpdateSearchStartTime(4, chatId);
-                case "SET_START_5" -> keywordsUpdateSearchStartTime(5, chatId);
-                case "SET_START_6" -> keywordsUpdateSearchStartTime(6, chatId);
-                case "SET_START_7" -> keywordsUpdateSearchStartTime(7, chatId);
-                case "SET_START_8" -> keywordsUpdateSearchStartTime(8, chatId);
-                case "SET_START_9" -> keywordsUpdateSearchStartTime(9, chatId);
-                case "SET_START_10" -> keywordsUpdateSearchStartTime(10, chatId);
-                case "SET_START_11" -> keywordsUpdateSearchStartTime(11, chatId);
-                case "SET_START_12" -> keywordsUpdateSearchStartTime(12, chatId);
-                case "SET_START_13" -> keywordsUpdateSearchStartTime(13, chatId);
-                case "SET_START_14" -> keywordsUpdateSearchStartTime(14, chatId);
-                case "SET_START_15" -> keywordsUpdateSearchStartTime(15, chatId);
-                case "SET_START_16" -> keywordsUpdateSearchStartTime(16, chatId);
-                case "SET_START_17" -> keywordsUpdateSearchStartTime(17, chatId);
-                case "SET_START_18" -> keywordsUpdateSearchStartTime(18, chatId);
-                case "SET_START_19" -> keywordsUpdateSearchStartTime(19, chatId);
-                case "SET_START_20" -> keywordsUpdateSearchStartTime(20, chatId);
-                case "SET_START_21" -> keywordsUpdateSearchStartTime(21, chatId);
-                case "SET_START_22" -> keywordsUpdateSearchStartTime(22, chatId);
-                case "SET_START_23" -> keywordsUpdateSearchStartTime(23, chatId);
-
-                // Премиум поиск каждые 2 минуты
-                case "PREMIUM_SEARCH" -> premiumSearchOnOffSchedulerKeyboard(chatId);
-                case "PREMIUM_SEARCH_ON" -> {
-                    settingsRepository.updatePremiumSearch("on", chatId);
-                    sendMessage(chatId, changesSavedText);
-                    getSettings(chatId);
-                }
-                case "PREMIUM_SEARCH_OFF" -> {
-                    settingsRepository.updatePremiumSearch("off", chatId);
-                    sendMessage(chatId, changesSavedText);
-                    getSettings(chatId);
+                // DEBUG: запись действий пользователя для анализа
+                if (Common.DEV_ID != chatId) {
+                    if (userState != null)
+                        log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId),
+                                userState + " " + messageText);
+                    else log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId), messageText);
                 }
 
+                // SEND TO ALL FROM BOT OWNER
+                if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
+                    String textToSend = messageText.substring(messageText.indexOf(" "));
+                    List<User> users = userRepository.findAllByIsActive();
+                    for (User user : users) {
+                        sendMessage(user.getChatId(), textToSend);
+                    }
+                    // SEND TO CHAT_ID FROM BOT OWNER
+                } else if (messageText.startsWith("@") && config.getBotOwner() == chatId) {
+                    long chatToSend = Long.parseLong(messageText.substring(1, messageText.indexOf(" ")));
+                    String textToSend = messageText.substring(messageText.indexOf(" "));
+                    sendMessage(chatToSend, textToSend);
+
+                    // DEACTIVATE SOURCE
+                } else if (messageText.startsWith("-") && config.getBotOwner() == chatId) {
+                    String link = messageText.substring(messageText.indexOf("-") + 1, messageText.indexOf("="));
+                    int value = Integer.parseInt(messageText.substring(messageText.indexOf("=") + 1));
+                    int count = rssRepository.updateIsActiveRss(value, link);
+                    if (count == 1) {
+                        sendMessage(chatId, "Активность источника переключена на: " + value);
+                    }
+
+                    /* USER INPUT BLOCK */
+                } else if (UserState.SEND_FEEDBACK.equals(userState)) {
+                    String feedback = messageText.substring(messageText.indexOf(" ") + 1);
+                    if (checkUserInput(chatId, messageText)) return;
+                    sendFeedback(chatId, feedback);
+                    sendMessage(chatId, sentText);
+
+                    // Добавление ключевых слов
+                } else if (UserState.ADD_KEYWORDS.equals(userState)) {
+                    String keywords = messageText.trim().toLowerCase();
+                    if (checkUserInput(chatId, keywords)) return;
+                    String[] words = keywords.split(",");
+                    addKeyword(chatId, words);
+
+                    // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
+                } else if (UserState.DEL_KEYWORDS.equals(userState)) {
+                    String keywords = messageText.trim().toLowerCase();
+                    if (checkUserInput(chatId, keywords)) return;
+                    deleteKeywords(keywords, chatId);
+
+                    // Добавление слов-исключений
+                } else if (UserState.ADD_EXCLUDED.equals(userState)) {
+                    String exclude = messageText.trim().toLowerCase();
+                    if (checkUserInput(chatId, exclude)) return;
+                    String[] words = exclude.split(",");
+                    addExclude(chatId, words);
+                    getExcludedList(chatId);
+
+                    // Удаление слов-исключений
+                } else if (UserState.DEL_EXCLUDED.equals(userState)) {
+                    String excluded = messageText.trim().toLowerCase();
+                    if (checkUserInput(chatId, excluded)) return;
+                    String[] words = excluded.split(",");
+                    delExcluded(chatId, words);
+                    getExcludedList(chatId);
+
+                    // Удаление слов из показа в Топе
+                } else if (UserState.DEL_TOP.equals(userState)) {
+                    String text = messageText.trim().toLowerCase();
+                    if (checkUserInput(chatId, text)) return;
+                    String[] words = text.split(",");
+                    topListDelete(chatId, words);
+                    getTopTenWordsList(chatId);
+
+                    // Поиск по трём кнопкам меню
+                } else if (messageText.equals(keywordsSearchText)) {
+                    new Thread(() -> findNewsByKeywordsManual(chatId)).start();
+
+                } else if (messageText.equals(updateTopText2)) {
+                    new Thread(() -> showTop(chatId)).start();
+
+                } else if (messageText.equals(fullSearchText)) {
+                    new Thread(() -> fullSearch(chatId)).start();
+                } else {
+                    /* Основные команды */
+                    switch (messageText) {
+                        case "/settings" -> new Thread(() -> getSettings(chatId)).start();
+                        case "/keywords" -> new Thread(() -> showKeywordsList(chatId)).start();
+                        case "/search" -> new Thread(() -> initSearchesKeyboard(chatId)).start();
+                        case "/info" -> new Thread(() -> infoKeyboard(chatId)).start();
+                        // не использую в интерфейсе
+                        case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
+                        case "/excluding" -> getExcludedList(chatId);
+                        case "/delete" -> showYesNoOnDeleteUser(chatId);
+                        case "/top" -> new Thread(() -> showTop(chatId)).start();
+                        case "/premium" -> new Thread(() -> showYesNoGetPremium(chatId)).start();
+                        default -> undefinedKeyboard(chatId);
+                    }
+                }
+                userStates.remove(chatId);
+
+                /* CALLBACK DATA */
+            } else if (update.hasCallbackQuery()) {
+                String callbackData = update.getCallbackQuery().getData();
+                Long chatId = update.getCallbackQuery().getMessage().getChatId();
+                Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
+                setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
+                usersTopPage.putIfAbsent(chatId, 0);
+                usersExclTermsPage.putIfAbsent(chatId, 0);
+                newsListFullSearchCounter.putIfAbsent(chatId, 0);
+                newsListKeySearchCounter.putIfAbsent(chatId, 0);
+                newsListTopSearchCounter.putIfAbsent(chatId, 0);
+
+                switch (callbackData) {
+                    case "NEXT_NEWS" -> getNewsListPage(chatId, searchOffset, messageId);
+                    case "BEFORE_NEWS" -> getNewsListPage(chatId, -searchOffset, messageId);
+
+                    case "NEXT_KEY" -> getNewsListKeyPage(chatId, searchOffset, messageId);
+                    case "BEFORE_KEY" -> getNewsListKeyPage(chatId, -searchOffset, messageId);
+
+                    case "NEXT_TOP" -> getNewsListTopPage(chatId, topSearchOffset, messageId);
+                    case "BEFORE_TOP" -> getNewsListTopPage(chatId, -topSearchOffset, messageId);
+
+                    case "FIRST_EXCL_PAGE" -> {
+                        usersExclTermsPage.put(chatId, 0);
+                        List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
+
+                        List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
+                                usersExclTermsPage.get(chatId), offset);
+                        getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
+                    }
+
+                    case "LAST_EXCL_PAGE" -> {
+                        List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
+                        usersExclTermsPage.put(chatId, items.size() - offset);
+
+                        List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
+                                usersExclTermsPage.get(chatId), offset);
+                        getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
+                    }
+
+                    case "NEXT_EXCL_PAGE" -> {
+                        List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
+
+                        Integer i = usersExclTermsPage.get(chatId);
+                        usersExclTermsPage.put(chatId, i += offset);
+                        if (i >= items.size()) usersExclTermsPage.put(chatId, i - offset);
+
+                        List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
+                                usersExclTermsPage.get(chatId), offset);
+                        getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
+                    }
+
+                    case "BEFORE_EXCL_PAGE" -> {
+                        List<String> items = excludingTermsRepository.findExcludedByChatId(chatId);
+
+                        Integer i = usersExclTermsPage.get(chatId);
+                        usersExclTermsPage.put(chatId, i -= offset);
+                        if (i <= 0) usersExclTermsPage.put(chatId, 0);
+
+                        List<String> terms = excludingTermsRepository.findExcludingTermsPage(chatId,
+                                usersExclTermsPage.get(chatId), offset);
+                        getExcludedWordsPage(chatId, messageId, items, terms, listExcludedText);
+                    }
+
+                    case "FIRST_TOP_PAGE" -> {
+                        usersTopPage.put(chatId, 0);
+                        Set<String> items = topRepository.findAllByChatId(chatId);
+                        List<String> excludedWordsPage = topRepository.getPage(chatId, usersTopPage.get(chatId), offset);
+                        getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
+                    }
+
+                    case "LAST_TOP_PAGE" -> {
+                        Set<String> items = topRepository.findAllByChatId(chatId);
+                        usersTopPage.put(chatId, items.size() - offset);
+
+                        List<String> excludedWordsPage = topRepository.getPage(chatId, usersTopPage.get(chatId), offset);
+                        getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
+                    }
+
+                    case "NEXT_TOP_PAGE" -> {
+                        Set<String> items = topRepository.findAllByChatId(chatId);
+                        Integer i = usersTopPage.get(chatId);
+                        usersTopPage.put(chatId, i += offset);
+                        if (i >= items.size()) usersTopPage.put(chatId, i - offset);
+
+                        List<String> excludedWordsPage = topRepository.getPage(chatId,
+                                usersTopPage.get(chatId), offset);
+                        getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
+                    }
+
+                    case "BEFORE_TOP_PAGE" -> {
+                        Integer i = usersTopPage.get(chatId);
+                        usersTopPage.put(chatId, i -= offset);
+                        if (i <= 0) usersTopPage.put(chatId, 0);
+
+                        Set<String> items = topRepository.findAllByChatId(chatId);
+                        List<String> excludedWordsPage = topRepository.getPage(chatId,
+                                usersTopPage.get(chatId), offset);
+                        getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
+                    }
+
+                    case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
+                    case "YES_PREMIUM" -> {
+                        sendMessage(Common.DEV_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
+                                userRepository.findNameByChatId(chatId)));
+                        sendMessage(chatId, getPremiumRequestText);
+                    }
+
+                    case "FEEDBACK" -> {
+                        userStates.put(chatId, UserState.SEND_FEEDBACK);
+                        cancelKeyboard(chatId, sendMessageForDevText);
+                    }
+
+                    /* KEYWORDS */
+                    case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywordsManual(chatId)).start();
+                    case "LIST_KEYWORDS" -> showKeywordsList(chatId);
+                    case "ADD_KEYWORD" -> {
+                        userStates.put(chatId, UserState.ADD_KEYWORDS);
+                        cancelKeyboard(chatId, addInListText);
+                    }
+                    case "DELETE_KEYWORD" -> {
+                        userStates.put(chatId, UserState.DEL_KEYWORDS);
+                        cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
+                    }
+
+                    case "START_SEARCH", "DELETE_NO", "NO_PREMIUM" -> initSearchesKeyboard(chatId);
+
+                    /* FULL SEARCH */
+                    case "FIND_ALL" -> new Thread(() -> fullSearch(chatId)).start();
+
+                    /* EXCLUDED */
+                    case "LIST_EXCLUDED" -> getExcludedList(chatId);
+                    case "ADD_EXCLUDED" -> {
+                        userStates.put(chatId, UserState.ADD_EXCLUDED);
+                        cancelKeyboard(chatId, addInListText);
+                    }
+                    case "DELETE_EXCLUDED" -> {
+                        userStates.put(chatId, UserState.DEL_EXCLUDED);
+                        cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
+                    }
+
+                    /* TOP */
+                    case "DEL_FROM_TOP" -> topDeleteKeyboard(chatId);
+                    case "LIST_TOP" -> getTopTenWordsList(chatId);
+                    case "GET_TOP" -> showTop(chatId);
+                    case "SEARCH_BY_TOP_WORD" -> new Thread(() -> topSearchKeyboard(chatId)).start();
+                    case "DELETE_TOP" -> {
+                        userStates.put(chatId, UserState.DEL_TOP);
+                        cancelKeyboard(chatId, removeFromTopTenListText);
+                    }
+
+                    /* SETTINGS */
+                    case "GET_SETTINGS" -> getSettings(chatId);
+                    case "SET_PERIOD" -> keywordsChangePeriodKeyboard(chatId);
+                    case "SET_PERIOD_ALL" -> fullSearchPeriodChangeKeyboard(chatId);
+                    case "SET_PERIOD_TOP" -> topPeriodsKeyboard(chatId);
+                    case "SET_EXCLUDED" -> excludeOnOffKeyboard(chatId);
+                    case "EXCLUDED_ON" -> {
+                        settingsRepository.updateExcluded("on", chatId);
+                        sendMessage(chatId, changesSavedText);
+                        getSettings(chatId);
+                    }
+                    case "EXCLUDED_OFF" -> {
+                        settingsRepository.updateExcluded("off", chatId);
+                        sendMessage(chatId, changesSavedText);
+                        getSettings(chatId);
+                    }
+
+                    case "JARO_WINKLER_MODE" -> showOnOffJaroWinklerKeyboard(chatId);
+                    case "JARO_WINKLER_ON" -> {
+                        settingsRepository.updateJaroWinkler("on", chatId);
+                        sendMessage(chatId, changesSavedText);
+                    }
+                    case "JARO_WINKLER_OFF" -> {
+                        settingsRepository.updateJaroWinkler("off", chatId);
+                        sendMessage(chatId, changesSavedText);
+                    }
+
+                    case "CANCEL" -> {
+                        userStates.remove(chatId);
+                        nextKeyboard(chatId, actionCanceledText);
+                    }
+
+                    // Language
+                    case "DE_BUTTON" -> setLangAndMenuCreate(chatId, "de");
+                    case "ES_BUTTON" -> setLangAndMenuCreate(chatId, "es");
+                    case "FR_BUTTON" -> setLangAndMenuCreate(chatId, "fr");
+                    case "RU_BUTTON" -> setLangAndMenuCreate(chatId, "ru");
+                    case "EN_BUTTON" -> setLangAndMenuCreate(chatId, "en");
+
+                    // Обновление периода поиска по ключевым словам
+                    case "BUTTON_1" -> keywordsUpdatePeriod(1, chatId);
+                    case "BUTTON_2" -> keywordsUpdatePeriod(2, chatId);
+                    case "BUTTON_4" -> keywordsUpdatePeriod(4, chatId);
+                    case "BUTTON_12" -> keywordsUpdatePeriod(12, chatId);
+                    case "BUTTON_24" -> keywordsUpdatePeriod(24, chatId);
+                    case "BUTTON_48" -> keywordsUpdatePeriod(48, chatId);
+                    case "BUTTON_72" -> keywordsUpdatePeriod(72, chatId);
+
+                    // Обновление периода поиска по всем новостям
+                    case "BUTTON_1_ALL" -> fullSearchPeriodUpdate(1, chatId);
+                    case "BUTTON_2_ALL" -> fullSearchPeriodUpdate(2, chatId);
+                    case "BUTTON_4_ALL" -> fullSearchPeriodUpdate(4, chatId);
+                    case "BUTTON_6_ALL" -> fullSearchPeriodUpdate(6, chatId);
+                    case "BUTTON_8_ALL" -> fullSearchPeriodUpdate(8, chatId);
+                    case "BUTTON_12_ALL" -> fullSearchPeriodUpdate(12, chatId);
+                    case "BUTTON_24_ALL" -> fullSearchPeriodUpdate(24, chatId);
+
+                    case "YES_BUTTON" -> addKeywordsKeyboard(chatId, yesButtonText);
+                    case "NO_BUTTON" -> sendMessage(chatId, buyButtonText);
+                    case "DELETE_YES" -> deleteUser(chatId);
+
+                    case "TOP_NUM_1" -> searchNewsTop(1, chatId);
+                    case "TOP_NUM_2" -> searchNewsTop(2, chatId);
+                    case "TOP_NUM_3" -> searchNewsTop(3, chatId);
+                    case "TOP_NUM_4" -> searchNewsTop(4, chatId);
+                    case "TOP_NUM_5" -> searchNewsTop(5, chatId);
+                    case "TOP_NUM_6" -> searchNewsTop(6, chatId);
+                    case "TOP_NUM_7" -> searchNewsTop(7, chatId);
+                    case "TOP_NUM_8" -> searchNewsTop(8, chatId);
+                    case "TOP_NUM_9" -> searchNewsTop(9, chatId);
+                    case "TOP_NUM_10" -> searchNewsTop(10, chatId);
+                    case "TOP_NUM_11" -> searchNewsTop(11, chatId);
+                    case "TOP_NUM_12" -> searchNewsTop(12, chatId);
+                    case "TOP_NUM_13" -> searchNewsTop(13, chatId);
+                    case "TOP_NUM_14" -> searchNewsTop(14, chatId);
+                    case "TOP_NUM_15" -> searchNewsTop(15, chatId);
+                    case "TOP_NUM_16" -> searchNewsTop(16, chatId);
+                    case "TOP_NUM_17" -> searchNewsTop(17, chatId);
+                    case "TOP_NUM_18" -> searchNewsTop(18, chatId);
+                    case "TOP_NUM_19" -> searchNewsTop(19, chatId);
+                    case "TOP_NUM_20" -> searchNewsTop(20, chatId);
+
+                    case "TOP_DEL_1" -> topDelete(1, chatId);
+                    case "TOP_DEL_2" -> topDelete(2, chatId);
+                    case "TOP_DEL_3" -> topDelete(3, chatId);
+                    case "TOP_DEL_4" -> topDelete(4, chatId);
+                    case "TOP_DEL_5" -> topDelete(5, chatId);
+                    case "TOP_DEL_6" -> topDelete(6, chatId);
+                    case "TOP_DEL_7" -> topDelete(7, chatId);
+                    case "TOP_DEL_8" -> topDelete(8, chatId);
+                    case "TOP_DEL_9" -> topDelete(9, chatId);
+                    case "TOP_DEL_10" -> topDelete(10, chatId);
+                    case "TOP_DEL_11" -> topDelete(11, chatId);
+                    case "TOP_DEL_12" -> topDelete(12, chatId);
+                    case "TOP_DEL_13" -> topDelete(13, chatId);
+                    case "TOP_DEL_14" -> topDelete(14, chatId);
+                    case "TOP_DEL_15" -> topDelete(15, chatId);
+                    case "TOP_DEL_16" -> topDelete(16, chatId);
+                    case "TOP_DEL_17" -> topDelete(17, chatId);
+                    case "TOP_DEL_18" -> topDelete(18, chatId);
+                    case "TOP_DEL_19" -> topDelete(19, chatId);
+                    case "TOP_DEL_20" -> topDelete(20, chatId);
+
+                    case "TOP_INTERVAL_1" -> topUpdatePeriod(1, chatId);
+                    case "TOP_INTERVAL_2" -> topUpdatePeriod(2, chatId);
+                    case "TOP_INTERVAL_4" -> topUpdatePeriod(4, chatId);
+                    case "TOP_INTERVAL_12" -> topUpdatePeriod(12, chatId);
+                    case "TOP_INTERVAL_24" -> topUpdatePeriod(24, chatId);
+                    case "TOP_INTERVAL_48" -> topUpdatePeriod(48, chatId);
+                    case "TOP_INTERVAL_72" -> topUpdatePeriod(72, chatId);
+
+                    /* AUTO SEARCH BY KEYWORDS */
+                    case "SET_SCHEDULER" -> keywordsOnOffSchedulerKeyboard(chatId);
+                    case "SCHEDULER_ON" -> {
+                        settingsRepository.updateScheduler("on", chatId);
+                        sendMessage(chatId, changesSavedText);
+                        getSettings(chatId);
+                    }
+                    case "SCHEDULER_OFF" -> {
+                        settingsRepository.updateScheduler("off", chatId);
+                        sendMessage(chatId, changesSavedText);
+                        getSettings(chatId);
+                    }
+                    case "SCHEDULER_START" -> startSearchTimeButtons(chatId);
+                    // Set start time
+                    case "SET_START_0" -> keywordsUpdateSearchStartTime(0, chatId);
+                    case "SET_START_1" -> keywordsUpdateSearchStartTime(1, chatId);
+                    case "SET_START_2" -> keywordsUpdateSearchStartTime(2, chatId);
+                    case "SET_START_3" -> keywordsUpdateSearchStartTime(3, chatId);
+                    case "SET_START_4" -> keywordsUpdateSearchStartTime(4, chatId);
+                    case "SET_START_5" -> keywordsUpdateSearchStartTime(5, chatId);
+                    case "SET_START_6" -> keywordsUpdateSearchStartTime(6, chatId);
+                    case "SET_START_7" -> keywordsUpdateSearchStartTime(7, chatId);
+                    case "SET_START_8" -> keywordsUpdateSearchStartTime(8, chatId);
+                    case "SET_START_9" -> keywordsUpdateSearchStartTime(9, chatId);
+                    case "SET_START_10" -> keywordsUpdateSearchStartTime(10, chatId);
+                    case "SET_START_11" -> keywordsUpdateSearchStartTime(11, chatId);
+                    case "SET_START_12" -> keywordsUpdateSearchStartTime(12, chatId);
+                    case "SET_START_13" -> keywordsUpdateSearchStartTime(13, chatId);
+                    case "SET_START_14" -> keywordsUpdateSearchStartTime(14, chatId);
+                    case "SET_START_15" -> keywordsUpdateSearchStartTime(15, chatId);
+                    case "SET_START_16" -> keywordsUpdateSearchStartTime(16, chatId);
+                    case "SET_START_17" -> keywordsUpdateSearchStartTime(17, chatId);
+                    case "SET_START_18" -> keywordsUpdateSearchStartTime(18, chatId);
+                    case "SET_START_19" -> keywordsUpdateSearchStartTime(19, chatId);
+                    case "SET_START_20" -> keywordsUpdateSearchStartTime(20, chatId);
+                    case "SET_START_21" -> keywordsUpdateSearchStartTime(21, chatId);
+                    case "SET_START_22" -> keywordsUpdateSearchStartTime(22, chatId);
+                    case "SET_START_23" -> keywordsUpdateSearchStartTime(23, chatId);
+
+                    // Премиум поиск каждые 2 минуты
+                    case "PREMIUM_SEARCH" -> premiumSearchOnOffSchedulerKeyboard(chatId);
+                    case "PREMIUM_SEARCH_ON" -> {
+                        settingsRepository.updatePremiumSearch("on", chatId);
+                        sendMessage(chatId, changesSavedText);
+                        getSettings(chatId);
+                    }
+                    case "PREMIUM_SEARCH_OFF" -> {
+                        settingsRepository.updatePremiumSearch("off", chatId);
+                        sendMessage(chatId, changesSavedText);
+                        getSettings(chatId);
+                    }
+                }
             }
+        } catch (Exception e) {
+            log.error("Update exception: " + e.getMessage());
         }
     }
 
