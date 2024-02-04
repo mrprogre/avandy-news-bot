@@ -1,3 +1,15 @@
+-- Rows count
+-- 01.01.2024: 2747,  25, 5291, 205, 9
+-- 01.02.2024: 3150, 150, 2650, 441, 49  (1 покупка)
+-- 04.02.2024: 3180, 658, 9461, 500, 759 (не знаю откуда столько народа)
+select (select count(*) from excluding_terms) as excluded,
+       (select count(*) from keywords)        as keywords,
+       (select count(*) from showed_news)     as showed_news,
+       (select count(*) from top_excluded)    as top_ten_excluded,
+       (select count(*) from users)           as users;
+--(select count(*) from news_list)       as news_list
+--(select count(*) from rss_list)        as rss_list
+
 -- Количество новостей, которые получили все пользователи
 select case s.type when 2 then 'keys' else 'full' end as type,
        count(1)                                       as cnt,
@@ -43,18 +55,6 @@ from news_list n
 where n.add_date >= (current_timestamp - cast('2 hours' as interval))
 order by n.id desc;
 
--- Rows count
--- 01.01.2024: 2747,  25, 5291, 205, 9
--- 01.02.2024: 3150, 150, 2650, 441, 49  (1 покупка)
--- 04.02.2024: 3180, 658, 9461, 500, 759 (не знаю откуда столько народа)
-select (select count(*) from excluding_terms) as excluded,
-       (select count(*) from keywords)        as keywords,
-       (select count(*) from showed_news)     as showed_news,
-       (select count(*) from top_excluded)    as top_ten_excluded,
-       (select count(*) from users)           as users;
---(select count(*) from news_list)       as news_list,
---(select count(*) from rss_list)        as rss_list,
-
 -- Новости по языкам
 SELECT n.id, n.source, n.title, n.title_hash, n.link, n.pub_date, n.add_date
 FROM news_list n
@@ -77,8 +77,7 @@ WHERE pub_date > (current_timestamp - cast('6 hours' as interval));
 delete
 from showed_news
 where chat_id = 1254981379
-  and type = 4
-;
+  and type = 4;
 
 -- топ ключевых слов по всем пользователям
 select keyword, count(keyword) cnt

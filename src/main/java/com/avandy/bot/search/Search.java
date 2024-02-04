@@ -102,8 +102,15 @@ public class Search implements SearchService {
             for (String keyword : keywords) {
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
+                if (keyword.contains("+")) keyword = keyword.replace("+", "\\+");
+                if (keyword.contains("-")) keyword = keyword.replace("-", "\\-");
 
-                newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage);
+                try {
+                    newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage);
+                } catch (Exception e) {
+                    log.warn(e.getMessage() + ". Keyword: " + keyword);
+                    continue;
+                }
 
                 for (NewsList news : newsList) {
                     String rss = news.getSource();
@@ -132,7 +139,12 @@ public class Search implements SearchService {
             if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
                 newsList = newsListRepository.getNewsWithLike(period, type, userLanguage);
             } else {
-                newsList = newsListRepository.getNewsWithRegexp(period, type, userLanguage);
+                try {
+                    newsList = newsListRepository.getNewsWithRegexp(period, type, userLanguage);
+                } catch (Exception e) {
+                    log.warn(e.getMessage() + ". Word = " + type);
+                    return null;
+                }
             }
 
             for (NewsList news : newsList) {
