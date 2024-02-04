@@ -110,7 +110,7 @@ public class Schedulers {
         }
     }
 
-    // info: Количество активных пользователей: раз в сутки в 12 дня
+    // info: Количество активных пользователей: раз в сутки в 8 утра
     @Scheduled(cron = "${cron.active.users.count}")
     void activeUsersCount() {
         int usersCount = userRepository.activeUsersCount();

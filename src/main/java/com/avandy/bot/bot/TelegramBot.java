@@ -593,7 +593,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int counterParts = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Найдено за 24h: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
+            log.warn("Найдено за 48h: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
 
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListKeySearchData.get(chatId)) {
