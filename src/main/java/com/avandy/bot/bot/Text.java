@@ -61,7 +61,7 @@ public class Text extends Common {
             deleteAllWordsText = "❌ все слова удалены";
             wordIsExistsText = "Слово уже есть в списке: ";
             wordsIsNotAddedText = "Слова не добавлены";
-            wordsAddedText = "Слово добавлено";
+            wordsAddedText = "Добавлено слов";
             aboutDeveloperText = """
                     <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>Почта</b>: rps_project@mail.ru
