@@ -2,7 +2,7 @@
 
 DELETE FROM admin;
 INSERT INTO admin (key, value) VALUES ('showed_news_clear_scheduler', 'on');
-INSERT INTO admin (key, value) VALUES ('news_list_clear_scheduler', 'off');
+INSERT INTO admin (key, value) VALUES ('news_list_clear_scheduler', 'on');
 
 DELETE FROM rss_list;
 INSERT INTO rss_list (chat_id, source, link, is_active, position, add_date, country, parser_type, lang) VALUES (1254981379, 'The City Paper Bogota', 'https://thecitypaperbogota.com/feed/', 1, 100, '2024-01-07 11:24:28.810182', 'Colombia', 'rss', 'es');

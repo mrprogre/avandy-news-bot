@@ -88,7 +88,7 @@ public class Schedulers {
         }
     }
 
-    // info: Очистка таблицы news_list раз в сутки в 8 утра
+    // info: Очистка таблицы news_list раз в сутки в 4 утра
     @Scheduled(cron = "${cron.delete.old.news}")
     void deleteOldNewsList() {
         if (adminRepository.findValueByKey("news_list_clear_scheduler").equals("on")) {
