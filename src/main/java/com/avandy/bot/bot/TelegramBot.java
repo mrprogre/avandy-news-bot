@@ -579,7 +579,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // DEBUG
         if (Common.DEV_ID != chatId) {
-            log.warn("Ручной запуск поиска по ключевым словам: {}, {} за сутки", chatId, nameByChatId);
+            log.info("Ручной запуск поиска по ключевым словам: {}, {} за сутки", chatId, nameByChatId);
         }
 
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
@@ -598,7 +598,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int counterParts = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Найдено за 48h: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
+            log.info("Найдено за 48h: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
 
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListKeySearchData.get(chatId)) {
@@ -974,7 +974,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // DEBUG
         if (Common.DEV_ID != chatId) {
-            log.warn("{}: Запуск полного поиска", chatId);
+            log.info("{}: Запуск полного поиска", chatId);
         }
 
         getReplyKeyboard(chatId, fullSearchStartText, "");
@@ -1357,7 +1357,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // DEBUG
         if (Common.DEV_ID != chatId) {
-            log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
+            log.info("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 
         List<Headline> headlines = searchService.start(chatId, word);
@@ -1765,13 +1765,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (userRepository.isUserExistsByChatId(message.getChatId()) == 0) {
             userRepository.save(user);
-            log.warn(">>>  Добавлен новый пользователь: {}, {}, {}", user.getChatId(), user.getFirstName(),
-                    user.getUserName());
+            log.info(">>>  Добавлен новый пользователь: {}, {}, {}", user.getChatId(), user.getFirstName(), user.getUserName());
             addSettingsByDefault(message.getChatId());
         } else if (userRepository.isActive(message.getChatId()) == 0) {
             userRepository.updateIsActive(1, message.getChatId());
-            log.warn(">>> Пользователь снова активен: {}, {}, {}", user.getChatId(), user.getFirstName(),
-                    user.getUserName());
+            log.info(">>> Пользователь снова активен: {}, {}, {}", user.getChatId(), user.getFirstName(), user.getUserName());
         }
     }
 
@@ -1908,10 +1906,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             if (e.getMessage().contains("bot was blocked by the user")) {
                 userRepository.updateIsActive(0, Long.parseLong(message.getChatId()));
-                log.warn(String.format("Пользователь chat_id: %s теперь не активен, т.к. он заблокировал бота",
-                        message.getChatId()));
+                log.info(String.format("Пользователь chat_id: %s заблокировал бота", message.getChatId()));
             } else {
-                log.warn(e.getMessage() + String.format("[chat_id: %s]", message.getChatId()));
+                log.error(e.getMessage() + String.format("[chat_id: %s]", message.getChatId()));
             }
         }
         return null;

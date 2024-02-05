@@ -115,7 +115,7 @@ public class Schedulers {
     void activeUsersCount() {
         int usersCount = userRepository.activeUsersCount();
         if (usersCount > 0) {
-            log.warn("Количество активных пользователей: {}", usersCount);
+            log.warn("# Количество активных пользователей: {}", usersCount);
         }
     }
 

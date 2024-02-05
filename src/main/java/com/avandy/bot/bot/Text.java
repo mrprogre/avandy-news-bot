@@ -105,7 +105,7 @@ public class Text extends Common {
             sendIdeaText = "Отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             fullSearchStartText = "» поиск всех новостей";
-            searchByKeywordsStartText = "» поиск по ключевым словам";
+            searchByKeywordsStartText = "» ручной поиск по ключевым словам за 48 часов";
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час для расчёта времени запуска автопоиска по ключевым словам";
@@ -123,10 +123,11 @@ public class Text extends Common {
                     "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>.\n" +
                     "2. Возможность добавить <b>более " + MAX_KEYWORDS_COUNT + "</b> ключевых слов.\n" +
                     "Оплатить премиум (<b>900р.</b> в год)? \uD83D\uDC8E";
-            getPremiumRequestText = "1. <a href=\"https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835\">Ссылка на оплату через СБП</a>.\n" +
-                    "После оплаты отправьте в чат слово: \"<b>оплачено</b>\" и в ближайшие 12 часов Вам будут подключены премиум возможности бота.\n" +
-                    "2. <a href=\"https://avandy-news.ru/refund.html\">Возврат средств</a>\n" +
-                    "Не подошёл наш продукт и прошло <b>не более 3 дней</b> с момента активации премиум возможностей - напишите, и мы <b>вернём</b> средства!";
+            getPremiumRequestText = """
+                    1. <a href="https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835">Ссылка на оплату через СБП</a>.
+                    После оплаты отправьте в чат слово: "<b>оплачено</b>" и в ближайшие 12 часов Вам будут подключены премиум возможности бота.
+                    2. <a href="https://avandy-news.ru/refund.html">Возврат средств</a>
+                    Не подошёл наш продукт и прошло <b>не более 3 дней</b> с момента активации премиум возможностей - напишите, и мы <b>вернём</b> средства!""";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " ключевых слов возможно в <b>Premium</b> режиме";

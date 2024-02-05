@@ -2,8 +2,7 @@
 -- 01.01.2024: 2747,  25, 5291,  205, 9
 -- 01.02.2024: 3150, 150, 2650,  441, 49   (1 покупка)
 -- 04.02.2024: 3181, 738, 11810, 500, 859
--- 05.02.2024: 3183, 952, 17948, 521, 1229
--- 05.02.2024: 3183, 840, 16833, 518, 990
+-- 05.02.2024: 3197, 874, 21429, 524, 1044
 select (select count(*) from excluding_terms) as excluded,
        (select count(*) from keywords)        as keywords,
        (select count(*) from showed_news)     as showed_news,
@@ -86,4 +85,11 @@ select keyword, count(keyword) cnt
 from keywords
 group by keyword
 having count(keyword) > 2
-order by cnt desc
+order by cnt desc;
+
+-- количество ключевых слов по пользователям
+select chat_id, count(keyword) cnt
+from keywords
+group by chat_id
+having count(keyword) > 2
+order by cnt desc;
