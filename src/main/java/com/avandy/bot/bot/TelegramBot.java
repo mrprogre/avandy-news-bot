@@ -48,6 +48,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
     private final Map<Long, Integer> usersTopPage = new ConcurrentHashMap<>();
     private final Map<Long, Integer> usersExclTermsPage = new ConcurrentHashMap<>();
+    private final Map<Long, List<String>> topData = new ConcurrentHashMap<>();
     // Full Search
     private final Map<Long, List<Headline>> newsListFullSearchData = new ConcurrentHashMap<>();
     private final Map<Long, Integer> newsListFullSearchCounter = new ConcurrentHashMap<>();
@@ -1312,11 +1313,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             wordsCount.remove(word);
         }
 
-        return wordsCount.entrySet().stream()
+        List<String> list = wordsCount.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .limit(Common.TOP_TEN_SHOW_LIMIT)
                 .map(x -> String.format("%s [<b>%d</b>]", x.getKey(), x.getValue()) + "\n")
                 .toList();
+        topData.put(chatId, list);
+
+        return list;
     }
 
     // Поиск новостей по слову из Топа
@@ -1509,7 +1513,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons5 = new LinkedHashMap<>();
 
         int x = 1;
-        for (String s : topWordsPrepare(chatId)) {
+        for (String s : topData.get(chatId)) {
             s = s.substring(0, s.indexOf(" "));
 
             if (x <= 4)
@@ -1565,7 +1569,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons5 = new LinkedHashMap<>();
 
         int x = 1;
-        for (String s : topWordsPrepare(chatId)) {
+        for (String s : topData.get(chatId)) {
             s = s.substring(0, s.indexOf(" "));
 
             if (x <= 4)
