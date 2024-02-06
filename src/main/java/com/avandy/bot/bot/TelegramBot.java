@@ -1946,7 +1946,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                     .orElse(null)).getFileId();
 
             URL url = new URL("https://api.telegram.org/bot" + TOKEN + "/getFile?file_id=" + fileId);
-            log.warn(url.toString());
 
             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
             String res = in.readLine();
