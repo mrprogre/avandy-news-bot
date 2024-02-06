@@ -102,13 +102,13 @@ public class TelegramBot extends TelegramLongPollingBot {
             if (update.hasMessage() && (update.getMessage().hasDocument() || update.getMessage().hasPhoto())) {
                 Long chatId = update.getMessage().getChatId();
 
-                // Отправка отзыва с приложением документа (скриншоты сильно сжимаются)
-                if (UserState.SEND_FEEDBACK.equals(userStates.get(chatId))) {
+                // Отправка отзыва/платежа с приложением скриншота как документа, т.к. картинки сильно сжимаются
+                if (UserState.SEND_FEEDBACK.equals(userStates.get(chatId)) ||
+                        UserState.SEND_PAYMENT.equals(userStates.get(chatId))) {
                     if (update.getMessage().hasPhoto()) {
                         sendMessage(chatId, screenshotAsFileText);
                         return;
                     }
-
                     sendFeedbackWithDocument(update);
                     userStates.remove(chatId);
                     sendMessage(chatId, sentText);
@@ -242,6 +242,18 @@ public class TelegramBot extends TelegramLongPollingBot {
                 newsListTopSearchCounter.putIfAbsent(chatId, 0);
 
                 switch (callbackData) {
+                    case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
+                    case "YES_PREMIUM" -> {
+                        sendMessage(Common.DEV_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
+                                userRepository.findNameByChatId(chatId)));
+                        //sendMessage(chatId, getPremiumRequestText);
+                        sendPaymentPremium(chatId, getPremiumRequestText);
+                    }
+                    case "PAYMENT" -> {
+                        userStates.put(chatId, UserState.SEND_PAYMENT);
+                        cancelKeyboard(chatId, sendMessageForDevText2);
+                    }
+
                     case "NEXT_NEWS" -> getNewsListPage(chatId, searchOffset, messageId);
                     case "BEFORE_NEWS" -> getNewsListPage(chatId, -searchOffset, messageId);
 
@@ -328,13 +340,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                         List<String> excludedWordsPage = topRepository.getPage(chatId,
                                 usersTopPage.get(chatId), offset);
                         getExcludedWordsPage(chatId, messageId, items, excludedWordsPage, listOfDeletedFromTopText);
-                    }
-
-                    case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
-                    case "YES_PREMIUM" -> {
-                        sendMessage(Common.DEV_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
-                                userRepository.findNameByChatId(chatId)));
-                        sendMessage(chatId, getPremiumRequestText);
                     }
 
                     case "FEEDBACK" -> {
@@ -1748,6 +1753,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             buttons.put("YES_PREMIUM", yesText);
             sendMessage(chatId, getPremiumYesOrNowText, InlineKeyboards.inlineKeyboardMaker(buttons));
         }
+    }
+
+    public void sendPaymentPremium(long chatId, String text) {
+            Map<String, String> buttons = new LinkedHashMap<>();
+            buttons.put("PAYMENT", sendPaymentText);
+            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     // Сохранение пользователя в БД

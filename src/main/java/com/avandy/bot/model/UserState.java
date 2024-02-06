@@ -6,5 +6,6 @@ public enum UserState {
     DEL_KEYWORDS,
     ADD_EXCLUDED,
     DEL_EXCLUDED,
-    DEL_TOP
+    DEL_TOP,
+    SEND_PAYMENT
 }

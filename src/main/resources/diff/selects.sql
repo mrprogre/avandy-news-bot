@@ -2,7 +2,7 @@
 -- 01.01.2024: 2747,  25, 5291,  205, 9
 -- 01.02.2024: 3150, 150, 2650,  441, 49   (1 покупка)
 -- 04.02.2024: 3181, 738, 11810, 500, 859
--- 05.02.2024: 3197, 874, 21429, 524, 1044
+-- 05.02.2024: 3202, 896, 22292, 524, 1074
 select (select count(*) from excluding_terms) as excluded,
        (select count(*) from keywords)        as keywords,
        (select count(*) from showed_news)     as showed_news,

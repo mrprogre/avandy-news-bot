@@ -23,7 +23,7 @@ public class Text extends Common {
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
-            screenshotAsFileText, sentText, searchByKeywordsStartText;
+            screenshotAsFileText, sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -83,6 +83,7 @@ public class Text extends Common {
             delFromListText = "Укажите номера слов для удаления (разделять запятой)";
             removeAllText = "удалить всё";
             sendMessageForDevText = "Написать сообщение разработчику (просьба скриншот прилагать <b>как файл</b>, т.к. Telegram сильно сжимает фото)";
+            sendMessageForDevText2 = "Просьба скриншот прилагать <b>как файл</b>, т.к. Telegram сильно сжимает фото";
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
@@ -125,7 +126,7 @@ public class Text extends Common {
                     "Оплатить премиум (<b>900р.</b> в год)? \uD83D\uDC8E";
             getPremiumRequestText = """
                     1. <a href="https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835">Ссылка на оплату через СБП</a>.
-                    После оплаты отправьте в чат слово: "<b>оплачено</b>" и в ближайшие 12 часов Вам будут подключены премиум возможности бота.
+                    В ближайшие 12 часов после отправки подтверждения платежа Вам будут подключены премиум возможности бота.
                     2. <a href="https://avandy-news.ru/refund.html">Возврат средств</a>
                     Не подошёл наш продукт и прошло <b>не более 3 дней</b> с момента активации премиум возможностей - напишите, и мы <b>вернём</b> средства!""";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
@@ -157,7 +158,9 @@ public class Text extends Common {
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
             screenshotAsFileText = "Просьба направить скриншот как файл!";
+            sendPaymentText = "Отправить скриншот с оплатой";
         } else {
+            sendPaymentText = "Send transfer confirmation";
             screenshotAsFileText = "Please send the screenshot as a file!";
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
@@ -251,6 +254,7 @@ public class Text extends Common {
             delFromListText = "Input word numbers to remove (separated by comma)";
             removeAllText = "delete all";
             sendMessageForDevText = "Write a message to the developer (attach a screenshot <b>as a file</b>, since Telegram greatly compresses photos)";
+            sendMessageForDevText2 = "Attach a screenshot <b>as a file</b> please, since Telegram greatly compresses photos";
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "News sources";
