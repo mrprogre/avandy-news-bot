@@ -1867,7 +1867,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void sendMessage(long chatId, String textToSend) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(textToSend);
+        if (textToSend != null && textToSend.length() != 0) message.setText(textToSend);
         message.enableHtml(true);
         message.disableWebPagePreview();
         executeMessage(message);
@@ -1877,7 +1877,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private Integer sendMessage(long chatId, String textToSend, ReplyKeyboard keyboard) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        if (textToSend != null) message.setText(textToSend);
+        if (textToSend != null && textToSend.length() != 0) message.setText(textToSend);
         else return -1;
         message.enableHtml(true);
         message.disableWebPagePreview();
@@ -1889,7 +1889,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void sendMessageWithPreview(long chatId, String textToSend, ReplyKeyboard keyboard) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        if (textToSend != null) message.setText(textToSend);
+        if (textToSend != null && textToSend.length() != 0) message.setText(textToSend);
         else return;
         message.enableHtml(true);
         if (keyboard != null) message.setReplyMarkup(keyboard);
@@ -1900,22 +1900,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private Integer executeMessage(SendMessage message) {
         try {
             Message execute = execute(message);
-
-            // Предупреждение выброса исключения, что много сообщений в секунду
-//            try {
-//                Thread.sleep(Common.SLEEP_BETWEEN_SENDING_MESSAGES);
-//            } catch (InterruptedException e) {
-//                log.error(e.getMessage());
-//            }
-
             return execute.getMessageId();
-
         } catch (TelegramApiException e) {
             if (e.getMessage().contains("bot was blocked by the user")) {
                 userRepository.updateIsActive(0, Long.parseLong(message.getChatId()));
                 log.info(String.format("Пользователь chat_id: %s заблокировал бота", message.getChatId()));
             } else {
-                log.error(e.getMessage() + String.format("[chat_id: %s]", message.getChatId()));
+                log.error(e.getMessage() + String.format("[executeMessage, chat_id: %s]", message.getChatId()));
             }
         }
         return null;
