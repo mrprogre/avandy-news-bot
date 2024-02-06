@@ -23,7 +23,7 @@ public class Text extends Common {
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
-            screenshotAsFileText, sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2;
+            sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -83,8 +83,8 @@ public class Text extends Common {
             addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
             delFromListText = "Укажите номера слов для удаления (разделять запятой)";
             removeAllText = "удалить всё";
-            sendMessageForDevText = "Написать сообщение разработчику (просьба скриншот прилагать <b>как файл</b>, т.к. Telegram сильно сжимает фото)";
-            sendMessageForDevText2 = "Просьба скриншот прилагать <b>как файл</b>, т.к. Telegram сильно сжимает фото";
+            sendMessageForDevText = "Написать сообщение разработчику (можно приложить один скриншот)";
+            sendMessageForDevText2 = "Направить скриншот оплаты";
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей";
@@ -158,11 +158,9 @@ public class Text extends Common {
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
-            screenshotAsFileText = "Просьба направить скриншот как файл!";
             sendPaymentText = "Отправить скриншот с оплатой";
         } else {
             sendPaymentText = "Send transfer confirmation";
-            screenshotAsFileText = "Please send the screenshot as a file!";
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
@@ -255,8 +253,8 @@ public class Text extends Common {
             addInListText = "Input words to add (separated by comma) and send the message";
             delFromListText = "Input word numbers to remove (separated by comma)";
             removeAllText = "delete all";
-            sendMessageForDevText = "Write a message to the developer (attach a screenshot <b>as a file</b>, since Telegram greatly compresses photos)";
-            sendMessageForDevText2 = "Attach a screenshot <b>as a file</b> please, since Telegram greatly compresses photos";
+            sendMessageForDevText = "Write a message to the developer (you can attach one screenshot)";
+            sendMessageForDevText2 = "Send a screenshot of payment";
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "News sources";

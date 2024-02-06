@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.*;
@@ -97,18 +97,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         try {
 
-            // Отправка отзыва с приложением скриншота как документа
-            // Телеграм сильно сжимает фото и оно становится нечитаемым
-            if (update.hasMessage() && (update.getMessage().hasDocument() || update.getMessage().hasPhoto())) {
+            // Отправка отзыва с приложением скриншота
+            if (update.hasMessage() && update.getMessage().hasPhoto()) {
                 Long chatId = update.getMessage().getChatId();
 
-                // Отправка отзыва/платежа с приложением скриншота как документа, т.к. картинки сильно сжимаются
+                // Отправка отзыва/платежа с приложением скриншота
                 if (UserState.SEND_FEEDBACK.equals(userStates.get(chatId)) ||
                         UserState.SEND_PAYMENT.equals(userStates.get(chatId))) {
-                    if (update.getMessage().hasPhoto()) {
-                        sendMessage(chatId, screenshotAsFileText);
-                        return;
-                    }
+
                     sendFeedbackWithDocument(update);
                     userStates.remove(chatId);
                     sendMessage(chatId, sentText);
@@ -616,7 +612,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             if (counterParts != 0) {
-                getReplyKeyboard(chatId,foundNewsText + ": <b>" + headlines.size() + "</b> " +
+                getReplyKeyboard(chatId, foundNewsText + ": <b>" + headlines.size() + "</b> " +
                         Common.ICON_NEWS_FOUNDED, "");
             }
 
@@ -1545,7 +1541,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (wordsCount > topSearchOffset) {
             buttons.put("BEFORE_TOP", "« «");
             buttons.put("TOTAL_TOP", (int) Math.ceil((double) (i - 1) / topSearchOffset) + delimiterPages +
-                   (int) Math.ceil((double) wordsCount / topSearchOffset));
+                    (int) Math.ceil((double) wordsCount / topSearchOffset));
             buttons.put("NEXT_TOP", "» »");
         }
 
@@ -1756,9 +1752,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public void sendPaymentPremium(long chatId, String text) {
-            Map<String, String> buttons = new LinkedHashMap<>();
-            buttons.put("PAYMENT", sendPaymentText);
-            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("PAYMENT", sendPaymentText);
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
 
     // Сохранение пользователя в БД
@@ -1937,16 +1933,20 @@ public class TelegramBot extends TelegramLongPollingBot {
         String userName = userRepository.findNameByChatId(chatIdFrom);
         String caption = update.getMessage().getCaption();
         if (caption == null) caption = "не удосужился..";
+        List<PhotoSize> photos = update.getMessage().getPhoto();
 
-        SendDocument sendDocument = new SendDocument();
-        sendDocument.setChatId(Common.DEV_ID);
-        sendDocument.setCaption("Message from " + userName + ", " + chatIdFrom + ":\n" + caption);
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setChatId(Common.DEV_ID);
+        sendPhoto.setCaption("Message from " + userName + ", " + chatIdFrom + ":\n" + caption);
 
-        Document document = update.getMessage().getDocument();
-        if (document == null) return;
+        List<PhotoSize> photo = update.getMessage().getPhoto();
+        if (photo == null) return;
         try {
-            String fileId = document.getFileId();
+            String fileId = Objects.requireNonNull(photos.stream().max(Comparator.comparing(PhotoSize::getFileSize))
+                    .orElse(null)).getFileId();
+
             URL url = new URL("https://api.telegram.org/bot" + TOKEN + "/getFile?file_id=" + fileId);
+            log.warn(url.toString());
 
             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
             String res = in.readLine();
@@ -1957,12 +1957,13 @@ public class TelegramBot extends TelegramLongPollingBot {
             BufferedImage img = ImageIO.read(url2);
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(img, "png", os);
+            ImageIO.write(img, "jpg", os);
             InputStream is = new ByteArrayInputStream(os.toByteArray());
+            sendPhoto.setPhoto(new InputFile(is, caption));
 
-            sendDocument.setDocument(new InputFile(is, "screen.png"));
-            execute(sendDocument);
-        } catch (Exception e) {
+            execute(sendPhoto);
+
+        } catch (IOException | TelegramApiException e) {
             log.error(e.getMessage());
         }
     }
