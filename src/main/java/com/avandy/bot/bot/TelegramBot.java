@@ -1868,6 +1868,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         if (textToSend != null && textToSend.length() != 0) message.setText(textToSend);
+        else return;
         message.enableHtml(true);
         message.disableWebPagePreview();
         executeMessage(message);
