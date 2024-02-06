@@ -57,7 +57,7 @@ public class Text extends Common {
             sentText = "Доставлено ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
-            minWordLengthText = "Длина слова должна быть более 2 символов и менее 18";
+            minWordLengthText = "Длина слова должна быть более 1 символа и менее 18";
             deleteAllWordsText = "❌ все слова удалены";
             wordIsExistsText = "Слово уже есть в списке: ";
             wordsIsNotAddedText = "Слова не добавлены";
@@ -226,7 +226,7 @@ public class Text extends Common {
             sentText = "Done ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
-            minWordLengthText = "Word length must be more than 2 characters and less than 18";
+            minWordLengthText = "Word length must be more than 1 characters and less than 18";
             deleteAllWordsText = "❌ all words removed";
             wordIsExistsText = "The word is already on the list: ";
             wordsIsNotAddedText = "No words added";
