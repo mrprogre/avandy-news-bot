@@ -80,12 +80,12 @@ public class Schedulers {
         }
     }
 
-    // info: Мониторинг количества загруженных новостей: раз в 6 часов
+    // info: Мониторинг количества загруженных новостей: раз в 2 часа
     @Scheduled(cron = "${cron.monitoring.save.news}")
     void getStatSaveNews() {
-        int newsListCounts = newsListRepository.getNewsListCountByPeriod("6 hours");
+        int newsListCounts = newsListRepository.getNewsListCountByPeriod("2 hours");
         if (newsListCounts > 0) {
-            log.warn("За 6 часов сохранено новостей: {} ", newsListCounts);
+            log.warn("За 2 часа сохранено новостей: {} ", newsListCounts);
         }
     }
 

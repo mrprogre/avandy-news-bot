@@ -57,14 +57,10 @@ where n.add_date >= (current_timestamp - cast('2 hours' as interval))
 order by n.id desc;
 
 -- Новости по языкам
-SELECT n.id, n.source, n.title, n.title_hash, n.link, n.pub_date, n.add_date
+SELECT count(*) --n.id, n.source, n.title, n.title_hash, n.link, n.pub_date, n.add_date
 FROM news_list n
          JOIN rss_list r on n.source = r.source and lang = 'ru'
-WHERE pub_date > (current_timestamp - cast('1 hours' as interval));
-
-SELECT count(*) FROM news_list n
-         JOIN rss_list r on n.source = r.source and lang = 'ru'
-WHERE pub_date > (current_timestamp - cast('1 hour' as interval));
+WHERE pub_date >= current_date;
 
 -- Новости по источнику
 select *
