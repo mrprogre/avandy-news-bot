@@ -165,8 +165,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 } else if (UserState.ADD_KEYWORDS.equals(userState)) {
                     String keywords = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, keywords)) return;
-                    String[] words = keywords.split(",");
-                    addKeyword(chatId, words);
+                    addKeyword(chatId, new HashSet<>(Arrays.asList(keywords.split(","))));
 
                     // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
                 } else if (UserState.DEL_KEYWORDS.equals(userState)) {
@@ -756,12 +755,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Добавление ключевых слов
-    private void addKeyword(long chatId, String[] keywords) {
+    private void addKeyword(long chatId, HashSet<String> keywords) {
         int counter = 0;
         int isPremium = userRepository.isPremiumByChatId(chatId);
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
         int currentKeywordsCount = keywordRepository.getKeywordsCountByChatId(chatId);
-        int totalKeywordsCount = currentKeywordsCount + keywords.length;
+        int totalKeywordsCount = currentKeywordsCount + keywords.size();
 
         if (isPremium != 1 && totalKeywordsCount > Common.MAX_KEYWORDS_COUNT && chatId != Common.DEV_ID) {
             sendMessage(chatId, premiumIsActive3);
