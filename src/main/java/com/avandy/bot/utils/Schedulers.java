@@ -58,31 +58,32 @@ public class Schedulers {
     // Сохранение всех новостей в БД по всем источникам каждые 2 минуты
     @Scheduled(cron = "${cron.fill.database}")
     public void scheduler() {
+        long searchTimeLimit = 50000L;
         long start = System.currentTimeMillis();
 
         int countRome = searchService.downloadNewsByRome();
         int countJsoup = searchService.downloadNewsByJsoup();
 
         long searchTime = System.currentTimeMillis() - start;
-        if ((countRome > 0 || countJsoup > 0) && searchTime > 50000L) {
+        if ((countRome > 0 || countJsoup > 0) && searchTime > searchTimeLimit) {
             log.warn("Сохранено новостей: {} (rome: {} + jsoup: {}) за {} s", countRome + countJsoup,
                     countRome, countJsoup, searchTime / 1000);
         }
     }
 
-    // error: Мониторинг работы загрузчика новостей: раз в 2 часа
+    // error: Мониторинг работы загрузчика новостей: раз в 1 час
     @Scheduled(cron = "${cron.monitoring.no.save.news}")
     void getStatNoSaveNews() {
-        int newsListCounts = newsListRepository.getNewsListCountBy6Hours("2 hours");
+        int newsListCounts = newsListRepository.getNewsListCountByPeriod("1 hour");
         if (newsListCounts < 5) {
-            log.error("Загрузчик новостей не работает, сохранено новостей: {}!", newsListCounts);
+            log.error("### Загрузчик новостей не работает, сохранено новостей: {} ###", newsListCounts);
         }
     }
 
     // info: Мониторинг количества загруженных новостей: раз в 6 часов
     @Scheduled(cron = "${cron.monitoring.save.news}")
     void getStatSaveNews() {
-        int newsListCounts = newsListRepository.getNewsListCountBy6Hours("6 hours");
+        int newsListCounts = newsListRepository.getNewsListCountByPeriod("6 hours");
         if (newsListCounts > 0) {
             log.warn("За 6 часов сохранено новостей: {} ", newsListCounts);
         }

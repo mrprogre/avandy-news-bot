@@ -37,7 +37,7 @@ public interface NewsListRepository extends CrudRepository<NewsList, Long> {
     /* Schedulers */
     @Query(value = "SELECT count(*) FROM news_list WHERE pub_date > (current_timestamp - cast(:interval as interval))",
             nativeQuery = true)
-    int getNewsListCountBy6Hours(String interval);
+    int getNewsListCountByPeriod(String interval);
 
     @Transactional
     @Modifying(clearAutomatically = true)
