@@ -165,6 +165,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 } else if (UserState.ADD_KEYWORDS.equals(userState)) {
                     String keywords = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, keywords)) return;
+                    // Люди часто добавляют одни и те же слова
                     addKeyword(chatId, new HashSet<>(Arrays.asList(keywords.split(","))));
 
                     // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)

@@ -123,7 +123,8 @@ public class Text extends Common {
             getPremiumYesOrNowText = "На тарифе <b>Premium</b>\n" +
                     "1. Поиск новостей по ключевым словам производится каждые <b>2 минуты</b>. " +
                     "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>.\n" +
-                    "2. Возможность добавить <b>более " + MAX_KEYWORDS_COUNT + "</b> ключевых слов.\n" +
+                    "2. Возможность добавить <b>более " + MAX_KEYWORDS_COUNT + "</b> ключевых слов (до " +
+                    MAX_KEYWORDS_COUNT_PREMIUM + ")\n" +
                     "Оплатить премиум (<b>900р.</b> в год)? \uD83D\uDC8E";
             getPremiumRequestText = """
                     1. <a href="https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835">Ссылка на оплату через СБП</a>.
@@ -191,7 +192,8 @@ public class Text extends Common {
             getPremiumYesOrNowText = "On the <b>premium</b> tariff:\n" +
                     "1. News search by keywords is performed every <b>2 minutes</b>. " +
                     "So you <b>will be the first</b> to receive the <b>most up-to-date information</b>.\n" +
-                    "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords.\n" +
+                    "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords (up to " +
+                    MAX_KEYWORDS_COUNT_PREMIUM + " words).\n" +
                     "Pay for a Premium subscription (<b>50$</b> per year) \uD83D\uDC8E";
             getPremiumText = "Premium";
             premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b> /premium) " +
