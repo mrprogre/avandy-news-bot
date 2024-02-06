@@ -141,13 +141,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                     String textToSend = messageText.substring(messageText.indexOf(" "));
                     List<User> users = userRepository.findAllRusByIsActive();
                     for (User user : users) {
-                        sendMessage(user.getChatId(), textToSend);
+                        sendMessageWithPreview(user.getChatId(), textToSend, null);
                     }
                     // SEND TO CHAT_ID FROM BOT OWNER
                 } else if (messageText.startsWith("@") && config.getBotOwner() == chatId) {
                     long chatToSend = Long.parseLong(messageText.substring(1, messageText.indexOf(" ")));
                     String textToSend = messageText.substring(messageText.indexOf(" "));
-                    sendMessage(chatToSend, textToSend);
+                    sendMessageWithPreview(chatToSend, textToSend, null);
 
                     // DEACTIVATE SOURCE
                 } else if (messageText.startsWith("-") && config.getBotOwner() == chatId) {
