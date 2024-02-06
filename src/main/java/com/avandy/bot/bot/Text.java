@@ -66,7 +66,8 @@ public class Text extends Common {
                     <b>Разработчик</b>: <a href="https://github.com/mrprogre">mrprogre</a>
                     <b>Почта</b>: rps_project@mail.ru
                     <b>Основная программа:</b> <a href="https://avandy-news.ru">Avandy News Analysis</a> (запись в Реестре российского ПО: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)
-                    <b>Помощь в тестировании:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">Andrew Sereda</a>""";
+                    <b>Тестировщики:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">Andrew Sereda</a>
+                    <b>Видеоинструкция:</b> <a href="https://youtu.be/HPAk8GPHes4">youtube</a>""";
             buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
             intervalText = "Глубина";
             autoSearchText = "Автопоиск";
