@@ -131,9 +131,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                 // DEBUG: запись действий пользователя для анализа
                 if (Common.DEV_ID != chatId) {
                     if (userState != null)
-                        log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId),
+                        log.info("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId),
                                 userState + " " + messageText);
-                    else log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId), messageText);
+                    else log.info("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId), messageText);
                 }
 
                 // SEND TO ALL FROM BOT OWNER
