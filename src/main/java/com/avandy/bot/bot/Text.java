@@ -236,6 +236,7 @@ public class Text extends Common {
                     <b>E-mail</b>: rps_project@mail.ru
                     <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)
                     <b>Testing:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">Andrew Sereda</a>
+                    <b>Video:</b> <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     """;
             buyButtonText = "Good buy! " + ICON_GOOD_BYE;
             intervalText = "Interval";
