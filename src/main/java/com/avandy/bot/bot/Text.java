@@ -182,7 +182,7 @@ public class Text extends Common {
             yesButtonText = """
                     The first thing to do is add <b>keywords</b>.
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    You can also watch the <b>video instructions</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
+                    You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Automatic news search is performed based on a complete match with a keyword.
                     - - - - - - - - - - - - - - - - - - - - - - - -
