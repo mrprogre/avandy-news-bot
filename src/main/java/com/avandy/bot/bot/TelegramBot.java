@@ -764,7 +764,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int currentKeywordsCount = keywordRepository.getKeywordsCountByChatId(chatId);
         int totalKeywordsCount = currentKeywordsCount + keywords.size();
 
-        if (isPremium != 1 && totalKeywordsCount > Common.MAX_KEYWORDS_COUNT /*&& chatId != Common.DEV_ID*/) {
+        if (isPremium != 1 && totalKeywordsCount > Common.MAX_KEYWORDS_COUNT && chatId != Common.DEV_ID) {
             sendMessage(chatId, premiumIsActive3);
             return;
         }
