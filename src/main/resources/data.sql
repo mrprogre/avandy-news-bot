@@ -1,4 +1,4 @@
---DELETE FROM showed_news;
+DELETE FROM showed_news;
 
 DELETE FROM admin;
 INSERT INTO admin (key, value) VALUES ('showed_news_clear_scheduler', 'on');

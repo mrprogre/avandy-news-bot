@@ -52,11 +52,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Full Search
     private final Map<Long, List<Headline>> newsListFullSearchData = new ConcurrentHashMap<>();
     private final Map<Long, Integer> newsListFullSearchCounter = new ConcurrentHashMap<>();
-    private Map<Long, Integer> newsListFullSearchMessageId = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> newsListFullSearchMessageId = new ConcurrentHashMap<>();
     // Keywords Search
     private final Map<Long, List<Headline>> newsListKeySearchData = new ConcurrentHashMap<>();
     private final Map<Long, Integer> newsListKeySearchCounter = new ConcurrentHashMap<>();
-    private Map<Long, Integer> newsListKeySearchMessageId = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> newsListKeySearchMessageId = new ConcurrentHashMap<>();
     // Top Search
     private final Map<Long, List<Headline>> newsListTopSearchData = new ConcurrentHashMap<>();
     private final Map<Long, Integer> newsListTopSearchCounter = new ConcurrentHashMap<>();
@@ -583,7 +583,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     /* KEYWORDS */
     // Ручной поиск по ключевым словам
     public void findNewsByKeywordsManual(long chatId) {
-        newsListKeySearchMessageId = new ConcurrentHashMap<>();
+        //newsListKeySearchMessageId = new ConcurrentHashMap<>();
         newsListKeySearchCounter.put(chatId, 0);
         String nameByChatId = userRepository.findNameByChatId(chatId);
 
@@ -636,7 +636,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Меняющееся сообщение со всеми новостями по страницам
     private void getNewsListKeyPage(Long chatId, int plusMinus, int messageId) {
-        newsListKeySearchMessageId.putIfAbsent(chatId, messageId);
+        newsListKeySearchMessageId.put(chatId, messageId);
         List<Headline> headlines = newsListKeySearchData.get(chatId);
         if (headlines == null) return;
         messageId = newsListKeySearchMessageId.get(chatId);
@@ -982,7 +982,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     /* FULL SEARCH */
     // Полный поиск
     private void fullSearch(long chatId) {
-        newsListFullSearchMessageId = new ConcurrentHashMap<>();
+        //newsListFullSearchMessageId = new ConcurrentHashMap<>();
         newsListFullSearchCounter.put(chatId, 0);
 
         // DEBUG
@@ -1025,7 +1025,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Меняющееся сообщение со всеми новостями по страницам
     private void getNewsListPage(Long chatId, int plusMinus, int messageId) {
-        newsListFullSearchMessageId.putIfAbsent(chatId, messageId);
+        newsListFullSearchMessageId.put(chatId, messageId);
         List<Headline> headlines = newsListFullSearchData.get(chatId);
         if (headlines == null) return;
         messageId = newsListFullSearchMessageId.get(chatId);
