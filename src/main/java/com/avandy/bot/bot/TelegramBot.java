@@ -69,6 +69,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final TopTenRepository topRepository;
     private final KeywordRepository keywordRepository;
     private final SettingsRepository settingsRepository;
+    private final ShowedNewsRepository showedNewsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
     private final int offset = 60;
     private final int searchOffset = 5;
@@ -81,7 +82,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
                        SearchService searchService, UserRepository userRepository, KeywordRepository keywordRepository,
                        SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
-                       RssRepository rssRepository, TopTenRepository topRepository) {
+                       RssRepository rssRepository, TopTenRepository topRepository,
+                       ShowedNewsRepository showedNewsRepository) {
         super(botToken);
         this.config = config;
         this.searchService = searchService;
@@ -91,6 +93,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.excludingTermsRepository = excludingTermsRepository;
         this.rssRepository = rssRepository;
         this.topRepository = topRepository;
+        this.showedNewsRepository = showedNewsRepository;
     }
 
     @Override
@@ -216,6 +219,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                         case "/search" -> new Thread(() -> initSearchesKeyboard(chatId)).start();
                         case "/info" -> new Thread(() -> infoKeyboard(chatId)).start();
                         // не использую в интерфейсе
+                        case "/clear" -> {
+                            showedNewsRepository.deleteHistoryManual(chatId);
+                            sendMessage(chatId, historyClearText);
+                        }
                         case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
                         case "/excluding" -> getExcludedList(chatId);
                         case "/delete" -> showYesNoOnDeleteUser(chatId);
@@ -1827,7 +1834,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         String fullText = String.format("2" + initSearchTemplateText, searchWithFilterText,
                 settingsRepository.getFullSearchPeriod(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
-                searchWithFilter2Text);
+                searchWithFilter2Text + ",\n" + cleanFullSearchHistoryText);
 
         String topText = String.format("3" + initSearchTemplateText, top20Text2,
                 settingsRepository.getTopPeriod(chatId), topRepository.deleteFromTopTenCount(chatId),

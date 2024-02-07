@@ -23,7 +23,8 @@ public class Text extends Common {
             removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
-            sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2;
+            sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
+            historyClearText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -55,6 +56,7 @@ public class Text extends Common {
                     ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Сохранено ✔️";
             sentText = "Доставлено ✔️";
+            historyClearText = "История просмотра очищена ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 1 символа и менее 18";
@@ -164,7 +166,9 @@ public class Text extends Common {
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
             sendPaymentText = "Отправить скриншот с оплатой";
+            cleanFullSearchHistoryText = "очистить историю просмотра /clear";
         } else {
+            cleanFullSearchHistoryText = "clear browsing history /clear";
             sendPaymentText = "Send transfer confirmation";
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
@@ -232,6 +236,7 @@ public class Text extends Common {
                     "However, I will see your message in the journal " + ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Done ✔️";
             sentText = "Done ✔️";
+            historyClearText = "Browsing history cleared ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 1 characters and less than 18";
