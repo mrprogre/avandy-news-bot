@@ -133,7 +133,7 @@ public class Text extends Common {
                     Не подошёл наш продукт и прошло <b>не более 3 дней</b> с момента активации премиум возможностей - напишите, и мы <b>вернём</b> средства!""";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " ключевых слов возможно в <b>Premium</b> режиме";
+            premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " ключевых слов возможно в <b>/premium</b> режиме";
             premiumIsActive4 = "Максимальное количество ключевых слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             yesButtonText = """
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
@@ -193,7 +193,7 @@ public class Text extends Common {
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Click the "Add" button.""";
             premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
-            premiumIsActive3 = "Adding more than " + MAX_KEYWORDS_COUNT + " is possible in <b>Premium</b> mode";
+            premiumIsActive3 = "Adding more than " + MAX_KEYWORDS_COUNT + " is possible in <b>/premium</b> mode";
             premiumIsActive2 = "Premium activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Paypal link</a>";
