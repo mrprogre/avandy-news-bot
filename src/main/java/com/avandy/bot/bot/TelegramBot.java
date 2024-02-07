@@ -60,7 +60,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Top Search
     private final Map<Long, List<Headline>> newsListTopSearchData = new ConcurrentHashMap<>();
     private final Map<Long, Integer> newsListTopSearchCounter = new ConcurrentHashMap<>();
-    private Map<Long, Integer> newsListTopSearchMessageId = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> newsListTopSearchMessageId = new ConcurrentHashMap<>();
     // Repository
     private final SearchService searchService;
     private final BotConfig config;
@@ -1541,7 +1541,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 buttons5.put("TOP_NUM_" + x++, s);
         }
         sendMessage(chatId, chooseNumberWordFromTop, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
-        newsListTopSearchMessageId = new ConcurrentHashMap<>();
+        newsListTopSearchMessageId.remove(chatId);
     }
 
     // Кнопки поиска по слову в Топ с кнопками пагинации
