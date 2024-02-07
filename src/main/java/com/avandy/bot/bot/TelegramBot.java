@@ -169,8 +169,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                     String keywords = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, keywords)) return;
                     // Люди часто добавляют одни и те же слова
-                    addKeyword(chatId, new HashSet<>(Arrays.asList(keywords.split(","))));
-                    return;
+                    boolean isAdded = addKeyword(chatId, new HashSet<>(Arrays.asList(keywords.split(","))));
+                    if (!isAdded) return;
 
                     // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
                 } else if (UserState.DEL_KEYWORDS.equals(userState)) {
@@ -764,7 +764,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Добавление ключевых слов
-    private void addKeyword(long chatId, HashSet<String> keywords) {
+    private boolean addKeyword(long chatId, HashSet<String> keywords) {
         int counter = 0;
         int isPremium = userRepository.isPremiumByChatId(chatId);
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
@@ -773,12 +773,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (isPremium != 1 && totalKeywordsCount > Common.MAX_KEYWORDS_COUNT && chatId != Common.DEV_ID) {
             sendMessage(chatId, premiumIsActive3);
-            return;
+            return false;
         }
 
         if (totalKeywordsCount > Common.MAX_KEYWORDS_COUNT_PREMIUM) {
             sendMessage(chatId, premiumIsActive4);
-            return;
+            return false;
         }
 
         Keyword word;
@@ -812,6 +812,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             sendMessage(chatId, wordsIsNotAddedText);
         }
         showKeywordsList(chatId);
+        return true;
     }
 
     // Изменение периода поиска
