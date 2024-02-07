@@ -138,13 +138,15 @@ public class Text extends Common {
             yesButtonText = """
                     Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Автопоиск новостей производится по полному совпадению с ключевым словом (запуск 1 раз в час по умолчанию).
+                    Также можно ознакомиться с <b>видеоинструкцией</b> на <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Однако, можно использовать символ <b>*</b>, который обозначает одну любую букву в слове.
-                    <b>Например</b>: ключевое слово <b>курс</b> найдёт новости содержащие только слово: курс
-                    <b>курс*</b> найдёт с: курс, курсА, курсЫ
-                    <b>курс**</b>: курс, курсА, курсАХ
-                    <b>Росси* созда**</b>: в РоссиИ создаНА, РоссиЯ создаЛА
+                    Автопоиск новостей производится по полному совпадению с ключевыми словами.
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    Однако, можно использовать <b>символ *</b>, который обозначает одну любую букву в слове.
+                    <b>Например</b>: ключевое слово <b>курс</b> найдёт новости содержащие только это слово
+                    <b>курс*</b> найдёт и <b>курс</b>, и <b>курсА, курсЫ</b>
+                    <b>курс**</b> - <b>курс, курсА, курсАХ</b>
+                    <b>Росси* созда**</b> - в <b>РоссиИ создаНА, РоссиЯ создаЛА</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Нажми кнопку "Добавить".""";
             listKeywordsText = """
@@ -180,7 +182,9 @@ public class Text extends Common {
             yesButtonText = """
                     The first thing to do is add <b>keywords</b>.
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Automatic news search is performed based on a complete match with a keyword (runs once an hour by default).
+                    You can also watch the <b>video instructions</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    Automatic news search is performed based on a complete match with a keyword.
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     However you can use the * symbol:
                     1. <b>tax</b> will find all news only with <b>tax</b> but not <b>taxes, taxcom</b>.
