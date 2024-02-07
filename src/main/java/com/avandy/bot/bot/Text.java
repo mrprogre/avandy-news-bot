@@ -140,10 +140,11 @@ public class Text extends Common {
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Автопоиск новостей производится по полному совпадению с ключевым словом (запуск 1 раз в час по умолчанию).
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Однако, можно использовать символ *, который обозначает одну любую букву в слове.
-                      <b>курс</b> найдёт: курс
-                      <b>курс*</b> найдёт: курс, курсА
-                      <b>курс**</b> найдёт: курс, курсА, курсАХ
+                    Однако, можно использовать символ <b>*</b>, который обозначает одну любую букву в слове.
+                    <b>Например</b>: ключевое слово <b>курс</b> найдёт новости содержащие только слово: курс
+                    <b>курс*</b> найдёт с: курс, курсА, курсЫ
+                    <b>курс**</b>: курс, курсА, курсАХ
+                    <b>Росси* созда**</b>: в РоссиИ создаНА, РоссиЯ создаЛА
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Нажми кнопку "Добавить".""";
             listKeywordsText = """
@@ -153,8 +154,9 @@ public class Text extends Common {
                     Запуск поиска раз в %s
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     <b>курс</b> найдёт: курс
-                    <b>курс*</b> найдёт: курс, курсА
-                    <b>курс**</b> найдёт: курс, курсА, курсАХ
+                    <b>курс*</b>: курс, курсА, курсЫ
+                    <b>курс**</b>: курс, курсА, курсАХ
+                    <b>Росси* созда**</b>: в РоссиИ создаНА, РоссиЯ создаЛА
                     - - - - - - - - - - - - - - - - - - - - - - - -""";
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
@@ -173,6 +175,7 @@ public class Text extends Common {
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     <b>tax</b> will find all news only with <b>tax</b>
                     <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
+                    <b>pay tax**</b> will find headlines with <b>pay taxes</b>.
                     - - - - - - - - - - - - - - - - - - - - - - - -""";
             yesButtonText = """
                     The first thing to do is add <b>keywords</b>.
@@ -182,6 +185,7 @@ public class Text extends Common {
                     However you can use the * symbol:
                     1. <b>tax</b> will find all news only with <b>tax</b> but not <b>taxes, taxcom</b>.
                     2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
+                    3. <b>pay tax**</b> will find headlines with <b>pay taxes</b>.
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Click the "Add" button.""";
             premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
