@@ -176,7 +176,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 } else if (UserState.DEL_KEYWORDS.equals(userState)) {
                     String keywords = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, keywords)) return;
-                    deleteKeywords(keywords, chatId);
+                    boolean isDeleted = deleteKeywords(keywords, chatId);
+                    if (!isDeleted) return;
 
                     // Добавление слов-исключений
                 } else if (UserState.ADD_EXCLUDED.equals(userState)) {
@@ -823,7 +824,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Удаление ключевых слов. Порядковые номера преобразуются в слова, которые потом и удаляются из БД
-    private void deleteKeywords(String keywordNumbers, long chatId) {
+    private boolean deleteKeywords(String keywordNumbers, long chatId) {
         ArrayList<String> words = new ArrayList<>();
 
         try {
@@ -869,9 +870,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             showKeywordsList(chatId);
         } catch (NumberFormatException n) {
             sendMessage(chatId, allowCommasAndNumbersText);
+            return false;
         } catch (NullPointerException npe) {
             sendMessage(chatId, "click /keywords" + Common.TOP_TEN_SHOW_LIMIT);
+            return false;
         }
+        return true;
     }
 
     // Изменение времени старта запуска автопоиска по ключевым словам
