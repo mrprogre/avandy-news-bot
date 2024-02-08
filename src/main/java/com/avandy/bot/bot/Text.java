@@ -25,7 +25,7 @@ public class Text extends Common {
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
             historyClearText, advancedSearch, addText3, addSourceText, addSourceInfoText, premiumAddSourcesText,
-            notSupportedRssText;
+            notSupportedRssText, rssExistsText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -176,7 +176,9 @@ public class Text extends Common {
             addSourceInfoText = "Введите <b>страну</b>, <b>название</b> источника и <b>веб ссылку на xml</b> c новостями, разделяя всё запятой";
             premiumAddSourcesText = "Добавление персональных источников предусмотрено только в режиме /premium";
             notSupportedRssText = "Данный источник не поддерживается";
+            rssExistsText = "Данный источник уже есть в списке";
         } else {
+            rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";
             premiumAddSourcesText = "Adding personal sources is only possible in /premium mode";
             addSourceInfoText = "Enter the <b>country</b>, <b>source name</b> and <b>xml link</b>, separated all by commas";

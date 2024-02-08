@@ -13,6 +13,9 @@ public interface RssRepository extends CrudRepository<RssList, Integer> {
             "AND (lang = :lang or chat_id = :chatId) ORDER BY source", nativeQuery = true)
     List<String> findAllActiveSources(String lang, long chatId);
 
+    @Query(value = "SELECT 1 FROM rss_list WHERE chat_id = :chatId and link = :link", nativeQuery = true)
+    int isExistsByChatId(long chatId, String link);
+
     @Query(value = "FROM rss_list WHERE isActive = 1 and parserType = 'rss'")
     List<RssList> findAllActiveRss();
 

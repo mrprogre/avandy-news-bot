@@ -221,17 +221,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.warn("isParsedRome = " + isParsedRome + ", isParsedJsoup = " + isParsedJsoup); // DEBUG
 
                     if (isParsedRome || isParsedJsoup) {
-                        try {
-                            rssRepository.save(new RssList(chatId, country, source, link, 1, 100,
-                                    new Timestamp(System.currentTimeMillis()), parseType, userTelegramLanguageCode));
-                            sendMessage(chatId, changesSavedText);
-                        } catch (Exception e) {
-                            if (e.getMessage().contains("ui_rss_list_chat_id_link")) {
-                                sendMessage(chatId, "Данный источник уже есть в списке");
-                            } else {
-                                log.error(e.getMessage());
-                            }
+                        int isExists = rssRepository.isExistsByChatId(chatId, link);
+                        if (isExists == 1) {
+                            sendMessage(chatId, rssExistsText);
+                            return;
                         }
+                        rssRepository.save(new RssList(chatId, country, source, link, 1, 100,
+                                new Timestamp(System.currentTimeMillis()), parseType, userTelegramLanguageCode));
+                        sendMessage(chatId, changesSavedText);
                     } else {
                         sendMessage(chatId, notSupportedRssText);
                     }
