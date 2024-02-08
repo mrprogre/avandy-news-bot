@@ -15,11 +15,8 @@ public class ReplyKeyboards {
     public static ReplyKeyboardMarkup replyKeyboardMaker(KeyboardRow row) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);
-        keyboardMarkup.setSelective(false);
 
         List<KeyboardRow> keyboardRows = new ArrayList<>();
-
-
         keyboardRows.add(row);
         keyboardMarkup.setKeyboard(keyboardRows);
         return keyboardMarkup;

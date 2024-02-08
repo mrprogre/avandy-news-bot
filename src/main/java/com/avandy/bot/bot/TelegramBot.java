@@ -584,8 +584,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     /* KEYWORDS */
     // Ручной поиск по ключевым словам
     public void findNewsByKeywordsManual(long chatId) {
-        //newsListKeySearchMessageId = new ConcurrentHashMap<>();
-        newsListKeySearchCounter.put(chatId, 0);
         String nameByChatId = userRepository.findNameByChatId(chatId);
 
         // DEBUG
@@ -604,12 +602,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // Search
         List<Headline> headlines = searchService.start(chatId, "keywords-manual");
-        newsListKeySearchData.put(chatId, headlines);
+
 
         int counterParts = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.info("Найдено за 48h: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
+            log.warn("Найдено за 48h: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
+
+            newsListKeySearchCounter.put(chatId, 0);
+            newsListKeySearchData.put(chatId, headlines);
 
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListKeySearchData.get(chatId)) {
@@ -990,9 +991,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     /* FULL SEARCH */
     // Полный поиск
     private void fullSearch(long chatId) {
-        //newsListFullSearchMessageId = new ConcurrentHashMap<>();
-        newsListFullSearchCounter.put(chatId, 0);
-
         // DEBUG
         if (Common.DEV_ID != chatId) {
             log.info("{}: Запуск полного поиска", chatId);
@@ -1003,11 +1001,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // Поиск и заполнение коллекции
         List<Headline> headlines = searchService.start(chatId, "all");
-        // Делаем лист, чтобы можно было применять sublist (Set менять на List нельзя, т.к. сортировка объектов по дате)
-        newsListFullSearchData.put(chatId, headlines);
 
         int counterParts = 1;
         if (headlines.size() > 0) {
+            newsListFullSearchCounter.put(chatId, 0);
+            newsListFullSearchData.put(chatId, headlines);
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListFullSearchData.get(chatId)) {
 
