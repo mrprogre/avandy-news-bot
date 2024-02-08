@@ -8,5 +8,6 @@ public enum UserState {
     DEL_EXCLUDED,
     DEL_TOP,
     SEND_PAYMENT,
-    ADD_SOURCE
+    ADD_SOURCE,
+    DEL_SOURCE
 }

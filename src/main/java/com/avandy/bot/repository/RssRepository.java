@@ -13,8 +13,15 @@ public interface RssRepository extends CrudRepository<RssList, Integer> {
             "AND (lang = :lang or chat_id = :chatId) ORDER BY source", nativeQuery = true)
     List<String> findAllActiveSources(String lang, long chatId);
 
+    @Query(value = "SELECT source FROM rss_list WHERE is_active = 1 and chat_id = :chatId ORDER BY source",
+            nativeQuery = true)
+    List<String> findPersonalSources(long chatId);
+
     @Query(value = "SELECT 1 FROM rss_list WHERE chat_id = :chatId and link = :link", nativeQuery = true)
-    int isExistsByChatId(long chatId, String link);
+    Integer isExistsByChatId(long chatId, String link);
+
+    @Query(value = "SELECT 1 FROM rss_list WHERE chat_id = :chatId and lower(source) = lower(:source)", nativeQuery = true)
+    Integer isExistsBySourceName(long chatId, String source);
 
     @Query(value = "FROM rss_list WHERE isActive = 1 and parserType = 'rss'")
     List<RssList> findAllActiveRss();
@@ -26,5 +33,11 @@ public interface RssRepository extends CrudRepository<RssList, Integer> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE rss_list SET is_active = :value WHERE link = :link", nativeQuery = true)
     int updateIsActiveRss(int value, String link);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from rss_list where chat_id = :chatId and lower(source) = lower(:source)",
+            nativeQuery = true)
+    int deleteOwnRss(long chatId, String source);
 
 }

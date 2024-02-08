@@ -221,8 +221,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.warn("isParsedRome = " + isParsedRome + ", isParsedJsoup = " + isParsedJsoup); // DEBUG
 
                     if (isParsedRome || isParsedJsoup) {
-                        int isExists = rssRepository.isExistsByChatId(chatId, link);
-                        if (isExists == 1) {
+                        Integer isExists = rssRepository.isExistsByChatId(chatId, link);
+                        if (isExists != null) {
                             sendMessage(chatId, rssExistsText);
                             return;
                         }
@@ -231,6 +231,20 @@ public class TelegramBot extends TelegramLongPollingBot {
                         sendMessage(chatId, changesSavedText);
                     } else {
                         sendMessage(chatId, notSupportedRssText);
+                    }
+                } else if (UserState.DEL_SOURCE.equals(userState)) {
+                    String source = messageText.trim().toLowerCase();
+                    if (checkUserInput(chatId, source)) return;
+                    log.warn("source = " + source);
+
+                    Integer isExists = rssRepository.isExistsBySourceName(chatId, source);
+                    if (isExists != null) {
+                        int count = rssRepository.deleteOwnRss(chatId, source);
+                        if (count > 0) {
+                            sendMessage(chatId, deleteText);
+                        }
+                    } else {
+                        sendMessage(chatId, rssNameNotExistsText);
                     }
 
                     // Поиск по трём кнопкам меню
@@ -283,6 +297,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                         if (isPremium == 1) {
                             userStates.put(chatId, UserState.ADD_SOURCE);
                             cancelKeyboard(chatId, addSourceInfoText);
+                        } else {
+                            sendMessage(chatId, premiumAddSourcesText);
+                        }
+                    }
+                    case "DEL_RSS" -> {
+                        int isPremium = userRepository.isPremiumByChatId(chatId);
+                        if (isPremium == 1) {
+                            userStates.put(chatId, UserState.DEL_SOURCE);
+                            cancelKeyboard(chatId, delSourceInfoText);
                         } else {
                             sendMessage(chatId, premiumAddSourcesText);
                         }
@@ -1868,13 +1891,23 @@ public class TelegramBot extends TelegramLongPollingBot {
     private String getRssList(long chatId) {
         String lang = settingsRepository.getLangByChatId(chatId);
         List<String> sources = rssRepository.findAllActiveSources(lang, chatId);
+        List<String> personalSources = rssRepository.findPersonalSources(chatId);
 
         StringJoiner joiner = new StringJoiner(", ");
         for (String source : sources) {
             joiner.add(source);
         }
+        String list = "<b>" + rssSourcesText + "</b>\n" + joiner;
 
-        return "<b>" + rssSourcesText + "</b>\n" + joiner;
+        if (personalSources.size() > 0) {
+            StringJoiner joinerPers = new StringJoiner(", ");
+            for (String source : personalSources) {
+                joinerPers.add(source);
+            }
+            list = list + "\n\n" + "<b>Персональные источники</b>\n" + joinerPers;
+        }
+
+        return list;
     }
 
     // Кнопки всех видов поиска (/search)
@@ -2039,6 +2072,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Кнопка показа всех видов поиска
     private void nextKeyboard(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("GET_TOP", updateTopText2);
         buttons.put("START_SEARCH", "» » »");
         sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
     }
@@ -2047,10 +2081,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void infoKeyboard(long chatId) {
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
-        buttons1.put("FEEDBACK", sendIdeaText);
-        buttons1.put("GET_PREMIUM", getPremiumText);
-        buttons2.put("ADD_RSS", addSourceText);
-        buttons2.put("START_SEARCH", "» » »");
+        buttons1.put("DEL_RSS", delSourceText);
+        buttons1.put("ADD_RSS", addSourceText);
+        buttons2.put("FEEDBACK", sendIdeaText);
+        buttons2.put("GET_PREMIUM", getPremiumText);
+        //buttons2.put("START_SEARCH", "» » »");
         sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(chatId),
                 InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }

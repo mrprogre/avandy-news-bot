@@ -24,8 +24,9 @@ public class Text extends Common {
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
-            historyClearText, advancedSearch, addText3, addSourceText, addSourceInfoText, premiumAddSourcesText,
-            notSupportedRssText, rssExistsText;
+            historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
+            premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
+            rssNameNotExistsText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -63,6 +64,7 @@ public class Text extends Common {
             setupKeywordsText = "» ключевые слова не заданы";
             minWordLengthText = "Длина слова должна быть более 1 символа и менее 18";
             deleteAllWordsText = "❌ все слова удалены";
+            deleteText = "❌ удалено";
             wordIsExistsText = "Слово уже есть в списке: ";
             wordsIsNotAddedText = "Слова не добавлены";
             wordsAddedText = "Добавлено слов";
@@ -173,16 +175,22 @@ public class Text extends Common {
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     %s""";
             addSourceText = "Добавить источник";
+            delSourceText = "Удалить источник";
             addSourceInfoText = "Введите <b>страну</b>, <b>название</b> источника и <b>веб ссылку на xml</b> c новостями, разделяя всё запятой";
+            delSourceInfoText = "Удалить <b>свой</b> источник по его названию";
             premiumAddSourcesText = "Добавление персональных источников предусмотрено только в режиме /premium";
             notSupportedRssText = "Данный источник не поддерживается";
             rssExistsText = "Данный источник уже есть в списке";
+            rssNameNotExistsText = "Персонального источника с таким названием не существует";
         } else {
+            rssNameNotExistsText = "There is no personal source with this name";
             rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";
             premiumAddSourcesText = "Adding personal sources is only possible in /premium mode";
             addSourceInfoText = "Enter the <b>country</b>, <b>source name</b> and <b>xml link</b>, separated all by commas";
+            delSourceInfoText = "Delete <b>your</b> source by its name";
             addSourceText = "Add news source";
+            delSourceText = "Delete news source";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -255,6 +263,7 @@ public class Text extends Common {
             setupKeywordsText = "» no keywords specified";
             minWordLengthText = "Word length must be more than 1 characters and less than 18";
             deleteAllWordsText = "❌ all words removed";
+            deleteText = "❌ deleted";
             wordIsExistsText = "The word is already on the list: ";
             wordsIsNotAddedText = "No words added";
             wordsAddedText = "Word added";
