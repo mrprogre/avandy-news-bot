@@ -24,7 +24,7 @@ public class Text extends Common {
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
-            historyClearText;
+            historyClearText, advancedSearch, addText3;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -45,6 +45,7 @@ public class Text extends Common {
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
             addText2 = "Добавить ключевые слова";
+            addText3 = "Добавить слова";
             delText = "Удалить";
             excludeWordText = "Исключить";
             excludeWordText2 = "Добавить слова-исключения";
@@ -82,8 +83,8 @@ public class Text extends Common {
             startSearchBeforeText = "Топ необходимо обновить. Нажмите на /top";
             keywordsSearchText = "По словам";
             fullSearchText = "Полный";
-            addInListText = "Введите слова для добавления в список (разделять запятой) и нажмите \"Отправить\"";
-            delFromListText = "Укажите номера слов для удаления (разделять запятой)";
+            addInListText = "Если слов несколько, то раздели их запятыми";
+            delFromListText = "Введи <b>порядковый номер</b> слова, а если их несколько, то раздели запятыми";
             removeAllText = "удалить всё";
             sendMessageForDevText = "Написать сообщение разработчику (можно приложить один скриншот)";
             sendMessageForDevText2 = "Направить скриншот оплаты";
@@ -142,60 +143,58 @@ public class Text extends Common {
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Также можно ознакомиться с <b>видеоинструкцией</b> на <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Автопоиск новостей производится по полному совпадению с ключевыми словами.
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Однако, можно использовать <b>символ *</b>, который обозначает одну любую букву в слове.
-                    <b>Например</b>: ключевое слово <b>курс</b> найдёт новости содержащие только это слово
-                    <b>курс*</b> найдёт и <b>курс</b>, и <b>курсА, курсЫ</b>
-                    <b>курс**</b> - <b>курс, курсА, курсАХ</b>
-                    <b>Росси* созда**</b> - в <b>РоссиИ создаНА, РоссиЯ создаЛА</b>
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Нажми кнопку "Добавить".""";
-            listKeywordsText = """
-                    <b>Ключевые слова</b>
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Автопоиск %s
-                    Запуск поиска раз в %s
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    <b>курс</b> найдёт - курс
-                    <b>курс*</b> - курс, курсА, курсЫ
-                    <b>курс**</b> - курс, курсА, курсАХ
-                    <b>Росси* созда**</b> - в РоссиИ создаНА, РоссиЯ создаЛА
-                    - - - - - - - - - - - - - - - - - - - - - - - -""";
+                    Нажми кнопку <b>Добавить слова</b> или посмотри о чём сейчас пишут СМИ, нажав на <b>Top 20</b>""";
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
             sendPaymentText = "Отправить скриншот с оплатой";
             cleanFullSearchHistoryText = "очистить историю просмотра /clear";
+            advancedSearch = """
+                    Для получения большего количества результатов при меньшем количестве слов
+                    используйте символ <b>*</b> вместо любой буквы в слове.
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    <b>К примеру</b> ключевое слово <b>курс</b> найдёт новости содержащие только это слово без окончаний
+                    <b>курс*</b> найдёт и с <b>курс</b>, и с <b>курса, курсы</b>
+                    <b>курс**</b> найдёт с <b>курс, курса, курсах</b> (а с <b>курсами</b> не найдёт, т.к. надо три звезды)
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    Можно искать новости <b>по фразам</b>:
+                    Ключевая фраза <b>Росси* созда**</b> найдёт новости содержащие: в <b>России создана, Россия создала</b>
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    Перейти в раздел /keywords""";
+            listKeywordsText = """
+                    <b>Ключевые слова</b>
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    Автопоиск %s
+                    Запуск поиска раз в %s
+                    Продвинутый поиск /advanced
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    %s""";
         } else {
-            cleanFullSearchHistoryText = "clear browsing history /clear";
-            sendPaymentText = "Send transfer confirmation";
-            premiumSearchSettingsText = "Premium search";
-            inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
-            inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Auto search %s
                     The search runs every <b>%s</b>
+                    Advanced search /advanced
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    <b>tax</b> will find all news only with <b>tax</b>
-                    <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
-                    <b>pay tax**</b> will find headlines with <b>pay taxes</b>.
-                    - - - - - - - - - - - - - - - - - - - - - - - -""";
+                    %s""";
+            advancedSearch = """
+                    However you can use the <b>*</b> symbol
+                    1. <b>tax</b> will find all news only with <b>tax</b> but not <b>taxes, taxcom</b>.
+                    2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
+                    3. <b>pay tax**</b> will find headlines with <b>pay taxes</b>.
+                    Go to /keywords section""";
+            cleanFullSearchHistoryText = "clear browsing history /clear";
+            sendPaymentText = "Send transfer confirmation";
+            premiumSearchSettingsText = "Premium search";
+            inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
+            inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
             yesButtonText = """
                     The first thing to do is add <b>keywords</b>.
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Automatic news search is performed based on a complete match with a keyword.
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    However you can use the * symbol:
-                    1. <b>tax</b> will find all news only with <b>tax</b> but not <b>taxes, taxcom</b>.
-                    2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
-                    3. <b>pay tax**</b> will find headlines with <b>pay taxes</b>.
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Click the "Add" button.""";
+                    Click the <b>Add keywords</b> button or see what the media are writing about now by clicking on <b>Top 20</b>""";
             premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive3 = "Adding more than " + MAX_KEYWORDS_COUNT + " is possible in <b>/premium</b> mode";
             premiumIsActive2 = "Premium activated until %s " + ICON_PREMIUM_IS_ACTIVE;
@@ -227,6 +226,7 @@ public class Text extends Common {
             deleteUserText = "Delete user data";
             addText = "Add";
             addText2 = "Add keywords";
+            addText3 = "Add keywords";
             delText = "Delete";
             excludeWordText = "Exclude term";
             excludeWordText2 = "Add excluding terms";
