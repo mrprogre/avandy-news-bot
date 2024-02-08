@@ -24,7 +24,7 @@ public class Text extends Common {
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
-            historyClearText, advancedSearch, addText3;
+            historyClearText, advancedSearch, addText3, addSourceText, addSourceInfoText, premiumAddSourcesText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -107,7 +107,7 @@ public class Text extends Common {
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
             chooseSearchDepthText = "Глубина поиска новостей (интервал поиска равен текущему моменту минус глубина в часах).\n" +
                     "Выберите глубину поиска.";
-            sendIdeaText = "Отзыв";
+            sendIdeaText = "Написать отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             fullSearchStartText = "» поиск всех новостей";
             searchByKeywordsStartText = "» ручной поиск по ключевым словам за 48 часов";
@@ -122,7 +122,7 @@ public class Text extends Common {
             jaroWinklerText = "Окончания";
             premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b> /premium) " +
                     ICON_PREMIUM_IS_ACTIVE;
-            getPremiumText = "Премиум";
+            getPremiumText = "Премиум бот";
             getPremiumYesOrNowText = "На тарифе <b>Premium</b>\n" +
                     "1. Поиск новостей по ключевым словам производится каждые <b>2 минуты</b>. " +
                     "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>.\n" +
@@ -169,7 +169,13 @@ public class Text extends Common {
                     Продвинутый поиск /advanced
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     %s""";
+            addSourceText = "Добавить источник";
+            addSourceInfoText = "Введите <b>страну</b>, <b>название</b> источника и <b>веб ссылку на xml</b> c новостями, разделяя всё запятой";
+            premiumAddSourcesText = "Добавление персональных источников предусмотрено только в режиме /premium";
         } else {
+            premiumAddSourcesText = "Adding personal sources is only possible in /premium mode";
+            addSourceInfoText = "Enter the <b>country</b>, <b>source name</b> and <b>xml link</b>, separated all by commas";
+            addSourceText = "Add news source";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -

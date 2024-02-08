@@ -118,6 +118,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String messageText = update.getMessage().getText();
                 long chatId = update.getMessage().getChatId();
                 String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
+                if(userTelegramLanguageCode == null ) userTelegramLanguageCode = "ru";
+
                 usersTopPage.putIfAbsent(chatId, 0);
                 usersExclTermsPage.putIfAbsent(chatId, 0);
                 newsListFullSearchCounter.putIfAbsent(chatId, 0);
@@ -203,6 +205,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                     topListDelete(chatId, words);
                     getTopTenWordsList(chatId);
 
+                } else if (UserState.ADD_SOURCE.equals(userState)) {
+                    String text = messageText.trim().toLowerCase();
+                    if (checkUserInput(chatId, text)) return;
+                    String[] words = text.split(",");
+                    rssRepository.save(new RssList(chatId, words[0].trim(), words[1].trim(), words[2].trim(), 1,
+                            100, new Timestamp(System.currentTimeMillis()), "rss",
+                            userTelegramLanguageCode));
+                    sendMessage(chatId, changesSavedText);
+
                     // Поиск по трём кнопкам меню
                 } else if (messageText.equals(keywordsSearchText)) {
                     new Thread(() -> findNewsByKeywordsManual(chatId)).start();
@@ -248,6 +259,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                 newsListTopSearchCounter.putIfAbsent(chatId, 0);
 
                 switch (callbackData) {
+                    case "ADD_RSS" -> {
+                        int isPremium = userRepository.isPremiumByChatId(chatId);
+                        if (isPremium == 1) {
+                            userStates.put(chatId, UserState.ADD_SOURCE);
+                            cancelKeyboard(chatId, addSourceInfoText);
+                        } else {
+                            sendMessage(chatId, premiumAddSourcesText);
+                        }
+                    }
+
                     case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
                     case "YES_PREMIUM" -> {
                         sendMessage(Common.DEV_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
@@ -2005,12 +2026,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Кнопки раздела Инфо (/info)
     private void infoKeyboard(long chatId) {
-        Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("FEEDBACK", sendIdeaText);
-        buttons.put("GET_PREMIUM", getPremiumText);
-        buttons.put("START_SEARCH", "» » »");
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
+        buttons1.put("FEEDBACK", sendIdeaText);
+        buttons1.put("GET_PREMIUM", getPremiumText);
+        buttons2.put("ADD_RSS", addSourceText);
+        buttons2.put("START_SEARCH", "» » »");
         sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(chatId),
-                InlineKeyboards.inlineKeyboardMaker(buttons));
+                InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
     }
 
     // Кнопки раздела Инфо (/info)
