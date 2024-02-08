@@ -118,7 +118,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String messageText = update.getMessage().getText();
                 long chatId = update.getMessage().getChatId();
                 String userTelegramLanguageCode = update.getMessage().getFrom().getLanguageCode();
-                if(userTelegramLanguageCode == null ) userTelegramLanguageCode = "ru";
+                if (userTelegramLanguageCode == null) userTelegramLanguageCode = "ru";
 
                 usersTopPage.putIfAbsent(chatId, 0);
                 usersExclTermsPage.putIfAbsent(chatId, 0);
@@ -209,10 +209,32 @@ public class TelegramBot extends TelegramLongPollingBot {
                     String text = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, text)) return;
                     String[] words = text.split(",");
-                    rssRepository.save(new RssList(chatId, words[0].trim(), words[1].trim(), words[2].trim(), 1,
-                            100, new Timestamp(System.currentTimeMillis()), "rss",
-                            userTelegramLanguageCode));
-                    sendMessage(chatId, changesSavedText);
+                    String country = words[0].trim();
+                    String source = words[1].trim();
+                    String link = words[2].trim();
+                    String parseType = "rss";
+
+                    boolean isParsedJsoup = Common.checkRssJsoup(link);
+                    boolean isParsedRome = Common.checkRssRome(link);
+
+                    if (!isParsedRome && isParsedJsoup) parseType = "no-rss";
+                    log.warn("isParsedRome = " + isParsedRome + ", isParsedJsoup = " + isParsedJsoup); // DEBUG
+
+                    if (isParsedRome || isParsedJsoup) {
+                        try {
+                            rssRepository.save(new RssList(chatId, country, source, link, 1, 100,
+                                    new Timestamp(System.currentTimeMillis()), parseType, userTelegramLanguageCode));
+                            sendMessage(chatId, changesSavedText);
+                        } catch (Exception e) {
+                            if (e.getMessage().contains("ui_rss_list_chat_id_link")) {
+                                sendMessage(chatId, "Данный источник уже есть в списке");
+                            } else {
+                                log.error(e.getMessage());
+                            }
+                        }
+                    } else {
+                        sendMessage(chatId, notSupportedRssText);
+                    }
 
                     // Поиск по трём кнопкам меню
                 } else if (messageText.equals(keywordsSearchText)) {
@@ -1848,7 +1870,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Список источников новостей, исходя из выбранного на старте языка интерфейса
     private String getRssList(long chatId) {
         String lang = settingsRepository.getLangByChatId(chatId);
-        List<String> sources = rssRepository.findAllActiveSources(lang);
+        List<String> sources = rssRepository.findAllActiveSources(lang, chatId);
 
         StringJoiner joiner = new StringJoiner(", ");
         for (String source : sources) {

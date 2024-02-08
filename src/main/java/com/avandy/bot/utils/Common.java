@@ -1,5 +1,8 @@
 package com.avandy.bot.utils;
 
+import com.avandy.bot.model.Message;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.io.FeedException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.similarity.JaroWinklerDistance;
 
@@ -170,6 +173,26 @@ public class Common {
 
     public static int compare(String text1, String text2) {
         return (int) Math.round((1 - new JaroWinklerDistance().apply(text1, text2)) * 100);
+    }
+
+    public static boolean checkRssRome(String link) {
+        try {
+            for (SyndEntry message : new ParserRome().parseFeed(link).getEntries()) {
+                String title = message.getTitle();
+                return (title != null && title.length() > 0);
+            }
+        } catch (FeedException ignored) {
+            return false;
+        }
+        return false;
+    }
+
+    public static boolean checkRssJsoup(String link) {
+        for (Message message : new ParserJsoup().parse(link)) {
+            String title = message.getTitle();
+            return (title != null && title.length() > 0);
+        }
+        return false;
     }
 
 }
