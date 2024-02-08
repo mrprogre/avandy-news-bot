@@ -1805,7 +1805,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         setInterfaceLanguage(lang);
         settingsRepository.updateLanguage(lang, chatId);
         setInterfaceLanguage(settingsRepository.getLangByChatId(chatId));
-        sendMessage(chatId, String.format(greetingText, userRepository.findNameByChatId(chatId)));
+        sendMessage(chatId, greetingText);
         showYesNoOnStartKeyboard(chatId, letsStartText);
         createMenuCommands();
     }

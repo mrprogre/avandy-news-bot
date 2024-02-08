@@ -30,9 +30,9 @@ public class Text extends Common {
         if (lang != null && lang.equals("ru")) {
             initSearchTemplateText = ". %s%s\n[Список: <b>%d</b> %s]";
             searchNewsHeaderText = "Поиск новостей";
-            greetingText = EmojiParser.parseToUnicode("Здравствуй, %s! :blush: \n" +
-                    "Я могу найти для тебя важную информацию и отсеять много лишней!");
-            letsStartText = "Продолжим?";
+            greetingText = EmojiParser.parseToUnicode("Здравствуйте! :blush: \n" +
+                    "Я могу найти для Вас важную информацию и отсеять много лишней!");
+            letsStartText = "Продолжить?";
             noText = "Нет";
             yesText = "Да";
             infoText = "Информация и подписка";
@@ -139,11 +139,11 @@ public class Text extends Common {
             premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " ключевых слов возможно в <b>/premium</b> режиме";
             premiumIsActive4 = "Максимальное количество ключевых слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             yesButtonText = """
-                    Первое, что нужно сделать, - добавить <b>ключевые слова</b>.
+                    Добавьте <b>слова</b> по которым я буду искать новости для Вас
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Также можно ознакомиться с <b>видеоинструкцией</b> на <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
+                    <b>Видеоинструкция</b> на <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Нажми кнопку <b>Добавить слова</b> или посмотри о чём сейчас пишут СМИ, нажав на <b>Top 20</b>""";
+                    Нажмите кнопку <b>Добавить</b> или посмотрите о чём сейчас пишут СМИ, нажав на <b>Top 20</b>""";
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
