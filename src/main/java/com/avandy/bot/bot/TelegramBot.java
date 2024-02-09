@@ -1890,7 +1890,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Список источников новостей, исходя из выбранного на старте языка интерфейса
     private String getRssList(long chatId) {
         String lang = settingsRepository.getLangByChatId(chatId);
-        List<String> sources = rssRepository.findAllActiveSources(lang, chatId);
+        List<String> sources = rssRepository.findAllActiveSources(lang);
         List<String> personalSources = rssRepository.findPersonalSources(chatId);
 
         StringJoiner joiner = new StringJoiner(", ");

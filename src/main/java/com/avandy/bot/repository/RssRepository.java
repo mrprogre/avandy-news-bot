@@ -9,9 +9,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface RssRepository extends CrudRepository<RssList, Integer> {
-    @Query(value = "select distinct source from rss_list where is_active = 1 " +
-            "and (lang = :lang or chat_id = :chatId) order by source", nativeQuery = true)
-    List<String> findAllActiveSources(String lang, long chatId);
+    @Query(value = "select distinct source from rss_list where is_active = 1 and lang = :lang order by source",
+            nativeQuery = true)
+    List<String> findAllActiveSources(String lang);
 
     @Query(value = "SELECT source FROM rss_list WHERE is_active = 1 and chat_id = :chatId ORDER BY source",
             nativeQuery = true)
