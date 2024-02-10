@@ -100,8 +100,10 @@ public class Search implements SearchService {
 
             Set<NewsList> newsList;
             for (String keyword : keywords) {
-                // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
-                keyword = keyword.substring(0, keyword.length() -  1) + "*";
+                if (keyword.length() > 4) {
+                    // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
+                    keyword = keyword.substring(0, keyword.length() - 1) + "*";
+                }
 
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
