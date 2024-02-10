@@ -206,7 +206,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     getTopTenWordsList(chatId);
 
                 } else if (UserState.ADD_SOURCE.equals(userState)) {
-                    String text = messageText.trim().toLowerCase();
+                    String text = messageText.trim();
                     if (checkUserInput(chatId, text)) return;
                     String[] words = text.split(",");
                     String country = words[0].trim();
@@ -221,7 +221,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.warn("isParsedRome = " + isParsedRome + ", isParsedJsoup = " + isParsedJsoup); // DEBUG
 
                     if (isParsedRome || isParsedJsoup) {
-                        Integer isExists = rssRepository.isExistsByChatId(chatId, link);
+                        Integer isExists = rssRepository.isExistsByChatId(link);
                         if (isExists != null) {
                             sendMessage(chatId, rssExistsText);
                             return;
@@ -237,14 +237,27 @@ public class TelegramBot extends TelegramLongPollingBot {
                     if (checkUserInput(chatId, source)) return;
                     log.warn("source = " + source);
 
-                    Integer isExists = rssRepository.isExistsBySourceName(chatId, source);
-                    if (isExists != null) {
-                        int count = rssRepository.deleteOwnRss(chatId, source);
-                        if (count > 0) {
-                            sendMessage(chatId, deleteText);
+                    List<String> personalSources = rssRepository.findPersonalSources(chatId);
+                    if (personalSources.stream().anyMatch(x -> x.toLowerCase().equals(source))) {
+                        Integer isExists = rssRepository.isExistsPersonalRssByName(chatId, source);
+                        if (isExists != null) {
+                            int count = rssRepository.deletePersonalRss(chatId, source);
+                            if (count > 0) {
+                                sendMessage(chatId, deleteText);
+                            }
+                        } else {
+                            sendMessage(chatId, rssNameNotExistsText);
                         }
                     } else {
-                        sendMessage(chatId, rssNameNotExistsText);
+                        Integer isExists = rssRepository.isExistsCommonRssByName(source);
+                        if (isExists != null) {
+                            int count = rssRepository.deleteCommonRss(chatId, source);
+                            if (count > 0) {
+                                sendMessage(chatId, deleteText);
+                            }
+                        } else {
+                            sendMessage(chatId, rssNameNotExistsText);
+                        }
                     }
 
                     // Поиск по трём кнопкам меню
@@ -1890,7 +1903,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Список источников новостей, исходя из выбранного на старте языка интерфейса
     private String getRssList(long chatId) {
         String lang = settingsRepository.getLangByChatId(chatId);
-        List<String> sources = rssRepository.findAllActiveSources(lang);
+        List<String> sources = rssRepository.findAllActiveSources(chatId, lang);
         List<String> personalSources = rssRepository.findPersonalSources(chatId);
 
         StringJoiner joiner = new StringJoiner(", ");

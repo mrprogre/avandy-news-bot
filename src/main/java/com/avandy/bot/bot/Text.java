@@ -181,9 +181,9 @@ public class Text extends Common {
             premiumAddSourcesText = "Добавление/удаление <b>персональных</b> источников предусмотрено только в режиме /premium";
             notSupportedRssText = "Данный источник не поддерживается";
             rssExistsText = "Данный источник уже есть в списке";
-            rssNameNotExistsText = "Персонального источника с таким названием не существует";
+            rssNameNotExistsText = "Источника с таким названием не существует";
         } else {
-            rssNameNotExistsText = "There is no personal source with this name";
+            rssNameNotExistsText = "There is no source with this name";
             rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";
             premiumAddSourcesText = "Adding/deleting <b>personal</b> sources is only possible in /premium mode";
