@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -691,8 +692,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             for (Headline headline : newsListKeySearchData.get(chatId)) {
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>");
+                        "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
 
                 if (counterParts++ == searchOffset) break;
             }
@@ -772,8 +772,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 for (Headline headline : headlines) {
                     joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
                             Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                            headline.getTitle() + " " +
-                            "<a href=\"" + headline.getLink() + "\">link</a>");
+                            "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
 
                     if (counterParts == 10) {
                         sendMessage(chatId, String.valueOf(joiner));
@@ -792,8 +791,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 for (Headline headline : headlines) {
                     String text = "<b>" + headline.getSource() + "</b> [" +
                             Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                            headline.getTitle() + " " +
-                            "<a href=\"" + headline.getLink() + "\">link</a>";
+                            "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>";
 
                     sendMessage(chatId, text);
                 }
@@ -1086,8 +1084,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>");
+                        "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
 
                 if (counterParts++ == searchOffset) break;
             }
@@ -1464,8 +1461,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>");
+                        "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
 
                 if (counterParts++ == topSearchOffset) break;
             }
@@ -1973,7 +1969,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (textToSend != null && textToSend.length() != 0) message.setText(textToSend);
         else return;
         message.enableHtml(true);
-        message.setParseMode("HTML");
+        message.setParseMode(ParseMode.HTML);
         message.disableWebPagePreview();
         executeMessage(message);
     }
@@ -1985,7 +1981,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (textToSend != null && textToSend.length() != 0) message.setText(textToSend);
         else return -1;
         message.enableHtml(true);
-        message.setParseMode("HTML");
+        message.setParseMode(ParseMode.HTML);
         message.disableWebPagePreview();
         if (keyboard != null) message.setReplyMarkup(keyboard);
         return executeMessage(message);
@@ -1998,7 +1994,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (textToSend != null && textToSend.length() != 0) message.setText(textToSend);
         else return;
         message.enableHtml(true);
-        message.setParseMode("HTML");
+        message.setParseMode(ParseMode.HTML);
         if (keyboard != null) message.setReplyMarkup(keyboard);
         executeMessage(message);
     }
@@ -2138,8 +2134,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             for (Headline headline : headlines.subList(current, next)) {
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
                         Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() + " " +
-                        "<a href=\"" + headline.getLink() + "\">link</a>");
+                        "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
 
                 if (counterParts++ > offset) break;
             }
