@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -100,10 +101,13 @@ public class Search implements SearchService {
 
             Set<NewsList> newsList;
             for (String keyword : keywords) {
-                if (keyword.length() > 4) {
+
+                boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я]*$", keyword);
+                if (keyword.length() > 4 && isOnlyRussianLetters) {
                     // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
-                    keyword = keyword.substring(0, keyword.length() - 1) + "*";
+                    keyword = keyword.substring(0, keyword.length() - 1) + "**";
                 }
+                log.warn("keyword = " + keyword);
 
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
