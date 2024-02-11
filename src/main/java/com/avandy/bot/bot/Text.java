@@ -176,10 +176,13 @@ public class Text extends Common {
                     %s""";
             addSourceText = "Добавить источник";
             delSourceText = "Удалить источник";
-            addSourceInfoText = "Введите <b>страну</b>, <b>название</b> источника и <b>веб ссылку на xml</b> c новостями, разделяя всё запятой";
+            addSourceInfoText = "Введите <b>страну</b> источника, его <b>название</b> и <b>веб ссылку на xml</b> " +
+                    "c новостями, через запятую.\n" +
+                    "<b>Примерный</b> список подходящих источников по категориям и странам: " +
+                    "<a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             delSourceInfoText = "Удалить <b>персональный</b> источник по его названию";
             premiumAddSourcesText = "Добавление/удаление <b>персональных</b> источников возможно в /premium\n" +
-                    "<b>Огромный список</b> источников по категориям и странам: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
+                    "<b>Примерный</b> список подходящих источников по категориям и странам: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             notSupportedRssText = "Данный источник не поддерживается";
             rssExistsText = "Данный источник уже есть в списке";
             rssNameNotExistsText = "Источника с таким названием не существует";
@@ -190,8 +193,9 @@ public class Text extends Common {
             rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";
             premiumAddSourcesText = "Adding/removing <b>personal</b> sources is possible in /premium\n" +
-                    "<b>Huge list</b> of sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
-            addSourceInfoText = "Enter the <b>country</b>, <b>source name</b> and <b>xml link</b>, separated all by commas";
+                    "<b>Sample</b> list of suitable sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
+            addSourceInfoText = "Enter the <b>country</b>, <b>source name</b> and <b>xml link</b>, separated all by commas.\n" +
+                    "<b>Sample</b> list of suitable sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             delSourceInfoText = "Delete <b>your</b> source by its name";
             addSourceText = "Add source";
             delSourceText = "Delete source";

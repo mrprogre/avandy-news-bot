@@ -26,6 +26,7 @@ public class NewsList implements Comparable<NewsList> {
     private String titleHash;
     private String link;
     private Date pubDate;
+    private Date addDate;
 
     @Override
     public boolean equals(Object o) {
@@ -42,6 +43,6 @@ public class NewsList implements Comparable<NewsList> {
 
     @Override
     public int compareTo(NewsList n) {
-        return n.getPubDate().compareTo(pubDate);
+        return n.getAddDate().compareTo(addDate);
     }
 }

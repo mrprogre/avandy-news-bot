@@ -54,7 +54,7 @@ public class Search implements SearchService {
         if (isAllSearch || isTopSearch) {
             headlinesTopTen = new ArrayList<>();
 
-            // find news by period
+            // find news by period TreeSet<YourClass> treeSet = new TreeSet<>(arrayList);
             TreeSet<NewsList> newsListByPeriod =
                     newsListRepository.getNewsListByPeriod(periodMinutes + " minutes", userLanguage);
             for (NewsList news : newsListByPeriod) {
