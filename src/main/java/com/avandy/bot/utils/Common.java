@@ -87,7 +87,7 @@ public class Common {
     // INPUT  2023-12-13 13:39:06.0
     // OUTPUT 13:39 13.12
     public static String showDate(String input) {
-        return input.substring(11, 16) + " " + input.substring(8, 10) + "." + input.substring(5, 7);
+        return input.substring(11, 16) + " // " + input.substring(8, 10) + "." + input.substring(5, 7);
     }
 
     public static List<Integer> getTimeToExecute(LocalTime start, String interval) {
