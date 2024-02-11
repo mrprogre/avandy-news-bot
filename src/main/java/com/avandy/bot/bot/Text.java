@@ -132,7 +132,7 @@ public class Text extends Common {
                     "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + "</b> ключевых слов (до " +
                     MAX_KEYWORDS_COUNT_PREMIUM + ");\n" +
                     "3. Возможность добавления <b>персональных источников</b> новостей " +
-                    "(если источник предоставляет новости в формате <b>XML</b>) и удаления источников по умолчанию.\n" +
+                    "(если источник предоставляет новости в формате <b>RSS (XML)</b> и удаления источников по умолчанию.\n" +
                     "Оплатить премиум <b>900р.</b> в год? \uD83D\uDC8E";
             getPremiumRequestText = """
                     1. <a href="https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835">Ссылка на оплату через СБП</a>.
@@ -176,12 +176,12 @@ public class Text extends Common {
                     %s""";
             addSourceText = "Добавить источник";
             delSourceText = "Удалить источник";
-            addSourceInfoText = "Введите <b>страну</b> источника, его <b>название</b> и <b>веб ссылку на xml</b> " +
-                    "c новостями, через запятую.\n" +
+            addSourceInfoText = "Введите <b>страну</b> источника, его <b>название</b> и <b>веб ссылку на XML</b> " +
+                    "c новостями, <b>через запятую</b>.\n" +
                     "<b>Примерный</b> список подходящих источников по категориям и странам: " +
                     "<a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             delSourceInfoText = "Удалить <b>персональный</b> источник по его названию";
-            premiumAddSourcesText = "Добавление/удаление <b>персональных</b> источников возможно в /premium тарифе\n" +
+            premiumAddSourcesText = "Добавление/удаление <b>персональных</b> источников в формате RSS возможно в /premium тарифе\n" +
                     "<b>Примерный</b> список подходящих источников по категориям и странам: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             notSupportedRssText = "Данный источник не поддерживается";
             rssExistsText = "Данный источник уже есть в списке";
@@ -194,7 +194,7 @@ public class Text extends Common {
             rssNameNotExistsText = "There is no source with this name";
             rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";
-            premiumAddSourcesText = "Adding/removing <b>personal</b> sources is possible in /premium mode\n" +
+            premiumAddSourcesText = "Adding/removing <b>personal</b> sources (RSS format) is possible in /premium mode\n" +
                     "<b>Sample</b> list of suitable sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             addSourceInfoText = "Enter the <b>country</b>, <b>source name</b> and <b>xml link</b>, separated all by commas.\n" +
                     "<b>Sample</b> list of suitable sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
@@ -236,7 +236,7 @@ public class Text extends Common {
                     "So you <b>will be the first</b> to receive the <b>most up-to-date information</b>;\n" +
                     "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords (up to " +
                     MAX_KEYWORDS_COUNT_PREMIUM + " words);\n" +
-                    "3. Ability to add <b>personal news sources</b> (if the source provides <b>XML</b> format) " +
+                    "3. Ability to add <b>personal news sources</b> (if the source provides <b>RSS (XML)</b> format) " +
                     "and removing default sources.\n" +
                     "Pay for a Premium bot subscription <b>50$</b> per year \uD83D\uDC8E";
             getPremiumText = "Premium bot";

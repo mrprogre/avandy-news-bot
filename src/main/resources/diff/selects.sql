@@ -1,20 +1,12 @@
 -- Мой: 1254981379, Лена: 1020961767, Вика: 6455565758, Саша: 6128707071
 
--- stat
---             excl  keys shwd   top  users
--- 01.01.2024: 2747,  25,  5291, 205, 9
--- 02.02.2024: 3150, 150,  2650, 441, 49 (1 покупка)
--- 07.02.2024: 3226, 928,  1420, 561, 1040
--- 08.02.2024: 3253, 932,  3317, 581, 1059
--- 09.02.2024: 3281, 937, 10533, 582, 1071
--- 09.02.2024: 3293, 931, 10782, 590, 1079
 select (select count(*) from excluding_terms) as excluded,
        (select count(*) from keywords)        as keywords,
        (select count(*) from showed_news)     as showed_news,
        (select count(*) from top_excluded)    as top_ten_excluded,
+       (select count(*) from news_list)       as news_list,
+       (select count(*) from rss_list)        as rss_list,
        (select count(*) from users)           as users;
---(select count(*) from news_list)       as news_list
---(select count(*) from rss_list)        as rss_list
 
 -- Количество новостей, которые получили все пользователи
 select case s.type when 2 then 'keys' else 'full' end as type,
@@ -24,13 +16,17 @@ select case s.type when 2 then 'keys' else 'full' end as type,
 from showed_news s
          join users u
               on s.chat_id = u.chat_id
-where s.add_date >= (current_timestamp - cast('12 hours' as interval))
+where s.add_date >= (current_timestamp - cast('1 hours' as interval))
 --and s.chat_id = 678952524
 group by s.chat_id, u.user_name, u.first_name, type
 order by type desc, cnt desc;
 
 -- Новости, которые получил пользователь
-select source, title, pub_date::time, n.add_date::time, extract(minute from (n.pub_date - n.add_date)) as "pub-add",
+select source,
+       title,
+       pub_date::time,
+       n.add_date::time,
+       extract(minute from (n.pub_date - n.add_date)) as "pub-add",
        s.add_date
 from news_list n
          join showed_news s
@@ -53,7 +49,7 @@ where source = 'EL PAÍS'
 -- Количество новостей, сохранённых за последние 6 часов
 SELECT count(*)
 FROM news_list
-WHERE pub_date > (current_timestamp - cast('6 hours' as interval));
+WHERE add_date > (current_timestamp - cast('6 hours' as interval));
 
 -- Очистить full search
 --select count(*)
