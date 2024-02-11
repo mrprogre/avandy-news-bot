@@ -32,6 +32,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Query(value = "SELECT premium_search FROM settings WHERE chat_id = :chatId", nativeQuery = true)
     String getPremiumSearchByChatId(long chatId);
 
+    @Query(value = "SELECT message_theme FROM settings WHERE chat_id = :chatId", nativeQuery = true)
+    int getMessageTheme(long chatId);
+
     @Query(value = "select s.* from settings s join users u on s.chat_id = u.chat_id " +
             "where u.is_active = 1 and s.scheduler = 'on' " +
             "and (u.is_premium = 0 or (u.is_premium = 1 and s.premium_search = 'off'))", nativeQuery = true)
@@ -88,4 +91,9 @@ public interface SettingsRepository extends JpaRepository<Settings, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE settings SET premium_search = lower(:value) WHERE chat_id = :chatId", nativeQuery = true)
     void updatePremiumSearch(String value, long chatId);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE settings SET message_theme = :value WHERE chat_id = :chatId", nativeQuery = true)
+    void updateMessageTheme(int value, long chatId);
 }

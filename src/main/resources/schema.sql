@@ -25,6 +25,7 @@ create table if not exists settings
     period_top     varchar(8) default '12h'::character varying,
     jaro_winkler   varchar(3) default 'on'::character varying,
     premium_search varchar(3) default 'on'::character varying,
+    message_theme  integer    default 1,
     constraint fk_settings_chat_id foreign key (chat_id) references users (chat_id) on delete cascade
 );
 comment on column settings.period is 'Глубина поиска по ключевым словам';

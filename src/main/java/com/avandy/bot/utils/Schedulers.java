@@ -29,7 +29,7 @@ public class Schedulers {
     // Поиск новостей каждый час
     @Scheduled(cron = "${cron.search.keywords}")
     protected void autoSearchByKeywords() {
-        List<Settings> usersSettings = settingsRepository.findAllSchedulerOnPremium();
+        List<Settings> usersSettings = settingsRepository.findAllSchedulerOn();
         Integer hourNow = LocalTime.now().getHour();
 
         for (Settings setting : usersSettings) {

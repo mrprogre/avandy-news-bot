@@ -28,4 +28,5 @@ public class Settings {
     private String jaroWinkler;
     @Size(max = 3)
     private String premiumSearch;
+    private Integer messageTheme;
 }

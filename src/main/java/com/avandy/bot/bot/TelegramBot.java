@@ -276,12 +276,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                         case "/keywords" -> new Thread(() -> showKeywordsList(chatId)).start();
                         case "/search" -> new Thread(() -> initSearchesKeyboard(chatId)).start();
                         case "/info" -> new Thread(() -> infoKeyboard(chatId)).start();
-                        // не использую в интерфейсе
                         case "/clear" -> {
                             showedNewsRepository.deleteHistoryManual(chatId);
                             sendMessage(chatId, historyClearText);
                         }
                         case "/advanced" -> new Thread(() -> advancedSearchText(chatId)).start();
+                        case "/theme" -> new Thread(() -> setThemeKeyboard(chatId)).start();
+                        // не использую в интерфейсе
                         case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
                         case "/excluding" -> getExcludedList(chatId);
                         case "/delete" -> showYesNoOnDeleteUser(chatId);
@@ -629,6 +630,20 @@ public class TelegramBot extends TelegramLongPollingBot {
                         sendMessage(chatId, changesSavedText);
                         getSettings(chatId);
                     }
+
+                    case "MESSAGE_THEME_1" -> {
+                        settingsRepository.updateMessageTheme(1, chatId);
+                        sendMessage(chatId, changesSavedText);
+                    }
+                    case "MESSAGE_THEME_2" -> {
+                        settingsRepository.updateMessageTheme(2, chatId);
+                        sendMessage(chatId, changesSavedText);
+                    }
+                    case "MESSAGE_THEME_3" -> {
+                        settingsRepository.updateMessageTheme(3, chatId);
+                        sendMessage(chatId, changesSavedText);
+                    }
+
                 }
             }
         } catch (Exception e) {
@@ -691,7 +706,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListKeySearchData.get(chatId)) {
-                joiner.add(getHeadlinesText(headline));
+                joiner.add(getHeadlinesText(chatId, headline));
 
                 if (counterParts++ == searchOffset) break;
             }
@@ -738,7 +753,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int counterParts = 1;
 
-        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts, searchOffset);
+        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts, searchOffset, chatId);
         getEditMessage(chatId, messageId, joiner, afterKeywordsSearchKeyboard(chatId, "", headlines.size()));
     }
 
@@ -765,7 +780,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 StringJoiner joiner = new StringJoiner(delimiterNews);
 
                 for (Headline headline : headlines) {
-                    joiner.add(getHeadlinesText(headline));
+                    joiner.add(getHeadlinesText(chatId, headline));
 
                     if (counterParts == 10) {
                         sendMessage(chatId, String.valueOf(joiner));
@@ -782,7 +797,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             } else {
                 for (Headline headline : headlines) {
-                    String text = getHeadlinesText(headline);
+                    String text = getHeadlinesText(chatId, headline);
 
                     sendMessage(chatId, text);
                 }
@@ -1072,7 +1087,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             newsListFullSearchData.put(chatId, headlines);
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListFullSearchData.get(chatId)) {
-                joiner.add(getHeadlinesText(headline));
+                joiner.add(getHeadlinesText(chatId, headline));
 
                 if (counterParts++ == searchOffset) break;
             }
@@ -1120,7 +1135,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int counterParts = 1;
 
-        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts, searchOffset);
+        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts, searchOffset, chatId);
         getEditMessage(chatId, messageId, joiner, afterFullSearchKeyboard(chatId, "", headlines.size()));
     }
 
@@ -1353,7 +1368,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int counterParts = 1;
 
-        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts, topSearchOffset);
+        StringJoiner joiner = getHeadlinesText(headlines, current, next, counterParts, topSearchOffset, chatId);
         getEditMessage(chatId, messageId, joiner, afterTopSearchKeyboard(chatId, "", headlines.size()));
     }
 
@@ -1446,7 +1461,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (headlines.size() > 0) {
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListTopSearchData.get(chatId)) {
-                joiner.add(getHeadlinesText(headline));
+                joiner.add(getHeadlinesText(chatId, headline));
 
                 if (counterParts++ == topSearchOffset) break;
             }
@@ -1747,6 +1762,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setLang("en");
         settings.setJaroWinkler("on");
         settings.setPremiumSearch("on");
+        settings.setMessageTheme(1);
         settingsRepository.save(settings);
     }
 
@@ -2101,6 +2117,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                 InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
     }
 
+    void setThemeKeyboard(long chatId) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("MESSAGE_THEME_1", "1");
+        buttons.put("MESSAGE_THEME_2", "2");
+        buttons.put("MESSAGE_THEME_3", "3");
+
+        sendMessageWithPreview(chatId, messageThemeChooseText,
+                InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
     // Дополнительная клавиатура с тремя видами поиска (с приветствием пользователя)
     private void getReplyKeyboard(long chatId, String textToSend) {
         String text = String.format(textToSend, "");
@@ -2113,11 +2139,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Текст новостей для пагинации
-    private StringJoiner getHeadlinesText(List<Headline> headlines, int current, int next, int counterParts, int offset) {
+    private StringJoiner getHeadlinesText(List<Headline> headlines, int current, int next, int counterParts, int offset, long chatId) {
         StringJoiner joiner = new StringJoiner(delimiterNews);
         if (headlines.size() > 0) {
             for (Headline headline : headlines.subList(current, next)) {
-                joiner.add(getHeadlinesText(headline));
+                joiner.add(getHeadlinesText(chatId, headline));
 
                 if (counterParts++ > offset) break;
             }
@@ -2147,7 +2173,16 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Форматированная новость для показа в чате
-    private static String getHeadlinesText(Headline headline) {
+    private String getHeadlinesText(long chatId, Headline headline) {
+        int messageTheme = settingsRepository.getMessageTheme(chatId);
+
+        if (messageTheme == 2) {
+            return String.format("<a href=\"%s\">%s</a>\n<code>%s [%s]</code>",
+                    headline.getLink(), headline.getTitle(),
+                    headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())));
+        }
+
+        // default theme = 1
         return String.format("<b>%s</b> [%s]\n%s <a href=\"%s\">%s</a>",
                 headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())), headline.getTitle(),
                 headline.getLink(), linkText);
