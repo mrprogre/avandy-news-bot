@@ -30,10 +30,11 @@ group by s.chat_id, u.user_name, u.first_name, type
 order by type desc, cnt desc;
 
 -- Новости, которые получил пользователь
-select source, title, pub_date::time, n.add_date::time, extract(minute from (n.pub_date - n.add_date)) as "pub-add"
+select source, title, pub_date::time, n.add_date::time, extract(minute from (n.pub_date - n.add_date)) as "pub-add",
+       s.add_date
 from news_list n
          join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 86798965 -- 900: 678952524
+              on n.title_hash = s.title_hash and s.chat_id = 678952524 -- 900: 678952524
 where n.add_date >= (current_timestamp - cast('24 hours' as interval))
 order by n.id desc;
 

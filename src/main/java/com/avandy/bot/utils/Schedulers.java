@@ -62,7 +62,7 @@ public class Schedulers {
     // Сохранение всех новостей в БД по всем источникам каждые 2 минуты
     @Scheduled(cron = "${cron.fill.database}")
     public void scheduler() {
-        long searchTimeLimit = 50000L;
+        long searchTimeLimit = 500L; // 50000L
         long start = System.currentTimeMillis();
 
         int countRome = searchService.downloadNewsByRome();
