@@ -384,7 +384,7 @@ public class Text extends Common {
                     schedSettings +
                     premiumSettings +
                     delimiterNews + "\n" +
-                    "Выбрать тип <b>внешнего вида</b> сообщения /theme" + "\n" +
+                    "Выбрать тип <b>внешнего вида</b> сообщений /theme" + "\n" +
                     delimiterNews + "\n" +
                     "Параметры меняются после нажатия на кнопки";
         } else {
@@ -427,7 +427,7 @@ public class Text extends Common {
                     schedSettings +
                     premiumSettings +
                     delimiterNews + "\n" +
-                    "Select message <b>appearance</b> type /theme" + "\n" +
+                    "Select messages <b>appearance</b> type /theme" + "\n" +
                     delimiterNews + "\n" +
                     "Parameters change after pressing buttons";
         }
