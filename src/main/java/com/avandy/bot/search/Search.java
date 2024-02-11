@@ -107,7 +107,6 @@ public class Search implements SearchService {
                     // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
                     keyword = keyword.substring(0, keyword.length() - 1) + "**";
                 }
-                log.warn("keyword = " + keyword);
 
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");

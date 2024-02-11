@@ -235,7 +235,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 } else if (UserState.DEL_SOURCE.equals(userState)) {
                     String source = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, source)) return;
-                    log.warn("source = " + source);
 
                     List<String> personalSources = rssRepository.findPersonalSources(chatId);
                     if (personalSources.stream().anyMatch(x -> x.toLowerCase().equals(source))) {
