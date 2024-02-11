@@ -126,7 +126,7 @@ public class Text extends Common {
             premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b> /premium) " +
                     ICON_PREMIUM_IS_ACTIVE;
             getPremiumText = "Премиум бот";
-            getPremiumYesOrNowText = "На тарифе <b>Premium</b>\n" +
+            getPremiumYesOrNowText = "На тарифе <b>Premium bot</b>\n" +
                     "1. Поиск новостей по ключевым словам производится каждые <b>2 минуты</b>. " +
                     "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>;\n" +
                     "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + "</b> ключевых слов (до " +
@@ -140,7 +140,7 @@ public class Text extends Common {
                     2. <a href="https://avandy-news.ru/refund.html">Возврат средств</a>
                     Не подошёл наш продукт и прошло <b>не более 3 дней</b> с момента активации премиум возможностей - напишите, и мы <b>вернём</b> средства!""";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive2 = "Premium активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
+            premiumIsActive2 = "Premium bot активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " ключевых слов возможно в <b>/premium</b> режиме";
             premiumIsActive4 = "Максимальное количество ключевых слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             yesButtonText = """
@@ -181,7 +181,7 @@ public class Text extends Common {
                     "<b>Примерный</b> список подходящих источников по категориям и странам: " +
                     "<a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             delSourceInfoText = "Удалить <b>персональный</b> источник по его названию";
-            premiumAddSourcesText = "Добавление/удаление <b>персональных</b> источников возможно в /premium\n" +
+            premiumAddSourcesText = "Добавление/удаление <b>персональных</b> источников возможно в /premium тарифе\n" +
                     "<b>Примерный</b> список подходящих источников по категориям и странам: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             notSupportedRssText = "Данный источник не поддерживается";
             rssExistsText = "Данный источник уже есть в списке";
@@ -192,7 +192,7 @@ public class Text extends Common {
             rssNameNotExistsText = "There is no source with this name";
             rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";
-            premiumAddSourcesText = "Adding/removing <b>personal</b> sources is possible in /premium\n" +
+            premiumAddSourcesText = "Adding/removing <b>personal</b> sources is possible in /premium mode\n" +
                     "<b>Sample</b> list of suitable sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             addSourceInfoText = "Enter the <b>country</b>, <b>source name</b> and <b>xml link</b>, separated all by commas.\n" +
                     "<b>Sample</b> list of suitable sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
@@ -226,18 +226,18 @@ public class Text extends Common {
                     Click the <b>Add keywords</b> button or see what the media are writing about now by clicking on <b>Top 20</b>""";
             premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive3 = "Adding more than " + MAX_KEYWORDS_COUNT + " is possible in <b>/premium</b> mode";
-            premiumIsActive2 = "Premium activated until %s " + ICON_PREMIUM_IS_ACTIVE;
+            premiumIsActive2 = "Premium bot activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Paypal link</a>";
-            getPremiumYesOrNowText = "On the <b>premium</b> tariff:\n" +
+            getPremiumYesOrNowText = "On the <b>Premium bot</b> tariff:\n" +
                     "1. News search by keywords is performed every <b>2 minutes</b>. " +
                     "So you <b>will be the first</b> to receive the <b>most up-to-date information</b>;\n" +
                     "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords (up to " +
                     MAX_KEYWORDS_COUNT_PREMIUM + " words);\n" +
                     "3. Ability to add <b>personal news sources</b> (if the source provides <b>XML</b> format) " +
                     "and removing default sources.\n" +
-                    "Pay for a Premium subscription <b>50$</b> per year \uD83D\uDC8E";
-            getPremiumText = "Premium";
+                    "Pay for a Premium bot subscription <b>50$</b> per year \uD83D\uDC8E";
+            getPremiumText = "Premium bot";
             premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b> /premium) " +
                     ICON_PREMIUM_IS_ACTIVE;
             initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
@@ -401,7 +401,7 @@ public class Text extends Common {
                 String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
                 premiumPeriod = "<b>" + period + "</b>, " + premiumIsActive;
                 premiumMessage = "";
-                premiumSettings = delimiterNews + "\n<b>5. Premium search: " + settings.getPremiumSearch() + "</b>\n" +
+                premiumSettings = delimiterNews + "\n<b>5. Premium bot search: " + settings.getPremiumSearch() + "</b>\n" +
                         "Enable or disable auto search every 2 minutes (will be launched in accordance with step 2)\n";
             } else {
                 premiumPeriod = settings.getPeriod();
