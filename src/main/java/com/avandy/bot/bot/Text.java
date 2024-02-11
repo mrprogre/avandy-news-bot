@@ -26,7 +26,7 @@ public class Text extends Common {
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
-            rssNameNotExistsText, linkText, messageThemeChooseText;
+            rssNameNotExistsText, linkText, messageThemeChooseText, noCommasText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -188,7 +188,9 @@ public class Text extends Common {
             rssNameNotExistsText = "Источника с таким названием не существует";
             linkText = "Источник";
             messageThemeChooseText = "Выберите вариант внешнего вида сообщений";
+            noCommasText = "Страну, название и ссылку необходимо разделить запятыми";
         } else {
+            noCommasText = "Country, name and link must be separated by commas";
             messageThemeChooseText = "Select a message appearance option";
             linkText = "link";
             rssNameNotExistsText = "There is no source with this name";

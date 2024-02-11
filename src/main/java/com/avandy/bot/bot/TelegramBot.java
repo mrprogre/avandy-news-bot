@@ -208,6 +208,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 } else if (UserState.ADD_SOURCE.equals(userState)) {
                     String text = messageText.trim();
+                    if (!text.contains(",")) {
+                        sendMessage(chatId, noCommasText);
+                        return;
+                    }
                     if (checkUserInput(chatId, text)) return;
                     String[] words = text.split(",");
                     String country = words[0].trim();
