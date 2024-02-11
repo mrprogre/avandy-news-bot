@@ -193,8 +193,8 @@ public class Text extends Common {
                     "<b>Huge list</b> of sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             addSourceInfoText = "Enter the <b>country</b>, <b>source name</b> and <b>xml link</b>, separated all by commas";
             delSourceInfoText = "Delete <b>your</b> source by its name";
-            addSourceText = "Add news source";
-            delSourceText = "Delete news source";
+            addSourceText = "Add source";
+            delSourceText = "Delete source";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
