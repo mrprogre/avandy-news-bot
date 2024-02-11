@@ -2124,14 +2124,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         return joiner;
     }
 
-    // Форматированная новость для показа в Телеграм
-    private static String getHeadlinesText(Headline headline) {
-        return "<b>" + headline.getSource() +
-                "</b> [" + Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
-                headline.getTitle() +
-                " <a href=\"" + headline.getLink() + "\">" + linkText + "</a>";
-    }
-
     // Изменяемое сообщение для пагинации
     private void getEditMessage(Long chatId, int messageId, StringJoiner joiner, InlineKeyboardMarkup keyboard) {
         EditMessageText editOptions = new EditMessageText();
@@ -2151,6 +2143,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                 log.error(e.getMessage());
             }
         }
+    }
+
+    // Форматированная новость для показа в чате
+    private static String getHeadlinesText(Headline headline) {
+        return String.format("<b>%s</b> [%s]\n%s <a href=\"%s\">%s</a>",
+                headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())), headline.getTitle(),
+                headline.getLink(), linkText);
     }
 
     // Создание кнопок меню
