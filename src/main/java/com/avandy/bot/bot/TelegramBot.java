@@ -2185,6 +2185,15 @@ public class TelegramBot extends TelegramLongPollingBot {
             return String.format("<a href=\"%s\">%s</a>\n<code>%s [%s]</code>",
                     headline.getLink(), headline.getTitle(),
                     headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())));
+        } else if (messageTheme == 3) {
+            return String.format("<a href=\"%s\">%s</a>\n<pre>%s [%s]</pre>",
+                    headline.getLink(), headline.getTitle(),
+                    headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())));
+        } else if (messageTheme == 4) {
+//            String time = Common.showDate(String.valueOf(headline.getPubDate()));
+//            time = time.substring(0, time.indexOf(" "));
+
+            return String.format("<code>%s</code>", headline.getTitle());
         }
 
         // default theme = 1
