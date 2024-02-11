@@ -690,9 +690,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListKeySearchData.get(chatId)) {
-                joiner.add("<b>" + headline.getSource() + "</b> [" + Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() +
-                        " <a href=\"" + headline.getLink() + "\">" + linkText + "</a>");
+                joiner.add(getHeadlinesText(headline));
 
                 if (counterParts++ == searchOffset) break;
             }
@@ -766,9 +764,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 StringJoiner joiner = new StringJoiner(delimiterNews);
 
                 for (Headline headline : headlines) {
-                    joiner.add("<b>" + headline.getSource() + "</b> [" + Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
-                            headline.getTitle() +
-                            " <a href=\"" + headline.getLink() + "\">" + linkText + "</a>");
+                    joiner.add(getHeadlinesText(headline));
 
                     if (counterParts == 10) {
                         sendMessage(chatId, String.valueOf(joiner));
@@ -785,10 +781,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             } else {
                 for (Headline headline : headlines) {
-                    String text = "<b>" + headline.getSource() + "</b> [" +
-                            Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
-                            headline.getTitle() +
-                            " <a href=\"" + headline.getLink() + "\">" + linkText + "</a>";
+                    String text = getHeadlinesText(headline);
 
                     sendMessage(chatId, text);
                 }
@@ -1078,10 +1071,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             newsListFullSearchData.put(chatId, headlines);
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListFullSearchData.get(chatId)) {
-                joiner.add("<b>" + headline.getSource() + "</b> [" +
-                        Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() +
-                        " <a href=\"" + headline.getLink() + "\">" + linkText + "</a>");
+                joiner.add(getHeadlinesText(headline));
 
                 if (counterParts++ == searchOffset) break;
             }
@@ -1455,9 +1445,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (headlines.size() > 0) {
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListTopSearchData.get(chatId)) {
-                joiner.add("<b>" + headline.getSource() + "</b> [" + Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() +
-                        " <a href=\"" + headline.getLink() + "\">" + linkText + "</a>");
+                joiner.add(getHeadlinesText(headline));
 
                 if (counterParts++ == topSearchOffset) break;
             }
@@ -2128,15 +2116,20 @@ public class TelegramBot extends TelegramLongPollingBot {
         StringJoiner joiner = new StringJoiner(delimiterNews);
         if (headlines.size() > 0) {
             for (Headline headline : headlines.subList(current, next)) {
-                joiner.add("<b>" + headline.getSource() + "</b> [" +
-                        Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
-                        headline.getTitle() +
-                        " <a href=\"" + headline.getLink() + "\">" + linkText + "</a>");
+                joiner.add(getHeadlinesText(headline));
 
                 if (counterParts++ > offset) break;
             }
         }
         return joiner;
+    }
+
+    // Форматированная новость для показа в Телеграм
+    private static String getHeadlinesText(Headline headline) {
+        return "<b>" + headline.getSource() +
+                "</b> [" + Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
+                headline.getTitle() +
+                " <a href=\"" + headline.getLink() + "\">" + linkText + "</a>";
     }
 
     // Изменяемое сообщение для пагинации
