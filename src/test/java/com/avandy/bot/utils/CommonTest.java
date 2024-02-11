@@ -56,7 +56,7 @@ public class CommonTest {
 
     @Test
     public void dateToShowFormatChangeTest() {
-        assertEquals(Common.dateToShowFormatChange("2023-12-13 14:39:06.0"), "14:39 13.12");
+        assertEquals(Common.showDate("2023-12-13 14:39:06.0"), "14:39 13.12");
     }
 
     @Test

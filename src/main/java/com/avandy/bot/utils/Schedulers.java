@@ -29,17 +29,7 @@ public class Schedulers {
     // Поиск новостей каждый час
     @Scheduled(cron = "${cron.search.keywords}")
     protected void autoSearchByKeywords() {
-        searchNewsByKeywords(settingsRepository.findAllSchedulerOn());
-    }
-
-    // Премиум пользователи: поиск новостей каждые 2 минуты
-    @Scheduled(cron = "${cron.search.keywords.premium}")
-    protected void autoSearchByKeywordsPremium() {
-        searchNewsByKeywords(settingsRepository.findAllSchedulerOnPremium());
-
-    }
-
-    private void searchNewsByKeywords(List<Settings> usersSettings) {
+        List<Settings> usersSettings = settingsRepository.findAllSchedulerOnPremium();
         Integer hourNow = LocalTime.now().getHour();
 
         for (Settings setting : usersSettings) {
@@ -51,6 +41,20 @@ public class Schedulers {
                 if (userRepository.isActive(chatId) == 1) {
                     telegramBot.autoSearchNewsByKeywords(chatId);
                 }
+            }
+        }
+    }
+
+    // Премиум пользователи: поиск новостей каждые 2 минуты
+    @Scheduled(cron = "${cron.search.keywords.premium}")
+    protected void autoSearchByKeywordsVip() {
+        List<Settings> usersSettings = settingsRepository.findAllSchedulerOnPremium();
+
+        for (Settings setting : usersSettings) {
+            Long chatId = setting.getChatId();
+
+            if (userRepository.isActive(chatId) == 1) {
+                telegramBot.autoSearchNewsByKeywords(chatId);
             }
         }
     }

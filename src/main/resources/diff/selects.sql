@@ -7,7 +7,7 @@
 -- 07.02.2024: 3226, 928,  1420, 561, 1040
 -- 08.02.2024: 3253, 932,  3317, 581, 1059
 -- 09.02.2024: 3281, 937, 10533, 582, 1071
--- 09.02.2024: 3292, 941,  9220, 590, 1084
+-- 09.02.2024: 3293, 931, 10782, 590, 1079
 select (select count(*) from excluding_terms) as excluded,
        (select count(*) from keywords)        as keywords,
        (select count(*) from showed_news)     as showed_news,

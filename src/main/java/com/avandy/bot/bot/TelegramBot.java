@@ -690,9 +690,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListKeySearchData.get(chatId)) {
-                joiner.add("<b>" + headline.getSource() + "</b> [" +
-                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
+                joiner.add("<b>" + headline.getSource() + "</b> [" + Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() +
+                        " <a href=\"" + headline.getLink() + "\">link</a>");
 
                 if (counterParts++ == searchOffset) break;
             }
@@ -701,9 +701,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 getReplyKeyboard(chatId, foundNewsText + ": <b>" + headlines.size() + "</b> " +
                         Common.ICON_NEWS_FOUNDED);
             }
-
-//            afterKeywordsSearchKeyboard(chatId, foundNewsText + ": <b>" + headlines.size() + "</b> " +
-//                    Common.ICON_NEWS_FOUNDED, headlines.size());
 
             afterKeywordsSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
         } else {
@@ -760,7 +757,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<Headline> headlines = searchService.start(chatId, "keywords");
 
         int counterParts = 1;
-        int showAllCounter = 1;
         if (headlines.size() > 0) {
             // INFO
             log.info("Автопоиск: {}, {}, найдено {} за {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
@@ -770,9 +766,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                 StringJoiner joiner = new StringJoiner(delimiterNews);
 
                 for (Headline headline : headlines) {
-                    joiner.add(showAllCounter++ + ". <b>" + headline.getSource() + "</b> [" +
-                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                            "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
+                    joiner.add("<b>" + headline.getSource() + "</b> [" + Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
+                            headline.getTitle() +
+                            " <a href=\"" + headline.getLink() + "\">link</a>");
 
                     if (counterParts == 10) {
                         sendMessage(chatId, String.valueOf(joiner));
@@ -790,8 +786,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             } else {
                 for (Headline headline : headlines) {
                     String text = "<b>" + headline.getSource() + "</b> [" +
-                            Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                            "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>";
+                            Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
+                            headline.getTitle() +
+                            " <a href=\"" + headline.getLink() + "\">link</a>";
 
                     sendMessage(chatId, text);
                 }
@@ -1081,10 +1078,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             newsListFullSearchData.put(chatId, headlines);
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListFullSearchData.get(chatId)) {
-
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
-                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
+                        Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() +
+                        " <a href=\"" + headline.getLink() + "\">link</a>");
 
                 if (counterParts++ == searchOffset) break;
             }
@@ -1458,10 +1455,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (headlines.size() > 0) {
             StringJoiner joiner = new StringJoiner(delimiterNews);
             for (Headline headline : newsListTopSearchData.get(chatId)) {
-
-                joiner.add("<b>" + headline.getSource() + "</b> [" +
-                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
+                joiner.add("<b>" + headline.getSource() + "</b> [" + Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() +
+                        " <a href=\"" + headline.getLink() + "\">link</a>");
 
                 if (counterParts++ == topSearchOffset) break;
             }
@@ -2133,8 +2129,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (headlines.size() > 0) {
             for (Headline headline : headlines.subList(current, next)) {
                 joiner.add("<b>" + headline.getSource() + "</b> [" +
-                        Common.dateToShowFormatChange(String.valueOf(headline.getPubDate())) + "]\n" +
-                        "<a href=\"" + headline.getLink() + "\">" + headline.getTitle() + "</a>");
+                        Common.showDate(String.valueOf(headline.getPubDate())) + "]\n" +
+                        headline.getTitle() +
+                        " <a href=\"" + headline.getLink() + "\">link</a>");
 
                 if (counterParts++ > offset) break;
             }
