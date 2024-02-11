@@ -643,6 +643,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                         settingsRepository.updateMessageTheme(3, chatId);
                         sendMessage(chatId, changesSavedText);
                     }
+                    case "MESSAGE_THEME_4" -> {
+                        settingsRepository.updateMessageTheme(4, chatId);
+                        sendMessage(chatId, changesSavedText);
+                    }
 
                 }
             }
@@ -2122,6 +2126,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("MESSAGE_THEME_1", "1");
         buttons.put("MESSAGE_THEME_2", "2");
         buttons.put("MESSAGE_THEME_3", "3");
+        buttons.put("MESSAGE_THEME_4", "4");
 
         sendMessageWithPreview(chatId, messageThemeChooseText,
                 InlineKeyboards.inlineKeyboardMaker(buttons));
