@@ -2186,13 +2186,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                     headline.getLink(), headline.getTitle(),
                     headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())));
         } else if (messageTheme == 3) {
+            String time = Common.showDate(String.valueOf(headline.getPubDate()));
+            time = time.substring(0, time.indexOf(" "));
+
             return String.format("<a href=\"%s\">%s</a>\n<pre>%s [%s]</pre>",
                     headline.getLink(), headline.getTitle(),
-                    headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())));
+                    headline.getSource(), time);
         } else if (messageTheme == 4) {
-//            String time = Common.showDate(String.valueOf(headline.getPubDate()));
-//            time = time.substring(0, time.indexOf(" "));
-
             return String.format("<code>%s</code>", headline.getTitle());
         }
 
