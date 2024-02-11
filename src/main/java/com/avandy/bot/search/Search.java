@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -243,6 +244,7 @@ public class Search implements SearchService {
                     String title = message.getTitle().trim();
                     String titleHash = Common.getHash(title);
                     Date pubDate = message.getPublishedDate();
+                    Date addDate = new Timestamp(System.currentTimeMillis());
                     String link = message.getLink();
 
                     if (!newsListAllHash.contains(titleHash)) {
@@ -252,6 +254,7 @@ public class Search implements SearchService {
                                 .titleHash(titleHash)
                                 .link(link)
                                 .pubDate(pubDate)
+                                .addDate(addDate)
                                 .build());
                     }
                 }
@@ -289,6 +292,7 @@ public class Search implements SearchService {
                     String title = message.getTitle().trim();
                     String titleHash = Common.getHash(title);
                     Date pubDate = message.getPubDate();
+                    Date addDate = new Timestamp(System.currentTimeMillis());
                     String link = message.getLink();
 
                     if (!newsListAllHash.contains(titleHash)) {
@@ -298,6 +302,7 @@ public class Search implements SearchService {
                                 .titleHash(titleHash)
                                 .link(link)
                                 .pubDate(pubDate)
+                                .addDate(addDate)
                                 .build());
                     }
                 }
