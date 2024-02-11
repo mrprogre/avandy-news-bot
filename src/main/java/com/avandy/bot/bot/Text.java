@@ -427,7 +427,7 @@ public class Text extends Common {
                     schedSettings +
                     premiumSettings +
                     delimiterNews + "\n" +
-                    "Select messages <b>appearance</b> type /theme" + "\n" +
+                    "Select the type of <b>appearance</b> messages /theme" + "\n" +
                     delimiterNews + "\n" +
                     "Parameters change after pressing buttons";
         }
