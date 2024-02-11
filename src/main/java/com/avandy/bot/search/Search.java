@@ -62,7 +62,7 @@ public class Search implements SearchService {
                 String rss = news.getSource();
                 String title = news.getTitle().trim();
                 String hash = Common.getHash(title);
-                Date date = news.getPubDate();
+                Date date = news.getAddDate();
                 String link = news.getLink();
 
                 int dateDiff = Common.compareDates(new Date(), date, periodMinutes);
@@ -125,7 +125,7 @@ public class Search implements SearchService {
                     String rss = news.getSource();
                     String title = news.getTitle().trim();
                     String hash = Common.getHash(title);
-                    Date date = news.getPubDate();
+                    Date date = news.getAddDate();
                     String link = news.getLink();
 
                     if (title.length() > 15) {
@@ -160,7 +160,7 @@ public class Search implements SearchService {
                 String rss = news.getSource();
                 String title = news.getTitle().trim();
                 String hash = Common.getHash(title);
-                Date date = news.getPubDate();
+                Date date = news.getAddDate();
                 String link = news.getLink();
 
                 headlinesToShow.add(new Headline(rss, title, link, date, chatId, -2, hash));
