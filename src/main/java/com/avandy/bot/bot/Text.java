@@ -26,7 +26,7 @@ public class Text extends Common {
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
-            rssNameNotExistsText, linkText, messageThemeChooseText, noCommasText;
+            rssNameNotExistsText, linkText, messageThemeChooseText, noCommasText, changesSavedText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -58,6 +58,7 @@ public class Text extends Common {
             undefinedCommandText = "Данная команда не существует, либо Вы не нажали кнопку перед вводом текста " +
                     ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Сохранено ✔️";
+            changesSavedText2 = "Сохранено: %s ✔️";
             sentText = "Доставлено ✔️";
             historyClearText = "История просмотра очищена ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
@@ -270,6 +271,7 @@ public class Text extends Common {
             undefinedCommandText = "This command doesn't exist or you did not click the button before entering text! " +
                     "However, I will see your message in the journal " + ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Done ✔️";
+            changesSavedText2 = "Done: %s ✔️";
             sentText = "Done ✔️";
             historyClearText = "Browsing history cleared ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;

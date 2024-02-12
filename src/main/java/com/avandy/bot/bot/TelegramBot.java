@@ -233,7 +233,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         }
                         rssRepository.save(new RssList(chatId, country, source, link, 1, 100,
                                 new Timestamp(System.currentTimeMillis()), parseType, userTelegramLanguageCode));
-                        sendMessage(chatId, changesSavedText);
+                        savedKeyboard(chatId, changesSavedText);
                     } else {
                         sendMessage(chatId, notSupportedRssText);
                     }
@@ -480,23 +480,21 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "SET_EXCLUDED" -> excludeOnOffKeyboard(chatId);
                     case "EXCLUDED_ON" -> {
                         settingsRepository.updateExcluded("on", chatId);
-                        sendMessage(chatId, changesSavedText);
-                        getSettings(chatId);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "on"));
                     }
                     case "EXCLUDED_OFF" -> {
                         settingsRepository.updateExcluded("off", chatId);
-                        sendMessage(chatId, changesSavedText);
-                        getSettings(chatId);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "off"));
                     }
 
                     case "JARO_WINKLER_MODE" -> showOnOffJaroWinklerKeyboard(chatId);
                     case "JARO_WINKLER_ON" -> {
                         settingsRepository.updateJaroWinkler("on", chatId);
-                        sendMessage(chatId, changesSavedText);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "on"));
                     }
                     case "JARO_WINKLER_OFF" -> {
                         settingsRepository.updateJaroWinkler("off", chatId);
-                        sendMessage(chatId, changesSavedText);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "off"));
                     }
 
                     case "CANCEL" -> {
@@ -587,13 +585,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "SET_SCHEDULER" -> keywordsOnOffSchedulerKeyboard(chatId);
                     case "SCHEDULER_ON" -> {
                         settingsRepository.updateScheduler("on", chatId);
-                        sendMessage(chatId, changesSavedText);
-                        getSettings(chatId);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "on"));
                     }
                     case "SCHEDULER_OFF" -> {
                         settingsRepository.updateScheduler("off", chatId);
-                        sendMessage(chatId, changesSavedText);
-                        getSettings(chatId);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "off"));
                     }
                     case "SCHEDULER_START" -> startSearchTimeButtons(chatId);
                     // Set start time
@@ -626,30 +622,28 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "PREMIUM_SEARCH" -> premiumSearchOnOffSchedulerKeyboard(chatId);
                     case "PREMIUM_SEARCH_ON" -> {
                         settingsRepository.updatePremiumSearch("on", chatId);
-                        sendMessage(chatId, changesSavedText);
-                        getSettings(chatId);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "on"));
                     }
                     case "PREMIUM_SEARCH_OFF" -> {
                         settingsRepository.updatePremiumSearch("off", chatId);
-                        sendMessage(chatId, changesSavedText);
-                        getSettings(chatId);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "off"));
                     }
 
                     case "MESSAGE_THEME_1" -> {
                         settingsRepository.updateMessageTheme(1, chatId);
-                        sendMessage(chatId, changesSavedText);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "1"));
                     }
                     case "MESSAGE_THEME_2" -> {
                         settingsRepository.updateMessageTheme(2, chatId);
-                        sendMessage(chatId, changesSavedText);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "2"));
                     }
                     case "MESSAGE_THEME_3" -> {
                         settingsRepository.updateMessageTheme(3, chatId);
-                        sendMessage(chatId, changesSavedText);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "3"));
                     }
                     case "MESSAGE_THEME_4" -> {
                         settingsRepository.updateMessageTheme(4, chatId);
-                        sendMessage(chatId, changesSavedText);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "4"));
                     }
 
                 }
@@ -908,8 +902,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Изменение периода поиска
     private void keywordsUpdatePeriod(int period, long chatId) {
         settingsRepository.updateKeywordsPeriod(period + "h", chatId);
-        sendMessage(chatId, changesSavedText);
-        initSearchesKeyboard(chatId);
+        savedKeyboard(chatId, String.format(changesSavedText2, period + "h"));
     }
 
     // Удаление ключевых слов. Порядковые номера преобразуются в слова, которые потом и удаляются из БД
@@ -969,9 +962,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Изменение времени старта запуска автопоиска по ключевым словам
     private void keywordsUpdateSearchStartTime(int start, long chatId) {
-        settingsRepository.updateStart(LocalTime.of(start, 0, 0), chatId);
-        sendMessage(chatId, changesSavedText);
-        getSettings(chatId);
+        LocalTime time = LocalTime.of(start, 0, 0);
+        settingsRepository.updateStart(time, chatId);
+        savedKeyboard(chatId, String.format(changesSavedText2, time));
     }
 
     // KEYBOARDS
@@ -1150,8 +1143,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Изменение глубины полного поиска
     private void fullSearchPeriodUpdate(int period, long chatId) {
         settingsRepository.updatePeriodAll(period + "h", chatId);
-        sendMessage(chatId, changesSavedText);
-        initSearchesKeyboard(chatId);
+        savedKeyboard(chatId, String.format(changesSavedText2, period + "h"));
     }
 
     // KEYBOARDS
@@ -1536,7 +1528,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Обновление интервала поиска слов для Топа
     private void topUpdatePeriod(int period, long chatId) {
         settingsRepository.updatePeriodTop(period + "h", chatId);
-        sendMessage(chatId, changesSavedText);
+        savedKeyboard(chatId, String.format(changesSavedText2, period + "h"));
         showTop(chatId);
     }
 
@@ -2088,6 +2080,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Кнопка показа всех видов поиска
     private void nextKeyboard(long chatId, String text) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("GET_TOP", updateTopText2);
+        buttons.put("START_SEARCH", "» » »");
+        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+    }
+
+    // Кнопка показа всех видов поиска
+    private void savedKeyboard(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("GET_TOP", updateTopText2);
         buttons.put("START_SEARCH", "» » »");
