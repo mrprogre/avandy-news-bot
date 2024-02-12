@@ -388,7 +388,7 @@ public class Text extends Common {
                     schedSettings +
                     premiumSettings +
                     delimiterNews + "\n" +
-                    "Выбрать тип <b>внешнего вида</b> сообщений /theme" + "\n" +
+                    "Выбрать тему <b>внешнего вида</b> сообщений /theme" + "\n" +
                     delimiterNews + "\n" +
                     "Параметры меняются после нажатия на кнопки";
         } else {

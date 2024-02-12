@@ -76,8 +76,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final int searchOffset = 5;
     private final int topSearchOffset = 3;
     private final String delimiterPages = " : ";
-    private final String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
-
 
     @Autowired
     public TelegramBot(@Value("${bot.token}") String botToken, BotConfig config,
@@ -100,7 +98,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         try {
-
             // Отправка отзыва с приложением скриншота
             if (update.hasMessage() && update.getMessage().hasPhoto()) {
                 Long chatId = update.getMessage().getChatId();
@@ -706,7 +703,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             newsListKeySearchCounter.put(chatId, 0);
             newsListKeySearchData.put(chatId, headlines);
 
-            StringJoiner joiner = new StringJoiner(delimiterNews);
+            StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
             for (Headline headline : newsListKeySearchData.get(chatId)) {
                 joiner.add(getHeadlinesText(chatId, headline));
 
@@ -722,6 +719,22 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             afterKeywordsSearchKeyboard(chatId, headlinesNotFound, 0);
         }
+    }
+
+    // Разделитель для сообщений в зависимости от выбранной темы
+    private String getDelimiterNews(long chatId) {
+        String delimiterNews;
+        int messageTheme = settingsRepository.getMessageTheme(chatId);
+        if (messageTheme == 2) {
+            delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
+        } else if (messageTheme == 3) {
+            delimiterNews = "\n";
+        } else if (messageTheme == 4) {
+            delimiterNews = "\n\n";
+        } else {
+            delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
+        }
+        return delimiterNews;
     }
 
     // Меняющееся сообщение со всеми новостями по страницам
@@ -779,14 +792,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
                 // 10 message in 1
-                StringJoiner joiner = new StringJoiner(delimiterNews);
+                StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
 
                 for (Headline headline : headlines) {
                     joiner.add(getHeadlinesText(chatId, headline));
 
                     if (counterParts == 10) {
                         sendMessage(chatId, String.valueOf(joiner));
-                        joiner = new StringJoiner(delimiterNews);
+                        joiner = new StringJoiner(getDelimiterNews(chatId));
                         counterParts = 0;
                     }
                     counterParts++;
@@ -1086,7 +1099,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (headlines.size() > 0) {
             newsListFullSearchCounter.put(chatId, 0);
             newsListFullSearchData.put(chatId, headlines);
-            StringJoiner joiner = new StringJoiner(delimiterNews);
+            StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
             for (Headline headline : newsListFullSearchData.get(chatId)) {
                 joiner.add(getHeadlinesText(chatId, headline));
 
@@ -1459,7 +1472,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         int counterParts = 1;
         if (headlines.size() > 0) {
-            StringJoiner joiner = new StringJoiner(delimiterNews);
+            StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
             for (Headline headline : newsListTopSearchData.get(chatId)) {
                 joiner.add(getHeadlinesText(chatId, headline));
 
@@ -1933,6 +1946,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 settingsRepository.getTopPeriod(chatId), topRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
 
+        String delimiterNews = getDelimiterNews(chatId);
+
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
                 delimiterNews +
                 keywordsText +
@@ -2151,7 +2166,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Текст новостей для пагинации
     private StringJoiner getHeadlinesText(List<Headline> headlines, int current, int next, int counterParts, int offset, long chatId) {
-        StringJoiner joiner = new StringJoiner(delimiterNews);
+        StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
         if (headlines.size() > 0) {
             for (Headline headline : headlines.subList(current, next)) {
                 joiner.add(getHeadlinesText(chatId, headline));
