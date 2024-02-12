@@ -26,7 +26,7 @@ public class InlineKeyboards {
         }
     }
 
-    public static InlineKeyboardMarkup inlineKeyboardMaker(Map<String, String> buttons) {
+    public static InlineKeyboardMarkup maker(Map<String, String> buttons) {
         InlineKeyboardMarkup inlineKeyboardAbout = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
         List<InlineKeyboardButton> rowInLine = new ArrayList<>();
@@ -39,11 +39,11 @@ public class InlineKeyboards {
         return inlineKeyboardAbout;
     }
 
-    public static InlineKeyboardMarkup inlineKeyboardMaker(Map<String, String> buttons1,
-                                                           Map<String, String> buttons2,
-                                                           Map<String, String> buttons3,
-                                                           Map<String, String> buttons4,
-                                                           Map<String, String> buttons5) {
+    public static InlineKeyboardMarkup maker(Map<String, String> buttons1,
+                                             Map<String, String> buttons2,
+                                             Map<String, String> buttons3,
+                                             Map<String, String> buttons4,
+                                             Map<String, String> buttons5) {
         InlineKeyboardMarkup inlineKeyboardAbout = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
 

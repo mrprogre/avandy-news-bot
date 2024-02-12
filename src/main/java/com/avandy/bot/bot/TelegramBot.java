@@ -971,14 +971,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addKeywordsKeyboard(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("ADD_KEYWORD", addText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     private void addKeywordsKeyboardOrTop(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("GET_TOP", updateTopText2);
         buttons.put("ADD_KEYWORD", addText3);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     public void keywordsChangePeriodKeyboard(long chatId) {
@@ -990,7 +990,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("BUTTON_24", "24");
         buttons.put("BUTTON_48", "48");
         buttons.put("BUTTON_72", "72");
-        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.maker(buttons));
     }
 
     private void keywordsListKeyboard(long chatId, String text) {
@@ -1001,7 +1001,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons1.put("ADD_KEYWORD", addText);
         buttons2.put("SET_PERIOD", intervalText);
         buttons2.put("FIND_BY_KEYWORDS", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, null, null, null));
     }
 
     // Кнопки включения и выключения авто запуска автопоиска
@@ -1009,7 +1009,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("SCHEDULER_OFF", "Off");
         buttons.put("SCHEDULER_ON", "On");
-        sendMessage(chatId, autoSearchText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, autoSearchText, InlineKeyboards.maker(buttons));
     }
 
     // Кнопки включения и выключения авто запуска автопоиска
@@ -1017,7 +1017,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("PREMIUM_SEARCH_OFF", "Off");
         buttons.put("PREMIUM_SEARCH_ON", "On");
-        sendMessage(chatId, premiumSearchSettingsText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, premiumSearchSettingsText, InlineKeyboards.maker(buttons));
     }
 
     // Кнопки для выбора времени старта автопоиска (в часах)
@@ -1038,7 +1038,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 buttons4.put("SET_START_" + x, String.valueOf(x));
         }
 
-        sendMessage(chatId, chooseSearchStartText, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, null));
+        sendMessage(chatId, chooseSearchStartText, InlineKeyboards.maker(buttons1, buttons2, buttons3, buttons4, null));
     }
 
     // Кнопки после итогов поиска по ключевым словам
@@ -1060,11 +1060,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!text.isBlank()) {
-            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+            sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, null, null, null));
             return null;
         }
 
-        return InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null);
+        return InlineKeyboards.maker(buttons1, buttons2, null, null, null);
 
     }
 
@@ -1157,7 +1157,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("BUTTON_8_ALL", "8");
         buttons.put("BUTTON_12_ALL", "12");
         buttons.put("BUTTON_24_ALL", "24");
-        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.maker(buttons));
     }
 
     /* EXCLUDING TERMS */
@@ -1262,11 +1262,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!text.isBlank()) {
-            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+            sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, null, null, null));
             return null;
         }
 
-        return InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null);
+        return InlineKeyboards.maker(buttons1, buttons2, null, null, null);
     }
 
     // Кнопки включения и выключения механизма исключения заголовков
@@ -1274,7 +1274,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("EXCLUDED_OFF", "Off");
         buttons.put("EXCLUDED_ON", "On");
-        sendMessage(chatId, exclusionText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, exclusionText, InlineKeyboards.maker(buttons));
     }
 
     // Кнопки для просмотра списка слов-исключений
@@ -1298,17 +1298,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!text.isBlank()) {
-            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+            sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, null, null, null));
             return null;
         }
-        return InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null);
+        return InlineKeyboards.maker(buttons1, buttons2, null, null, null);
     }
 
     // Одна кнопка с добавлением в слова-исключения
     private void excludeKeyboard(long chatId) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("ADD_EXCLUDED", addText);
-        sendMessage(chatId, excludedWordsNotSetText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, excludedWordsNotSetText, InlineKeyboards.maker(buttons));
     }
 
     /* TOP */
@@ -1591,7 +1591,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons2.put("SET_PERIOD_TOP", intervalText);
         buttons2.put("DEL_FROM_TOP", delFromTopText);
         buttons2.put("SEARCH_BY_TOP_WORD", searchText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, null, null, null));
     }
 
     // Кнопки со словами для быстрого поиска
@@ -1617,7 +1617,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             else if (x <= 20)
                 buttons5.put("TOP_NUM_" + x++, s);
         }
-        sendMessage(chatId, chooseNumberWordFromTop, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
+        sendMessage(chatId, chooseNumberWordFromTop, InlineKeyboards.maker(buttons1, buttons2, buttons3, buttons4, buttons5));
         newsListTopSearchMessageId.remove(chatId);
     }
 
@@ -1635,19 +1635,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!text.isBlank()) {
-            Integer messageId = sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+            Integer messageId = sendMessage(chatId, text, InlineKeyboards.maker(buttons));
             newsListTopSearchMessageId.put(chatId, messageId);
             return null;
         }
 
-        return InlineKeyboards.inlineKeyboardMaker(buttons);
+        return InlineKeyboards.maker(buttons);
     }
 
     // Одна кнопка для обновления Топа
     private void topKeyboard(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("GET_TOP", updateTopText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     // Кнопки со словами для быстрого удаления
@@ -1674,7 +1674,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 buttons5.put("TOP_DEL_" + x++, s);
         }
 
-        sendMessage(chatId, chooseWordDelFromTop, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, buttons4, buttons5));
+        sendMessage(chatId, chooseWordDelFromTop, InlineKeyboards.maker(buttons1, buttons2, buttons3, buttons4, buttons5));
     }
 
     // Кнопки для выбора периода поиска
@@ -1687,7 +1687,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("TOP_INTERVAL_24", "24");
         buttons.put("TOP_INTERVAL_48", "48");
         buttons.put("TOP_INTERVAL_72", "72");
-        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.maker(buttons));
     }
 
     // Кнопки для просмотра списка удалённых слов из Топ по страницам
@@ -1711,10 +1711,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (!text.isBlank()) {
-            sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+            sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, null, null, null));
             return null;
         }
-        return InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null);
+        return InlineKeyboards.maker(buttons1, buttons2, null, null, null);
     }
 
     // Включение и выключение применения механизма Джаро-Винклера
@@ -1727,7 +1727,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         isActiveJw = setOnOffRus(isActiveJw, chatId);
 
         sendMessage(chatId, jaroWinklerSwitcherText + "<b>" + isActiveJw +
-                "</b>", InlineKeyboards.inlineKeyboardMaker(buttons));
+                "</b>", InlineKeyboards.maker(buttons));
     }
 
 
@@ -1786,7 +1786,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
         buttons3.put("START_SEARCH", "» » »");
 
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
     }
 
 
@@ -1817,7 +1817,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("ES_BUTTON", "es");
         buttons.put("EN_BUTTON", "en");
         buttons.put("RU_BUTTON", "ru");
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     // Предложение пользователю продолжить работу в боте на старте
@@ -1825,7 +1825,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("NO_BUTTON", noText);
         buttons.put("YES_BUTTON", yesText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     public void showYesNoGetPremium(long chatId) {
@@ -1837,14 +1837,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             Map<String, String> buttons = new LinkedHashMap<>();
             buttons.put("NO_PREMIUM", noText);
             buttons.put("YES_PREMIUM", yesText);
-            sendMessage(chatId, getPremiumYesOrNowText, InlineKeyboards.inlineKeyboardMaker(buttons));
+            sendMessage(chatId, getPremiumYesOrNowText, InlineKeyboards.maker(buttons));
         }
     }
 
     public void sendPaymentPremium(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("PAYMENT", sendPaymentText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     // Сохранение пользователя в БД
@@ -1893,7 +1893,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("DELETE_YES", yesText);
         buttons.put("DELETE_NO", noText);
-        sendMessage(chatId, confirmDeletedUserText, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, confirmDeletedUserText, InlineKeyboards.maker(buttons));
     }
 
     // Список источников новостей, исходя из выбранного на старте языка интерфейса
@@ -1960,7 +1960,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons3.put("LIST_TOP", listText);
         buttons3.put("GET_TOP", updateTopText2);
 
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
     }
 
     // Отправка сообщения стандартная
@@ -2075,7 +2075,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void cancelKeyboard(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("CANCEL", cancelButtonText);
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     // Кнопка показа всех видов поиска
@@ -2083,7 +2083,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("GET_TOP", updateTopText2);
         buttons.put("START_SEARCH", "» » »");
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     // Кнопка показа всех видов поиска
@@ -2091,7 +2091,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("GET_TOP", updateTopText2);
         buttons.put("START_SEARCH", "» » »");
-        sendMessage(chatId, text, InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     // Кнопки раздела Инфо (/info)
@@ -2104,7 +2104,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons2.put("GET_PREMIUM", getPremiumText);
         //buttons2.put("START_SEARCH", "» » »");
         sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(chatId),
-                InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, null, null, null));
+                InlineKeyboards.maker(buttons1, buttons2, null, null, null));
     }
 
     // Кнопки раздела Инфо (/info)
@@ -2122,18 +2122,20 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons3.put("START_SEARCH", findSelectText);
 
         sendMessageWithPreview(chatId, undefinedCommandText,
-                InlineKeyboards.inlineKeyboardMaker(buttons1, buttons2, buttons3, null, null));
+                InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
     }
 
     void setThemeKeyboard(long chatId) {
+        int messageTheme = settingsRepository.getMessageTheme(chatId);
         Map<String, String> buttons = new LinkedHashMap<>();
+
         buttons.put("MESSAGE_THEME_1", "1");
         buttons.put("MESSAGE_THEME_2", "2");
         buttons.put("MESSAGE_THEME_3", "3");
         buttons.put("MESSAGE_THEME_4", "4");
 
-        sendMessageWithPreview(chatId, messageThemeChooseText,
-                InlineKeyboards.inlineKeyboardMaker(buttons));
+        sendMessageWithPreview(chatId, String.format(messageThemeChooseText, messageTheme),
+                InlineKeyboards.maker(buttons));
     }
 
     // Дополнительная клавиатура с тремя видами поиска (с приветствием пользователя)
