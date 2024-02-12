@@ -283,7 +283,41 @@ public class TelegramBot extends TelegramLongPollingBot {
                         }
                         case "/advanced" -> new Thread(() -> advancedSearchText(chatId)).start();
                         case "/theme" -> new Thread(() -> setThemeKeyboard(chatId)).start();
-                        // не использую в интерфейсе
+
+                        // Автопоиск
+                        case "/auto_on" -> {
+                            settingsRepository.updateScheduler("on", chatId);
+                            savedKeyboard(chatId, String.format(changesSavedText2, "on"));
+                        }
+                        case "/auto_off" -> {
+                            settingsRepository.updateScheduler("off", chatId);
+                            savedKeyboard(chatId, String.format(changesSavedText2, "off"));
+                        }
+                        case "/change_key" -> keywordsChangePeriodKeyboard(chatId);
+                        case "/change_time" -> startSearchTimeButtons(chatId);
+
+                        // Полный поиск
+                        case "/change_full" -> fullSearchPeriodChangeKeyboard(chatId);
+                        case "/filter_on" -> {
+                            settingsRepository.updateExcluded("on", chatId);
+                            savedKeyboard(chatId, String.format(changesSavedText2, "on"));
+                        }
+                        case "/filter_off" -> {
+                            settingsRepository.updateExcluded("off", chatId);
+                            savedKeyboard(chatId, String.format(changesSavedText2, "off"));
+                        }
+
+                        // Премиум
+                        case "/prem_on" -> {
+                            settingsRepository.updatePremiumSearch("on", chatId);
+                            savedKeyboard(chatId, String.format(changesSavedText2, "on"));
+                        }
+                        case "/prem_off" -> {
+                            settingsRepository.updatePremiumSearch("off", chatId);
+                            savedKeyboard(chatId, String.format(changesSavedText2, "off"));
+                        }
+
+                        // Misc
                         case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
                         case "/excluding" -> getExcludedList(chatId);
                         case "/delete" -> showYesNoOnDeleteUser(chatId);
@@ -1765,25 +1799,34 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Кнопки для раздела настроек (/settings)
     private void settingsKeyboard(long chatId, String text) {
-        boolean isOn = settingsRepository.getSchedulerOnOffByChatId(chatId).equals("on");
-        int isPremium = userRepository.isPremiumByChatId(chatId);
+        String lang = settingsRepository.getLangByChatId(chatId);
 
-        Map<String, String> buttons1 = new LinkedHashMap<>();
-        Map<String, String> buttons2 = new LinkedHashMap<>();
-        Map<String, String> buttons3 = new LinkedHashMap<>();
-        buttons1.put("SET_SCHEDULER", "1. " + autoSearchText);
-        buttons1.put("SET_PERIOD", "2. " + intervalText);
-        buttons2.put("SET_EXCLUDED", "3. " + exclusionText);
-        buttons2.put("SET_PERIOD_ALL", "4. " + intervalText);
+        if (lang.equals("ru")) {
+            Map<String, String> buttons = new LinkedHashMap<>();
+            buttons.put("GET_TOP", updateTopText2);
+            buttons.put("START_SEARCH", "» » »");
+            sendMessage(chatId, text, InlineKeyboards.maker(buttons));
+        } else {
+            boolean isOn = settingsRepository.getSchedulerOnOffByChatId(chatId).equals("on");
+            int isPremium = userRepository.isPremiumByChatId(chatId);
 
-        if (isOn && isPremium != 1) {
-            buttons3.put("SCHEDULER_START", "5. " + startSettingsText);
-        } else if (isPremium == 1) {
-            buttons3.put("PREMIUM_SEARCH", "5. " + premiumSearchSettingsText);
+            Map<String, String> buttons1 = new LinkedHashMap<>();
+            Map<String, String> buttons2 = new LinkedHashMap<>();
+            Map<String, String> buttons3 = new LinkedHashMap<>();
+            buttons1.put("SET_SCHEDULER", "1. " + autoSearchText);
+            buttons1.put("SET_PERIOD", "2. " + intervalText);
+            buttons2.put("SET_EXCLUDED", "3. " + exclusionText);
+            buttons2.put("SET_PERIOD_ALL", "4. " + intervalText);
+
+            if (isOn && isPremium != 1) {
+                buttons3.put("SCHEDULER_START", "5. " + startSettingsText);
+            } else if (isPremium == 1) {
+                buttons3.put("PREMIUM_SEARCH", "5. " + premiumSearchSettingsText);
+            }
+            buttons3.put("START_SEARCH", "» » »");
+
+            sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
         }
-        buttons3.put("START_SEARCH", "» » »");
-
-        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
     }
 
 

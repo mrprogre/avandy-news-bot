@@ -124,8 +124,6 @@ public class Text extends Common {
                     Пример: в Top 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
                     Текущий статус:\s""";
             jaroWinklerText = "Окончания";
-            premiumText = " (для <b>премиум аккаунта</b> запуск поиска производится <b>каждые 2 минуты</b> /premium) " +
-                    ICON_PREMIUM_IS_ACTIVE;
             getPremiumText = "Премиум бот";
             getPremiumYesOrNowText = "На тарифе <b>Premium bot</b>\n" +
                     "1. Поиск новостей по ключевым словам производится каждые <b>2 минуты</b>. " +
@@ -344,53 +342,64 @@ public class Text extends Common {
 
     public static String getSettingsText(Settings settings, String lang, int isPremium) {
         String premiumPeriod;
-        String premiumMessage;
         String premiumSettings = "";
 
         if (lang.equals("ru")) {
             String schedSettings = "";
             if (settings.getScheduler().contains("on") && isPremium != 1) {
                 String text = switch (settings.getPeriod()) {
-                    case "1h" -> " (запуск каждый час)\n";
-                    case "2h" -> " (запуск каждые 2 часа)\n";
-                    case "24h", "48h", "72h" -> " (запуск один раз в сутки)\n";
-                    default ->
-                            " (часы запуска: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
+                    case "1h" -> "Запуск поиска каждый час\n";
+                    case "2h" -> "Запуск поиска каждые 2 часа\n";
+                    case "24h", "48h", "72h" -> "Запуск поиска один раз в сутки\n";
+                    default -> "Часы запуска: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = delimiterNews + "\n<b>5. Старт</b> автопоиска: <b>" + settings.getStart() + "</b>" + text;
+                schedSettings = "<b>Старт</b> автопоиска: <b>" + settings.getStart() + "</b>\n" +
+                        "[изменить /change_time]\n" +
+                        "<pre>" + text + "</pre>";
             }
+
+            String premiumRus = settings.getPremiumSearch();
+            String onOffPremiumRus = "включить /prem_on";
+            if (premiumRus.contains("on")) onOffPremiumRus = "выключить /prem_off";
 
             if (isPremium == 1) {
                 String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
-                premiumPeriod = "<b>" + period + "</b>, " + premiumIsActive;
-                premiumMessage = "";
-                String rus = settings.getPremiumSearch().equals("on") ? "<b>вкл [on]</b>" : "<b>выкл [off]</b>";
-                premiumSettings = delimiterNews + "\n<b>5. Премиум поиск:</b> " + rus + "\n" +
-                        "Включить или выключить автопоиск каждые 2 минуты (будет запускаться в соответствии с п.2)\n";
+                premiumPeriod = "<b>" + period + "</b>";
+                String rus = settings.getPremiumSearch().equals("on") ? "<b>вкл</b>" : "<b>выкл</b>";
+                premiumSettings = delimiterNews + "\n<b>Премиум поиск:</b> " + rus + "\n" +
+                        "[" + onOffPremiumRus + "]\n" +
+                        "<pre>Поиск производится каждые 2 минуты</pre>";
             } else {
                 premiumPeriod = settings.getPeriod();
-                premiumMessage = premiumText;
             }
 
+            String schedulerRus = settings.getScheduler();
+            String onOffSchedulerRus = "включить /auto_on";
+            if (schedulerRus.contains("on")) onOffSchedulerRus = "выключить /auto_off";
+
+            String excludedRus = settings.getExcluded();
+            String onOffExcludedRus = "включить /filter_on";
+            if (excludedRus.contains("on")) onOffExcludedRus = "выключить /filter_off";
+
             return "<b>Настройки</b> " + ICON_SETTINGS + " \n" +
-                    "<b>1. Автопоиск: " + settings.getScheduler() + "</b>\n" +
-                    "Автоматический запуск поиска по <b>ключевым словам</b>\n" +
                     delimiterNews + "\n" +
-                    "<b>2. Частота автопоиска:</b> " + premiumPeriod + "\n" +
-                    "Глубина поиска совпадает с частотой и равна текущему времени минус <b>" + settings.getPeriod() + "</b>" +
-                    premiumMessage + "\n" +
-                    delimiterNews + "\n" +
-                    "<b>3. Исключение</b>: <b>" + settings.getExcluded() + "</b>\n" +
-                    "Исключение новостей, которые содержат слова-исключения\n" +
-                    delimiterNews + "\n" +
-                    "<b>4. Глубина полного поиска</b>\n" +
-                    "Глубина равна текущему времени минус <b>" + settings.getPeriodAll() + "</b>\n" +
+                    "<b>Автопоиск</b> по словам: <b>" + schedulerRus.replaceAll("[ \\[on\\]| \\[off\\]]", "") + "</b> [" +
+                    onOffSchedulerRus + "]\n" +
+                    //delimiterNews + "\n" +
+                    "<b>Частота и глубина</b> автопоиска: <b>" + premiumPeriod + "</b> [изменить /change_key]\n" +
+                    "<pre>В результатах поиска представлены новости за выбранный период</pre>\n" +
                     schedSettings +
                     premiumSettings +
                     delimiterNews + "\n" +
-                    "Выбрать тему <b>внешнего вида</b> сообщений /theme" + "\n" +
+                    "<b>Полный поиск</b> новостей, интервал: <b>" + settings.getPeriodAll() + "</b>\n" +
+                    "[изменить /change_full]\n" +
+                    "<b>Отсев новостей</b>: <b>" +
+                    settings.getExcluded().replaceAll("[ \\[on\\] | \\[off\\]]", "") + "</b>\n[" +
+                    onOffExcludedRus + "]\n" +
+                    "<pre>Новости, содержащие слова-исключения, будут исключены из показа</pre>" +
                     delimiterNews + "\n" +
-                    "Параметры меняются после нажатия на кнопки";
+                    "<b>Внешний вид</b> ленты новостей, тип: <b>" + settings.getMessageTheme() + "</b>\n" +
+                    "[выбрать другой тип /theme]";
         } else {
             String schedSettings = "";
 
@@ -402,32 +411,28 @@ public class Text extends Common {
                     default ->
                             " (start time: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
                 };
-                schedSettings = delimiterNews + "\n" + "<b>5. Start</b> auto search by keywords: <b>" + settings.getStart() + "</b>" + text;
+                schedSettings = delimiterNews + "\n" + "<b>Start</b> auto search by keywords: <b>" + settings.getStart() + "</b>" + text;
             }
 
             if (isPremium == 1) {
                 String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
                 premiumPeriod = "<b>" + period + "</b>, " + premiumIsActive;
-                premiumMessage = "";
-                premiumSettings = delimiterNews + "\n<b>5. Premium bot search: " + settings.getPremiumSearch() + "</b>\n" +
+                premiumSettings = delimiterNews + "\n<b>Premium bot search: " + settings.getPremiumSearch() + "</b>\n" +
                         "Enable or disable auto search every 2 minutes (will be launched in accordance with step 2)\n";
             } else {
                 premiumPeriod = settings.getPeriod();
-                premiumMessage = premiumText;
             }
 
             return "<b>Settings</b> " + ICON_SETTINGS + " \n" +
-                    "<b>1. Auto search: " + settings.getScheduler() + "</b>\n" +
-                    "Automatically launch a search using <b>keywords</b> for the period specified in clause 1, with a frequency in clause 5" + "\n" +
+                    "<b>Auto search by words: " + settings.getScheduler() + "</b>\n" +
                     delimiterNews + "\n" +
-                    "<b>2. Auto search frequency: " + premiumPeriod + "</b>\n" +
-                    "The search period coincides with the search frequency and is equal to the current time minus <b>" + settings.getPeriod() + "</b>" +
-                    premiumMessage + "\n" +
+                    "<b>Auto search frequency: " + premiumPeriod + "</b>\n" +
+                    "The search period coincides with the search frequency and is equal to the current time minus <b>" + settings.getPeriod() + "</b>\n" +
                     delimiterNews + "\n" +
-                    "<b>3. Excluding</b>: <b>" + settings.getExcluded() + "</b>\n" +
+                    "<b>Excluding</b>: <b>" + settings.getExcluded() + "</b>\n" +
                     "Excluding news that contains excluding terms\n" +
                     delimiterNews + "\n" +
-                    "<b>4. Full search interval: " + settings.getPeriodAll() + "</b>\n" +
+                    "<b>Full search interval: " + settings.getPeriodAll() + "</b>\n" +
                     schedSettings +
                     premiumSettings +
                     delimiterNews + "\n" +
