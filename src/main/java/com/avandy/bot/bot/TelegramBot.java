@@ -721,22 +721,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    // Разделитель для сообщений в зависимости от выбранной темы
-    private String getDelimiterNews(long chatId) {
-        String delimiterNews;
-        int messageTheme = settingsRepository.getMessageTheme(chatId);
-        if (messageTheme == 2) {
-            delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
-        } else if (messageTheme == 3) {
-            delimiterNews = "\n";
-        } else if (messageTheme == 4) {
-            delimiterNews = "\n\n";
-        } else {
-            delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
-        }
-        return delimiterNews;
-    }
-
     // Меняющееся сообщение со всеми новостями по страницам
     private void getNewsListKeyPage(Long chatId, int plusMinus, int messageId) {
         newsListKeySearchMessageId.put(chatId, messageId);
@@ -2196,6 +2180,22 @@ public class TelegramBot extends TelegramLongPollingBot {
                 log.error(e.getMessage());
             }
         }
+    }
+
+    // Разделитель для сообщений в зависимости от выбранной темы
+    private String getDelimiterNews(long chatId) {
+        String delimiterNews;
+        int messageTheme = settingsRepository.getMessageTheme(chatId);
+        if (messageTheme == 2) {
+            delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
+        } else if (messageTheme == 3) {
+            delimiterNews = "\n";
+        } else if (messageTheme == 4) {
+            delimiterNews = "\n\n";
+        } else {
+            delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
+        }
+        return delimiterNews;
     }
 
     // Форматированная новость для показа в чате
