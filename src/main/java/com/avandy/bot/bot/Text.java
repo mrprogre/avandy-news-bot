@@ -396,7 +396,7 @@ public class Text extends Common {
                     "<b>Отсев новостей</b>: <b>" +
                     settings.getExcluded().replaceAll("[ \\[on\\] | \\[off\\]]", "") + "</b>\n[" +
                     onOffExcludedRus + "]\n" +
-                    "<pre>Новости, содержащие слова-исключения, будут исключены из показа</pre>" +
+                    "<pre>Новости, содержащие слова-исключения, не будут показаны</pre>" +
                     delimiterNews + "\n" +
                     "<b>Внешний вид</b> ленты новостей, тип: <b>" + settings.getMessageTheme() + "</b>\n" +
                     "[выбрать другой тип /theme]";
