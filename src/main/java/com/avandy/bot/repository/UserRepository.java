@@ -26,6 +26,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
             "and s.lang = 'ru'", nativeQuery = true)
     List<User> findAllRusByIsActive();
 
+    @Query(value = "select u.* from users u join settings s on u.chat_id = s.chat_id where u.is_active = 1 " +
+            "and s.lang != 'ru'", nativeQuery = true)
+    List<User> findAllNotRusByIsActive();
+
     @Query(value = "SELECT prem_exp_date FROM users WHERE chat_id = :chatId", nativeQuery = true)
     Date findPremiumExpDateByChatId(Long chatId);
 

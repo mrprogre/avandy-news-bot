@@ -135,13 +135,23 @@ public class TelegramBot extends TelegramLongPollingBot {
                     else log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId), messageText);
                 }
 
-                // SEND TO ALL FROM BOT OWNER
+                // SEND TO ALL RUS FROM BOT OWNER
                 if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
                     String textToSend = messageText.substring(messageText.indexOf(" "));
                     List<User> users = userRepository.findAllRusByIsActive();
                     for (User user : users) {
                         sendMessageWithPreview(user.getChatId(), textToSend, null);
                     }
+                }
+
+                // SEND TO ALL ENG FROM BOT OWNER
+                if (messageText.startsWith("^") && config.getBotOwner() == chatId) {
+                    String textToSend = messageText.substring(messageText.indexOf(" "));
+                    List<User> users = userRepository.findAllNotRusByIsActive();
+                    for (User user : users) {
+                        sendMessageWithPreview(user.getChatId(), textToSend, null);
+                    }
+
                     // SEND TO CHAT_ID FROM BOT OWNER
                 } else if (messageText.startsWith("@") && config.getBotOwner() == chatId) {
                     long chatToSend = Long.parseLong(messageText.substring(1, messageText.indexOf(" ")));
