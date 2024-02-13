@@ -204,9 +204,9 @@ public class Common {
             StringBuilder text = new StringBuilder();
             if (keyword.length() > 4 && isOnlyRussianLetters) {
                 if (keyword.contains(" ")) {
-                    keyword = replaceKeywordChars(keyword, text);
+                    keyword = replaceKeywordChars(keyword, text, ' ');
                 } else if (keyword.contains("-")) {
-                    keyword = replaceKeywordChars(keyword, text);
+                    keyword = replaceKeywordChars(keyword, text, '-');
                 } else {
                     keyword = keyword.substring(0, keyword.length() - 1) + "**";
                 }
@@ -218,16 +218,16 @@ public class Common {
         return initKeyword;
     }
 
-    private static String replaceKeywordChars(String keyword, StringBuilder text) {
-        String[] split = keyword.split(" ");
+    private static String replaceKeywordChars(String keyword, StringBuilder text, char delim) {
+        String[] split = keyword.split(String.valueOf(delim));
         for (String s : split) {
             if (s.length() <  4) {
-                text.append(s).append(" ");
+                text.append(s).append(delim);
             } else {
-                text.append(s, 0, s.length() - 2).append("** ");
+                text.append(s, 0, s.length() - 2).append("**").append(delim);
             }
         }
-        if (text.toString().charAt(text.length() -1) == ' ') {
+        if (text.toString().charAt(text.length() - 1) == delim) {
             keyword = text.substring(0, text.length() - 1);
         } else {
             keyword = text.toString();

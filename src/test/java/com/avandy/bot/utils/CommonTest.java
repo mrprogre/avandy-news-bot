@@ -8,6 +8,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class CommonTest {
+
+    @Test
+    public void replaceKeywordsEndTest() {
+        String [] keywords = {"курс", "курска", "нейронные аи", "аи сети", "нейронные сети", "нейронные-сети", "Москва"};
+        for (String keyword : keywords) {
+            System.out.println(keyword + " = " + Common.replaceWordsEnd(keyword));
+        }
+    }
+
     @Test
     public void checkJaroWinkler() {
         String s1 = "BlackRock объявила о приобретении инвестфонда GIP за $12,5";
@@ -35,14 +44,6 @@ public class CommonTest {
         s1 = "played";
         s2 = "player";
         assertEquals(93, Common.compare(s1, s2));
-    }
-
-    @Test
-    public void replaceKeywordsEndTest() {
-        String [] keywords = {"курс", "курска", "нейронные аи", "аи сети", "нейронные сети", "нейронные-сети", "нейронные"};
-        for (String keyword : keywords) {
-            System.out.println(Common.replaceWordsEnd(keyword));
-        }
     }
 
     @Test
