@@ -2251,7 +2251,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (messageTheme == 2) {
             delimiterNews = "\n\n";
         } else if (messageTheme == 3) {
-            delimiterNews = "\n";
+            delimiterNews = "\n\n";
         } else if (messageTheme == 4) {
             delimiterNews = "\n\n";
         } else {
@@ -2272,9 +2272,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             String time = Common.showDate(String.valueOf(headline.getPubDate()));
             time = time.substring(0, time.indexOf(" "));
 
-            return String.format("<a href=\"%s\">%s</a>\n<pre>%s [%s]</pre>",
-                    headline.getLink(), headline.getTitle(),
-                    headline.getSource(), time);
+            return String.format("<strong>%s</strong> <a href=\"%s\">»»</a>\n<pre>%s [%s]</pre>",
+                    headline.getTitle(), headline.getLink(), headline.getSource(), time);
         } else if (messageTheme == 4) {
             return String.format("<code>%s</code> <a href=\"%s\">»»</a>", headline.getTitle(), headline.getLink());
         }
