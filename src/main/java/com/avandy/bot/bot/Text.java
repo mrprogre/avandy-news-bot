@@ -389,10 +389,10 @@ public class Text extends Common {
                     schedSettings +
                     premiumSettings +
                     delimiterNews + "\n" +
-                    "<b>Полный поиск</b> новостей, интервал: <b>" + settings.getPeriodAll() + "</b>\n" +
+                    "<b>Полный поиск</b> новостей, интервал: <b>" + settings.getPeriodAll() + "</b> \n" +
                     "[изменить /change_full]\n" +
-                    "<b>Отсев новостей</b>: <b>" +
-                    settings.getExcluded().replaceAll("[ \\[on\\] | \\[off\\]]", "") + "</b>\n[" +
+                    "<b>Фильтрация новостей</b>: <b>" +
+                    settings.getExcluded().replaceAll("[ \\[on\\] | \\[off\\]]", "") + "</b> [" +
                     onOffExcludedRus + "]\n" +
                     "<pre>Новости, содержащие слова-исключения, не будут показаны</pre>" +
                     delimiterNews + "\n" +
