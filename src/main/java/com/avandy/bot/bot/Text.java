@@ -341,15 +341,16 @@ public class Text extends Common {
     public static String getSettingsText(Settings settings, String lang, int isPremium) {
         String premiumPeriod;
         String premiumSettings = "";
+        String schedSettings = "";
 
         if (lang.equals("ru")) {
-            String schedSettings = "";
             if (settings.getScheduler().contains("on") && isPremium != 1) {
                 String text = switch (settings.getPeriod()) {
                     case "1h" -> "Запуск поиска каждый час\n";
                     case "2h" -> "Запуск поиска каждые 2 часа\n";
                     case "24h", "48h", "72h" -> "Запуск поиска один раз в сутки\n";
-                    default -> "Часы запуска: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
+                    default ->
+                            "Часы запуска: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
                 };
                 schedSettings = "<b>Старт</b> автопоиска: <b>" + settings.getStart() + "</b>\n" +
                         "[изменить /change_time]\n" +
@@ -381,7 +382,7 @@ public class Text extends Common {
 
             return "<b>Настройки</b> " + ICON_SETTINGS + " \n" +
                     delimiterNews + "\n" +
-                    "<b>Автопоиск</b> по словам: <b>" + schedulerRus.replaceAll("[ \\[on\\]| \\[off\\]]", "") + "</b> [" +
+                    "<b>Автопоиск</b> по словам: <b>" + schedulerRus.replaceAll("[onf\\[\\] ]", "") + "</b> [" +
                     onOffSchedulerRus + "]\n" +
                     //delimiterNews + "\n" +
                     "<b>Частота и глубина</b> автопоиска: <b>" + premiumPeriod + "</b> [изменить /change_key]\n" +
@@ -392,14 +393,13 @@ public class Text extends Common {
                     "<b>Полный поиск</b> новостей, интервал: <b>" + settings.getPeriodAll() + "</b> \n" +
                     "[изменить /change_full]\n" +
                     "<b>Фильтрация новостей</b>: <b>" +
-                    settings.getExcluded().replaceAll("[ \\[on\\] | \\[off\\]]", "") + "</b> [" +
+                    settings.getExcluded().replaceAll("[onf\\[\\] ]", "") + "</b> [" +
                     onOffExcludedRus + "]\n" +
                     "<pre>Новости, содержащие слова-исключения, не будут показаны</pre>" +
                     delimiterNews + "\n" +
-                    "<b>Внешний вид</b> ленты новостей, тип: <b>" + settings.getMessageTheme() + "</b>\n" +
+                    "<b>Внешний вид</b> ленты новостей, тип: <b>" + settings.getMessageTheme() + "</b> \n" +
                     "[выбрать другой тип /theme]";
         } else {
-            String schedSettings = "";
 
             if (settings.getScheduler().contains("on") && isPremium != 1) {
                 String text = switch (settings.getPeriod()) {
