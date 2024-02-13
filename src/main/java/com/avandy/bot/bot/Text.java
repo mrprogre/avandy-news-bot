@@ -26,7 +26,7 @@ public class Text extends Common {
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
-            rssNameNotExistsText, linkText, messageThemeChooseText, noCommasText, changesSavedText2;
+            rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -185,13 +185,11 @@ public class Text extends Common {
             notSupportedRssText = "Данный источник не поддерживается";
             rssExistsText = "Данный источник уже есть в списке";
             rssNameNotExistsText = "Источника с таким названием не существует";
-            linkText = "Источник";
             messageThemeChooseText = "Выберите вариант внешнего вида сообщений. Текущая тема: %s";
             noCommasText = "Страну, название и ссылку необходимо разделить запятыми";
         } else {
             noCommasText = "Country, name and link must be separated by commas";
             messageThemeChooseText = "Select a message appearance option. Current theme: %s";
-            linkText = "link";
             rssNameNotExistsText = "There is no source with this name";
             rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";

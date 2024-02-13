@@ -821,8 +821,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             /* DEBUG PREMIUM USERS */
             for (Long id : premiumChatIds) {
-                log.warn("# Автопоиск для премиум пользователя {}, {}. Найдено новостей: {}",
-                        id, userRepository.findNameByChatId(chatId), headlines.size());
+                if (id == chatId) {
+                    log.warn("# Автопоиск для премиум пользователя {}, {}. Найдено новостей: {}",
+                            id, userRepository.findNameByChatId(chatId), headlines.size());
+                }
             }
 
             if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
@@ -2274,13 +2276,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                     headline.getLink(), headline.getTitle(),
                     headline.getSource(), time);
         } else if (messageTheme == 4) {
-            return String.format("<code>%s</code>", headline.getTitle());
+            return String.format("<code>%s</code> <a href=\"%s\">»»</a>", headline.getTitle(), headline.getLink());
         }
 
         // default theme = 1
-        return String.format("<b>%s</b> [%s]\n%s <a href=\"%s\">%s</a>",
+        return String.format("<b>%s</b> [%s]\n%s <a href=\"%s\">»»</a>",
                 headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())), headline.getTitle(),
-                headline.getLink(), linkText);
+                headline.getLink());
     }
 
     // Создание кнопок меню
