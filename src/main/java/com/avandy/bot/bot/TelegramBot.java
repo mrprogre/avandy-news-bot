@@ -2249,7 +2249,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         String delimiterNews;
         int messageTheme = settingsRepository.getMessageTheme(chatId);
         if (messageTheme == 2) {
-            delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
+            delimiterNews = "\n\n";
         } else if (messageTheme == 3) {
             delimiterNews = "\n";
         } else if (messageTheme == 4) {
