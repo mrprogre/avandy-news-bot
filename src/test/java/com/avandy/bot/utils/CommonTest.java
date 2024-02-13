@@ -11,7 +11,7 @@ public class CommonTest {
 
     @Test
     public void replaceKeywordsEndTest() {
-        String [] keywords = {"курс", "курска", "нейронные аи", "аи сети", "нейронные сети", "нейронные-сети", "Москва"};
+        String [] keywords = {"курс", "илон маск", "нейронные аи", "аи сети", "нейронные сети", "нейронные-сети", "Москва"};
         for (String keyword : keywords) {
             System.out.println(keyword + " = " + Common.replaceWordsEnd(keyword));
         }
