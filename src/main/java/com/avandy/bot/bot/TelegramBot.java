@@ -918,7 +918,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Keyword word;
         for (String keyword : keywords) {
             keyword = keyword.trim().toLowerCase();
-            if (keyword.length() >= 2 && keyword.length() <= 18) {
+            if (keyword.length() >= 2 && keyword.length() <= 30) {
                 if (!keywordsByChatId.contains(keyword)) {
                     word = new Keyword();
                     word.setChatId(chatId);

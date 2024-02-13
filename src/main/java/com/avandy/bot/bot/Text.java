@@ -63,7 +63,7 @@ public class Text extends Common {
             historyClearText = "История просмотра очищена ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» ключевые слова не заданы";
-            minWordLengthText = "Длина слова должна быть более 1 символа и менее 18";
+            minWordLengthText = "Длина слова должна быть более 1 символа и менее 30";
             deleteAllWordsText = "❌ все слова удалены";
             deleteText = "❌ удалено";
             wordIsExistsText = "Слово уже есть в списке: ";
@@ -272,7 +272,7 @@ public class Text extends Common {
             historyClearText = "Browsing history cleared ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
-            minWordLengthText = "Word length must be more than 1 characters and less than 18";
+            minWordLengthText = "Word length must be more than 1 characters and less than 30";
             deleteAllWordsText = "❌ all words removed";
             deleteText = "❌ deleted";
             wordIsExistsText = "The word is already on the list: ";

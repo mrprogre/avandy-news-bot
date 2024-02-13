@@ -11,6 +11,7 @@ import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class Common {
@@ -193,6 +194,45 @@ public class Common {
             return (title != null && title.length() > 0);
         }
         return false;
+    }
+
+    public static String replaceWordsEnd(String keyword) {
+        String initKeyword = keyword;
+
+        try {
+            boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", keyword);
+            StringBuilder text = new StringBuilder();
+            if (keyword.length() > 4 && isOnlyRussianLetters) {
+                if (keyword.contains(" ")) {
+                    keyword = replaceKeywordChars(keyword, text);
+                } else if (keyword.contains("-")) {
+                    keyword = replaceKeywordChars(keyword, text);
+                } else {
+                    keyword = keyword.substring(0, keyword.length() - 1) + "**";
+                }
+            }
+            return keyword;
+        } catch (Exception e) {
+            log.warn("Common.replaceWordsEnd error: " + e.getMessage());
+        }
+        return initKeyword;
+    }
+
+    private static String replaceKeywordChars(String keyword, StringBuilder text) {
+        String[] split = keyword.split(" ");
+        for (String s : split) {
+            if (s.length() <  4) {
+                text.append(s).append(" ");
+            } else {
+                text.append(s, 0, s.length() - 2).append("** ");
+            }
+        }
+        if (text.toString().charAt(text.length() -1) == ' ') {
+            keyword = text.substring(0, text.length() - 1);
+        } else {
+            keyword = text.toString();
+        }
+        return keyword;
     }
 
 }

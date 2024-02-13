@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -104,7 +103,7 @@ public class Search implements SearchService {
             for (String keyword : keywords) {
 
                 // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
-                keyword = replaceWordsEnd(keyword);
+                keyword = Common.replaceWordsEnd(keyword);
 
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
@@ -214,31 +213,6 @@ public class Search implements SearchService {
         }
 
         return new LinkedList<>(headlinesToShow);
-    }
-
-    private static String replaceWordsEnd(String keyword) {
-        boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", keyword);
-        StringBuilder text = new StringBuilder();
-        if (keyword.length() > 4 && isOnlyRussianLetters) {
-            if (keyword.contains(" ")) {
-                String[] split = keyword.split(" ");
-                for (String s : split) {
-                    text.append(s, 0, s.length() - 2).append("** ");
-                }
-                keyword = text.substring(0, text.length() - 1);
-
-            }else if (keyword.contains("-")) {
-                String[] split = keyword.split("-");
-                for (String s : split) {
-                    text.append(s, 0, s.length() - 2).append("**-");
-                }
-                keyword = text.substring(0, text.length() - 1);
-
-            } else {
-                keyword = keyword.substring(0, keyword.length() - 1) + "**";
-            }
-        }
-        return keyword;
     }
 
     @Override
