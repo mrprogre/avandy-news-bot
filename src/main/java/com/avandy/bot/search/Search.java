@@ -103,11 +103,8 @@ public class Search implements SearchService {
             Set<NewsList> newsList;
             for (String keyword : keywords) {
 
-                boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я]*$", keyword);
-                if (keyword.length() > 4 && isOnlyRussianLetters) {
-                    // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
-                    keyword = keyword.substring(0, keyword.length() - 1) + "**";
-                }
+                // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
+                keyword = replaceWordsEnd(keyword);
 
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
@@ -217,6 +214,31 @@ public class Search implements SearchService {
         }
 
         return new LinkedList<>(headlinesToShow);
+    }
+
+    private static String replaceWordsEnd(String keyword) {
+        boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", keyword);
+        StringBuilder text = new StringBuilder();
+        if (keyword.length() > 4 && isOnlyRussianLetters) {
+            if (keyword.contains(" ")) {
+                String[] split = keyword.split(" ");
+                for (String s : split) {
+                    text.append(s, 0, s.length() - 2).append("** ");
+                }
+                keyword = text.substring(0, text.length() - 1);
+
+            }else if (keyword.contains("-")) {
+                String[] split = keyword.split("-");
+                for (String s : split) {
+                    text.append(s, 0, s.length() - 2).append("**-");
+                }
+                keyword = text.substring(0, text.length() - 1);
+
+            } else {
+                keyword = keyword.substring(0, keyword.length() - 1) + "**";
+            }
+        }
+        return keyword;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.avandy.bot.utils;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -35,6 +36,38 @@ public class CommonTest {
         s1 = "played";
         s2 = "player";
         assertEquals(93, Common.compare(s1, s2));
+    }
+
+    @Test
+    public void replaceKeywordsEndTest() {
+        String [] keywords = {"нейронные сети", "нейронные-сети", "нейронные"};
+
+        for (String keyword : keywords) {
+            boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", keyword);
+            StringBuilder text = new StringBuilder();
+
+            // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
+            if (isOnlyRussianLetters) {
+                if (keyword.contains(" ")) {
+                    String[] split = keyword.split(" ");
+                    for (String s : split) {
+                        text.append(s, 0, s.length() - 2).append("** ");
+                    }
+                    keyword = text.substring(0, text.length() - 1);
+
+                }else if (keyword.contains("-")) {
+                    String[] split = keyword.split("-");
+                    for (String s : split) {
+                        text.append(s, 0, s.length() - 2).append("**-");
+                    }
+                    keyword = text.substring(0, text.length() - 1);
+
+                } else {
+                    keyword = keyword.substring(0, keyword.length() - 1) + "**";
+                }
+                System.out.println(keyword);
+            }
+        }
     }
 
     @Test

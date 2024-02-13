@@ -30,8 +30,8 @@ select source,
        s.add_date
 from news_list n
          join showed_news s
-              on n.title_hash = s.title_hash and s.chat_id = 832939968 -- 900: 678952524, 257963162
-where n.add_date >= (current_timestamp - cast('2 hours' as interval))
+              on n.title_hash = s.title_hash and s.chat_id = 257963162 -- 900: 678952524, 257963162
+where n.add_date >= (current_timestamp - cast('12 hours' as interval))
 order by n.id desc;
 
 -- Новости по языкам
