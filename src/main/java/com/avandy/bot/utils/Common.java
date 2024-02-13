@@ -208,7 +208,7 @@ public class Common {
                 } else if (keyword.contains("-")) {
                     keyword = replaceKeywordChars(keyword, text, '-');
                 } else {
-                    keyword = keyword.substring(0, keyword.length() - 1) + "**";
+                    keyword = keyword.substring(0, keyword.length() - 1) + "***";
                 }
             }
             return keyword;
@@ -221,10 +221,10 @@ public class Common {
     private static String replaceKeywordChars(String keyword, StringBuilder text, char delim) {
         String[] split = keyword.split(String.valueOf(delim));
         for (String s : split) {
-            if (s.length() <  4) {
+            if (s.length() < 5) {
                 text.append(s).append(delim);
             } else {
-                text.append(s, 0, s.length() - 2).append("**").append(delim);
+                text.append(s, 0, s.length() - 2).append("***").append(delim);
             }
         }
         if (text.toString().charAt(text.length() - 1) == delim) {
