@@ -11,10 +11,13 @@ public class CommonTest {
 
     @Test
     public void replaceKeywordsEndTest() {
-        String [] keywords = {"курс", "илон маск", "нейронные аи", "аи сети", "нейронные сети", "нейронные-сети", "Москва"};
-        for (String keyword : keywords) {
-            System.out.println(keyword + " = " + Common.replaceWordsEnd(keyword));
-        }
+        String keyword = "Россия"; // Росси**
+        System.out.println(keyword + " = " + Common.replaceWordsEnd(keyword));
+        assertEquals("илон маск", Common.replaceWordsEnd("илон маск"));
+        assertEquals("нейронн** сети", Common.replaceWordsEnd("нейронные сети"));
+        assertEquals("нейронн**-сети", Common.replaceWordsEnd("нейронные-сети"));
+        assertEquals("Москв**", Common.replaceWordsEnd("Москва"));
+
     }
 
     @Test

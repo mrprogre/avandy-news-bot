@@ -11,7 +11,6 @@ import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Slf4j
 public class Common {
@@ -20,7 +19,6 @@ public class Common {
     public static final int TOP_TEN_SHOW_LIMIT = 20;
     public static final int EXCLUDED_LIMIT = 100;
     public static final int LIMIT_FOR_BREAKING_INTO_PARTS = 50;
-    //public static final int SLEEP_BETWEEN_SENDING_MESSAGES = 150;
     public static final int MAX_KEYWORDS_COUNT_PREMIUM = 100;
     public static final int MAX_KEYWORDS_COUNT = 5;
     public static final int MANUAL_SEARCH_BY_KEYWORDS_PERIOD = 2880;
@@ -196,21 +194,20 @@ public class Common {
         return false;
     }
 
+    // Замена окончаний слов на * для дальнейшего преобразования в регулярное выражение
     public static String replaceWordsEnd(String keyword) {
         String initKeyword = keyword;
-
         try {
-            boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", keyword);
             StringBuilder text = new StringBuilder();
-            if (keyword.length() > 4 && isOnlyRussianLetters) {
-                if (keyword.contains(" ")) {
-                    keyword = replaceKeywordChars(keyword, text, ' ');
-                } else if (keyword.contains("-")) {
-                    keyword = replaceKeywordChars(keyword, text, '-');
-                } else {
-                    keyword = keyword.substring(0, keyword.length() - 1) + "**";
-                }
+
+            if (keyword.contains(" ")) {
+                keyword = replaceKeywordChars(keyword, text, ' ');
+            } else if (keyword.contains("-")) {
+                keyword = replaceKeywordChars(keyword, text, '-');
+            } else {
+                keyword = keyword.substring(0, keyword.length() - 1) + "**";
             }
+
             return keyword;
         } catch (Exception e) {
             log.warn("Common.replaceWordsEnd error: " + e.getMessage());
@@ -218,6 +215,7 @@ public class Common {
         return initKeyword;
     }
 
+    // формирование строки с * для слов с пробелами и тире
     private static String replaceKeywordChars(String keyword, StringBuilder text, char delim) {
         String[] split = keyword.split(String.valueOf(delim));
         for (String s : split) {

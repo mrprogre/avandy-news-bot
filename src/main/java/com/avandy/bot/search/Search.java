@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -101,12 +102,15 @@ public class Search implements SearchService {
 
             Set<NewsList> newsList;
             for (String keyword : keywords) {
-
-                // Замена последнего символа на любой, чтобы слово с другим окончанием тоже находилось
-                keyword = Common.replaceWordsEnd(keyword);
+                // Замена окончаний слов на *. Применяется только к русским словам.
+                boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", keyword);
+                if (keyword.length() > 4 && isOnlyRussianLetters) {
+                    keyword = Common.replaceWordsEnd(keyword);
+                }
 
                 // замена * на любой текстовый символ, который может быть или не быть
                 if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
+                // Экранирование специальных символов regex, чтобы "C++" толковалось корректно
                 if (keyword.contains("+")) keyword = keyword.replace("+", "\\+");
                 if (keyword.contains("-")) keyword = keyword.replace("-", "\\-");
 
