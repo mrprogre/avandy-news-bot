@@ -805,6 +805,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         String nameByChatId = userRepository.findNameByChatId(chatId);
         String keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
+        List<Long> premiumChatIds = userRepository.findAllPremiumUsersChatId();
 
         if (keywordsByChatId.isEmpty()) {
             return;
@@ -817,6 +818,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (headlines.size() > 0) {
             // INFO
             log.info("Автопоиск: {}, {}, найдено {} за {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
+
+            /* DEBUG PREMIUM USERS */
+            for (Long id : premiumChatIds) {
+                log.warn("# Автопоиск для премиум пользователя {}, {}. Найдено новостей: {}",
+                        id, userRepository.findNameByChatId(chatId), headlines.size());
+            }
 
             if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
                 // 10 message in 1

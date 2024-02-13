@@ -8,6 +8,7 @@ create table if not exists users
     is_active     integer default 1,
     is_premium    integer default 0,
     prem_exp_date date,
+    description   varchar(256),
     constraint pk_users_chat_id primary key (chat_id)
 );
 comment on table users is 'Список пользователей Telegram';
