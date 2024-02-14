@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -61,7 +60,7 @@ public class Search implements SearchService {
                 String rss = news.getSource();
                 String title = news.getTitle().trim();
                 String hash = Common.getHash(title);
-                Date date = news.getAddDate();
+                Date date = news.getPubDate();
                 String link = news.getLink();
 
                 int dateDiff = Common.compareDates(new Date(), date, periodMinutes);
@@ -119,7 +118,7 @@ public class Search implements SearchService {
                     String rss = news.getSource();
                     String title = news.getTitle().trim();
                     String hash = Common.getHash(title);
-                    Date date = news.getAddDate();
+                    Date date = news.getPubDate();
                     String link = news.getLink();
 
                     if (title.length() > 15) {
@@ -154,7 +153,7 @@ public class Search implements SearchService {
                 String rss = news.getSource();
                 String title = news.getTitle().trim();
                 String hash = Common.getHash(title);
-                Date date = news.getAddDate();
+                Date date = news.getPubDate();
                 String link = news.getLink();
 
                 headlinesToShow.add(new Headline(rss, title, link, date, chatId, -2, hash));
@@ -238,7 +237,6 @@ public class Search implements SearchService {
                     String title = message.getTitle().trim();
                     String titleHash = Common.getHash(title);
                     Date pubDate = message.getPublishedDate();
-                    Date addDate = new Timestamp(System.currentTimeMillis());
                     String link = message.getLink();
 
                     if (!newsListAllHash.contains(titleHash)) {
@@ -248,7 +246,6 @@ public class Search implements SearchService {
                                 .titleHash(titleHash)
                                 .link(link)
                                 .pubDate(pubDate)
-                                .addDate(addDate)
                                 .build());
                     }
                 }
@@ -286,7 +283,6 @@ public class Search implements SearchService {
                     String title = message.getTitle().trim();
                     String titleHash = Common.getHash(title);
                     Date pubDate = message.getPubDate();
-                    Date addDate = new Timestamp(System.currentTimeMillis());
                     String link = message.getLink();
 
                     if (!newsListAllHash.contains(titleHash)) {
@@ -296,7 +292,6 @@ public class Search implements SearchService {
                                 .titleHash(titleHash)
                                 .link(link)
                                 .pubDate(pubDate)
-                                .addDate(addDate)
                                 .build());
                     }
                 }
