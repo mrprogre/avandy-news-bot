@@ -686,6 +686,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                         settingsRepository.updateMessageTheme(4, chatId);
                         savedKeyboard(chatId, String.format(changesSavedText2, "4"));
                     }
+                    case "MESSAGE_THEME_5" -> {
+                        settingsRepository.updateMessageTheme(5, chatId);
+                        savedKeyboard(chatId, String.format(changesSavedText2, "5"));
+                    }
 
                 }
             }
@@ -2194,6 +2198,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("MESSAGE_THEME_2", "2");
         buttons.put("MESSAGE_THEME_3", "3");
         buttons.put("MESSAGE_THEME_4", "4");
+        buttons.put("MESSAGE_THEME_5", "5");
 
         sendMessageWithPreview(chatId, String.format(messageThemeChooseText, messageTheme),
                 InlineKeyboards.maker(buttons));
@@ -2251,8 +2256,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (messageTheme == 2) {
             delimiterNews = "\n\n";
         } else if (messageTheme == 3) {
-            delimiterNews = "\n\n";
+            delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
         } else if (messageTheme == 4) {
+            delimiterNews = "\n\n";
+        } else if (messageTheme == 5) {
             delimiterNews = "\n\n";
         } else {
             delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
@@ -2269,13 +2276,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                     headline.getLink(), headline.getTitle(),
                     headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())));
         } else if (messageTheme == 3) {
+            return String.format("<strong>%s</strong> <a href=\"%s\">»»</a>", headline.getTitle(), headline.getLink());
+        } else if (messageTheme == 4) {
+            return String.format("<code>%s</code> <a href=\"%s\">»»</a>", headline.getTitle(), headline.getLink());
+        } else if (messageTheme == 5) {
             String time = Common.showDate(String.valueOf(headline.getPubDate()));
             time = time.substring(0, time.indexOf(" "));
 
             return String.format("<strong>%s</strong> <a href=\"%s\">»»</a>\n<pre>%s [%s]</pre>",
                     headline.getTitle(), headline.getLink(), headline.getSource(), time);
-        } else if (messageTheme == 4) {
-            return String.format("<code>%s</code> <a href=\"%s\">»»</a>", headline.getTitle(), headline.getLink());
         }
 
         // default theme = 1
