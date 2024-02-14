@@ -115,7 +115,7 @@ public class Text extends Common {
             sendIdeaText = "Написать отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             fullSearchStartText = "» поиск всех новостей";
-            searchByKeywordsStartText = "» ручной поиск по ключевым словам за 48 часов";
+            searchByKeywordsStartText = "» поиск по словам за %s";
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час для расчёта времени запуска автопоиска по ключевым словам";
@@ -327,7 +327,7 @@ public class Text extends Common {
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of deleted from the Top";
             fullSearchStartText = "» search all news";
-            searchByKeywordsStartText = "» search by keywords";
+            searchByKeywordsStartText = "» word search in %s";
             chooseNumberWordFromTop = "Click to search";
             chooseWordDelFromTop = "Click to delete";
             chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";

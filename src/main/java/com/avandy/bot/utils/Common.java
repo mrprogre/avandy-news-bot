@@ -21,7 +21,6 @@ public class Common {
     public static final int LIMIT_FOR_BREAKING_INTO_PARTS = 50;
     public static final int MAX_KEYWORDS_COUNT_PREMIUM = 100;
     public static final int MAX_KEYWORDS_COUNT = 5;
-    public static final int MANUAL_SEARCH_BY_KEYWORDS_PERIOD = 2880;
     public static final String ERROR_TEXT = "Error occurred: ";
     public static final String ICON_SEARCH = "\uD83C\uDFB2";
     public static final String ICON_NEWS_FOUNDED = "\uD83C\uDF3F";

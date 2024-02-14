@@ -727,16 +727,15 @@ public class TelegramBot extends TelegramLongPollingBot {
             return;
         }
 
-        getReplyKeyboard(chatId, searchByKeywordsStartText);
+        getReplyKeyboard(chatId, String.format(searchByKeywordsStartText, settingsRepository.getKeywordsPeriod(chatId)));
 
         // Search
-        List<Headline> headlines = searchService.start(chatId, "keywords-manual");
-
+        List<Headline> headlines = searchService.start(chatId, "keywords");
 
         int counterParts = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Найдено за 48h: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
+            log.warn("Найдено: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
 
             newsListKeySearchCounter.put(chatId, 0);
             newsListKeySearchData.put(chatId, headlines);
@@ -1797,7 +1796,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addSettingsByDefault(long chatId) {
         Settings settings = new Settings();
         settings.setChatId(chatId);
-        settings.setPeriod("1h");
+        settings.setPeriod("2h");
         settings.setPeriodAll("1h");
         settings.setPeriodTop("12h");
         settings.setScheduler("on");
@@ -2250,7 +2249,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else if (messageTheme == 4) {
             delimiterNews = "\n\n";
         } else if (messageTheme == 5) {
-            delimiterNews = "\n\n";
+            delimiterNews = "\n";
         } else {
             delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
         }

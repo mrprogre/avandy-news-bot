@@ -33,9 +33,8 @@ public class Search implements SearchService {
     public LinkedList<Headline> start(Long chatId, String searchType) {
         boolean isAllSearch = searchType.equals("all");
         boolean isKeywordAutoSearch = searchType.equals("keywords");
-        boolean isKeywordSearchManual = searchType.equals("keywords-manual");
         boolean isTopSearch = searchType.equals("top");
-        boolean isSearchByOneWordFromTop = !isAllSearch && !isKeywordAutoSearch && !isKeywordSearchManual && !isTopSearch;
+        boolean isSearchByOneWordFromTop = !isAllSearch && !isKeywordAutoSearch && !isTopSearch;
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
         settings.ifPresentOrElse(value -> userLanguage = value.getLang(), () -> userLanguage = "en");
         Set<ShowedNews> showedNewsToSave = new HashSet<>();
@@ -89,15 +88,10 @@ public class Search implements SearchService {
         }
 
         /* KEYWORDS SEARCH */
-        if (isKeywordAutoSearch || isKeywordSearchManual) {
+        if (isKeywordAutoSearch) {
             List<String> keywords = keywordRepository.findKeywordsByChatId(chatId);
-
-            if (isKeywordAutoSearch) {
-                settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriod()),
-                        () -> periodMinutes = 1440);
-            } else {
-                periodMinutes = Common.MANUAL_SEARCH_BY_KEYWORDS_PERIOD;
-            }
+            settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriod()),
+                    () -> periodMinutes = 600);
             String period = periodMinutes + " minutes";
 
             Set<NewsList> newsList;

@@ -104,7 +104,7 @@ create table if not exists news_list
     add_date   timestamp default current_timestamp::timestamp,
     constraint ui_news_list unique (title_hash)
 );
-create index if not exists news_list_add_date_index on news_list (add_date);
+create index if not exists news_list_add_date_index on news_list (pub_date);
 -- create index if not exists news_list_pub_date_index on news_list (pub_date);
 comment on table news_list is 'Все сохранённые новости';
 
