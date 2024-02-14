@@ -77,7 +77,7 @@ public class Text extends Common {
                     <b>Тестировщики:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">Andrew Sereda</a>
                     <b>Видеоинструкция:</b> <a href="https://youtu.be/HPAk8GPHes4">youtube</a>""";
             buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
-            intervalText = "Глубина";
+            intervalText = "Интервал";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
             startSettingsText = "Старт";
@@ -110,7 +110,7 @@ public class Text extends Common {
             wordIsNotInTheListText = "Слово %s отсутствует в списке";
             listText = "Список";
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
-            chooseSearchDepthText = "Глубина поиска новостей (интервал поиска равен текущему моменту минус глубина в часах).\n" +
+            chooseSearchDepthText = "Интервал поиска новостей (равен текущему моменту минус интервал в часах).\n" +
                     "Выберите глубину поиска.";
             sendIdeaText = "Написать отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
@@ -387,8 +387,8 @@ public class Text extends Common {
                     "<b>Автопоиск</b> по словам: <b>" + schedulerRus.replaceAll("[onf\\[\\] ]", "") + "</b> [" +
                     onOffSchedulerRus + "]\n" +
                     //delimiterNews + "\n" +
-                    "<b>Частота и глубина</b> автопоиска: <b>" + premiumPeriod + "</b> [изменить /change_key]\n" +
-                    "<pre>В результатах поиска представлены новости за выбранный период</pre>\n" +
+                    "<b>Частота и интервал</b> автопоиска: <b>" + premiumPeriod + "</b> [изменить /change_key]\n" +
+                    "<pre>В результатах поиска представлены новости за выбранный интервал</pre>\n" +
                     schedSettings +
                     premiumSettings +
                     delimiterNews + "\n" +
