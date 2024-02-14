@@ -59,7 +59,7 @@ public class Text extends Common {
                     ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
-            changesSavedText3 = "Сохранено: %s ✔️ \nВид сообщения поменяется в следующих сообщениях с новостями!!";
+            changesSavedText3 = "Сохранено: %s ✔️ \nВнешний вид сообщений с новостями поменяется далее!";
             sentText = "Доставлено ✔️";
             historyClearText = "История просмотра очищена ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
@@ -269,7 +269,7 @@ public class Text extends Common {
                     "However, I will see your message in the journal " + ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Done ✔️";
             changesSavedText2 = "Done: %s ✔️";
-            changesSavedText3 = "Done: %s ✔️ \nThe type of message will change in future news messages!";
+            changesSavedText3 = "Done: %s ✔️ \nThe appearance of news messages will change further!";
             sentText = "Done ✔️";
             historyClearText = "Browsing history cleared ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
