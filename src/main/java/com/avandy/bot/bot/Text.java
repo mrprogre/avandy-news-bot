@@ -26,7 +26,7 @@ public class Text extends Common {
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
-            rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3;
+            rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3, listText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -39,14 +39,14 @@ public class Text extends Common {
             yesText = "Да";
             infoText = "Информация и подписка";
             settingText = "Настройки";
-            listKeywordsButtonText = "Ключевые слова";
+            listKeywordsButtonText = "Слова для поиска";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
             top20Text2 = "<b>Top 20</b> слов за ";
             listExcludedText = "Слова-исключения";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
-            addText2 = "Добавить ключевые слова";
+            addText2 = "Добавить слова";
             addText3 = "Добавить слова";
             delText = "Удалить";
             excludeWordText = "Исключить";
@@ -63,7 +63,7 @@ public class Text extends Common {
             sentText = "Доставлено ✔️";
             historyClearText = "История просмотра очищена ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
-            setupKeywordsText = "» ключевые слова не заданы";
+            setupKeywordsText = "» слова не заданы";
             minWordLengthText = "Длина слова должна быть более 1 символа и менее 30";
             deleteAllWordsText = "❌ все слова удалены";
             deleteText = "❌ удалено";
@@ -98,8 +98,8 @@ public class Text extends Common {
             rssSourcesText = "Источники новостей [RSS формат]";
             searchWithFilterText = "<b>Полный поиск</b> за ";
             searchWithFilter2Text = "слов-исключений";
-            keywordSearchText = "По <b>ключевым словам</b> за ";
-            keywordSearch2Text = "ключевых слов";
+            keywordSearchText = "Поиск <b>по словам</b> за ";
+            keywordSearch2Text = "слов";
             cancelButtonText = "Отменить";
             foundNewsText = "Найдено";
             excludedNewsText = "исключено";
@@ -109,16 +109,17 @@ public class Text extends Common {
             addedExceptionWordsText = "Добавлено слов-исключений";
             wordIsNotInTheListText = "Слово %s отсутствует в списке";
             listText = "Список";
+            listText2 = "Список слов";
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
-            chooseSearchDepthText = "Интервал поиска новостей (равен текущему моменту минус интервал в часах).\n" +
+            chooseSearchDepthText = "Интервал поиска равен текущему моменту минус глубине в часах\n" +
                     "Выберите глубину поиска.";
             sendIdeaText = "Написать отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
-            fullSearchStartText = "» поиск всех новостей";
+            fullSearchStartText = "» поиск всех новостей за %s";
             searchByKeywordsStartText = "» поиск по словам за %s";
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
-            chooseSearchStartText = "Выберите час для расчёта времени запуска автопоиска по ключевым словам";
+            chooseSearchStartText = "Выберите час для расчёта времени запуска автопоиска по словам";
             removedFromTopText = "удалено из Топа";
             jaroWinklerSwitcherText = """
                     Чтобы объединить одинаковые слова для исключения повторений можно включить удаление окончаний.
@@ -127,9 +128,9 @@ public class Text extends Common {
             jaroWinklerText = "Окончания";
             getPremiumText = "Премиум бот";
             getPremiumYesOrNowText = "На тарифе <b>Premium bot</b>\n" +
-                    "1. Поиск новостей по ключевым словам производится каждые <b>2 минуты</b>. " +
+                    "1. Поиск новостей по словам производится каждые <b>2 минуты</b>. " +
                     "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>;\n" +
-                    "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + "</b> ключевых слов (до " +
+                    "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + " слов</b> для поиска (до " +
                     MAX_KEYWORDS_COUNT_PREMIUM + ");\n" +
                     "3. Возможность добавления <b>персональных источников</b> новостей " +
                     "(если источник предоставляет новости в формате <b>RSS (XML)</b> и удаления источников по умолчанию.\n" +
@@ -141,8 +142,8 @@ public class Text extends Common {
                     Не подошёл наш продукт и прошло <b>не более 3 дней</b> с момента активации премиум возможностей - напишите, и мы <b>вернём</b> средства!""";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium bot активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " ключевых слов возможно в <b>/premium</b> режиме";
-            premiumIsActive4 = "Максимальное количество ключевых слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
+            premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " слов возможно в <b>/premium</b> режиме";
+            premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             yesButtonText = """
                     Добавьте <b>слова</b> по которым я буду искать новости для Вас
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -158,16 +159,16 @@ public class Text extends Common {
                     Для получения большего количества результатов при меньшем количестве слов
                     используйте символ <b>*</b> вместо любой буквы в слове.
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    <b>К примеру,</b> ключевое слово <b>курс</b> найдёт новости содержащие только это слово без окончаний
+                    <b>К примеру,</b> слово <b>курс</b> найдёт новости содержащие только это слово без окончаний
                     <b>курс*</b> найдёт как <b>курс</b>, так и <b>курсы</b>
                     <b>курс**</b> найдёт <b>курс, курсы, курсах</b>, но новостей с <b>курсами</b> не найдёт, т.к. надо указать три звёздочки
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Можно искать новости <b>по фразам</b>:
-                    Ключевая фраза <b>Росси* созда**</b> найдёт новости содержащие: в <b>России создана, Россия создала</b>
+                    Фраза <b>Росси* созда**</b> найдёт новости содержащие: в <b>России создана, Россия создала</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Перейти в раздел /keywords""";
             listKeywordsText = """
-                    <b>Ключевые слова</b>
+                    <b>Слова для поиска</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Автопоиск %s
                     Запуск поиска раз в %s
@@ -322,11 +323,12 @@ public class Text extends Common {
             addedExceptionWordsText = "Added excluding terms";
             wordIsNotInTheListText = "The word <b>%s</b> isn't in the list";
             listText = "List";
+            listText2 = "Word list";
             confirmDeletedUserText = "Do you confirm?";
             chooseSearchDepthText = "Search time = current moment minus hours. Select time.";
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of deleted from the Top";
-            fullSearchStartText = "» search all news";
+            fullSearchStartText = "» search all news in %s";
             searchByKeywordsStartText = "» word search in %s";
             chooseNumberWordFromTop = "Click to search";
             chooseWordDelFromTop = "Click to delete";

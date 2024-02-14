@@ -247,29 +247,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 } else if (UserState.DEL_SOURCE.equals(userState)) {
                     String source = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, source)) return;
-
-                    List<String> personalSources = rssRepository.findPersonalSources(chatId);
-                    if (personalSources.stream().anyMatch(x -> x.toLowerCase().equals(source))) {
-                        Integer isExists = rssRepository.isExistsPersonalRssByName(chatId, source);
-                        if (isExists != null) {
-                            int count = rssRepository.deletePersonalRss(chatId, source);
-                            if (count > 0) {
-                                sendMessage(chatId, deleteText);
-                            }
-                        } else {
-                            sendMessage(chatId, rssNameNotExistsText);
-                        }
-                    } else {
-                        Integer isExists = rssRepository.isExistsCommonRssByName(source);
-                        if (isExists != null) {
-                            int count = rssRepository.deleteCommonRss(chatId, source);
-                            if (count > 0) {
-                                sendMessage(chatId, deleteText);
-                            }
-                        } else {
-                            sendMessage(chatId, rssNameNotExistsText);
-                        }
-                    }
+                    deleteSourceRss(chatId, source);
 
                     // Поиск по трём кнопкам меню
                 } else if (messageText.equals(keywordsSearchText)) {
@@ -681,6 +659,31 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Update exception: " + e.getMessage());
+        }
+    }
+
+    private void deleteSourceRss(long chatId, String source) {
+        List<String> personalSources = rssRepository.findPersonalSources(chatId);
+        if (personalSources.stream().anyMatch(x -> x.toLowerCase().equals(source))) {
+            Integer isExists = rssRepository.isExistsPersonalRssByName(chatId, source);
+            if (isExists != null) {
+                int count = rssRepository.deletePersonalRss(chatId, source);
+                if (count > 0) {
+                    sendMessage(chatId, deleteText);
+                }
+            } else {
+                sendMessage(chatId, rssNameNotExistsText);
+            }
+        } else {
+            Integer isExists = rssRepository.isExistsCommonRssByName(source);
+            if (isExists != null) {
+                int count = rssRepository.deleteCommonRss(chatId, source);
+                if (count > 0) {
+                    sendMessage(chatId, deleteText);
+                }
+            } else {
+                sendMessage(chatId, rssNameNotExistsText);
+            }
         }
     }
 
@@ -1119,7 +1122,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.info("{}: Запуск полного поиска", chatId);
         }
 
-        getReplyKeyboard(chatId, fullSearchStartText);
+        getReplyKeyboard(chatId, String.format(fullSearchStartText, settingsRepository.getFullSearchPeriod(chatId)));
         //sendMessage(chatId, fullSearchStartText);
 
         // Поиск и заполнение коллекции
@@ -1973,25 +1976,25 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Кнопки всех видов поиска (/search)
     private void initSearchesKeyboard(long chatId) {
-        String keywordsText = String.format("1" + initSearchTemplateText, keywordSearchText,
-                settingsRepository.getKeywordsPeriod(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
-                keywordSearch2Text);
-
-        String fullText = String.format("2" + initSearchTemplateText, searchWithFilterText,
+        String fullText = String.format("1" + initSearchTemplateText, searchWithFilterText,
                 settingsRepository.getFullSearchPeriod(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
                 searchWithFilter2Text + ",\n" + cleanFullSearchHistoryText);
+
+        String keywordsText = String.format("2" + initSearchTemplateText, keywordSearchText,
+                settingsRepository.getKeywordsPeriod(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
+                keywordSearch2Text);
 
         String topText = String.format("3" + initSearchTemplateText, top20Text2,
                 settingsRepository.getTopPeriod(chatId), topRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
 
-        String delimiterNews = getDelimiterNews(chatId);
+        String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
                 delimiterNews +
-                keywordsText +
-                delimiterNews +
                 fullText +
+                delimiterNews +
+                keywordsText +
                 delimiterNews +
                 topText;
 
@@ -1999,19 +2002,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
 
-        // Keywords search
-        buttons1.put("SET_PERIOD", intervalText);
-        buttons1.put("LIST_KEYWORDS", listText);
-        buttons1.put("FIND_BY_KEYWORDS", keywordsSearchText);
-
         // Full search
-        buttons2.put("SET_PERIOD_ALL", intervalText);
-        buttons2.put("LIST_EXCLUDED", listText);
-        buttons2.put("FIND_ALL", fullSearchText);
+        //buttons1.put("SET_PERIOD_ALL", intervalText);
+        buttons1.put("LIST_EXCLUDED", listText2);
+        buttons1.put("FIND_ALL", fullSearchText);
+
+        // Keywords search
+        //buttons2.put("SET_PERIOD", intervalText);
+        buttons2.put("LIST_KEYWORDS", listText2);
+        buttons2.put("FIND_BY_KEYWORDS", keywordsSearchText);
 
         // Top 20
-        buttons3.put("SET_PERIOD_TOP", intervalText);
-        buttons3.put("LIST_TOP", listText);
+        //buttons3.put("SET_PERIOD_TOP", intervalText);
+        buttons3.put("LIST_TOP", listText2);
         buttons3.put("GET_TOP", updateTopText2);
 
         sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
@@ -2198,9 +2201,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         String text = String.format(textToSend, "");
 
         KeyboardRow row = new KeyboardRow();
-        row.add(keywordsSearchText);
-        row.add(fullSearchText);
+        //row.add(fullSearchText);
         row.add(updateTopText2);
+        row.add(keywordsSearchText);
         sendMessage(chatId, text, ReplyKeyboards.replyKeyboardMaker(row));
     }
 
