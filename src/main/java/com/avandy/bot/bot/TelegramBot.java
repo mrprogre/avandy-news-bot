@@ -670,26 +670,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                         savedKeyboard(chatId, String.format(changesSavedText2, "off"));
                     }
 
-                    case "MESSAGE_THEME_1" -> {
-                        settingsRepository.updateMessageTheme(1, chatId);
-                        savedKeyboard(chatId, String.format(changesSavedText2, "1"));
-                    }
-                    case "MESSAGE_THEME_2" -> {
-                        settingsRepository.updateMessageTheme(2, chatId);
-                        savedKeyboard(chatId, String.format(changesSavedText2, "2"));
-                    }
-                    case "MESSAGE_THEME_3" -> {
-                        settingsRepository.updateMessageTheme(3, chatId);
-                        savedKeyboard(chatId, String.format(changesSavedText2, "3"));
-                    }
-                    case "MESSAGE_THEME_4" -> {
-                        settingsRepository.updateMessageTheme(4, chatId);
-                        savedKeyboard(chatId, String.format(changesSavedText2, "4"));
-                    }
-                    case "MESSAGE_THEME_5" -> {
-                        settingsRepository.updateMessageTheme(5, chatId);
-                        savedKeyboard(chatId, String.format(changesSavedText2, "5"));
-                    }
+                    case "MESSAGE_THEME_1" -> updateMessageTheme(chatId, 1);
+                    case "MESSAGE_THEME_2" -> updateMessageTheme(chatId, 2);
+                    case "MESSAGE_THEME_3" -> updateMessageTheme(chatId, 3);
+                    case "MESSAGE_THEME_4" -> updateMessageTheme(chatId, 4);
+                    case "MESSAGE_THEME_5" -> updateMessageTheme(chatId, 5);
 
                 }
             }
@@ -697,6 +682,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             e.printStackTrace();
             log.error("Update exception: " + e.getMessage());
         }
+    }
+
+    private void updateMessageTheme(Long chatId, int value) {
+        settingsRepository.updateMessageTheme(value, chatId);
+        savedKeyboard(chatId, String.format(changesSavedText3, value));
     }
 
     // Пользователь нажимает кнопку добавления текста, но передумывает и нажимает на команду,

@@ -26,7 +26,7 @@ public class Text extends Common {
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
-            rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2;
+            rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -59,6 +59,7 @@ public class Text extends Common {
                     ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
+            changesSavedText3 = "Сохранено: %s ✔️ \nВид сообщения поменяется в следующих сообщениях с новостями!!";
             sentText = "Доставлено ✔️";
             historyClearText = "История просмотра очищена ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
@@ -268,6 +269,7 @@ public class Text extends Common {
                     "However, I will see your message in the journal " + ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Done ✔️";
             changesSavedText2 = "Done: %s ✔️";
+            changesSavedText3 = "Done: %s ✔️ \nThe type of message will change in future news messages!";
             sentText = "Done ✔️";
             historyClearText = "Browsing history cleared ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
