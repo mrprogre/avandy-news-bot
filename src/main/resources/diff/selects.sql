@@ -66,6 +66,7 @@ having count(keyword) > 2
 order by cnt desc;
 
 -- количество ключевых слов по пользователям
+select * from keywords where chat_id = 5294960396;
 select chat_id, count(keyword) cnt
 from keywords
 group by chat_id
@@ -73,7 +74,10 @@ having count(keyword) > 2
 order by cnt desc;
 
 -- количество слов-исключений
+select * from excluding_terms where chat_id = 5294960396;
 select chat_id, count(word) cnt
 from excluding_terms
 group by chat_id
 order by cnt desc;
+
+

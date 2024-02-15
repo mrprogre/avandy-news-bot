@@ -135,8 +135,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                     else log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId), messageText);
                 }
 
+                // Принудительный выход
+                List<String> flugengeheimen = List.of("стоп", "/стоп", "stop", "/stop");
+                if (flugengeheimen.contains(messageText.toLowerCase())) {
+                    userStates.remove(chatId);
+                    nextKeyboard(chatId, actionCanceledText);
+                }
+
                 // SEND TO ALL RUS FROM BOT OWNER
-                if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
+                else if (messageText.startsWith(":") && config.getBotOwner() == chatId) {
                     String textToSend = messageText.substring(messageText.indexOf(" "));
                     List<User> users = userRepository.findAllRusByIsActive();
                     for (User user : users) {
@@ -145,7 +152,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 
                 // SEND TO ALL ENG FROM BOT OWNER
-                if (messageText.startsWith("^") && config.getBotOwner() == chatId) {
+                else if (messageText.startsWith("^") && config.getBotOwner() == chatId) {
                     String textToSend = messageText.substring(messageText.indexOf(" "));
                     List<User> users = userRepository.findAllNotRusByIsActive();
                     for (User user : users) {
