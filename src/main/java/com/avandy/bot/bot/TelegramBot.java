@@ -913,7 +913,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Keyword word;
         for (String keyword : keywords) {
-            keyword = keyword.trim().toLowerCase();
+            keyword = keyword.replace("\"", "")
+                    .trim()
+                    .toLowerCase();
+
             if (keyword.length() >= 2 && keyword.length() <= 64) {
                 if (!keywordsByChatId.contains(keyword)) {
                     word = new Keyword();
