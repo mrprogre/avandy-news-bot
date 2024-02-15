@@ -27,10 +27,11 @@ public class Text extends Common {
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
-            listText2, minWordLengthText2, premiumIsActive5;
+            listText2, minWordLengthText2, premiumIsActive5, startText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
+            startText = "Начало работы с ботом";
             initSearchTemplateText = ". %s%s\n[Список: <b>%d</b> %s]";
             searchNewsHeaderText = "Поиск новостей";
             greetingText = EmojiParser.parseToUnicode("Здравствуйте! :blush: \n" +
@@ -130,13 +131,13 @@ public class Text extends Common {
             jaroWinklerText = "Окончания";
             getPremiumText = "Премиум бот";
             getPremiumYesOrNowText = "На тарифе <b>Premium bot</b>\n" +
-                    "1. Поиск новостей по словам производится каждые <b>2 минуты</b>. " +
+                    "1. Поиск по словам производится каждые <b>2 минуты</b>. " +
                     "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>;\n" +
                     "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + " слов</b> для поиска по словам (до " +
                     MAX_KEYWORDS_COUNT_PREMIUM + ") и <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> для полного поиска;\n" +
                     "3. Возможность добавления <b>персональных источников</b> новостей " +
-                    "(если источник предоставляет новости в формате <b>RSS (XML)</b> и удаления источников по умолчанию.\n" +
-                    "Оплатить премиум <b>900р.</b> в год? \uD83D\uDC8E";
+                    "(если источник предоставляет новости в формате <b>RSS</b>) и удаления источников по умолчанию.\n\n" +
+                    "Оплатить премиум <b>" + BOT_PRICE_RUS + "</b> рублей на год? \uD83D\uDC8E";
             getPremiumRequestText = """
                     1. <a href="https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835">Ссылка на оплату через СБП</a>.
                     В ближайшие 12 часов после отправки подтверждения платежа Вам будут подключены премиум возможности бота.
@@ -241,9 +242,9 @@ public class Text extends Common {
                     "So you <b>will be the first</b> to receive the <b>most up-to-date information</b>;\n" +
                     "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords (up to " +
                     MAX_KEYWORDS_COUNT_PREMIUM + " words) and <b>more than " + MAX_EXCL_TERMS_COUNT + " excluding terms</b> for full search;\n" +
-                    "3. Ability to add <b>personal news sources</b> (if the source provides <b>RSS (XML)</b> format) " +
-                    "and removing default sources.\n" +
-                    "Pay for a Premium bot subscription <b>50$</b> per year \uD83D\uDC8E";
+                    "3. Ability to add <b>personal news sources</b> (if the source provides <b>RSS</b> format) " +
+                    "and removing default sources.\n\n" +
+                    "Pay for a Premium bot subscription <b>" + BOT_PRICE_ENG + "$</b> per year \uD83D\uDC8E";
             getPremiumText = "Premium bot";
             premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b> /premium) " +
                     ICON_PREMIUM_IS_ACTIVE;
@@ -291,8 +292,7 @@ public class Text extends Common {
                     <b>E-mail</b>: rps_project@mail.ru
                     <b>Main application:</b> <a href="https://avandy-news.ru/index-en.html">Avandy News Analysis</a> (entry in the Register of Russian Software No: <a href="https://reestr.digital.gov.ru/reestr/1483979/">17539</a>)
                     <b>Testing:</b> <a href="https://www.instagram.com/andrew.sereda.1968?utm_source=qr&igsh=MWV1Z2pxZDN6Mm8ycA==">Andrew Sereda</a>
-                    <b>Video:</b> <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
-                    """;
+                    <b>Video:</b> <a href="https://youtu.be/HPAk8GPHes4">youtube</a>""";
             buyButtonText = "Good buy! " + ICON_GOOD_BYE;
             intervalText = "Interval";
             autoSearchText = "Auto search";
@@ -344,6 +344,7 @@ public class Text extends Common {
                     To combine identical words to eliminate repetitions, you can enable removal of word endings
                     For example: "played, player" will be combined into one word "play".
                     Current status:\s""";
+            startText = "Getting started with the bot";
         }
     }
 

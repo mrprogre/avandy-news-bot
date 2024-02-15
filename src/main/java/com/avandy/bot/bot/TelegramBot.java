@@ -2305,18 +2305,18 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Создание кнопок меню
     private void createMenuCommands() {
-        List<BotCommand> listOfCommands = new LinkedList<>();
-        listOfCommands.add(new BotCommand("/settings", settingText));
-        listOfCommands.add(new BotCommand("/keywords", listKeywordsButtonText));
-        listOfCommands.add(new BotCommand("/search", findSelectText));
-        listOfCommands.add(new BotCommand("/info", infoText));
-        //listOfCommands.add(new BotCommand("/top", top20Text));
-        //listOfCommands.add(new BotCommand("/delete", deleteUserText));
-        //listOfCommands.add(new BotCommand("/excluding", listExcludedText));
-        //listOfCommands.add(new BotCommand("/start", startText));
+        List<BotCommand> commands = new LinkedList<>();
+        commands.add(new BotCommand("/settings", settingText));
+        commands.add(new BotCommand("/excluding", listExcludedText));
+        commands.add(new BotCommand("/keywords", listKeywordsButtonText));
+        commands.add(new BotCommand("/search", findSelectText));
+        commands.add(new BotCommand("/info", infoText));
+//        commands.add(new BotCommand("/top", top20Text));
+        commands.add(new BotCommand("/delete", deleteUserText));
+        commands.add(new BotCommand("/start", startText));
 
         try {
-            this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
+            execute(new SetMyCommands(commands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
             log.error(Common.ERROR_TEXT + e.getMessage());
         }
