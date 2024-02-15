@@ -27,7 +27,7 @@ public class Text extends Common {
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
-            listText2, minWordLengthText2;
+            listText2, minWordLengthText2, premiumIsActive5;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -132,8 +132,8 @@ public class Text extends Common {
             getPremiumYesOrNowText = "На тарифе <b>Premium bot</b>\n" +
                     "1. Поиск новостей по словам производится каждые <b>2 минуты</b>. " +
                     "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>;\n" +
-                    "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + " слов</b> для поиска (до " +
-                    MAX_KEYWORDS_COUNT_PREMIUM + ");\n" +
+                    "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + " слов</b> для поиска по словам (до " +
+                    MAX_KEYWORDS_COUNT_PREMIUM + ") и <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> для полного поиска;\n" +
                     "3. Возможность добавления <b>персональных источников</b> новостей " +
                     "(если источник предоставляет новости в формате <b>RSS (XML)</b> и удаления источников по умолчанию.\n" +
                     "Оплатить премиум <b>900р.</b> в год? \uD83D\uDC8E";
@@ -144,8 +144,9 @@ public class Text extends Common {
                     Не подошёл наш продукт и прошло <b>не более 3 дней</b> с момента активации премиум возможностей - напишите, и мы <b>вернём</b> средства!""";
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium bot активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
-            premiumIsActive3 = "Добавление более " + MAX_KEYWORDS_COUNT + " слов возможно в <b>/premium</b> режиме";
+            premiumIsActive3 = "Добавление <b>более " + MAX_KEYWORDS_COUNT + " слов</b> возможно в /premium режиме";
             premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
+            premiumIsActive5 = "Добавление <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> возможно в /premium режиме";
             yesButtonText = """
                     Добавьте <b>слова</b> по которым я буду искать новости для Вас
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -229,8 +230,9 @@ public class Text extends Common {
                     You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Click the <b>Add keywords</b> button or see what the media are writing about now by clicking on <b>Top 20</b>""";
+            premiumIsActive5 = "Adding <b>more than " + MAX_EXCL_TERMS_COUNT + " exclusion terms</b> is possible in /premium mode";
             premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
-            premiumIsActive3 = "Adding more than " + MAX_KEYWORDS_COUNT + " is possible in <b>/premium</b> mode";
+            premiumIsActive3 = "Adding <b>more than " + MAX_KEYWORDS_COUNT + " keywords</b> is possible in /premium mode";
             premiumIsActive2 = "Premium bot activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Paypal link</a>";
@@ -238,7 +240,7 @@ public class Text extends Common {
                     "1. News search by keywords is performed every <b>2 minutes</b>. " +
                     "So you <b>will be the first</b> to receive the <b>most up-to-date information</b>;\n" +
                     "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords (up to " +
-                    MAX_KEYWORDS_COUNT_PREMIUM + " words);\n" +
+                    MAX_KEYWORDS_COUNT_PREMIUM + " words) and <b>more than " + MAX_EXCL_TERMS_COUNT + " excluding terms</b> for full search;\n" +
                     "3. Ability to add <b>personal news sources</b> (if the source provides <b>RSS (XML)</b> format) " +
                     "and removing default sources.\n" +
                     "Pay for a Premium bot subscription <b>50$</b> per year \uD83D\uDC8E";

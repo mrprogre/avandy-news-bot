@@ -1238,6 +1238,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         int counter = 0;
         List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
 
+        int isPremium = userRepository.isPremiumByChatId(chatId);
+        int totalKeywordsCount = excludedByChatId.size() + list.length;
+        log.warn("totalKeywordsCount = " + totalKeywordsCount);
+
+        if (isPremium != 1 && totalKeywordsCount > Common.MAX_EXCL_TERMS_COUNT && chatId != Common.DEV_ID) {
+            sendMessage(chatId, premiumIsActive5);
+            return;
+        }
+
         ExcludingTerm excluded;
         for (String word : list) {
             word = word.trim().toLowerCase();
