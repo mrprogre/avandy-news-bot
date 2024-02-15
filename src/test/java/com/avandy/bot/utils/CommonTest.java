@@ -17,7 +17,6 @@ public class CommonTest {
         assertEquals("нейронны** сети", Common.replaceWordsEnd("нейронные сети"));
         assertEquals("нейронны**-сети", Common.replaceWordsEnd("нейронные-сети"));
         assertEquals("Москв**", Common.replaceWordsEnd("Москва"));
-
     }
 
     @Test
