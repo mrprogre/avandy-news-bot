@@ -133,7 +133,7 @@ public class Text extends Common {
             getPremiumText = "Премиум бот";
             getPremiumYesOrNowText = "На тарифе <b>Premium bot</b>\n" +
                     "1. Поиск по словам производится каждые <b>2 минуты</b>. " +
-                    "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b>;\n" +
+                    "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b> (можно отключить и поставить другой интервал рассылки);\n" +
                     "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + " слов</b> для поиска по словам (до " +
                     MAX_KEYWORDS_COUNT_PREMIUM + ") и <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> для полного поиска;\n" +
                     "3. Удаление/добавление <b>источников</b> новостей " +
@@ -240,7 +240,7 @@ public class Text extends Common {
             getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Paypal link</a>";
             getPremiumYesOrNowText = "On the <b>Premium bot</b> tariff:\n" +
                     "1. News search by keywords is performed every <b>2 minutes</b>. " +
-                    "So you <b>will be the first</b> to receive the <b>most up-to-date information</b>;\n" +
+                    "So you <b>will be the first</b> to receive the <b>most up-to-date information</b> (can be disabled);\n" +
                     "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords (up to " +
                     MAX_KEYWORDS_COUNT_PREMIUM + " words) and <b>more than " + MAX_EXCL_TERMS_COUNT + " excluding terms</b> for full search;\n" +
                     "3. Ability to add <b>personal news sources</b> (if the source provides <b>RSS</b> format) " +
