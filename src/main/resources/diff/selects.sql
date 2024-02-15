@@ -1,12 +1,12 @@
 -- Мой: 1254981379, Лена: 1020961767, Вика: 6455565758, Саша: 6128707071
 
-select (select count(*) from excluding_terms) as excluded,
-       (select count(*) from keywords)        as keywords,
-       (select count(*) from showed_news)     as showed_news,
-       (select count(*) from top_excluded)    as top_ten_excluded,
-       (select count(*) from news_list)       as news_list,
-       (select count(*) from rss_list)        as rss_list,
-       (select count(*) from users)           as users;
+select (select count(*) from excluding_terms where chat_id != 1254981379) as excluded,
+       (select count(*) from keywords where chat_id != 1254981379)        as keywords,
+       (select count(*) from showed_news where chat_id != 1254981379)     as showed_news,
+       (select count(*) from top_excluded where chat_id != 1254981379)    as top_ten_excluded,
+       (select count(*) from news_list)                                   as news_list,
+       (select count(*) from rss_list)                                    as rss_list,
+       (select count(*) from users where chat_id != 1254981379)           as users;
 
 -- Количество новостей, которые получили все пользователи
 select case s.type when 2 then 'keys' else 'full' end as type,
@@ -66,7 +66,9 @@ having count(keyword) > 2
 order by cnt desc;
 
 -- количество ключевых слов по пользователям
-select * from keywords where chat_id = 5294960396;
+select *
+from keywords
+where chat_id = 5294960396;
 select chat_id, count(keyword) cnt
 from keywords
 group by chat_id
@@ -74,7 +76,9 @@ having count(keyword) > 2
 order by cnt desc;
 
 -- количество слов-исключений
-select * from excluding_terms where chat_id = 5294960396;
+select *
+from excluding_terms
+where chat_id = 5294960396;
 select chat_id, count(word) cnt
 from excluding_terms
 group by chat_id
