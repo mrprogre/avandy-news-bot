@@ -1957,7 +1957,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Удаление пользователя из БД
     private void deleteUser(long chatId) {
-        log.warn("# Deleted account: {}", chatId + ", " + userRepository.findNameByChatId(chatId));
+        log.warn("# User delete account: {}", chatId + ", " + userRepository.findNameByChatId(chatId));
         userRepository.deleteById(chatId);
         String text = buyButtonText;
         sendMessage(chatId, text);
