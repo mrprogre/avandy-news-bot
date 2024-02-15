@@ -26,7 +26,8 @@ public class Text extends Common {
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
-            rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3, listText2;
+            rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
+            listText2, minWordLengthText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -64,7 +65,8 @@ public class Text extends Common {
             historyClearText = "История просмотра очищена ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» слова не заданы";
-            minWordLengthText = "Длина слова должна быть более 1 символа и менее 30";
+            minWordLengthText = "Длина слова должна быть более 1 символа и до 64";
+            minWordLengthText2 = "Длина слова должна быть более 2 символов и до 32";
             deleteAllWordsText = "❌ все слова удалены";
             deleteText = "❌ удалено";
             wordIsExistsText = "Слово уже есть в списке: ";
@@ -275,7 +277,8 @@ public class Text extends Common {
             historyClearText = "Browsing history cleared ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
-            minWordLengthText = "Word length must be more than 1 characters and less than 30";
+            minWordLengthText = "The word length must be more than 1 characters and up to 64";
+            minWordLengthText2 = "The word length must be more than 2 characters and up to 32";
             deleteAllWordsText = "❌ all words removed";
             deleteText = "❌ deleted";
             wordIsExistsText = "The word is already on the list: ";

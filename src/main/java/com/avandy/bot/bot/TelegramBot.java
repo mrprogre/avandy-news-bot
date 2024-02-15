@@ -914,7 +914,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Keyword word;
         for (String keyword : keywords) {
             keyword = keyword.trim().toLowerCase();
-            if (keyword.length() >= 2 && keyword.length() <= 30) {
+            if (keyword.length() >= 2 && keyword.length() <= 64) {
                 if (!keywordsByChatId.contains(keyword)) {
                     word = new Keyword();
                     word.setChatId(chatId);
@@ -1238,7 +1238,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         ExcludingTerm excluded;
         for (String word : list) {
             word = word.trim().toLowerCase();
-            if (!(word.length() <= 2)) {
+
+            if (word.length() >= 3 && word.length() <= 32) {
                 if (!excludedByChatId.contains(word)) {
                     excluded = new ExcludingTerm();
                     excluded.setChatId(chatId);
@@ -1257,7 +1258,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, wordIsExistsText + word);
                 }
             } else {
-                sendMessage(chatId, minWordLengthText);
+                sendMessage(chatId, minWordLengthText2);
             }
         }
 
