@@ -2311,7 +2311,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         commands.add(new BotCommand("/keywords", listKeywordsButtonText));
         commands.add(new BotCommand("/search", findSelectText));
         commands.add(new BotCommand("/info", infoText));
-//        commands.add(new BotCommand("/top", top20Text));
         commands.add(new BotCommand("/delete", deleteUserText));
         commands.add(new BotCommand("/start", startText));
 
