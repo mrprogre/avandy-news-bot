@@ -32,7 +32,7 @@ public class Text extends Common {
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
             startText = "Начало работы с ботом";
-            initSearchTemplateText = ". %s%s\n[Список: <b>%d</b> %s]";
+            initSearchTemplateText = ". %s%s\n<pre>Список: <b>%d</b> %s</pre>";
             searchNewsHeaderText = "Поиск новостей";
             greetingText = EmojiParser.parseToUnicode("Здравствуйте! :blush: \n" +
                     "Я могу найти для Вас важную информацию и отсеять много лишней!");
@@ -104,7 +104,7 @@ public class Text extends Common {
             searchWithFilterText = "<b>Полный поиск</b> за ";
             searchWithFilter2Text = "слов-исключений";
             keywordSearchText = "Поиск <b>по словам</b> за ";
-            keywordSearch2Text = "слов";
+            keywordSearch2Text = "(слова и фразы)";
             cancelButtonText = "Отменить";
             foundNewsText = "Найдено";
             excludedNewsText = "исключено";
@@ -125,7 +125,7 @@ public class Text extends Common {
             chooseNumberWordFromTop = "Нажмите для поиска";
             chooseWordDelFromTop = "Нажмите для удаления";
             chooseSearchStartText = "Выберите час для расчёта времени запуска автопоиска по словам";
-            removedFromTopText = "удалено из Топа";
+            removedFromTopText = "не показывать в Топ";
             jaroWinklerSwitcherText = """
                     Чтобы объединить одинаковые слова для исключения повторений можно включить удаление окончаний.
                     Пример: в Top 20 показаны слова: <b>белгородская [10], белгорода [7], белгороде [4]</b>, при включённом удалении будет показано только одно слово <b>белгород [21]</b> c общей суммой ранее указанных слов.
@@ -160,7 +160,7 @@ public class Text extends Common {
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
             sendPaymentText = "Отправить скриншот с оплатой";
-            cleanFullSearchHistoryText = "очистить историю просмотра /clear";
+            cleanFullSearchHistoryText = "<pre>Очистить историю просмотра</pre> ";
             advancedSearch = """
                     Для получения большего количества результатов при меньшем количестве слов
                     используйте символ <b>*</b> вместо любой буквы в слове.
@@ -222,7 +222,7 @@ public class Text extends Common {
                     2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
                     3. <b>pay tax**</b> will find headlines with <b>pay taxes</b>.
                     Go to /keywords section""";
-            cleanFullSearchHistoryText = "clear browsing history /clear";
+            cleanFullSearchHistoryText = "clear browsing history ";
             sendPaymentText = "Send transfer confirmation";
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
@@ -250,7 +250,7 @@ public class Text extends Common {
             getPremiumText = "Premium bot";
             premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b> /premium) " +
                     ICON_PREMIUM_IS_ACTIVE;
-            initSearchTemplateText = ". %s%s\n[List: <b>%d</b> %s]";
+            initSearchTemplateText = ". %s%s\n<pre>List: <b>%d</b> %s</pre>";
             searchNewsHeaderText = "Search news";
             greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -322,7 +322,7 @@ public class Text extends Common {
             searchWithFilterText = "<b>Full search</b> in ";
             searchWithFilter2Text = "excluding terms";
             keywordSearchText = "Search by <b>keywords</b> in ";
-            keywordSearch2Text = "keywords";
+            keywordSearch2Text = "(words and phrases)";
             cancelButtonText = "Cancel";
             foundNewsText = "Found";
             excludedNewsText = "excluded";
@@ -342,7 +342,7 @@ public class Text extends Common {
             chooseNumberWordFromTop = "Click to search";
             chooseWordDelFromTop = "Click to delete";
             chooseSearchStartText = "Select an hour to calculate the time to start auto search by keywords";
-            removedFromTopText = "words removed";
+            removedFromTopText = "don't show in Top";
             jaroWinklerText = "Word endings";
             jaroWinklerSwitcherText = """
                     To combine identical words to eliminate repetitions, you can enable removal of word endings

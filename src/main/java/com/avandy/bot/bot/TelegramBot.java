@@ -1998,7 +1998,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void initSearchesKeyboard(long chatId) {
         String fullText = String.format("1" + initSearchTemplateText, searchWithFilterText,
                 settingsRepository.getFullSearchPeriod(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
-                searchWithFilter2Text + ",\n" + cleanFullSearchHistoryText);
+                searchWithFilter2Text + "\n") + cleanFullSearchHistoryText + "/clear";
 
         String keywordsText = String.format("2" + initSearchTemplateText, keywordSearchText,
                 settingsRepository.getKeywordsPeriod(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
