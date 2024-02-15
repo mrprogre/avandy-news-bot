@@ -98,7 +98,7 @@ public class Text extends Common {
             sendMessageForDevText2 = "Направить скриншот оплаты";
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
-            rssSourcesText = "Источники новостей [RSS формат]";
+            rssSourcesText = "<b>Источники новостей</b> [RSS формат]";
             rssSourcesText2 = "Источники новостей";
             searchWithFilterText = "<b>Полный поиск</b> за ";
             searchWithFilter2Text = "слов-исключений";
@@ -315,7 +315,7 @@ public class Text extends Common {
             sendMessageForDevText2 = "Send a screenshot of payment";
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
-            rssSourcesText = "News sources [RSS format]";
+            rssSourcesText = "<b>News sources</b> [RSS format]";
             rssSourcesText2 = "News sources";
             searchWithFilterText = "<b>Full search</b> in ";
             searchWithFilter2Text = "excluding terms";
