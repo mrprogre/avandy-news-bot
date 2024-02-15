@@ -257,13 +257,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                     deleteSourceRss(chatId, source);
 
                     // Поиск по трём кнопкам меню
-                } else if (messageText.equals(keywordsSearchText)) {
+                } else if (messageText.equals("По словам") || messageText.equals("Keywords")) {
                     new Thread(() -> findNewsByKeywordsManual(chatId)).start();
 
-                } else if (messageText.equals(updateTopText2)) {
+                } else if (messageText.equals("Top 20") || messageText.equals("Show top")) {
                     new Thread(() -> showTop(chatId)).start();
 
-                } else if (messageText.equals(fullSearchText)) {
+                } else if (messageText.equals("Все новости") || messageText.equals("All news")) {
                     new Thread(() -> fullSearch(chatId)).start();
                 } else {
                     /* Основные команды */
@@ -2226,8 +2226,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         String text = String.format(textToSend, "");
 
         KeyboardRow row = new KeyboardRow();
-        //row.add(fullSearchText);
         row.add(updateTopText2);
+        row.add(fullSearchText2);
         row.add(keywordsSearchText);
         sendMessage(chatId, text, ReplyKeyboards.replyKeyboardMaker(row));
     }
