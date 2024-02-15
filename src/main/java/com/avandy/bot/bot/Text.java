@@ -27,7 +27,7 @@ public class Text extends Common {
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
-            listText2, minWordLengthText2, premiumIsActive5, startText;
+            listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -99,6 +99,7 @@ public class Text extends Common {
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "Источники новостей [RSS формат]";
+            rssSourcesText2 = "Источники новостей";
             searchWithFilterText = "<b>Полный поиск</b> за ";
             searchWithFilter2Text = "слов-исключений";
             keywordSearchText = "Поиск <b>по словам</b> за ";
@@ -315,6 +316,7 @@ public class Text extends Common {
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "News sources [RSS format]";
+            rssSourcesText2 = "News sources";
             searchWithFilterText = "<b>Full search</b> in ";
             searchWithFilter2Text = "excluding terms";
             keywordSearchText = "Search by <b>keywords</b> in ";

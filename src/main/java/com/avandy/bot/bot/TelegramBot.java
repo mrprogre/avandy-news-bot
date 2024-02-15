@@ -272,6 +272,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                         case "/keywords" -> new Thread(() -> showKeywordsList(chatId)).start();
                         case "/search" -> new Thread(() -> initSearchesKeyboard(chatId)).start();
                         case "/info" -> new Thread(() -> infoKeyboard(chatId)).start();
+                        case "/sources" -> new Thread(() -> sourcesKeyboard(chatId)).start();
+
                         case "/clear" -> {
                             showedNewsRepository.deleteHistoryManual(chatId);
                             sendMessage(chatId, historyClearText);
@@ -2171,15 +2173,20 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Кнопки раздела Инфо (/info)
     private void infoKeyboard(long chatId) {
-        Map<String, String> buttons1 = new LinkedHashMap<>();
-        Map<String, String> buttons2 = new LinkedHashMap<>();
-        buttons1.put("DEL_RSS", delSourceText);
-        buttons1.put("ADD_RSS", addSourceText);
-        buttons2.put("FEEDBACK", sendIdeaText);
-        buttons2.put("GET_PREMIUM", getPremiumText);
-        //buttons2.put("START_SEARCH", "» » »");
-        sendMessageWithPreview(chatId, aboutDeveloperText + "\n\n" + getRssList(chatId),
-                InlineKeyboards.maker(buttons1, buttons2, null, null, null));
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("FEEDBACK", sendIdeaText);
+        buttons.put("GET_PREMIUM", getPremiumText);
+        sendMessageWithPreview(chatId, aboutDeveloperText,
+                InlineKeyboards.maker(buttons));
+    }
+
+    // Кнопки раздела источники новостей (/sources)
+    private void sourcesKeyboard(long chatId) {
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("DEL_RSS", delSourceText);
+        buttons.put("ADD_RSS", addSourceText);
+        sendMessageWithPreview(chatId, getRssList(chatId),
+                InlineKeyboards.maker(buttons));
     }
 
     // Кнопки раздела Инфо (/info)
@@ -2310,9 +2317,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         commands.add(new BotCommand("/excluding", listExcludedText));
         commands.add(new BotCommand("/keywords", listKeywordsButtonText));
         commands.add(new BotCommand("/search", findSelectText));
+        commands.add(new BotCommand("/sources", rssSourcesText2));
         commands.add(new BotCommand("/info", infoText));
-        commands.add(new BotCommand("/delete", deleteUserText));
         commands.add(new BotCommand("/start", startText));
+        commands.add(new BotCommand("/delete", deleteUserText));
 
         try {
             execute(new SetMyCommands(commands, new BotCommandScopeDefault(), null));
