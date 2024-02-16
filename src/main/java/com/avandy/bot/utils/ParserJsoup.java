@@ -24,6 +24,7 @@ public class ParserJsoup {
     public List<Message> parse(String url) {
         List<Message> messages = new ArrayList<>();
         Message message;
+        String link = "";
 
         try {
             Document document = Jsoup.connect(url)
@@ -34,7 +35,7 @@ public class ParserJsoup {
             for (Element element : news) {
                 String title = element.getElementsByTag("title").text();
 
-                String link = element.getElementsByTag("link").text();
+                link = element.getElementsByTag("link").text();
                 if (link.isBlank()) link = element.ownText();
 
                 String date = element.getElementsByTag("pubDate").text();
@@ -54,6 +55,8 @@ public class ParserJsoup {
             log.error(e.getMessage());
         } catch (ParseException e) {
             log.error("ParseException: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("ParserJsoup exception: {}\nlink: {}", e.getMessage(), link);
         }
         return messages;
     }
