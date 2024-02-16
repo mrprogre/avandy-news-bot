@@ -2226,8 +2226,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         String text = String.format(textToSend, "");
 
         KeyboardRow row = new KeyboardRow();
-        row.add(updateTopText2);
         row.add(fullSearchText2);
+        row.add(updateTopText2);
         row.add(keywordsSearchText);
         sendMessage(chatId, text, ReplyKeyboards.replyKeyboardMaker(row));
     }
