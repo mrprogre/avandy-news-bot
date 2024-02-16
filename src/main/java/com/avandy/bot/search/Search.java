@@ -55,7 +55,7 @@ public class Search implements SearchService {
 
             // find news by period TreeSet<YourClass> treeSet = new TreeSet<>(arrayList);
             TreeSet<NewsList> newsListByPeriod =
-                    newsListRepository.getNewsListByPeriod(periodMinutes + " minutes", userLanguage);
+                    newsListRepository.getNewsListByPeriod(periodMinutes + " minutes", userLanguage, chatId);
             for (NewsList news : newsListByPeriod) {
                 String rss = news.getSource();
                 String title = news.getTitle().trim();
@@ -108,7 +108,7 @@ public class Search implements SearchService {
                 if (keyword.contains("-")) keyword = keyword.replace("-", "\\-");
 
                 try {
-                    newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage);
+                    newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage, chatId);
                 } catch (Exception e) {
                     log.warn(e.getMessage() + ". Keyword: " + keyword);
                     continue;
@@ -123,7 +123,7 @@ public class Search implements SearchService {
 
                     if (title.length() > 15) {
                         if (!showedNewsHash.contains(hash + 2)) {
-                            headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
+                            headlinesToShow.add(new Headline(rss, title, link, date, chatId,2, hash));
                         }
                     }
                 }
@@ -139,10 +139,10 @@ public class Search implements SearchService {
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
             if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
-                newsList = newsListRepository.getNewsWithLike(period, type, userLanguage);
+                newsList = newsListRepository.getNewsWithLike(period, type, userLanguage, chatId);
             } else {
                 try {
-                    newsList = newsListRepository.getNewsWithRegexp(period, type, userLanguage);
+                    newsList = newsListRepository.getNewsWithRegexp(period, type, userLanguage, chatId);
                 } catch (Exception e) {
                     log.warn(e.getMessage() + ". Word = " + type);
                     return null;

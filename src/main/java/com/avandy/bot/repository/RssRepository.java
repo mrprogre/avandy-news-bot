@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface RssRepository extends CrudRepository<RssList, Integer> {
     @Query(value = "select distinct source from rss_list r where is_active = 1 and lower(lang) = lower(:lang) " +
-            "and not exists(select 1 from rss_excluding e where lower(r.source) = lower(e.source_name) " +
-            "and e.chat_id = :chatId) " +
+            "and not exists(select 1 from rss_excluding e where lower(r.source) = lower(e.source_name) and e.chat_id = :chatId) " +
+            "and r.chat_id is null " +
             "order by source",
             nativeQuery = true)
     List<String> findAllActiveSources(long chatId, String lang);

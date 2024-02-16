@@ -15,24 +15,24 @@ public interface NewsListRepository extends CrudRepository<NewsList, Long> {
     LinkedHashSet<String> getNewsListAllHash();
 
     @Query(value = "SELECT n.id, n.source, n.title, n.title_hash, n.link, n.pub_date, n.add_date FROM news_list n" +
-            "         JOIN rss_list r on n.source = r.source and lang = :lang" +
+            "         JOIN rss_list r on n.source = r.source and lang = :lang and (r.chat_id = :chatId or r.chat_id is null)" +
             "        WHERE n.pub_date > (current_timestamp - cast(:period as interval))"
             , nativeQuery = true)
-    TreeSet<NewsList> getNewsListByPeriod(String period, String lang);
+    TreeSet<NewsList> getNewsListByPeriod(String period, String lang, long chatId);
 
     @Query(value = "SELECT n.id, n.source, n.title, n.title_hash, n.link, n.pub_date, n.add_date FROM news_list n" +
-            "         JOIN rss_list r on n.source = r.source and lang = :lang" +
+            "         JOIN rss_list r on n.source = r.source and lang = :lang and (r.chat_id = :chatId or r.chat_id is null)" +
             "        WHERE n.pub_date > (current_timestamp - cast(:period as interval))" +
             "          AND lower(title) ~ ('^'||:word||'(\\s|\\W)|(\\s|\\W)'||:word||'(\\s|\\W)|(\\s|\\W)'||:word||'$')"
             , nativeQuery = true)
-    TreeSet<NewsList> getNewsWithRegexp(String period, String word, String lang);
+    TreeSet<NewsList> getNewsWithRegexp(String period, String word, String lang, long chatId);
 
     @Query(value = "SELECT n.id, n.source, n.title, n.title_hash, n.link, n.pub_date, n.add_date FROM news_list n" +
-            "         JOIN rss_list r on n.source = r.source and lang = :lang" +
+            "         JOIN rss_list r on n.source = r.source and lang = :lang and (r.chat_id = :chatId or r.chat_id is null)" +
             "        WHERE n.pub_date > (current_timestamp - cast(:period as interval))" +
             "          AND lower(title) ilike '%'||:word||'%'"
             , nativeQuery = true)
-    TreeSet<NewsList> getNewsWithLike(String period, String word, String lang);
+    TreeSet<NewsList> getNewsWithLike(String period, String word, String lang, long chatId);
 
     /* Schedulers */
     @Query(value = "SELECT count(*) FROM news_list n WHERE n.pub_date > (current_timestamp - cast(:interval as interval))",
