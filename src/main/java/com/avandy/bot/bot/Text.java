@@ -93,8 +93,8 @@ public class Text extends Common {
             keywordsSearchText = "По словам";
             fullSearchText = "Полный";
             fullSearchText2 = "Все новости";
-            addInListText = "Если слов несколько, то раздели их запятыми";
-            delFromListText = "Введите <b>порядковый номер</b> слова, а если их несколько, то раздели запятыми";
+            addInListText = "Если слов несколько, то <b>разделите их запятыми</b>";
+            delFromListText = "Введите <b>порядковый номер</b> слова, а если их несколько, то <b>разделите запятыми</b>";
             removeAllText = "удалить всё";
             sendMessageForDevText = "Написать сообщение разработчику (можно приложить один скриншот)";
             sendMessageForDevText2 = "Направить скриншот оплаты";
