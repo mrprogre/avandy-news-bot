@@ -49,7 +49,7 @@ public class Text extends Common {
             listExcludedText = "Слова-исключения";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
-            addText2 = "Добавить слова";
+            addText2 = "Добавить слова для поиска";
             addText3 = "Добавить слова";
             delText = "Удалить";
             excludeWordText = "Исключить";
@@ -152,7 +152,7 @@ public class Text extends Common {
             premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive5 = "Добавление <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> возможно в /premium режиме";
             yesButtonText = """
-                    Добавьте <b>слова</b> по которым я буду искать новости для Вас
+                    Добавьте <b>слова или фразы</b> по которым я буду искать новости
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Нажмите кнопку <b>Добавить</b> или посмотрите о чём сейчас пишут СМИ, нажав на <b>Top 20</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -231,7 +231,7 @@ public class Text extends Common {
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
             yesButtonText = """
-                    The first thing to do is add <b>keywords</b>.
+                    The first thing to do is add <b>keywords or phrases</b>.
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -269,8 +269,8 @@ public class Text extends Common {
             listExcludedText = "Excluding terms";
             deleteUserText = "Delete user data";
             addText = "Add";
-            addText2 = "Add keywords";
-            addText3 = "Add keywords";
+            addText2 = "Add words to search";
+            addText3 = "Add words";
             delText = "Delete";
             excludeWordText = "Exclude term";
             excludeWordText2 = "Add excluding terms";
