@@ -1982,14 +1982,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         for (String source : sources) {
             joiner.add(source);
         }
-        String list = rssSourcesText + "\n <code>" + joiner + "</code>";
+        String list = rssSourcesText + "\n<code>" + joiner + "</code>";
 
         if (personalSources.size() > 0) {
             StringJoiner joinerPers = new StringJoiner(", ");
             for (String source : personalSources) {
                 joinerPers.add(source);
             }
-            list = list + "\n\n" + "<b>Персональные источники</b>\n <code>" + joinerPers + "</code>";
+            list = list + "\n\n" + "<b>Персональные источники</b>\n<code>" + joinerPers + "</code>";
         }
 
         return list;
