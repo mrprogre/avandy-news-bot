@@ -2204,7 +2204,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons3 = new LinkedHashMap<>();
         buttons1.put("ADD_KEYWORD", addText2);
         buttons2.put("ADD_EXCLUDED", excludeWordText2);
-        buttons3.put("START_SEARCH", findSelectText);
+        //buttons3.put("START_SEARCH", findSelectText);
+        buttons3.put("FIND_ALL", fullSearchText);
+        buttons3.put("GET_TOP", updateTopText2);
+        buttons3.put("FIND_BY_KEYWORDS", keywordsSearchText);
 
         sendMessageWithPreview(chatId, undefinedCommandText,
                 InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));

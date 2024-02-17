@@ -91,7 +91,7 @@ public class Text extends Common {
             allowCommasAndNumbersText = "Укажите порядковый номер слова (разделять запятой)";
             startSearchBeforeText = "Топ необходимо обновить. Нажмите на /top";
             keywordsSearchText = "По словам";
-            fullSearchText = "Полный";
+            fullSearchText = "Все новости";
             fullSearchText2 = "Все новости";
             addInListText = "Если слов несколько, то <b>разделите их запятыми</b>";
             delFromListText = "Введите <b>порядковый номер</b> слова, а если их несколько, то <b>разделите запятыми</b>";
