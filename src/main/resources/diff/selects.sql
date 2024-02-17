@@ -56,7 +56,7 @@ WHERE add_date > (current_timestamp - cast('6 hours' as interval));
 delete
 from showed_news
 where chat_id = 1254981379
-  and type = 4;
+  and type = 4; -- 4 - полный поиск
 
 -- топ ключевых слов по всем пользователям
 select keyword, count(keyword) cnt

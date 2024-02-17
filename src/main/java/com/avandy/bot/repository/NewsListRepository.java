@@ -41,7 +41,7 @@ public interface NewsListRepository extends CrudRepository<NewsList, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "DELETE FROM news_list WHERE pub_date < (current_timestamp - cast('72 hours' as interval))",
+    @Query(value = "DELETE FROM news_list WHERE pub_date < (current_timestamp - cast('24 hours' as interval))",
             nativeQuery = true)
-    int deleteNews72h();
+    int deleteOld();
 }

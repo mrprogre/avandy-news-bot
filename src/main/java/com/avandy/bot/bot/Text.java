@@ -27,7 +27,8 @@ public class Text extends Common {
             historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
-            listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2;
+            listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
+            messageThemeChooseText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -116,8 +117,8 @@ public class Text extends Common {
             listText = "Список";
             listText2 = "Список слов";
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
-            chooseSearchDepthText = "Интервал поиска равен текущему моменту минус глубине в часах\n" +
-                    "Выберите глубину поиска.";
+            chooseSearchDepthText = "Интервал поиска равен текущему моменту минус глубина в часах\n" +
+                    "Выберите глубину поиска";
             sendIdeaText = "Написать отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             fullSearchStartText = "» поиск всех новостей за %s";
@@ -160,7 +161,7 @@ public class Text extends Common {
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
             sendPaymentText = "Отправить скриншот с оплатой";
-            cleanFullSearchHistoryText = "<pre>Очистить историю просмотра</pre> ";
+            cleanFullSearchHistoryText = "Очистить историю ";
             advancedSearch = """
                     Для получения большего количества результатов при меньшем количестве слов
                     используйте символ <b>*</b> вместо любой буквы в слове.
@@ -194,10 +195,12 @@ public class Text extends Common {
             rssExistsText = "Данный источник уже есть в списке";
             rssNameNotExistsText = "Источника с таким названием не существует";
             messageThemeChooseText = "Выберите вариант внешнего вида сообщений. Текущая тема: %s";
+            messageThemeChooseText2 = "Внешний вид новостей ";
             noCommasText = "Страну, название и ссылку необходимо разделить запятыми";
         } else {
             noCommasText = "Country, name and link must be separated by commas";
             messageThemeChooseText = "Select a message appearance option. Current theme: %s";
+            messageThemeChooseText2 = "News appearance ";
             rssNameNotExistsText = "There is no source with this name";
             rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";

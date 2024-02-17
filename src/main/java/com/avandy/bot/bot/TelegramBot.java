@@ -541,10 +541,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "BUTTON_1" -> keywordsUpdatePeriod(1, chatId);
                     case "BUTTON_2" -> keywordsUpdatePeriod(2, chatId);
                     case "BUTTON_4" -> keywordsUpdatePeriod(4, chatId);
+                    case "BUTTON_6" -> keywordsUpdatePeriod(6, chatId);
+                    case "BUTTON_8" -> keywordsUpdatePeriod(8, chatId);
                     case "BUTTON_12" -> keywordsUpdatePeriod(12, chatId);
                     case "BUTTON_24" -> keywordsUpdatePeriod(24, chatId);
-                    case "BUTTON_48" -> keywordsUpdatePeriod(48, chatId);
-                    case "BUTTON_72" -> keywordsUpdatePeriod(72, chatId);
 
                     // Обновление периода поиска по всем новостям
                     case "BUTTON_1_ALL" -> fullSearchPeriodUpdate(1, chatId);
@@ -554,6 +554,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "BUTTON_8_ALL" -> fullSearchPeriodUpdate(8, chatId);
                     case "BUTTON_12_ALL" -> fullSearchPeriodUpdate(12, chatId);
                     case "BUTTON_24_ALL" -> fullSearchPeriodUpdate(24, chatId);
+
+                    // Обновление периода Топ 20
+                    case "TOP_INTERVAL_1" -> topUpdatePeriod(1, chatId);
+                    case "TOP_INTERVAL_2" -> topUpdatePeriod(2, chatId);
+                    case "TOP_INTERVAL_4" -> topUpdatePeriod(4, chatId);
+                    case "TOP_INTERVAL_6" -> topUpdatePeriod(6, chatId);
+                    case "TOP_INTERVAL_8" -> topUpdatePeriod(8, chatId);
+                    case "TOP_INTERVAL_12" -> topUpdatePeriod(12, chatId);
+                    case "TOP_INTERVAL_24" -> topUpdatePeriod(24, chatId);
 
                     case "YES_BUTTON" -> addKeywordsKeyboardOrTop(chatId, yesButtonText);
                     case "NO_BUTTON" -> sendMessage(chatId, buyButtonText);
@@ -600,14 +609,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "TOP_DEL_18" -> topDelete(18, chatId);
                     case "TOP_DEL_19" -> topDelete(19, chatId);
                     case "TOP_DEL_20" -> topDelete(20, chatId);
-
-                    case "TOP_INTERVAL_1" -> topUpdatePeriod(1, chatId);
-                    case "TOP_INTERVAL_2" -> topUpdatePeriod(2, chatId);
-                    case "TOP_INTERVAL_4" -> topUpdatePeriod(4, chatId);
-                    case "TOP_INTERVAL_12" -> topUpdatePeriod(12, chatId);
-                    case "TOP_INTERVAL_24" -> topUpdatePeriod(24, chatId);
-                    case "TOP_INTERVAL_48" -> topUpdatePeriod(48, chatId);
-                    case "TOP_INTERVAL_72" -> topUpdatePeriod(72, chatId);
 
                     /* AUTO SEARCH BY KEYWORDS */
                     case "SET_SCHEDULER" -> keywordsOnOffSchedulerKeyboard(chatId);
@@ -1044,10 +1045,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("BUTTON_1", "1");
         buttons.put("BUTTON_2", "2");
         buttons.put("BUTTON_4", "4");
+        buttons.put("BUTTON_6", "6");
+        buttons.put("BUTTON_8", "8");
         buttons.put("BUTTON_12", "12");
         buttons.put("BUTTON_24", "24");
-        buttons.put("BUTTON_48", "48");
-        buttons.put("BUTTON_72", "72");
         sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.maker(buttons));
     }
 
@@ -1749,10 +1750,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("TOP_INTERVAL_1", "1");
         buttons.put("TOP_INTERVAL_2", "2");
         buttons.put("TOP_INTERVAL_4", "4");
+        buttons.put("TOP_INTERVAL_6", "6");
+        buttons.put("TOP_INTERVAL_8", "8");
         buttons.put("TOP_INTERVAL_12", "12");
         buttons.put("TOP_INTERVAL_24", "24");
-        buttons.put("TOP_INTERVAL_48", "48");
-        buttons.put("TOP_INTERVAL_72", "72");
         sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.maker(buttons));
     }
 
@@ -1998,7 +1999,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void initSearchesKeyboard(long chatId) {
         String fullText = String.format("1" + initSearchTemplateText, searchWithFilterText,
                 settingsRepository.getFullSearchPeriod(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
-                searchWithFilter2Text + "\n") + cleanFullSearchHistoryText + "/clear ";
+                searchWithFilter2Text + "\n") +
+                cleanFullSearchHistoryText + "/clear \n" +
+                messageThemeChooseText2 + "/theme ";
 
         String keywordsText = String.format("2" + initSearchTemplateText, keywordSearchText,
                 settingsRepository.getKeywordsPeriod(chatId), keywordRepository.getKeywordsCountByChatId(chatId),

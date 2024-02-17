@@ -13,10 +13,8 @@ public interface ShowedNewsRepository extends JpaRepository<ShowedNews, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "delete from showed_news where " +
-            "(type = 2 and add_date < (current_timestamp - cast('72 hours' as interval))) or" +
-            "(type = 4 and add_date < (current_timestamp - cast('24 hours' as interval)))", nativeQuery = true)
-    int deleteOldNews();
+    @Query(value = "delete from showed_news where add_date < (current_timestamp - cast('24 hours' as interval))", nativeQuery = true)
+    int deleteOld();
 
     @Transactional
     @Modifying(clearAutomatically = true)
