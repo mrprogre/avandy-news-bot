@@ -100,7 +100,7 @@ public class Text extends Common {
             sendMessageForDevText2 = "Направить скриншот оплаты";
             actionCanceledText = "Действие отменено";
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
-            rssSourcesText = "<b>Источники новостей</b> [RSS формат]";
+            rssSourcesText = "<b>Источники новостей</b> (RSS формат)";
             rssSourcesText2 = "Источники новостей";
             searchWithFilterText = "<b>Полный поиск</b> за ";
             searchWithFilter2Text = "слов-исключений";
@@ -183,7 +183,7 @@ public class Text extends Common {
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     %s""";
             addSourceText = "Добавить RSS";
-            delSourceText = "Удалить RSS";
+            delSourceText = "Удалить";
             addSourceInfoText = "Введите <b>страну</b> источника, его <b>название</b> и <b>веб ссылку на XML</b> " +
                     "c новостями, <b>через запятую</b>.\n" +
                     "<b>Примерный</b> список подходящих источников по категориям и странам: " +
@@ -210,7 +210,7 @@ public class Text extends Common {
                     "<b>Sample</b> list of suitable sources by category and country: <a href=\"https://github.com/Martinviv/rss-sources/blob/main/README.md\">rss list</a>";
             delSourceInfoText = "Delete <b>your</b> source by its name";
             addSourceText = "Add RSS";
-            delSourceText = "Delete RSS";
+            delSourceText = "Delete";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -320,7 +320,7 @@ public class Text extends Common {
             sendMessageForDevText2 = "Send a screenshot of payment";
             actionCanceledText = "Cancelled";
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
-            rssSourcesText = "<b>News sources</b> [RSS format]";
+            rssSourcesText = "<b>News sources</b> (RSS format)";
             rssSourcesText2 = "News sources";
             searchWithFilterText = "<b>Full search</b> in ";
             searchWithFilter2Text = "excluding terms";
