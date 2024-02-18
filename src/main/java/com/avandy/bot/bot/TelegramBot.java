@@ -1983,25 +1983,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         String lang = settingsRepository.getLangByChatId(chatId);
         List<String> sources = rssRepository.findAllActiveSources(chatId, lang);
         List<String> personalSources = rssRepository.findPersonalSources(chatId);
-        String tag = "code";
 
-        int counter = 1;
-        String spaces = "  ";
         StringJoiner joiner = new StringJoiner("\n");
         for (String source : sources) {
-            joiner.add(counter++ + "." + spaces + source );
-            if (counter > 9 ) spaces = " ";
+            joiner.add("  <code>" +source + "</code>");
         }
-        String list = rssSourcesText + "\n<" + tag + ">" + joiner + "</" + tag + ">";
+        String list = rssSourcesText + "\n" + joiner;
 
-        counter = 1;
         if (personalSources.size() > 0) {
             StringJoiner joinerPers = new StringJoiner("\n");
             for (String source : personalSources) {
-                joinerPers.add(counter++ + "." + spaces + source);
-                if (counter > 9 ) spaces = " ";
+                joinerPers.add("  <code>" +source + "</code>");
             }
-            list = list + "\n\n" + "<b>Персональные источники</b>\n<" + tag + ">" + joinerPers + "</" + tag + ">";
+            list = list + "\n\n" + "<b>" + personalSourcesText + "</b>\n" + joinerPers;
         }
 
         return list;

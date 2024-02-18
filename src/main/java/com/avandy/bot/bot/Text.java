@@ -28,7 +28,7 @@ public class Text extends Common {
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
-            messageThemeChooseText2;
+            messageThemeChooseText2, personalSourcesText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -197,7 +197,9 @@ public class Text extends Common {
             messageThemeChooseText = "Выберите вариант внешнего вида сообщений. Текущая тема: %s";
             messageThemeChooseText2 = "Внешний вид новостей ";
             noCommasText = "Страну, название и ссылку необходимо разделить запятыми";
+            personalSourcesText = "Персональные источники";
         } else {
+            personalSourcesText = "Personal sources";
             noCommasText = "Country, name and link must be separated by commas";
             messageThemeChooseText = "Select a message appearance option. Current theme: %s";
             messageThemeChooseText2 = "News appearance ";
