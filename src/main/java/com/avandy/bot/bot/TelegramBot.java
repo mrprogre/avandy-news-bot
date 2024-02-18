@@ -218,7 +218,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     delExcluded(chatId, words);
                     getExcludedList(chatId);
 
-                    // Удаление слов из показа в Топе
+                    // Восстановление удалённых слов из показа в Топе
                 } else if (UserState.DEL_TOP.equals(userState)) {
                     String text = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, text)) return;
