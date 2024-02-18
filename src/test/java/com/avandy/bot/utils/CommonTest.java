@@ -11,7 +11,7 @@ public class CommonTest {
 
     @Test
     public void replaceKeywordsEndTest() {
-        String keyword = "Машинист буровой установки"; // Росси**
+        String keyword = "Ростов-на-Дону"; // Росси**
         System.out.println(keyword + " = " + Common.replaceWordsEnd(keyword));
         assertEquals("илон маск", Common.replaceWordsEnd("илон маск"));
         assertEquals("нейронны** сети", Common.replaceWordsEnd("нейронные сети"));

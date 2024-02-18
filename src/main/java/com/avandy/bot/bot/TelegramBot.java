@@ -167,11 +167,17 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     // DEACTIVATE SOURCE
                 } else if (messageText.startsWith("-") && config.getBotOwner() == chatId) {
-                    String link = messageText.substring(messageText.indexOf("-") + 1, messageText.indexOf("="));
-                    int value = Integer.parseInt(messageText.substring(messageText.indexOf("=") + 1));
-                    int count = rssRepository.updateIsActiveRss(value, link);
-                    if (count == 1) {
-                        sendMessage(chatId, "Активность источника переключена на: " + value);
+                    try {
+                        String link = messageText.substring(messageText.indexOf("-") + 1, messageText.indexOf("="));
+                        int value = Integer.parseInt(messageText.substring(messageText.indexOf("=") + 1));
+
+                        int count = rssRepository.updateIsActiveRss(value, link);
+                        if (count == 1) {
+                            sendMessage(chatId, "Активность источника переключена на: " + value);
+                        }
+                    } catch (Exception e) {
+                        sendMessage(chatId, "Exception: " + e.getMessage() + "\nФормат команды: -link=0 или 1");
+                        return;
                     }
 
                     /* USER INPUT BLOCK */
