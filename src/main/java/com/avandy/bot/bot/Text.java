@@ -36,7 +36,7 @@ public class Text extends Common {
             initSearchTemplateText = ". %s%s\n<pre>Список: <b>%d</b> %s</pre>";
             searchNewsHeaderText = "Поиск новостей";
             greetingText = EmojiParser.parseToUnicode("Здравствуйте! :blush: \n" +
-                    "Я могу найти для Вас важную информацию и отсеять много лишней!");
+                    "Я могу найти для Вас важную информацию и убрать много лишней!");
             letsStartText = "Продолжить?";
             noText = "Нет";
             yesText = "Да";
@@ -152,7 +152,7 @@ public class Text extends Common {
             premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive5 = "Добавление <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> возможно в /premium режиме";
             yesButtonText = """
-                    Добавьте <b>слова или фразы</b> по которым я буду искать новости
+                    Добавьте <b>слова или фразы</b> по которым я буду искать новости для Вас (продвинутый поиск /advanced)
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Нажмите кнопку <b>Добавить</b> или посмотрите о чём сейчас пишут СМИ, нажав на <b>Top 20</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -233,7 +233,7 @@ public class Text extends Common {
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
             yesButtonText = """
-                    The first thing to do is add <b>keywords or phrases</b>.
+                    The first thing to do is add <b>keywords or phrases</b> (/advanced search)
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
