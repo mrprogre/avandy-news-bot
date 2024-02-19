@@ -814,24 +814,26 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Автоматический поиск по ключевым словам
     public void autoSearchNewsByKeywords(long chatId) {
-        String nameByChatId = userRepository.findNameByChatId(chatId);
-        String keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
-        List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
-        //List<Long> premiumChatIds = userRepository.findAllPremiumUsersChatId();
+        List<String> keywordsByChatId = Collections.emptyList();
+        try {
+            String nameByChatId = userRepository.findNameByChatId(chatId);
+            String keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
+            keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
+            //List<Long> premiumChatIds = userRepository.findAllPremiumUsersChatId();
 
-        if (keywordsByChatId.isEmpty()) {
-            return;
-        }
+            if (keywordsByChatId.isEmpty()) {
+                return;
+            }
 
-        // Search
-        List<Headline> headlines = searchService.start(chatId, "keywords");
+            // Search
+            List<Headline> headlines = searchService.start(chatId, "keywords");
 
-        int counterParts = 1;
-        if (headlines.size() > 0) {
-            // INFO
-            log.info("Автопоиск: {}, {}, найдено {} за {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
+            int counterParts = 1;
+            if (headlines.size() > 0) {
+                // INFO
+                log.info("Автопоиск: {}, {}, найдено {} за {}", chatId, nameByChatId, headlines.size(), keywordsPeriod);
 
-            /* DEBUG PREMIUM USERS */
+                /* DEBUG PREMIUM USERS */
 //            for (Long id : premiumChatIds) {
 //                if (id == chatId) {
 //                    log.warn("# Автопоиск для премиум пользователя {}, {}. Найдено новостей: {}",
@@ -839,34 +841,36 @@ public class TelegramBot extends TelegramLongPollingBot {
 //                }
 //            }
 
-            if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
-                // 10 message in 1
-                StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
+                if (headlines.size() > Common.LIMIT_FOR_BREAKING_INTO_PARTS) {
+                    // 10 message in 1
+                    StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
 
-                for (Headline headline : headlines) {
-                    joiner.add(getHeadlinesText(chatId, headline));
+                    for (Headline headline : headlines) {
+                        joiner.add(getHeadlinesText(chatId, headline));
 
-                    if (counterParts == 10) {
-                        sendMessage(chatId, String.valueOf(joiner));
-                        joiner = new StringJoiner(getDelimiterNews(chatId));
-                        counterParts = 0;
+                        if (counterParts == 10) {
+                            sendMessage(chatId, String.valueOf(joiner));
+                            joiner = new StringJoiner(getDelimiterNews(chatId));
+                            counterParts = 0;
+                        }
+                        counterParts++;
                     }
-                    counterParts++;
-                }
 
-                // отправить оставшиеся новости
-                if (counterParts != 0) {
-                    sendMessage(chatId, String.valueOf(joiner));
-                }
+                    // отправить оставшиеся новости
+                    if (counterParts != 0) {
+                        sendMessage(chatId, String.valueOf(joiner));
+                    }
 
-            } else {
-                for (Headline headline : headlines) {
-                    String text = getHeadlinesText(chatId, headline);
+                } else {
+                    for (Headline headline : headlines) {
+                        String text = getHeadlinesText(chatId, headline);
 
-                    sendMessage(chatId, text);
+                        sendMessage(chatId, text);
+                    }
                 }
             }
-
+        } catch (Exception e) {
+            log.error("Error autoSearchNewsByKeywords: {}\n {}, keywords {}",  e.getMessage(), chatId, keywordsByChatId);
         }
     }
 
@@ -1986,14 +1990,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         StringJoiner joiner = new StringJoiner("\n");
         for (String source : sources) {
-            joiner.add("  <code>" +source + "</code>");
+            joiner.add("  <code>" + source + "</code>");
         }
         String list = rssSourcesText + "\n" + joiner;
 
         if (personalSources.size() > 0) {
             StringJoiner joinerPers = new StringJoiner("\n");
             for (String source : personalSources) {
-                joinerPers.add("  <code>" +source + "</code>");
+                joinerPers.add("  <code>" + source + "</code>");
             }
             list = list + "\n\n" + "<b>" + personalSourcesText + "</b>\n" + joinerPers;
         }
