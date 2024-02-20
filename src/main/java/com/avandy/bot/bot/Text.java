@@ -117,7 +117,7 @@ public class Text extends Common {
             listText = "Список";
             listText2 = "Список слов";
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
-            chooseSearchDepthText = "Интервал поиска равен текущему моменту минус глубина в часах\n" +
+            chooseSearchDepthText = "Интервал поиска равен текущему моменту минус глубина в часах.\n" +
                     "Выберите глубину поиска";
             sendIdeaText = "Написать отзыв";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
@@ -179,6 +179,7 @@ public class Text extends Common {
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Автопоиск %s
                     Запуск поиска раз в %s
+                    - - - - - - - - - - - - - - - - - - - - - - - -
                     Продвинутый поиск /advanced
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     %s""";
@@ -218,6 +219,7 @@ public class Text extends Common {
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Auto search %s
                     The search runs every <b>%s</b>
+                    - - - - - - - - - - - - - - - - - - - - - - - -
                     Advanced search /advanced
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     %s""";
@@ -339,7 +341,7 @@ public class Text extends Common {
             listText = "List";
             listText2 = "Word list";
             confirmDeletedUserText = "Do you confirm?";
-            chooseSearchDepthText = "Search time = current moment minus hours. Select time.";
+            chooseSearchDepthText = "Search time = current moment minus time in hours. Select time.";
             sendIdeaText = "Send feedback";
             listOfDeletedFromTopText = "List of deleted from the Top";
             fullSearchStartText = "» search all news in %s";
@@ -378,12 +380,12 @@ public class Text extends Common {
 
             String premiumRus = settings.getPremiumSearch();
             String onOffPremiumRus = "включить /prem_on";
-            if (premiumRus.contains("on")) onOffPremiumRus = "выключить /prem_off";
+            if (premiumRus.contains("on") || premiumRus.contains("включён")) onOffPremiumRus = "выключить /prem_off";
 
             if (isPremium == 1) {
                 String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
                 premiumPeriod = "<b>" + period + "</b>";
-                String rus = settings.getPremiumSearch().equals("on") ? "<b>вкл</b>" : "<b>выкл</b>";
+                String rus = settings.getPremiumSearch().equals("on") ? "<b>включён</b>" : "<b>выключен</b>";
                 premiumSettings = delimiterNews + "\n<b>Премиум поиск:</b> " + rus + "\n" +
                         "[" + onOffPremiumRus + "]\n" +
                         "<pre>Поиск производится каждые 2 минуты</pre>";
@@ -393,15 +395,15 @@ public class Text extends Common {
 
             String schedulerRus = settings.getScheduler();
             String onOffSchedulerRus = "включить /auto_on";
-            if (schedulerRus.contains("on")) onOffSchedulerRus = "выключить /auto_off";
+            if (schedulerRus.contains("on") || schedulerRus.contains("включён")) onOffSchedulerRus = "выключить /auto_off";
 
             String excludedRus = settings.getExcluded();
             String onOffExcludedRus = "включить /filter_on";
-            if (excludedRus.contains("on")) onOffExcludedRus = "выключить /filter_off";
+            if (excludedRus.contains("on") || excludedRus.contains("включён")) onOffExcludedRus = "выключить /filter_off";
 
             return "<b>Настройки</b> " + ICON_SETTINGS + " \n" +
                     delimiterNews + "\n" +
-                    "<b>Автопоиск</b> по словам: <b>" + schedulerRus.replaceAll("[onf\\[\\] ]", "") + "</b> [" +
+                    "<b>Автопоиск</b> по словам: <b>" + minusOnOff(schedulerRus) + "</b> [" +
                     onOffSchedulerRus + "]\n" +
                     //delimiterNews + "\n" +
                     "<b>Частота и интервал</b> автопоиска: <b>" + premiumPeriod + "</b> [изменить /change_key]\n" +
@@ -412,7 +414,7 @@ public class Text extends Common {
                     "<b>Полный поиск</b> новостей, интервал: <b>" + settings.getPeriodAll() + "</b> \n" +
                     "[изменить /change_full]\n" +
                     "<b>Фильтрация новостей</b>: <b>" +
-                    settings.getExcluded().replaceAll("[onf\\[\\] ]", "") + "</b> [" +
+                    minusOnOff(settings.getExcluded()) + "</b> [" +
                     onOffExcludedRus + "]\n" +
                     "<pre>Новости, содержащие слова-исключения, не будут показаны</pre>" +
                     delimiterNews + "\n" +

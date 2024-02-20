@@ -290,11 +290,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                         // Автопоиск
                         case "/auto_on" -> {
                             settingsRepository.updateScheduler("on", chatId);
-                            savedKeyboard(chatId, String.format(changesSavedText2, "on"));
+                            new Thread(() -> showKeywordsList(chatId)).start();
                         }
                         case "/auto_off" -> {
                             settingsRepository.updateScheduler("off", chatId);
-                            savedKeyboard(chatId, String.format(changesSavedText2, "off"));
+                            new Thread(() -> showKeywordsList(chatId)).start();
                         }
                         case "/change_key" -> keywordsChangePeriodKeyboard(chatId);
                         case "/change_time" -> startSearchTimeButtons(chatId);
@@ -903,9 +903,13 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         if (joinerKeywords != null && joinerKeywords.length() != 0) {
+            String auto = settingsRepository.getSchedulerOnOffByChatId(chatId);
+            String onOffSchedulerRus = "/auto_on";
+            if (auto.contains("on") || auto.contains("включён")) onOffSchedulerRus = "/auto_off";
+
             keywordsListKeyboard(chatId, String.format(
                     listKeywordsText,
-                    "<b>" + setOnOffRus(settingsRepository.getSchedulerOnOffByChatId(chatId), chatId) + "</b>",
+                    "<b>" + setOnOffRus(auto, chatId) + " </b>" + onOffSchedulerRus,
                     keywordsPeriod, joinerKeywords
             ));
         } else {
@@ -2156,7 +2160,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private String setOnOffRus(String value, long chatId) {
         String lang = settingsRepository.getLangByChatId(chatId);
         if (lang.equals("ru")) {
-            value = value.equals("on") ? "вкл [on]" : "выкл [off]";
+            value = value.equals("on") ? "включён" : "выключен";
         }
         return value;
     }

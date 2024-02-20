@@ -235,4 +235,8 @@ public class Common {
         return keyword;
     }
 
+    public static String minusOnOff(String text) {
+        return text.replaceAll("[onf\\[\\] ]", "");
+    }
+
 }
