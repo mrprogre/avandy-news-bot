@@ -26,7 +26,7 @@ public class Schedulers {
     private final CommonQuery commonQuery;
 
 
-    // Поиск новостей каждый час
+    // Поиск новостей по словам
     @Scheduled(cron = "${cron.search.keywords}")
     protected void autoSearchByKeywords() {
         List<Settings> usersSettings = settingsRepository.findAllSchedulerOn();
@@ -75,7 +75,7 @@ public class Schedulers {
         }
     }
 
-    // error: Мониторинг работы загрузчика новостей: раз в 1 час
+    // error: Мониторинг работы загрузчика новостей
     @Scheduled(cron = "${cron.monitoring.no.save.news}")
     void getStatNoSaveNews() {
         int newsListCounts = newsListRepository.getNewsListCountByPeriod("1 hour");
@@ -84,16 +84,16 @@ public class Schedulers {
         }
     }
 
-    // info: Мониторинг количества загруженных новостей: раз в 2 часа
+    // info: Мониторинг количества загруженных новостей
     @Scheduled(cron = "${cron.monitoring.save.news}")
     void getStatSaveNews() {
         int newsListCounts = newsListRepository.getNewsListCountByPeriod("2 hours");
         if (newsListCounts > 0) {
-            log.warn("За 2 часа сохранено новостей: {} ", newsListCounts);
+            log.info("За 2 часа сохранено новостей: {} ", newsListCounts);
         }
     }
 
-    // info: Очистка таблицы news_list раз в сутки в 4 утра
+    // info: Очистка таблицы news_list
     @Scheduled(cron = "${cron.delete.old.news}")
     void deleteOldNewsList() {
         if (adminRepository.findValueByKey("news_list_clear_scheduler").equals("on")) {
@@ -104,7 +104,7 @@ public class Schedulers {
         }
     }
 
-    // info: Очистка таблицы showed_news раз в сутки в 6 утра
+    // info: Очистка таблицы showed_news
     @Scheduled(cron = "${cron.delete.old.showed.news}")
     void deleteOldShowedNews() {
         if (adminRepository.findValueByKey("showed_news_clear_scheduler").equals("on")) {
@@ -115,7 +115,7 @@ public class Schedulers {
         }
     }
 
-    // info: Количество активных пользователей: раз в сутки в 8 утра
+    // info: Количество активных пользователей
     @Scheduled(cron = "${cron.active.users.count}")
     void activeUsersCount() {
         int usersCount = userRepository.activeUsersCount();
@@ -124,12 +124,12 @@ public class Schedulers {
         }
     }
 
-    // Удаление пользователей, заблокировавших бота, каждые 30 минут
+    // Удаление пользователей, заблокировавших бота
     @Scheduled(cron = "${cron.delete.users.blocked}")
     void deleteBlockedUsers() {
         int count = userRepository.deleteBlockedUsers();
         if (count > 0)
-            log.warn("# Удалено неактивных пользователей: " + count);
+            log.info("# Удалено неактивных пользователей: " + count);
     }
 
     // Отключение Premium по истечении его срока
