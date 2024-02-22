@@ -754,7 +754,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         int counterParts = 1;
         if (headlines.size() > 0) {
             // INFO
-            log.warn("Найдено: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
+            if (chatId != Common.DEV_ID) {
+                log.warn("Найдено: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
+            }
 
             newsListKeySearchCounter.put(chatId, 0);
             newsListKeySearchData.put(chatId, headlines);
@@ -870,7 +872,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
             }
         } catch (Exception e) {
-            log.error("Error autoSearchNewsByKeywords: {}\n {}, keywords {}",  e.getMessage(), chatId, keywordsByChatId);
+            log.error("Error autoSearchNewsByKeywords: {}\n {}, keywords {}", e.getMessage(), chatId, keywordsByChatId);
         }
     }
 
