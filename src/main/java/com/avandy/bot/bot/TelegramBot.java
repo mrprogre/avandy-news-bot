@@ -1843,7 +1843,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setStart(LocalTime.of(10, 0));
         settings.setExcluded("on");
         settings.setLang("en");
-        settings.setJaroWinkler("on");
+        settings.setJaroWinkler("off");
         settings.setPremiumSearch("on");
         settings.setMessageTheme(1);
         settingsRepository.save(settings);
