@@ -135,24 +135,24 @@ public class Search implements SearchService {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
 
-            String type = searchType.replaceAll(Common.REPLACE_ALL_TOP, "");
+            String word = searchType.replaceAll(Common.REPLACE_ALL_TOP, "");
             // Замена окончаний слов на *. Применяется только к русским словам.
-            boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", type);
-            if (type.length() > 4 && isOnlyRussianLetters) {
-                type = Common.replaceWordsEnd(type);
+            boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", word);
+            if (word.length() > 4 && isOnlyRussianLetters) {
+                word = Common.replaceWordsEnd(word);
             }
             // замена * на любой текстовый символ, который может быть или не быть
-            if (type.contains("*")) type = type.replace("*", "\\w?");
+            if (word.contains("*")) word = word.replace("*", "\\w?");
 
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
             if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
-                newsList = newsListRepository.getNewsWithLike(period, type, userLanguage, chatId);
+                newsList = newsListRepository.getNewsWithLike(period, word, userLanguage, chatId);
             } else {
                 try {
-                    newsList = newsListRepository.getNewsWithRegexp(period, type, userLanguage, chatId);
+                    newsList = newsListRepository.getNewsWithRegexp(period, word, userLanguage, chatId);
                 } catch (Exception e) {
-                    log.warn(e.getMessage() + ". Word = " + type);
+                    log.warn(e.getMessage() + ". Word = " + word);
                     return null;
                 }
             }
