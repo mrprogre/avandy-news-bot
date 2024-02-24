@@ -1851,7 +1851,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         settings.setChatId(chatId);
         settings.setPeriod("4h");
         settings.setPeriodAll("2h");
-        settings.setPeriodTop("8h");
+        settings.setPeriodTop("12h");
         settings.setScheduler("on");
         settings.setStart(LocalTime.of(10, 0));
         settings.setExcluded("on");
@@ -2233,8 +2233,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         Map<String, String> buttons = new LinkedHashMap<>();
 
-        buttons.put("ADD_KEYWORD_FROM_CHAT", addText + ": " + word);
-        buttons.put("SEARCH_BY_WORD", searchText + ": " + word);
+        buttons.put("ADD_KEYWORD_FROM_CHAT", saveText);
+        buttons.put("SEARCH_BY_WORD", findNewsText);
         oneWordFromChat.put(chatId, word);
 
         sendMessageWithPreview(chatId, undefinedCommandText, InlineKeyboards.maker(buttons));

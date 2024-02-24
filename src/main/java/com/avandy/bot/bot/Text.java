@@ -28,7 +28,7 @@ public class Text extends Common {
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
-            messageThemeChooseText2, personalSourcesText;
+            messageThemeChooseText2, personalSourcesText, saveText, findNewsText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -58,6 +58,7 @@ public class Text extends Common {
             updateTopText = "Обновить";
             updateTopText2 = "Top 20";
             undefinedCommandText = "Что сделать с этим словом? " + ICON_SMILE_UPSIDE_DOWN;
+            saveText = "Сохранить";
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
             changesSavedText3 = "Внешний вид сообщений с новостями изменён на: %s ✔️ \n";
@@ -197,7 +198,9 @@ public class Text extends Common {
             messageThemeChooseText2 = "Внешний вид новостей ";
             noCommasText = "Страну, название и ссылку необходимо разделить запятыми";
             personalSourcesText = "Персональные источники";
+            findNewsText = "Искать новости";
         } else {
+            findNewsText = "Find news";
             personalSourcesText = "Personal sources";
             noCommasText = "Country, name and link must be separated by commas";
             messageThemeChooseText = "Select a message appearance option. Current theme: %s";
@@ -278,6 +281,7 @@ public class Text extends Common {
             searchText = "Search";
             excludedText = "Excluded";
             undefinedCommandText = "What to do with this word? " + ICON_SMILE_UPSIDE_DOWN;
+            saveText = "Save";
             changesSavedText = "Done ✔️";
             changesSavedText2 = "Done: %s ✔️";
             changesSavedText3 = "The appearance of news messages has been changed to: %s ✔️!";
