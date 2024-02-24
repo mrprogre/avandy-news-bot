@@ -136,6 +136,14 @@ public class Search implements SearchService {
                     () -> periodMinutes = 1440);
 
             String type = searchType.replaceAll(Common.REPLACE_ALL_TOP, "");
+            // Замена окончаний слов на *. Применяется только к русским словам.
+            boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", type);
+            if (type.length() > 4 && isOnlyRussianLetters) {
+                type = Common.replaceWordsEnd(type);
+            }
+            // замена * на любой текстовый символ, который может быть или не быть
+            if (type.contains("*")) type = type.replace("*", "\\w?");
+
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
             if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
