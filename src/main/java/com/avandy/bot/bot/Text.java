@@ -24,7 +24,7 @@ public class Text extends Common {
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
-            historyClearText, advancedSearch, addText3, addSourceText, delSourceText, addSourceInfoText,
+            historyClearText, advancedSearch, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
@@ -49,8 +49,7 @@ public class Text extends Common {
             listExcludedText = "Слова-исключения";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
-            addText2 = "Добавить слова для поиска";
-            addText3 = "Добавить слова";
+            addText2 = "Добавить слова";
             delText = "Удалить";
             excludeWordText = "Исключить";
             excludeWordText2 = "Добавить слова-исключения";
@@ -273,8 +272,7 @@ public class Text extends Common {
             listExcludedText = "Excluding terms";
             deleteUserText = "Delete user data";
             addText = "Add";
-            addText2 = "Add words to search";
-            addText3 = "Add words";
+            addText2 = "Add words";
             delText = "Delete";
             excludeWordText = "Exclude term";
             excludeWordText2 = "Add excluding terms";

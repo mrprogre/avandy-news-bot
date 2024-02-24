@@ -62,6 +62,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, List<Headline>> newsListTopSearchData = new ConcurrentHashMap<>();
     private final Map<Long, Integer> newsListTopSearchCounter = new ConcurrentHashMap<>();
     private final Map<Long, Integer> newsListTopSearchMessageId = new ConcurrentHashMap<>();
+    //
+    private final Map<Long, String> oneWordFromChat = new ConcurrentHashMap<>();
     // Repository
     private final SearchService searchService;
     private final BotConfig config;
@@ -326,7 +328,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         case "/delete" -> showYesNoOnDeleteUser(chatId);
                         case "/top" -> new Thread(() -> showTop(chatId)).start();
                         case "/premium" -> new Thread(() -> showYesNoGetPremium(chatId)).start();
-                        default -> undefinedKeyboard(chatId);
+                        default -> undefinedKeyboard(chatId, messageText);
                     }
                 }
                 userStates.remove(chatId);
@@ -484,6 +486,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     /* FULL SEARCH */
                     case "FIND_ALL" -> new Thread(() -> fullSearch(chatId)).start();
+
+                    /* Поиск по одному слову, введённому пользователем, просто в общем чате */
+                    case "SEARCH_BY_WORD" -> new Thread(() ->
+                            wordSearch(chatId, oneWordFromChat.get(chatId), "chat")).start();
+                    // добавить слово из чата в список ключевых слов
+                    case "ADD_KEYWORD_FROM_CHAT" -> new Thread(() ->
+                            addKeyword(chatId, Set.of(oneWordFromChat.get(chatId)))).start();
 
                     /* EXCLUDED */
                     case "LIST_EXCLUDED" -> getExcludedList(chatId);
@@ -920,7 +929,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Добавление ключевых слов
-    private boolean addKeyword(long chatId, HashSet<String> keywords) {
+    private boolean addKeyword(long chatId, Set<String> keywords) {
         int counter = 0;
         int isPremium = userRepository.isPremiumByChatId(chatId);
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
@@ -1052,7 +1061,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addKeywordsKeyboardOrTop(long chatId, String text) {
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("GET_TOP", updateTopText2);
-        buttons.put("ADD_KEYWORD", addText3);
+        buttons.put("ADD_KEYWORD", addText2);
         sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
@@ -1504,7 +1513,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void searchNewsTop(int wordNum, long chatId) {
         try {
             String word = getWordByNumber(wordNum, chatId);
-            wordSearch(chatId, word);
+            wordSearch(chatId, word, "top");
         } catch (NullPointerException npe) {
             sendMessage(chatId, startSearchBeforeText);
         }
@@ -1529,7 +1538,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Механизм поиска по слову из Топа
-    private void wordSearch(long chatId, String word) {
+    private void wordSearch(long chatId, String word, String type) {
         newsListTopSearchCounter.put(chatId, 0);
 
         // DEBUG
@@ -1550,11 +1559,15 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             if (counterParts != 0) {
-                Integer id = newsListTopSearchMessageId.get(chatId);
-                if (id == null) {
+                if (type.equals("top")) {
+                    Integer id = newsListTopSearchMessageId.get(chatId);
+                    if (id == null) {
+                        afterTopSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
+                    } else {
+                        getNewsListTopPage(chatId, 0, id);
+                    }
+                } else if (type.equals("chat")) {
                     afterTopSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
-                } else {
-                    getNewsListTopPage(chatId, 0, id);
                 }
             }
 
@@ -2214,19 +2227,17 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // После ввода пользователем несуществующей команды предложить добавить слова или выбрать поиск
-    void undefinedKeyboard(long chatId) {
-        Map<String, String> buttons1 = new LinkedHashMap<>();
-        Map<String, String> buttons2 = new LinkedHashMap<>();
-        Map<String, String> buttons3 = new LinkedHashMap<>();
-        buttons1.put("ADD_KEYWORD", addText2);
-        buttons2.put("ADD_EXCLUDED", excludeWordText2);
-        //buttons3.put("START_SEARCH", findSelectText);
-        buttons3.put("FIND_ALL", fullSearchText);
-        buttons3.put("GET_TOP", updateTopText2);
-        buttons3.put("FIND_BY_KEYWORDS", keywordsSearchText);
+    void undefinedKeyboard(long chatId, String messageText) {
+        if (checkUserInput(chatId, messageText)) return;
+        String word = messageText.trim().toLowerCase();
 
-        sendMessageWithPreview(chatId, undefinedCommandText,
-                InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
+        Map<String, String> buttons = new LinkedHashMap<>();
+
+        buttons.put("ADD_KEYWORD_FROM_CHAT", addText + ": " + word);
+        buttons.put("SEARCH_BY_WORD", searchText + ": " + word);
+        oneWordFromChat.put(chatId, word);
+
+        sendMessageWithPreview(chatId, undefinedCommandText, InlineKeyboards.maker(buttons));
     }
 
     void setThemeKeyboard(long chatId) {
