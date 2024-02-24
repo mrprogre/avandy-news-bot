@@ -57,8 +57,7 @@ public class Text extends Common {
             excludedText = "Исключённое";
             updateTopText = "Обновить";
             updateTopText2 = "Top 20";
-            undefinedCommandText = "Данная команда не существует, либо Вы не нажали кнопку перед вводом текста " +
-                    ICON_SMILE_UPSIDE_DOWN;
+            undefinedCommandText = "Что сделать с этим словом? " + ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
             changesSavedText3 = "Внешний вид сообщений с новостями изменён на: %s ✔️ \n";
@@ -278,8 +277,7 @@ public class Text extends Common {
             excludeWordText2 = "Add excluding terms";
             searchText = "Search";
             excludedText = "Excluded";
-            undefinedCommandText = "This command doesn't exist or you did not click the button before entering text! " +
-                    "However, I will see your message in the journal " + ICON_SMILE_UPSIDE_DOWN;
+            undefinedCommandText = "What to do with this word? " + ICON_SMILE_UPSIDE_DOWN;
             changesSavedText = "Done ✔️";
             changesSavedText2 = "Done: %s ✔️";
             changesSavedText3 = "The appearance of news messages has been changed to: %s ✔️!";
