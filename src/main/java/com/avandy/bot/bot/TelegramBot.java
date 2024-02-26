@@ -747,7 +747,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // DEBUG
         if (OWNER_ID != chatId) {
-            log.info("Ручной запуск поиска по ключевым словам: {}, {} за сутки", chatId, nameByChatId);
+            log.warn("Ручной запуск поиска по словам: {}, {}", chatId, nameByChatId);
         }
 
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
@@ -1159,7 +1159,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void fullSearch(long chatId) {
         // DEBUG
         if (OWNER_ID != chatId) {
-            log.info("{}: Запуск полного поиска", chatId);
+            log.warn("{}: Запуск полного поиска", chatId);
         }
 
         getReplyKeyboard(chatId, String.format(fullSearchStartText, settingsRepository.getFullSearchPeriod(chatId)));
@@ -1545,7 +1545,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // DEBUG
         if (OWNER_ID != chatId) {
-            log.info("{}: Запуск поиска по словам из Топ 20", chatId);
+            log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 
         List<Headline> headlines = searchService.start(chatId, word);
