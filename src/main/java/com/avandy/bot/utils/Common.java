@@ -22,7 +22,7 @@ public class Common {
     public static final int EXCLUDED_LIMIT = 100;
     public static final int LIMIT_FOR_BREAKING_INTO_PARTS = 50;
     public static final int MAX_KEYWORDS_COUNT_PREMIUM = 100;
-    public static final int MAX_KEYWORDS_COUNT = 5;
+    public static final int MAX_KEYWORDS_COUNT = 3;
     public static final int MAX_EXCL_TERMS_COUNT = 10;
     public static final String ERROR_TEXT = "Error occurred: ";
     public static final String ICON_SEARCH = "\uD83C\uDFB2";
