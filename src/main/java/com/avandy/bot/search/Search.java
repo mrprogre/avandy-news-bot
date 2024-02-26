@@ -143,6 +143,9 @@ public class Search implements SearchService {
             }
             // замена * на любой текстовый символ, который может быть или не быть
             if (word.contains("*")) word = word.replace("*", "\\w?");
+            // Экранирование специальных символов regex, чтобы "C++" толковалось корректно
+            if (word.contains("+")) word = word.replace("+", "\\+");
+            if (word.contains("-")) word = word.replace("-", "\\-");
 
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
@@ -175,6 +178,9 @@ public class Search implements SearchService {
 
             for (String word : allExcludedByChatId) {
                 if (word.contains("*")) word = word.replace("*", "\\w?");
+                // Экранирование специальных символов regex, чтобы "C++" толковалось корректно
+                if (word.contains("+")) word = word.replace("+", "\\+");
+                if (word.contains("-")) word = word.replace("-", "\\-");
 
                 String finalWord = word;
                 headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(finalWord.toLowerCase()));
