@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Common {
-    public static final long DEV_ID = 1254981379L;
     public static final int BOT_PRICE_RUS = 1800;
     public static final double BOT_PRICE_ENG = 49.90;
     public static final int JARO_WINKLER_LEVEL = 85;

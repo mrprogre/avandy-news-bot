@@ -12,7 +12,8 @@
   Restart=on-failure
   
   Environment="AVANDY_NEWS_BOT_TOKEN=***"
+  Environment="AVANDY_NEWS_BOT_OWNER=***"
   Environment="POSTGRES_16_PWD=***"
- 
+
 [Install]
   WantedBy=multiuser.target

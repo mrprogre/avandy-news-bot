@@ -45,6 +45,8 @@ import static com.avandy.bot.bot.Text.*;
 public class TelegramBot extends TelegramLongPollingBot {
     @Value("${bot.token}")
     private String TOKEN;
+    @Value("${bot.owner}")
+    public long OWNER_ID;
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
     private final Map<Long, StringBuilder> usersTop = new ConcurrentHashMap<>();
     private final Map<Long, Integer> usersTopPage = new ConcurrentHashMap<>();
@@ -130,7 +132,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 UserState userState = userStates.get(chatId);
 
                 // DEBUG: запись действий пользователя для анализа
-                if (Common.DEV_ID != chatId) {
+                if (OWNER_ID != chatId) {
                     if (userState != null)
                         log.warn("{}, {}: message: {}", chatId, userRepository.findNameByChatId(chatId),
                                 userState + " " + messageText);
@@ -367,7 +369,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
                     case "YES_PREMIUM" -> {
-                        sendMessage(Common.DEV_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
+                        sendMessage(OWNER_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
                                 userRepository.findNameByChatId(chatId)));
                         //sendMessage(chatId, getPremiumRequestText);
                         sendPaymentPremium(chatId, getPremiumRequestText);
@@ -744,7 +746,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         String nameByChatId = userRepository.findNameByChatId(chatId);
 
         // DEBUG
-        if (Common.DEV_ID != chatId) {
+        if (OWNER_ID != chatId) {
             log.info("Ручной запуск поиска по ключевым словам: {}, {} за сутки", chatId, nameByChatId);
         }
 
@@ -763,7 +765,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int counterParts = 1;
         if (headlines.size() > 0) {
             // INFO
-            if (chatId != Common.DEV_ID) {
+            if (chatId != OWNER_ID) {
                 log.warn("Найдено: {}, {}, новостей {}", chatId, nameByChatId, headlines.size());
             }
 
@@ -936,7 +938,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         int currentKeywordsCount = keywordRepository.getKeywordsCountByChatId(chatId);
         int totalKeywordsCount = currentKeywordsCount + keywords.size();
 
-        if (isPremium != 1 && totalKeywordsCount > Common.MAX_KEYWORDS_COUNT && chatId != Common.DEV_ID) {
+        if (isPremium != 1 && totalKeywordsCount > Common.MAX_KEYWORDS_COUNT && chatId != OWNER_ID) {
             sendMessage(chatId, premiumIsActive3);
             return false;
         }
@@ -1156,7 +1158,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Полный поиск
     private void fullSearch(long chatId) {
         // DEBUG
-        if (Common.DEV_ID != chatId) {
+        if (OWNER_ID != chatId) {
             log.info("{}: Запуск полного поиска", chatId);
         }
 
@@ -1275,7 +1277,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
         int total = excludedByChatId.size() + list.length;
 
-        if (isPremium != 1 && total > Common.MAX_EXCL_TERMS_COUNT && chatId != Common.DEV_ID) {
+        if (isPremium != 1 && total > Common.MAX_EXCL_TERMS_COUNT && chatId != OWNER_ID) {
             sendMessage(chatId, premiumIsActive5);
             return;
         }
@@ -1542,7 +1544,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         newsListTopSearchCounter.put(chatId, 0);
 
         // DEBUG
-        if (Common.DEV_ID != chatId) {
+        if (OWNER_ID != chatId) {
             log.info("{}: Запуск поиска по словам из Топ 20", chatId);
         }
 
@@ -2128,7 +2130,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Отправка сообщения разработчику
     private void sendFeedback(long chatIdFrom, String text) {
         String userName = userRepository.findNameByChatId(chatIdFrom);
-        sendMessage(Common.DEV_ID, "Message from " + userName + ", " + chatIdFrom + ":\n" + text);
+        sendMessage(OWNER_ID, "Message from " + userName + ", " + chatIdFrom + ":\n" + text);
     }
 
     // Отправка сообщения разработчику с приложением скриншота как документа
@@ -2140,7 +2142,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<PhotoSize> photos = update.getMessage().getPhoto();
 
         SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(Common.DEV_ID);
+        sendPhoto.setChatId(OWNER_ID);
         sendPhoto.setCaption("Message from " + userName + ", " + chatIdFrom + ":\n" + caption);
 
         List<PhotoSize> photo = update.getMessage().getPhoto();
