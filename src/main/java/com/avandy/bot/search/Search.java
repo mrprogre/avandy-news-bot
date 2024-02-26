@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -96,16 +95,7 @@ public class Search implements SearchService {
             Set<NewsList> newsList;
             for (String keyword : keywords) {
                 // Замена окончаний слов на *. Применяется только к русским словам.
-                boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", keyword);
-                if (keyword.length() > 4 && isOnlyRussianLetters) {
-                    keyword = Common.replaceWordsEnd(keyword);
-                }
-
-                // замена * на любой текстовый символ, который может быть или не быть
-                if (keyword.contains("*")) keyword = keyword.replace("*", "\\w?");
-                // Экранирование специальных символов regex, чтобы "C++" толковалось корректно
-                if (keyword.contains("+")) keyword = keyword.replace("+", "\\+");
-                if (keyword.contains("-")) keyword = keyword.replace("-", "\\-");
+                keyword = Common.replaceCharsForRegexp(keyword);
 
                 try {
                     newsList = newsListRepository.getNewsWithRegexp(period, keyword, userLanguage, chatId);
@@ -136,16 +126,7 @@ public class Search implements SearchService {
                     () -> periodMinutes = 1440);
 
             String word = searchType.replaceAll(Common.REPLACE_ALL_TOP, "");
-            // Замена окончаний слов на *. Применяется только к русским словам.
-            boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", word);
-            if (word.length() > 4 && isOnlyRussianLetters) {
-                word = Common.replaceWordsEnd(word);
-            }
-            // замена * на любой текстовый символ, который может быть или не быть
-            if (word.contains("*")) word = word.replace("*", "\\w?");
-            // Экранирование специальных символов regex, чтобы "C++" толковалось корректно
-            if (word.contains("+")) word = word.replace("+", "\\+");
-            if (word.contains("-")) word = word.replace("-", "\\-");
+            word = Common.replaceCharsForRegexp(word);
 
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
@@ -177,12 +158,7 @@ public class Search implements SearchService {
             List<String> allExcludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
 
             for (String word : allExcludedByChatId) {
-                if (word.contains("*")) word = word.replace("*", "\\w?");
-                // Экранирование специальных символов regex, чтобы "C++" толковалось корректно
-                if (word.contains("+")) word = word.replace("+", "\\+");
-                if (word.contains("-")) word = word.replace("-", "\\-");
-
-                String finalWord = word;
+                String finalWord = Common.replaceSpecialSymbols(word);
                 headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(finalWord.toLowerCase()));
             }
         }

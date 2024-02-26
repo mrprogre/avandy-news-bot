@@ -11,6 +11,7 @@ import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class Common {
@@ -215,6 +216,28 @@ public class Common {
             log.warn("Common.replaceWordsEnd error: " + e.getMessage());
         }
         return initKeyword;
+    }
+
+    public static String replaceCharsForRegexp(String word) {
+        // Замена окончаний слов на *. Применяется только к русским словам.
+        boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", word);
+
+        if (word.length() > 4 && isOnlyRussianLetters) {
+            word = Common.replaceWordsEnd(word);
+        }
+        word = replaceSpecialSymbols(word);
+        return word;
+    }
+
+    // Подготовка данных для регулярного выражения
+    public static String replaceSpecialSymbols(String word) {
+        // замена * на любой текстовый символ, который может быть или не быть
+        if (word.contains("*")) word = word.replace("*", "\\w?");
+
+        // Экранирование специальных символов regex, чтобы "C++" толковалось корректно
+        if (word.contains("+")) word = word.replace("+", "\\+");
+        if (word.contains("-")) word = word.replace("-", "\\-");
+        return word;
     }
 
     // формирование строки с * для слов с пробелами и тире
