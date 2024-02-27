@@ -1544,7 +1544,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // DEBUG
         if (OWNER_ID != chatId) {
-            log.warn("{}: Запуск поиска по словам из Топ 20", chatId);
+            log.warn("{}: Top 20 поиск по слову: {}", chatId, word);
         }
 
         List<Headline> headlines = searchService.start(chatId, word);
