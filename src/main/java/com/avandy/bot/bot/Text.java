@@ -238,7 +238,7 @@ public class Text extends Common {
                     ICON_PREMIUM_IS_ACTIVE;
             initSearchTemplateText = ". %s%s\n<pre>List: <b>%d</b> %s</pre>";
             searchNewsHeaderText = "Search news";
-            greetingText = EmojiParser.parseToUnicode("Hello, %s! :blush: \n" +
+            greetingText = EmojiParser.parseToUnicode("Hello! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
             letsStartText = "Continue?";
             noText = "No";
