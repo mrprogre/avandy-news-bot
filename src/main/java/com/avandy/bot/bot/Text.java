@@ -24,7 +24,7 @@ public class Text extends Common {
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
-            historyClearText, advancedSearch, addSourceText, delSourceText, addSourceInfoText,
+            historyClearText, addSourceText, delSourceText, addSourceInfoText,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
@@ -151,7 +151,7 @@ public class Text extends Common {
             premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive5 = "Добавление <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> возможно в /premium режиме";
             yesButtonText = """
-                    Добавьте <b>слова или фразы</b> по которым я буду искать новости для Вас (продвинутый поиск /advanced)
+                    Добавьте <b>слова или фразы</b> по которым я буду искать новости для Вас
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Нажмите кнопку <b>Добавить</b> или посмотрите о чём сейчас пишут СМИ, нажав на <b>Top 20</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -161,25 +161,11 @@ public class Text extends Common {
             premiumSearchSettingsText = "Премиум поиск";
             sendPaymentText = "Отправить скриншот с оплатой";
             cleanFullSearchHistoryText = "Очистить историю ";
-            advancedSearch = """
-                    Для получения большего количества результатов при меньшем количестве слов
-                    используйте символ <b>*</b> вместо любой буквы в слове.
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    <b>К примеру,</b> слово <b>курс</b> найдёт новости содержащие только это слово без окончаний
-                    <b>курс*</b> найдёт как <b>курс</b>, так и <b>курсы</b>
-                    <b>курс**</b> найдёт <b>курс, курсы, курсах</b>, но новостей с <b>курсами</b> не найдёт, т.к. надо указать три звёздочки
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Можно искать новости <b>по фразам</b>:
-                    Фраза <b>Росси* созда**</b> найдёт новости содержащие: в <b>России создана, Россия создала</b>
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Перейти в раздел /keywords""";
             listKeywordsText = """
                     <b>Слова для поиска</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Автопоиск %s
                     Запуск поиска раз в %s
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Продвинутый поиск /advanced
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     %s""";
             addSourceText = "Добавить RSS";
@@ -221,22 +207,14 @@ public class Text extends Common {
                     Auto search %s
                     The search runs every <b>%s</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
-                    Advanced search /advanced
-                    - - - - - - - - - - - - - - - - - - - - - - - -
                     %s""";
-            advancedSearch = """
-                    However you can use the <b>*</b> symbol
-                    1. <b>tax</b> will find all news only with <b>tax</b> but not <b>taxes, taxcom</b>.
-                    2. <b>tax**</b> will find <b>tax, taxi, taxes</b> but not <b>taxcom</b>.
-                    3. <b>pay tax**</b> will find headlines with <b>pay taxes</b>.
-                    Go to /keywords section""";
             cleanFullSearchHistoryText = "clear browsing history ";
             sendPaymentText = "Send transfer confirmation";
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
             yesButtonText = """
-                    The first thing to do is add <b>keywords or phrases</b> (/advanced search)
+                    The first thing to do is add <b>keywords or phrases</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -

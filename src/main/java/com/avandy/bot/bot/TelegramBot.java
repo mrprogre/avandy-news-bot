@@ -288,7 +288,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                             showedNewsRepository.deleteHistoryManual(chatId);
                             sendMessage(chatId, historyClearText);
                         }
-                        case "/advanced" -> new Thread(() -> advancedSearchText(chatId)).start();
                         case "/theme" -> new Thread(() -> setThemeKeyboard(chatId)).start();
 
                         // Автопоиск
@@ -2221,11 +2220,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("ADD_RSS", addSourceText);
         sendMessageWithPreview(chatId, getRssList(chatId),
                 InlineKeyboards.maker(buttons));
-    }
-
-    // Кнопки раздела Инфо (/info)
-    private void advancedSearchText(long chatId) {
-        sendMessage(chatId, advancedSearch);
     }
 
     // После ввода пользователем несуществующей команды предложить добавить слова или выбрать поиск
