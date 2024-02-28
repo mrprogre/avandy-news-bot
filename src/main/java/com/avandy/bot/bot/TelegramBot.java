@@ -291,15 +291,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                         case "/theme" -> new Thread(() -> setThemeKeyboard(chatId)).start();
 
                         // Автопоиск
-                        case "/auto_on" -> {
+                        case "/on" -> {
                             settingsRepository.updateScheduler("on", chatId);
                             new Thread(() -> showKeywordsList(chatId)).start();
                         }
-                        case "/auto_off" -> {
+                        case "/off" -> {
                             settingsRepository.updateScheduler("off", chatId);
                             new Thread(() -> showKeywordsList(chatId)).start();
                         }
-                        case "/change_key" -> keywordsChangePeriodKeyboard(chatId);
+                        case "/interval" -> keywordsChangePeriodKeyboard(chatId);
                         case "/change_time" -> startSearchTimeButtons(chatId);
 
                         // Полный поиск
@@ -916,13 +916,16 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (joinerKeywords != null && joinerKeywords.length() != 0) {
             String auto = settingsRepository.getSchedulerOnOffByChatId(chatId);
-            String onOffSchedulerRus = "/auto_on";
-            if (auto.contains("on") || auto.contains("включён")) onOffSchedulerRus = "/auto_off";
+            int theme = settingsRepository.getMessageTheme(chatId);
+            String onOffSchedulerRus = "/on";
+            if (auto.contains("on") || auto.contains("включён")) onOffSchedulerRus = "/off";
 
             keywordsListKeyboard(chatId, String.format(
                     listKeywordsText,
+                    joinerKeywords,
                     "<b>" + setOnOffRus(auto, chatId) + " </b>" + onOffSchedulerRus,
-                    keywordsPeriod, joinerKeywords
+                    keywordsPeriod + " /interval",
+                    "<b>" + theme + "</b> /theme"
             ));
         } else {
             addKeywordsKeyboard(chatId, setupKeywordsText);

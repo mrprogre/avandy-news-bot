@@ -161,13 +161,6 @@ public class Text extends Common {
             premiumSearchSettingsText = "Премиум поиск";
             sendPaymentText = "Отправить скриншот с оплатой";
             cleanFullSearchHistoryText = "Очистить историю ";
-            listKeywordsText = """
-                    <b>Слова для поиска</b>
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Автопоиск %s
-                    Запуск поиска раз в %s
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    %s""";
             addSourceText = "Добавить RSS";
             delSourceText = "Удалить";
             addSourceInfoText = "Введите <b>страну</b> источника, его <b>название</b> и <b>веб ссылку на XML</b> " +
@@ -185,7 +178,23 @@ public class Text extends Common {
             noCommasText = "Страну, название и ссылку необходимо разделить запятыми";
             personalSourcesText = "Персональные источники";
             findNewsText = "Искать новости";
+            listKeywordsText = """
+                    <b>Слова для поиска</b>
+                    %s
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    Автопоиск %s
+                    Запуск поиска раз в %s
+                    Внешний вид новостей: %s
+                    - - - - - - - - - - - - - - - - - - - - - - - -""";
         } else {
+            listKeywordsText = """
+                    <b>Keywords</b>
+                    %s
+                    - - - - - - - - - - - - - - - - - - - - - - - -
+                    Auto search %s
+                    The search runs every <b>%s</b>
+                    News appearance: %s
+                    - - - - - - - - - - - - - - - - - - - - - - - -""";
             findNewsText = "Find news";
             personalSourcesText = "Personal sources";
             noCommasText = "Country, name and link must be separated by commas";
@@ -201,13 +210,6 @@ public class Text extends Common {
             delSourceInfoText = "Delete <b>your</b> source by its name";
             addSourceText = "Add RSS";
             delSourceText = "Delete";
-            listKeywordsText = """
-                    <b>Keywords</b>
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Auto search %s
-                    The search runs every <b>%s</b>
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    %s""";
             cleanFullSearchHistoryText = "clear browsing history ";
             sendPaymentText = "Send transfer confirmation";
             premiumSearchSettingsText = "Premium search";
@@ -372,8 +374,8 @@ public class Text extends Common {
             }
 
             String schedulerRus = settings.getScheduler();
-            String onOffSchedulerRus = "включить /auto_on";
-            if (schedulerRus.contains("on") || schedulerRus.contains("включён")) onOffSchedulerRus = "выключить /auto_off";
+            String onOffSchedulerRus = "включить /on";
+            if (schedulerRus.contains("on") || schedulerRus.contains("включён")) onOffSchedulerRus = "выключить /off";
 
             String excludedRus = settings.getExcluded();
             String onOffExcludedRus = "включить /filter_on";
@@ -384,7 +386,7 @@ public class Text extends Common {
                     "<b>Автопоиск</b> по словам: <b>" + minusOnOff(schedulerRus) + "</b> [" +
                     onOffSchedulerRus + "]\n" +
                     //delimiterNews + "\n" +
-                    "<b>Частота и интервал</b> автопоиска: <b>" + premiumPeriod + "</b> [изменить /change_key]\n" +
+                    "<b>Частота и интервал</b> автопоиска: <b>" + premiumPeriod + "</b> [изменить /interval]\n" +
                     "<pre>В результатах поиска представлены новости за выбранный интервал</pre>\n" +
                     schedSettings +
                     premiumSettings +
