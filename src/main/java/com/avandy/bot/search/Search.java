@@ -124,15 +124,14 @@ public class Search implements SearchService {
         if (isSearchByOneWordFromTop) {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
-
             String word = searchType.replaceAll(Common.REPLACE_ALL_TOP, "");
-            word = Common.replaceCharsForRegexp(word);
 
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
             if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
                 newsList = newsListRepository.getNewsWithLike(period, word, userLanguage, chatId);
             } else {
+                word = Common.replaceCharsForRegexp(word);
                 try {
                     newsList = newsListRepository.getNewsWithRegexp(period, word, userLanguage, chatId);
                 } catch (Exception e) {

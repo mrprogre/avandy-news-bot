@@ -1432,6 +1432,61 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+
+    // Поиск новостей по слову из Топа
+    private void searchNewsTop(int wordNum, long chatId) {
+        try {
+            String word = getWordByNumber(wordNum, chatId);
+            wordSearch(chatId, word, "top");
+        } catch (NullPointerException npe) {
+            sendMessage(chatId, startSearchBeforeText);
+        }
+    }
+
+    // Механизм поиска по слову из Топа
+    private void wordSearch(long chatId, String word, String type) {
+        newsListTopSearchCounter.put(chatId, 0);
+
+        // DEBUG
+        if (OWNER_ID != chatId) {
+            if (type.equals("top")) {
+                log.warn("{}: Top 20 поиск по слову: {}", chatId, word);
+            } else {
+                log.warn("{}: Поиск в чате по слову: {}", chatId, word);
+            }
+        }
+
+        List<Headline> headlines = searchService.start(chatId, word);
+        newsListTopSearchData.put(chatId, headlines);
+
+        int counterParts = 1;
+        if (headlines.size() > 0) {
+            StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
+            for (Headline headline : newsListTopSearchData.get(chatId)) {
+                joiner.add(getHeadlinesText(chatId, headline));
+
+                if (counterParts++ == topSearchOffset) break;
+            }
+
+            if (counterParts != 0) {
+                if (type.equals("top")) {
+                    Integer id = newsListTopSearchMessageId.get(chatId);
+                    if (id == null) {
+                        afterTopSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
+                    } else {
+                        getNewsListTopPage(chatId, 0, id);
+                    }
+                } else if (type.equals("chat")) {
+                    afterTopSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
+                }
+            }
+
+            //topSearchKeyboard(chatId);
+        } else {
+            topKeyboard(chatId, headlinesNotFound);
+        }
+    }
+
     // Меняющееся сообщение со всеми новостями по страницам
     private void getNewsListTopPage(Long chatId, int plusMinus, int messageId) {
         List<Headline> headlines = newsListTopSearchData.get(chatId);
@@ -1510,16 +1565,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         return list;
     }
 
-    // Поиск новостей по слову из Топа
-    private void searchNewsTop(int wordNum, long chatId) {
-        try {
-            String word = getWordByNumber(wordNum, chatId);
-            wordSearch(chatId, word, "top");
-        } catch (NullPointerException npe) {
-            sendMessage(chatId, startSearchBeforeText);
-        }
-    }
-
     // Преобразование порядковых номеров слов в списке в слова
     private String getWordByNumber(int wordNum, long chatId) {
         String word = "";
@@ -1536,50 +1581,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
         return word;
-    }
-
-    // Механизм поиска по слову из Топа
-    private void wordSearch(long chatId, String word, String type) {
-        newsListTopSearchCounter.put(chatId, 0);
-
-        // DEBUG
-        if (OWNER_ID != chatId) {
-            if (type.equals("top")) {
-                log.warn("{}: Top 20 поиск по слову: {}", chatId, word);
-            } else {
-                log.warn("{}: Поиск в чате по слову: {}", chatId, word);
-            }
-        }
-
-        List<Headline> headlines = searchService.start(chatId, word);
-        newsListTopSearchData.put(chatId, headlines);
-
-        int counterParts = 1;
-        if (headlines.size() > 0) {
-            StringJoiner joiner = new StringJoiner(getDelimiterNews(chatId));
-            for (Headline headline : newsListTopSearchData.get(chatId)) {
-                joiner.add(getHeadlinesText(chatId, headline));
-
-                if (counterParts++ == topSearchOffset) break;
-            }
-
-            if (counterParts != 0) {
-                if (type.equals("top")) {
-                    Integer id = newsListTopSearchMessageId.get(chatId);
-                    if (id == null) {
-                        afterTopSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
-                    } else {
-                        getNewsListTopPage(chatId, 0, id);
-                    }
-                } else if (type.equals("chat")) {
-                    afterTopSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
-                }
-            }
-
-            //topSearchKeyboard(chatId);
-        } else {
-            topKeyboard(chatId, headlinesNotFound);
-        }
     }
 
     // Список удалённых слов из Топа

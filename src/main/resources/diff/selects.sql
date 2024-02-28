@@ -69,6 +69,7 @@ order by cnt desc;
 select *
 from keywords
 where chat_id = 5294960396;
+--
 select chat_id, count(keyword) cnt
 from keywords
 group by chat_id
