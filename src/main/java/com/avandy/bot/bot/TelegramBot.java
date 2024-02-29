@@ -1448,8 +1448,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Механизм поиска по слову из Топа
     private void wordSearch(long chatId, String word, String type) {
-        newsListTopSearchCounter.put(chatId, 0);
-
         // DEBUG
         if (OWNER_ID != chatId) {
             if (type.equals("top")) {
@@ -1459,7 +1457,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
 
-        List<Headline> headlines = searchService.start(chatId, word);
+        newsListTopSearchCounter.put(chatId, 0);
+
+        List<Headline> headlines;
+        if (type.equals("top")) {
+            headlines = searchService.start(chatId, word);
+        } else {
+            headlines = searchService.start(chatId, "chat" + word);
+        }
         newsListTopSearchData.put(chatId, headlines);
 
         int counterParts = 1;

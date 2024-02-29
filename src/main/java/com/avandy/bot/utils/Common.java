@@ -244,7 +244,7 @@ public class Common {
         String[] split = keyword.split(String.valueOf(delim));
         for (String s : split) {
             if (s.length() < 5) {
-                text.append(s).append(delim);
+                text.append(s).append("*").append(delim);
             } else {
                 text.append(s, 0, s.length() - 1).append("**").append(delim);
             }

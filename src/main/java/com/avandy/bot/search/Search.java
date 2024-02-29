@@ -125,11 +125,17 @@ public class Search implements SearchService {
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriodTop()),
                     () -> periodMinutes = 1440);
             String word = searchType.replaceAll(Common.REPLACE_ALL_TOP, "");
+            log.warn("111 = " + word);
 
             String period = periodMinutes + " minutes";
             TreeSet<NewsList> newsList;
-            if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId))) {
+            if ("on".equals(settingsRepository.getJaroWinklerByChatId(chatId)) && !word.startsWith("chat")) {
                 newsList = newsListRepository.getNewsWithLike(period, word, userLanguage, chatId);
+            } else if (word.startsWith("chat")) {
+                word = word.substring(4);
+                word = Common.replaceCharsForRegexp(word);
+                log.warn("222 = " + word);
+                newsList = newsListRepository.getNewsWithRegexp(period, word, userLanguage, chatId);
             } else {
                 word = Common.replaceCharsForRegexp(word);
                 try {
