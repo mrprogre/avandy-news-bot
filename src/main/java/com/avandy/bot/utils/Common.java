@@ -206,6 +206,8 @@ public class Common {
                 keyword = replaceKeywordChars(keyword, text, ' ');
             } else if (keyword.contains("-")) {
                 keyword = replaceKeywordChars(keyword, text, '-');
+            }  else if (keyword.length() < 5) {
+                keyword = keyword + "*";
             } else {
                 keyword = keyword.substring(0, keyword.length() - 1) + "**";
             }
@@ -221,7 +223,7 @@ public class Common {
         // Замена окончаний слов на *. Применяется только к русским словам.
         boolean isOnlyRussianLetters = Pattern.matches("^[а-яА-Я -]*$", word);
 
-        if (word.length() > 4 && isOnlyRussianLetters) {
+        if (isOnlyRussianLetters) {
             word = Common.replaceWordsEnd(word);
         }
         word = replaceSpecialSymbols(word);
