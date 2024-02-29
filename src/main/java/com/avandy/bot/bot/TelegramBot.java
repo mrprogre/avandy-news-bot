@@ -491,9 +491,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                     /* Поиск по одному слову, введённому пользователем, просто в общем чате */
                     case "SEARCH_BY_WORD" -> new Thread(() ->
                             wordSearch(chatId, oneWordFromChat.get(chatId), "chat")).start();
+
                     // добавить слово из чата в список ключевых слов
-                    case "ADD_KEYWORD_FROM_CHAT" -> new Thread(() ->
-                            addKeyword(chatId, Set.of(oneWordFromChat.get(chatId)))).start();
+                    case "ADD_KEYWORD_FROM_CHAT" -> {
+                        String words = oneWordFromChat.get(chatId).trim().toLowerCase();
+                        addKeyword(chatId, new HashSet<>(Arrays.asList(words.split(","))));
+                    }
 
                     /* EXCLUDED */
                     case "LIST_EXCLUDED" -> getExcludedList(chatId);
