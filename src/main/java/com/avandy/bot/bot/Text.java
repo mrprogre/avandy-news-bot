@@ -180,6 +180,7 @@ public class Text extends Common {
             findNewsText = "Искать новости";
             listKeywordsText = """
                     <b>Слова для поиска</b>
+                    - - - - - - - - - - - - - - - - - - - - - - - -
                     %s
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Автопоиск %s
@@ -189,6 +190,7 @@ public class Text extends Common {
         } else {
             listKeywordsText = """
                     <b>Keywords</b>
+                    - - - - - - - - - - - - - - - - - - - - - - - -
                     %s
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Auto search %s
