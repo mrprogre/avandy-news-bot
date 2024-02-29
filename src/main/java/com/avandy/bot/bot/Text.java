@@ -57,7 +57,7 @@ public class Text extends Common {
             excludedText = "Исключённое";
             updateTopText = "Обновить";
             updateTopText2 = "Top 20";
-            undefinedCommandText = "Что сделать с этим словом? " + ICON_SMILE_UPSIDE_DOWN;
+            undefinedCommandText = "Что с этим делать? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Сохранить";
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
@@ -262,7 +262,7 @@ public class Text extends Common {
             excludeWordText2 = "Add excluding terms";
             searchText = "Search";
             excludedText = "Excluded";
-            undefinedCommandText = "What to do with this word? " + ICON_SMILE_UPSIDE_DOWN;
+            undefinedCommandText = "What to do about it? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Save";
             changesSavedText = "Done ✔️";
             changesSavedText2 = "Done: %s ✔️";
