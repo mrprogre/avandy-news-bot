@@ -113,7 +113,7 @@ public class Search implements SearchService {
 
                     if (title.length() > 15) {
                         if (!showedNewsHash.contains(hash + 2)) {
-                            headlinesToShow.add(new Headline(rss, title, link, date, chatId,2, hash));
+                            headlinesToShow.add(new Headline(rss, title, link, date, chatId, 2, hash));
                         }
                     }
                 }
@@ -132,8 +132,15 @@ public class Search implements SearchService {
                 newsList = newsListRepository.getNewsWithLike(period, word, userLanguage, chatId);
             } else if (word.startsWith("chat")) {
                 word = word.substring(4);
-                word = Common.replaceCharsForRegexp(word);
-                newsList = newsListRepository.getNewsWithRegexp(period, word, userLanguage, chatId);
+
+                newsList = new TreeSet<>();
+                String[] words = word.split(" ");
+                for (String keyword : words) {
+                    log.warn("s = " + keyword);
+                    keyword = Common.replaceCharsForRegexp(keyword);
+                    newsList.addAll(newsListRepository.getNewsWithRegexp(period, keyword, userLanguage, chatId));
+                }
+
             } else {
                 word = Common.replaceCharsForRegexp(word);
                 try {
