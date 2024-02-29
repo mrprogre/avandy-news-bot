@@ -136,7 +136,6 @@ public class Search implements SearchService {
                 newsList = new TreeSet<>();
                 String[] words = word.split(" ");
                 for (String keyword : words) {
-                    log.warn("s = " + keyword);
                     keyword = Common.replaceCharsForRegexp(keyword);
                     newsList.addAll(newsListRepository.getNewsWithRegexp(period, keyword, userLanguage, chatId));
                 }
