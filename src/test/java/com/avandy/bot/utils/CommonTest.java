@@ -20,6 +20,12 @@ public class CommonTest {
     }
 
     @Test
+    public void replaceSpecialSymbolsTest() {
+        String text = ". + ? { } [ ] ( ) | ^ $ \\ aaa ddd \\";
+        System.out.println(text + " = " +  Common.replaceSpecialSymbols(text));
+    }
+
+    @Test
     public void checkJaroWinkler() {
         String s1 = "BlackRock объявила о приобретении инвестфонда GIP за $12,5";
         String s2 = "BlackRock объявила о приобретении инвестфонда GIP за";

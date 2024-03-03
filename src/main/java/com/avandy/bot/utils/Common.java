@@ -235,9 +235,12 @@ public class Common {
         // замена * на любой текстовый символ, который может быть или не быть
         if (word.contains("*")) word = word.replace("*", "\\w?");
 
-        // Экранирование специальных символов regex, чтобы "C++" толковалось корректно
-        if (word.contains("+")) word = word.replace("+", "\\+");
-        if (word.contains("-")) word = word.replace("-", "\\-");
+        // Экранирование специальных символов regex, чтобы "C++" толковалось корректно . * + ? { } [ ] ( ) | ^ $ \
+        String [] specialSymbols = {".", "+", "?", "{", "}", "[", "]", "(", ")", "|", "^", "$", "\\"};
+        for (String s : specialSymbols) {
+            if (word.contains(s)) word = word.replace(s, "\\" + s);
+        }
+
         return word;
     }
 
