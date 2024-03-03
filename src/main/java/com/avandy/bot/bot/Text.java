@@ -59,7 +59,7 @@ public class Text extends Common {
             updateTopText2 = "Top 20";
             undefinedCommandText = "Что сделать? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Сохранить";
-            saveText2 = "Сохранить для автопоиска";
+            saveText2 = "Сохранить слово для автопоиска";
             findNewsText2 = "Искать новости, содержащие слово";
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
