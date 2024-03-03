@@ -23,29 +23,29 @@ public class CommonTest {
     public void checkJaroWinkler() {
         String s1 = "BlackRock объявила о приобретении инвестфонда GIP за $12,5";
         String s2 = "BlackRock объявила о приобретении инвестфонда GIP за";
-        System.out.println(Common.compare(s1, s2));
+        System.out.println(Common.jaroWinklerCompare(s1, s2));
     }
 
     @Test
     public void checkJaroWinklerDistanceCompare() {
         String s1 = "CRATE", s2 = "TRACE", s3 = "DwAyNE", s4 = "DuANE";
-        assertEquals(73, Common.compare(s1, s2));
-        assertEquals(84, Common.compare(s3, s4));
+        assertEquals(73, Common.jaroWinklerCompare(s1, s2));
+        assertEquals(84, Common.jaroWinklerCompare(s3, s4));
 
         s1 = "атака";
         s2 = "атаке";
         s3 = "атаку";
         s4 = "атакован";
-        assertEquals(92, Common.compare(s1, s2));
-        assertEquals(92, Common.compare(s1, s3));
-        assertEquals(93, Common.compare(s1, s4));
-        assertEquals(92, Common.compare(s2, s3));
-        assertEquals(86, Common.compare(s2, s4));
-        assertEquals(86, Common.compare(s3, s4));
+        assertEquals(92, Common.jaroWinklerCompare(s1, s2));
+        assertEquals(92, Common.jaroWinklerCompare(s1, s3));
+        assertEquals(93, Common.jaroWinklerCompare(s1, s4));
+        assertEquals(92, Common.jaroWinklerCompare(s2, s3));
+        assertEquals(86, Common.jaroWinklerCompare(s2, s4));
+        assertEquals(86, Common.jaroWinklerCompare(s3, s4));
 
         s1 = "played";
         s2 = "player";
-        assertEquals(93, Common.compare(s1, s2));
+        assertEquals(93, Common.jaroWinklerCompare(s1, s2));
     }
 
     @Test

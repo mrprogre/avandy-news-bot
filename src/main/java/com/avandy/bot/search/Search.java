@@ -176,7 +176,7 @@ public class Search implements SearchService {
         headlinesToShow.parallelStream()
                 .forEach(h1 -> headlinesToShow
                         .forEach(h2 -> {
-                            double compare = Common.compare(h1.getTitle(), h2.getTitle());
+                            double compare = Common.jaroWinklerCompare(h1.getTitle(), h2.getTitle());
                             if (compare >= 85 && compare != 100) {
                                 //log.warn(h1.getPubDate() + " " + h1.getTitle() + " + " + h2.getPubDate() + " " + h2.getTitle() + " = " + compare);
                                 headlinesDeleteJw.add(h1);

@@ -145,7 +145,7 @@ public class Common {
 
         for (Map.Entry<String, Integer> word1 : wordsCount.entrySet()) {
             for (Map.Entry<String, Integer> word2 : wordsCount.entrySet()) {
-                double compare = Common.compare(word1.getKey(), word2.getKey());
+                double compare = Common.jaroWinklerCompare(word1.getKey(), word2.getKey());
 
                 if (compare != 100 && compare >= jaroWinklerLevel && !excluded.contains(word1.getKey())) {
                     String string = longestCommonSubstring(word1.getKey(), word2.getKey());
@@ -172,7 +172,7 @@ public class Common {
         return new SimpleDateFormat("dd.MM.yyyy").format(date);
     }
 
-    public static int compare(String text1, String text2) {
+    public static int jaroWinklerCompare(String text1, String text2) {
         return (int) Math.round((1 - new JaroWinklerDistance().apply(text1, text2)) * 100);
     }
 
