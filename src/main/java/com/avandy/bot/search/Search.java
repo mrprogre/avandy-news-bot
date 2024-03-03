@@ -137,6 +137,7 @@ public class Search implements SearchService {
                 String[] words = word.split(" ");
                 for (String keyword : words) {
                     keyword = Common.replaceCharsForRegexp(keyword);
+                    log.warn("keyword = " + keyword);
                     newsList.addAll(newsListRepository.getNewsWithRegexp(period, keyword, userLanguage, chatId));
                 }
 
