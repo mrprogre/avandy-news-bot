@@ -24,11 +24,11 @@ public class Text extends Common {
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
-            historyClearText, addSourceText, delSourceText, addSourceInfoText,
+            historyClearText, addSourceText, delSourceText, addSourceInfoText, sendIdeaText2, saveText2,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
-            messageThemeChooseText2, personalSourcesText, saveText, findNewsText;
+            messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -57,8 +57,10 @@ public class Text extends Common {
             excludedText = "Исключённое";
             updateTopText = "Обновить";
             updateTopText2 = "Top 20";
-            undefinedCommandText = "Что с этим делать? " + ICON_SMILE_UPSIDE_DOWN;
+            undefinedCommandText = "Что сделать? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Сохранить";
+            saveText2 = "Сохранить слово";
+            findNewsText2 = "Искать новости";
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
             changesSavedText3 = "Внешний вид сообщений с новостями изменён на: %s ✔️ \n";
@@ -119,6 +121,7 @@ public class Text extends Common {
             chooseSearchDepthText = "Интервал поиска равен текущему моменту минус глубина в часах.\n" +
                     "Выберите глубину поиска";
             sendIdeaText = "Написать отзыв";
+            sendIdeaText2 = "Написать разработчику";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
             fullSearchStartText = "» поиск всех новостей за %s";
             searchByKeywordsStartText = "» поиск по словам за %s";
@@ -262,8 +265,10 @@ public class Text extends Common {
             excludeWordText2 = "Add excluding terms";
             searchText = "Search";
             excludedText = "Excluded";
-            undefinedCommandText = "What to do about it? " + ICON_SMILE_UPSIDE_DOWN;
+            undefinedCommandText = "What to do? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Save";
+            saveText2 = "Save this word";
+            findNewsText2 = "Search news with this word";
             changesSavedText = "Done ✔️";
             changesSavedText2 = "Done: %s ✔️";
             changesSavedText3 = "The appearance of news messages has been changed to: %s ✔️!";
@@ -325,6 +330,7 @@ public class Text extends Common {
             confirmDeletedUserText = "Do you confirm?";
             chooseSearchDepthText = "Search time = current moment minus time in hours. Select time.";
             sendIdeaText = "Send feedback";
+            sendIdeaText2 = "Write to the developer";
             listOfDeletedFromTopText = "List of deleted from the Top";
             fullSearchStartText = "» search all news in %s";
             searchByKeywordsStartText = "» word search in %s";

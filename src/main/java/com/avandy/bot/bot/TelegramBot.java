@@ -2243,13 +2243,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (checkUserInput(chatId, messageText)) return;
         String word = messageText.trim().toLowerCase();
 
-        Map<String, String> buttons = new LinkedHashMap<>();
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons3 = new LinkedHashMap<>();
 
-        buttons.put("ADD_KEYWORD_FROM_CHAT", saveText);
-        buttons.put("SEARCH_BY_WORD", findNewsText);
+        buttons1.put("FEEDBACK", sendIdeaText2);
+        buttons2.put("ADD_KEYWORD_FROM_CHAT", saveText2);
+        buttons3.put("SEARCH_BY_WORD", findNewsText2);
         oneWordFromChat.put(chatId, word);
 
-        sendMessageWithPreview(chatId, undefinedCommandText, InlineKeyboards.maker(buttons));
+        sendMessageWithPreview(chatId, undefinedCommandText,
+                InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
     }
 
     void setThemeKeyboard(long chatId) {
