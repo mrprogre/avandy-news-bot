@@ -59,8 +59,8 @@ public class Text extends Common {
             updateTopText2 = "Top 20";
             undefinedCommandText = "Что сделать? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Сохранить";
-            saveText2 = "Сохранить слово";
-            findNewsText2 = "Искать новости";
+            saveText2 = "Сохранить для автопоиска";
+            findNewsText2 = "Искать новости, содержащие слово";
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
             changesSavedText3 = "Внешний вид сообщений с новостями изменён на: %s ✔️ \n";
