@@ -22,7 +22,8 @@ public class CommonTest {
     @Test
     public void replaceSpecialSymbolsTest() {
         String text = ". + ? { } [ ] ( ) | ^ $ \\ aaa ddd \\";
-        System.out.println(text + " = " +  Common.replaceSpecialSymbols(text));
+        assertEquals("\\\\. \\\\+ \\\\? \\\\{ \\\\} \\\\[ \\\\] \\\\( \\\\) \\\\| \\\\^ \\\\$ \\\\ aaa ddd \\\\",
+                Common.replaceSpecialSymbols(text));
     }
 
     @Test
