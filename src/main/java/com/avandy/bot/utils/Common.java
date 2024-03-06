@@ -251,7 +251,7 @@ public class Common {
             if (s.length() < 5) {
                 text.append(s).append("*").append(delim);
             } else {
-                text.append(s, 0, s.length() - 1).append("**").append(delim);
+                text.append(s, 0, s.length() - 2).append("***").append(delim);
             }
         }
         if (text.toString().charAt(text.length() - 1) == delim) {
