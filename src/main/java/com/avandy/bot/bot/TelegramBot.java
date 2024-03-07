@@ -788,7 +788,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             afterKeywordsSearchKeyboard(chatId, String.valueOf(joiner), headlines.size());
         } else {
-            afterKeywordsSearchKeyboard(chatId, headlinesNotFound, 0);
+            afterKeywordsSearchNotFoundKeyboard(chatId, headlinesNotFound);
         }
     }
 
@@ -1156,7 +1156,18 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         return InlineKeyboards.maker(buttons1, buttons2, null, null, null);
+    }
 
+    private void afterKeywordsSearchNotFoundKeyboard(long chatId, String text) {
+        Map<String, String> buttons1 = new LinkedHashMap<>();
+        Map<String, String> buttons2 = new LinkedHashMap<>();
+        Map<String, String> buttons3 = new LinkedHashMap<>();
+
+        buttons1.put("SET_PERIOD", intervalText2);
+        buttons2.put("LIST_KEYWORDS", listText3);
+        buttons3.put("FIND_BY_KEYWORDS", searchText2);
+
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
     }
 
     /* FULL SEARCH */

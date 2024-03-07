@@ -20,15 +20,15 @@ public class Text extends Common {
             searchWithFilterText, searchWithFilter2Text, keywordSearchText, keywordSearch2Text, cancelButtonText,
             foundNewsText, excludedNewsText, settingsNotFoundText, exclusionWordsText, addedExceptionWordsText,
             wordIsNotInTheListText, listText, excludedWordsNotSetText, confirmDeletedUserText, chooseWordDelFromTop,
-            removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText,
+            removedFromTopText, chooseSearchDepthText, sendIdeaText, listOfDeletedFromTopText, searchText2,
             getPremiumYesOrNowText, getPremiumRequestText, premiumIsActive, premiumIsActive2, excludeWordText2,
             premiumIsActive3, premiumIsActive4, inputExceptionText, premiumSearchSettingsText, inputExceptionText2,
             sentText, searchByKeywordsStartText, sendPaymentText, sendMessageForDevText2, cleanFullSearchHistoryText,
             historyClearText, addSourceText, delSourceText, addSourceInfoText, sendIdeaText2, saveText2,
-            premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText,
+            premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText, listText3,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
-            messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2;
+            messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2, intervalText2;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -54,6 +54,7 @@ public class Text extends Common {
             excludeWordText = "Исключить";
             excludeWordText2 = "Добавить слова-исключения";
             searchText = "Поиск";
+            searchText2 = "Искать снова";
             excludedText = "Исключённое";
             updateTopText = "Обновить";
             updateTopText2 = "Top 20";
@@ -83,6 +84,7 @@ public class Text extends Common {
                     <b>Видеоинструкция:</b> <a href="https://youtu.be/HPAk8GPHes4">youtube</a>""";
             buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
             intervalText = "Интервал";
+            intervalText2 = "Изменить интервал поиска";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
             startSettingsText = "Старт";
@@ -117,9 +119,9 @@ public class Text extends Common {
             wordIsNotInTheListText = "Слово %s отсутствует в списке";
             listText = "Список";
             listText2 = "Список слов";
+            listText3 = "Список слов для поиска";
             confirmDeletedUserText = "Подтверждаете удаление пользователя?";
-            chooseSearchDepthText = "Интервал поиска равен текущему моменту минус глубина в часах.\n" +
-                    "Выберите глубину поиска";
+            chooseSearchDepthText = "Интервал поиска равен текущему моменту минус глубина в часах. Выберите глубину поиска";
             sendIdeaText = "Написать отзыв";
             sendIdeaText2 = "Написать разработчику";
             listOfDeletedFromTopText = "Список удалённого из Top 20";
@@ -154,7 +156,7 @@ public class Text extends Common {
             premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive5 = "Добавление <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> возможно в /premium режиме";
             yesButtonText = """
-                    Добавьте <b>слова или фразы</b> по которым я буду искать для Вас новости. При добавлении помните, что СМИ пишут заголовки в максимально простой форме. Не усложняйте!
+                    Добавьте <b>слова или фразы</b> по которым я буду искать для Вас новости (максимум 3 для начала). При добавлении помните, что СМИ пишут заголовки в максимально простой форме. Не усложняйте!
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Нажмите кнопку <b>Добавить</b> или посмотрите о чём сейчас пишут СМИ, нажав на <b>Top 20</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -221,7 +223,7 @@ public class Text extends Common {
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
             yesButtonText = """
-                    The first thing to do is add <b>keywords or phrases</b>
+                    The first thing to do is add <b>keywords or phrases</b> (maximum 3 to start)
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -264,6 +266,7 @@ public class Text extends Common {
             excludeWordText = "Exclude term";
             excludeWordText2 = "Add excluding terms";
             searchText = "Search";
+            searchText2 = "Search again";
             excludedText = "Excluded";
             undefinedCommandText = "What to do? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Save";
@@ -291,6 +294,7 @@ public class Text extends Common {
                     <b>Video:</b> <a href="https://youtu.be/HPAk8GPHes4">youtube</a>""";
             buyButtonText = "Good buy! " + ICON_GOOD_BYE;
             intervalText = "Interval";
+            intervalText2 = "Change search interval";
             autoSearchText = "Auto search";
             exclusionText = "News exclusion";
             startSettingsText = "Start";
@@ -327,6 +331,7 @@ public class Text extends Common {
             wordIsNotInTheListText = "The word <b>%s</b> isn't in the list";
             listText = "List";
             listText2 = "Word list";
+            listText3 = "List of words to search";
             confirmDeletedUserText = "Do you confirm?";
             chooseSearchDepthText = "Search time = current moment minus time in hours. Select time.";
             sendIdeaText = "Send feedback";
