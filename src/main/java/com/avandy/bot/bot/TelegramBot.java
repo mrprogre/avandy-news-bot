@@ -1162,12 +1162,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> buttons1 = new LinkedHashMap<>();
         Map<String, String> buttons2 = new LinkedHashMap<>();
         Map<String, String> buttons3 = new LinkedHashMap<>();
+        Map<String, String> buttons4 = new LinkedHashMap<>();
 
         buttons1.put("SET_PERIOD", intervalText2);
         buttons2.put("LIST_KEYWORDS", listText3);
         buttons3.put("FIND_BY_KEYWORDS", searchText2);
+        buttons4.put("START_SEARCH", findSelectText);
 
-        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, buttons4, null));
     }
 
     /* FULL SEARCH */
