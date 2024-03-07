@@ -1463,13 +1463,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Механизм поиска по слову из Топа
     private void wordSearch(long chatId, String word, String type) {
         // DEBUG
-        //if (OWNER_ID != chatId) {
+        if (OWNER_ID != chatId) {
             if (type.equals("top")) {
                 log.warn("{}: Top 20 поиск по слову: {}", chatId, word);
             } else {
                 log.warn("{}: Поиск в чате по слову: {}", chatId, word);
             }
-        //}
+        }
 
         newsListTopSearchCounter.put(chatId, 0);
 
