@@ -360,7 +360,6 @@ public class Text extends Common {
         String schedSettings = "";
 
         if (lang.equals("ru")) {
-            log.warn(settings.getScheduler());
             if (settings.getScheduler().contains("включён") && isPremium != 1) {
                 String text = switch (settings.getPeriod()) {
                     case "1h" -> "Запуск поиска каждый час\n";
