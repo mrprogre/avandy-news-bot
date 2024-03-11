@@ -3,7 +3,9 @@ package com.avandy.bot.bot;
 import com.avandy.bot.model.Settings;
 import com.avandy.bot.utils.Common;
 import com.vdurmont.emoji.EmojiParser;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Text extends Common {
     private static final String delimiterNews = "- - - - - - - - - - - - - - - - - - - - - - - -";
     public static String
@@ -358,7 +360,8 @@ public class Text extends Common {
         String schedSettings = "";
 
         if (lang.equals("ru")) {
-            if (settings.getScheduler().contains("on") && isPremium != 1) {
+            log.warn(settings.getScheduler());
+            if (settings.getScheduler().contains("включён") && isPremium != 1) {
                 String text = switch (settings.getPeriod()) {
                     case "1h" -> "Запуск поиска каждый час\n";
                     case "2h" -> "Запуск поиска каждые 2 часа\n";
