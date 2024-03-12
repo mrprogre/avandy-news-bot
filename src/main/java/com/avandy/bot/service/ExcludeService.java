@@ -102,10 +102,6 @@ public class ExcludeService {
         List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
         int excludedCount = excludedByChatId.size();
 
-        if (excludedByChatId.size() >= 400) {
-            excludedByChatId = excludingTermsRepository.findExcludedByChatIdLimit(chatId, Common.EXCLUDED_LIMIT);
-        }
-
         if (!excludedByChatId.isEmpty()) {
             StringJoiner joiner = new StringJoiner(", ");
             int counter = 0;

@@ -13,10 +13,6 @@ public interface ExcludingTermsRepository extends CrudRepository<ExcludingTerm, 
             nativeQuery = true)
     List<String> findExcludedByChatId(Long chatId);
 
-    @Query(value = "SELECT lower(word) as word FROM excluding_terms WHERE chat_id = :chatId ORDER BY id DESC LIMIT :limit",
-            nativeQuery = true)
-    List<String> findExcludedByChatIdLimit(Long chatId, int limit);
-
     @Query(value = "SELECT count(word) FROM excluding_terms WHERE chat_id = :chatId", nativeQuery = true)
     int getExcludedCountByChatId(Long chatId);
 
