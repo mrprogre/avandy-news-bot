@@ -30,7 +30,6 @@ public class KeywordService {
         this.settingsRepository = settingsRepository;
     }
 
-
     // Добавление ключевых слов для поиска
     public List<String> addKeywords(long chatId, Set<String> keywords) {
         int counter = 0;
