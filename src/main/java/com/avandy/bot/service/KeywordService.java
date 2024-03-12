@@ -3,6 +3,7 @@ package com.avandy.bot.service;
 import com.avandy.bot.model.Keyword;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.utils.Common;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import static com.avandy.bot.bot.Text.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KeywordService {
     @Value("${bot.owner}")
     public long OWNER_ID;
@@ -23,17 +25,10 @@ public class KeywordService {
     private final KeywordRepository keywordRepository;
     private final SettingsRepository settingsRepository;
 
-    public KeywordService(UserRepository userRepository, KeywordRepository keywordRepository,
-                          SettingsRepository settingsRepository) {
-        this.userRepository = userRepository;
-        this.keywordRepository = keywordRepository;
-        this.settingsRepository = settingsRepository;
-    }
-
     // Добавление ключевых слов для поиска
     public List<String> addKeywords(long chatId, Set<String> keywords) {
-        int counter = 0;
         List<String> messages = new ArrayList<>();
+        int counter = 0;
         int isPremium = userRepository.isPremiumByChatId(chatId);
         List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
         int currentKeywordsCount = keywordRepository.getKeywordsCountByChatId(chatId);

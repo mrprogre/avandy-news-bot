@@ -6,6 +6,7 @@ import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.search.Search;
 import com.avandy.bot.search.SearchService;
+import com.avandy.bot.service.ExcludeService;
 import com.avandy.bot.service.KeywordService;
 import com.avandy.bot.utils.Common;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +79,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final ShowedNewsRepository showedNewsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
     private final KeywordService keywordService;
+    private final ExcludeService excludeService;
     private final int offset = 60;
     private final int searchOffset = 5;
     private final int topSearchOffset = 3;
@@ -88,7 +90,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                        SearchService searchService, UserRepository userRepository, KeywordRepository keywordRepository,
                        SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
                        RssRepository rssRepository, TopTenRepository topRepository,
-                       ShowedNewsRepository showedNewsRepository, KeywordService keywordService) {
+                       ShowedNewsRepository showedNewsRepository, KeywordService keywordService, ExcludeService excludeService) {
         super(botToken);
         this.config = config;
         this.searchService = searchService;
@@ -100,6 +102,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.topRepository = topRepository;
         this.showedNewsRepository = showedNewsRepository;
         this.keywordService = keywordService;
+        this.excludeService = excludeService;
     }
 
     @Override
@@ -200,6 +203,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     if (checkUserInput(chatId, keywords)) return;
                     boolean isAdded = addKeywords(chatId, keywords);
                     if (!isAdded) return;
+                    showKeywordsList(chatId);
 
                     // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
                 } else if (UserState.DEL_KEYWORDS.equals(userState)) {
@@ -498,6 +502,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     case "ADD_KEYWORD_FROM_CHAT" -> {
                         String words = oneWordFromChat.get(chatId).trim().toLowerCase();
                         addKeywords(chatId, words);
+                        showKeywordsList(chatId);
                     }
 
                     /* EXCLUDED */
@@ -1114,22 +1119,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     /* EXCLUDING TERMS */
     // Список слов-исключений (/excluding)
     private void getExcludedList(long chatId) {
-        List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
-        int excludedCount = excludedByChatId.size();
+        String excludedList = excludeService.getExcludedList(chatId);
 
-        if (excludedByChatId.size() >= 400) {
-            excludedByChatId = excludingTermsRepository.findExcludedByChatIdLimit(chatId, Common.EXCLUDED_LIMIT);
-        }
-
-        if (!excludedByChatId.isEmpty()) {
-            StringJoiner joiner = new StringJoiner(", ");
-            int counter = 0;
-            for (String item : excludedByChatId) {
-                joiner.add(item);
-                if (++counter == offset) break;
-            }
-            excludeListKeyboard(chatId, "<b>" + exclusionWordsText + "</b> [" + excludedCount + "]\n" +
-                    joiner, excludedCount);
+        if (!excludedList.isBlank()) {
+            String[] split = excludedList.split(";");
+            excludeListKeyboard(chatId, split[0], Integer.parseInt(split[1]));
         } else {
             excludeKeyboard(chatId);
         }
@@ -1137,68 +1131,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Добавление слов-исключений
     private void addExclude(long chatId, String[] list) {
-        int counter = 0;
-        int isPremium = userRepository.isPremiumByChatId(chatId);
-        List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
-        int total = excludedByChatId.size() + list.length;
-
-        if (isPremium != 1 && total > Common.MAX_EXCL_TERMS_COUNT && chatId != OWNER_ID) {
-            sendMessage(chatId, premiumIsActive5);
-            return;
-        }
-
-        ExcludingTerm excluded;
-        for (String word : list) {
-            word = word.trim().toLowerCase();
-
-            if (word.length() >= 3 && word.length() <= 32) {
-                if (!excludedByChatId.contains(word)) {
-                    excluded = new ExcludingTerm();
-                    excluded.setChatId(chatId);
-                    excluded.setWord(word);
-
-                    try {
-                        excludingTermsRepository.save(excluded);
-                        counter++;
-                    } catch (Exception e) {
-                        if (e.getMessage().contains("ui_excluded")) {
-                            log.info(wordIsExistsText + word);
-                        }
-                    }
-
-                } else {
-                    sendMessage(chatId, wordIsExistsText + word);
-                }
-            } else {
-                sendMessage(chatId, minWordLengthText2);
-            }
-        }
-
-        if (counter != 0) {
-            sendMessage(chatId, addedExceptionWordsText + " - " + counter + " ✔️");
-        } else {
-            sendMessage(chatId, wordsIsNotAddedText);
-        }
+        List<String> messages = excludeService.addExclude(chatId, list);
+        showStatus(chatId, messages);
     }
 
     // Удаление слов-исключений
     private void delExcluded(long chatId, String[] excluded) {
-        for (String exclude : excluded) {
-            exclude = exclude.trim().toLowerCase();
-
-            if (exclude.equals("*")) {
-                excludingTermsRepository.deleteAllExcludedByChatId(chatId);
-                sendMessage(chatId, deleteAllWordsText);
-                break;
-            }
-
-            if (excludingTermsRepository.isWordExists(chatId, exclude) > 0) {
-                excludingTermsRepository.deleteExcludedByChatId(chatId, exclude);
-                sendMessage(chatId, "Удалено слово - " + exclude + " ❌");
-            } else {
-                sendMessage(chatId, "Слово " + exclude + " отсутствует в списке");
-            }
-        }
+        List<String> messages = excludeService.delExcluded(chatId, excluded);
+        showStatus(chatId, messages);
     }
 
     // KEYBOARDS
@@ -2195,7 +2135,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 if (message.equals(DONE)) continue;
                 sendMessage(chatId, message);
             }
-            showKeywordsList(chatId);
+
         } else {
             for (String message : messages) {
                 sendMessage(chatId, message);
