@@ -18,7 +18,7 @@ import static com.avandy.bot.bot.Text.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class KeywordService {
+public class KeywordsService {
     @Value("${bot.owner}")
     public long OWNER_ID;
     private final UserRepository userRepository;

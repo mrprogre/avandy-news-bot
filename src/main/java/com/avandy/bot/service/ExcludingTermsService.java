@@ -18,7 +18,7 @@ import static com.avandy.bot.bot.Text.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ExcludeService {
+public class ExcludingTermsService {
     @Value("${bot.owner}")
     public long OWNER_ID;
     private final UserRepository userRepository;

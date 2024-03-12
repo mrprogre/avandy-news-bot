@@ -6,8 +6,8 @@ import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.search.Search;
 import com.avandy.bot.search.SearchService;
-import com.avandy.bot.service.ExcludeService;
-import com.avandy.bot.service.KeywordService;
+import com.avandy.bot.service.ExcludingTermsService;
+import com.avandy.bot.service.KeywordsService;
 import com.avandy.bot.utils.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -78,8 +78,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final SettingsRepository settingsRepository;
     private final ShowedNewsRepository showedNewsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
-    private final KeywordService keywordService;
-    private final ExcludeService excludeService;
+    private final KeywordsService keywordsService;
+    private final ExcludingTermsService excludingTermsService;
     private final int offset = 60;
     private final int searchOffset = 5;
     private final int topSearchOffset = 3;
@@ -90,7 +90,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                        SearchService searchService, UserRepository userRepository, KeywordRepository keywordRepository,
                        SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
                        RssRepository rssRepository, TopTenRepository topRepository,
-                       ShowedNewsRepository showedNewsRepository, KeywordService keywordService, ExcludeService excludeService) {
+                       ShowedNewsRepository showedNewsRepository, KeywordsService keywordsService, ExcludingTermsService excludingTermsService) {
         super(botToken);
         this.config = config;
         this.searchService = searchService;
@@ -101,8 +101,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.rssRepository = rssRepository;
         this.topRepository = topRepository;
         this.showedNewsRepository = showedNewsRepository;
-        this.keywordService = keywordService;
-        this.excludeService = excludeService;
+        this.keywordsService = keywordsService;
+        this.excludingTermsService = excludingTermsService;
     }
 
     @Override
@@ -700,7 +700,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Добавление ключевых слов для поиска
     private boolean addKeywords(Long chatId, String keywords) {
-        showStatus(chatId, keywordService.addKeywords(chatId, new HashSet<>(Arrays.asList(keywords.split(",")))));
+        showStatus(chatId, keywordsService.addKeywords(chatId, new HashSet<>(Arrays.asList(keywords.split(",")))));
         return true;
     }
 
@@ -904,7 +904,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Показ ключевых слов в Телеграме (/keywords)
     private void showKeywordsList(long chatId) {
-        String keywords = keywordService.showKeywordsList(chatId);
+        String keywords = keywordsService.showKeywordsList(chatId);
 
         if (keywords != null && keywords.length() != 0) {
             keywordsListKeyboard(chatId, keywords);
@@ -921,7 +921,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Удаление ключевых слов. Порядковые номера преобразуются в слова, которые потом и удаляются из БД
     private boolean deleteKeywords(String keywordNumbers, long chatId) {
-        showStatus(chatId, keywordService.deleteKeywords(keywordNumbers, chatId));
+        showStatus(chatId, keywordsService.deleteKeywords(keywordNumbers, chatId));
         return true;
     }
 
@@ -1119,7 +1119,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     /* EXCLUDING TERMS */
     // Список слов-исключений (/excluding)
     private void getExcludedList(long chatId) {
-        String excludedList = excludeService.getExcludedList(chatId);
+        String excludedList = excludingTermsService.getExcludedList(chatId);
 
         if (!excludedList.isBlank()) {
             String[] split = excludedList.split(";");
@@ -1131,13 +1131,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Добавление слов-исключений
     private void addExclude(long chatId, String[] list) {
-        List<String> messages = excludeService.addExclude(chatId, list);
+        List<String> messages = excludingTermsService.addExclude(chatId, list);
         showStatus(chatId, messages);
     }
 
     // Удаление слов-исключений
     private void delExcluded(long chatId, String[] excluded) {
-        List<String> messages = excludeService.delExcluded(chatId, excluded);
+        List<String> messages = excludingTermsService.delExcluded(chatId, excluded);
         showStatus(chatId, messages);
     }
 
