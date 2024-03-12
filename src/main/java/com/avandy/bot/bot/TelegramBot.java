@@ -198,7 +198,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 } else if (UserState.ADD_KEYWORDS.equals(userState)) {
                     String keywords = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, keywords)) return;
-                    addKeywords(chatId, keywords);
+                    boolean isAdded = addKeywords(chatId, keywords);
+                    if (!isAdded) return;
 
                     // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
                 } else if (UserState.DEL_KEYWORDS.equals(userState)) {
@@ -693,21 +694,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     // Добавление ключевых слов для поиска
-    private void addKeywords(Long chatId, String keywords) {
-        List<String> messages = keywordService.addKeywords(chatId,
-                new HashSet<>(Arrays.asList(keywords.split(","))));
-
-        if (isDone(messages)) {
-            for (String message : messages) {
-                if (message.equals(DONE)) continue;
-                sendMessage(chatId, message);
-            }
-            showKeywordsList(chatId);
-        } else {
-            for (String message : messages) {
-                sendMessage(chatId, message);
-            }
-        }
+    private boolean addKeywords(Long chatId, String keywords) {
+        showStatus(chatId, keywordService.addKeywords(chatId, new HashSet<>(Arrays.asList(keywords.split(",")))));
+        return true;
     }
 
     private void deleteSourceRss(long chatId, String source) {
@@ -927,56 +916,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Удаление ключевых слов. Порядковые номера преобразуются в слова, которые потом и удаляются из БД
     private boolean deleteKeywords(String keywordNumbers, long chatId) {
-        ArrayList<String> words = new ArrayList<>();
-
-        try {
-            if (keywordNumbers.equals("*")) {
-                words.add("*");
-            } else {
-                String[] nums = keywordNumbers.split(",");
-                String[] split = keywordService.getKeywordsList(chatId).split("\n");
-
-                // Сопоставление
-                for (String num : nums) {
-                    int numInt = Integer.parseInt(num.trim());
-
-                    for (String row : split) {
-                        int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
-                        row = row.substring(row.indexOf(".") + 1);
-
-                        if (numInt == rowNum) {
-                            words.add(row);
-                        }
-                    }
-                }
-            }
-
-            // Удаление
-            for (String word : words) {
-                word = word.trim().toLowerCase();
-
-                if (word.equals("*")) {
-                    keywordRepository.deleteAllKeywordsByChatId(chatId);
-                    sendMessage(chatId, deleteAllWordsText);
-                    break;
-                }
-
-                if (keywordRepository.isKeywordExists(chatId, word) > 0) {
-                    keywordRepository.deleteKeywordByChatId(chatId, word);
-                    sendMessage(chatId, "❌ " + word);
-                } else {
-                    sendMessage(chatId, String.format(wordIsNotInTheListText, word));
-                }
-            }
-
-            showKeywordsList(chatId);
-        } catch (NumberFormatException n) {
-            sendMessage(chatId, allowCommasAndNumbersText);
-            return false;
-        } catch (NullPointerException npe) {
-            sendMessage(chatId, "click /keywords" + Common.TOP_TEN_SHOW_LIMIT);
-            return false;
-        }
+        showStatus(chatId, keywordService.deleteKeywords(keywordNumbers, chatId));
         return true;
     }
 
@@ -2291,6 +2231,21 @@ public class TelegramBot extends TelegramLongPollingBot {
         return String.format("<b>%s</b> [%s]\n%s <a href=\"%s\">»»</a>",
                 headline.getSource(), Common.showDate(String.valueOf(headline.getPubDate())), headline.getTitle(),
                 headline.getLink());
+    }
+
+    // Показать статус выполнения операции
+    private void showStatus(long chatId, List<String> messages) {
+        if (isDone(messages)) {
+            for (String message : messages) {
+                if (message.equals(DONE)) continue;
+                sendMessage(chatId, message);
+            }
+            showKeywordsList(chatId);
+        } else {
+            for (String message : messages) {
+                sendMessage(chatId, message);
+            }
+        }
     }
 
     // Создание кнопок меню

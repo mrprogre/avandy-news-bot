@@ -31,7 +31,7 @@ public class KeywordService {
     }
 
 
-    // Добавление ключевых слов дял поиска
+    // Добавление ключевых слов для поиска
     public List<String> addKeywords(long chatId, Set<String> keywords) {
         int counter = 0;
         List<String> messages = new ArrayList<>();
@@ -88,7 +88,6 @@ public class KeywordService {
         return messages;
     }
 
-
     // Формирование списка ключевых слов в виде строки
     public String getKeywordsList(long chatId) {
         int counter = 0;
@@ -134,6 +133,61 @@ public class KeywordService {
         } else {
             return setupKeywordsText;
         }
+    }
+
+    // Удаление ключевых слов
+    public List<String> deleteKeywords(String keywordNumbers, long chatId) {
+        List<String> messages = new ArrayList<>();
+        ArrayList<String> words = new ArrayList<>();
+
+        try {
+            if (keywordNumbers.equals("*")) {
+                words.add("*");
+            } else {
+                String[] nums = keywordNumbers.split(",");
+                String[] split = getKeywordsList(chatId).split("\n");
+
+                // Сопоставление
+                for (String num : nums) {
+                    int numInt = Integer.parseInt(num.trim());
+
+                    for (String row : split) {
+                        int rowNum = Integer.parseInt(row.substring(0, row.indexOf(".")));
+                        row = row.substring(row.indexOf(".") + 1);
+
+                        if (numInt == rowNum) {
+                            words.add(row);
+                        }
+                    }
+                }
+            }
+
+            // Удаление
+            for (String word : words) {
+                word = word.trim().toLowerCase();
+
+                if (word.equals("*")) {
+                    keywordRepository.deleteAllKeywordsByChatId(chatId);
+                    messages.add(deleteAllWordsText);
+                    break;
+                }
+
+                if (keywordRepository.isKeywordExists(chatId, word) > 0) {
+                    keywordRepository.deleteKeywordByChatId(chatId, word);
+                    messages.add("❌ " + word);
+                } else {
+                    messages.add(String.format(wordIsNotInTheListText, word));
+                }
+            }
+            messages.add(DONE);
+
+            showKeywordsList(chatId);
+        } catch (NumberFormatException n) {
+            messages.add(allowCommasAndNumbersText);
+        } catch (NullPointerException npe) {
+            messages.add("click /keywords" + Common.TOP_TEN_SHOW_LIMIT);
+        }
+        return messages;
     }
 
 }
