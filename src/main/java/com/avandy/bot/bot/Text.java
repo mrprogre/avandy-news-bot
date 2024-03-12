@@ -62,7 +62,7 @@ public class Text extends Common {
             updateTopText2 = "Top 20";
             undefinedCommandText = "Что сделать? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Сохранить";
-            saveText2 = "Сохранить слово для автопоиска";
+            saveText2 = "Сохранить для автопоиска";
             findNewsText2 = "Искать новости, содержащие слово";
             changesSavedText = "Сохранено ✔️";
             changesSavedText2 = "Сохранено: %s ✔️";
@@ -71,8 +71,8 @@ public class Text extends Common {
             historyClearText = "История просмотра очищена ✔️";
             headlinesNotFound = "» новостей нет " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» слова не заданы";
-            minWordLengthText = "Длина слова должна быть более 1 символа и до 64";
-            minWordLengthText2 = "Длина слова должна быть более 2 символов и до 32";
+            minWordLengthText = "Длина слов должна быть более 1 символа и до 64";
+            minWordLengthText2 = "Длина слов должна быть более 2 символов и до 32";
             deleteAllWordsText = "❌ все слова удалены";
             deleteText = "❌ удалено";
             wordIsExistsText = "Слово уже есть в списке: ";
@@ -281,8 +281,8 @@ public class Text extends Common {
             historyClearText = "Browsing history cleared ✔️";
             headlinesNotFound = "» no news headlines found " + ICON_END_SEARCH_NOT_FOUND;
             setupKeywordsText = "» no keywords specified";
-            minWordLengthText = "The word length must be more than 1 characters and up to 64";
-            minWordLengthText2 = "The word length must be more than 2 characters and up to 32";
+            minWordLengthText = "The words length must be more than 1 characters and up to 64";
+            minWordLengthText2 = "The words length must be more than 2 characters and up to 32";
             deleteAllWordsText = "❌ all words removed";
             deleteText = "❌ deleted";
             wordIsExistsText = "The word is already on the list: ";

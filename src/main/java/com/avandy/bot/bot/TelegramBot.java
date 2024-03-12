@@ -6,6 +6,7 @@ import com.avandy.bot.model.*;
 import com.avandy.bot.repository.*;
 import com.avandy.bot.search.Search;
 import com.avandy.bot.search.SearchService;
+import com.avandy.bot.service.KeywordService;
 import com.avandy.bot.utils.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -76,6 +77,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final SettingsRepository settingsRepository;
     private final ShowedNewsRepository showedNewsRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
+    private final KeywordService keywordService;
     private final int offset = 60;
     private final int searchOffset = 5;
     private final int topSearchOffset = 3;
@@ -86,7 +88,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                        SearchService searchService, UserRepository userRepository, KeywordRepository keywordRepository,
                        SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
                        RssRepository rssRepository, TopTenRepository topRepository,
-                       ShowedNewsRepository showedNewsRepository) {
+                       ShowedNewsRepository showedNewsRepository, KeywordService keywordService) {
         super(botToken);
         this.config = config;
         this.searchService = searchService;
@@ -97,6 +99,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.rssRepository = rssRepository;
         this.topRepository = topRepository;
         this.showedNewsRepository = showedNewsRepository;
+        this.keywordService = keywordService;
     }
 
     @Override
@@ -195,9 +198,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 } else if (UserState.ADD_KEYWORDS.equals(userState)) {
                     String keywords = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, keywords)) return;
-                    // Люди часто добавляют одни и те же слова
-                    boolean isAdded = addKeyword(chatId, new HashSet<>(Arrays.asList(keywords.split(","))));
-                    if (!isAdded) return;
+                    addKeywords(chatId, keywords);
 
                     // Удаление ключевых слов (передаются порядковые номера, которые преобразуются в слова)
                 } else if (UserState.DEL_KEYWORDS.equals(userState)) {
@@ -495,7 +496,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     // добавить слово из чата в список ключевых слов
                     case "ADD_KEYWORD_FROM_CHAT" -> {
                         String words = oneWordFromChat.get(chatId).trim().toLowerCase();
-                        addKeyword(chatId, new HashSet<>(Arrays.asList(words.split(","))));
+                        addKeywords(chatId, words);
                     }
 
                     /* EXCLUDED */
@@ -688,6 +689,24 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Update exception: " + e.getMessage());
+        }
+    }
+
+    // Добавление ключевых слов для поиска
+    private void addKeywords(Long chatId, String keywords) {
+        List<String> messages = keywordService.addKeywords(chatId,
+                new HashSet<>(Arrays.asList(keywords.split(","))));
+
+        if (isDone(messages)) {
+            for (String message : messages) {
+                if (message.equals(DONE)) continue;
+                sendMessage(chatId, message);
+            }
+            showKeywordsList(chatId);
+        } else {
+            for (String message : messages) {
+                sendMessage(chatId, message);
+            }
         }
     }
 
@@ -889,105 +908,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    // Формирование списка ключевых слов в виде строки
-    private String getKeywordsList(long chatId) {
-        int counter = 0;
-        StringJoiner joinerKeywords = new StringJoiner("\n");
-        List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
-
-        if (!keywordsByChatId.isEmpty()) {
-            for (String item : keywordsByChatId) {
-                joinerKeywords.add(++counter + ". " + item);
-            }
-        }
-        return joinerKeywords.toString();
-    }
-
     // Показ ключевых слов в Телеграме (/keywords)
     private void showKeywordsList(long chatId) {
-        int isPremium = userRepository.isPremiumByChatId(chatId);
-        String joinerKeywords = getKeywordsList(chatId);
+        String keywords = keywordService.showKeywordsList(chatId);
 
-        String keywordsPeriod;
-        if (isPremium != 1) {
-            keywordsPeriod = "<b>" + settingsRepository.getKeywordsPeriod(chatId) + "</b>";
-        } else if (settingsRepository.getPremiumSearchByChatId(chatId).equals("off")) {
-            keywordsPeriod = "<b>" + settingsRepository.getKeywordsPeriod(chatId) + "</b> " + Common.ICON_PREMIUM_IS_ACTIVE;
-        } else {
-            keywordsPeriod = "<b>2 min</b> " + Common.ICON_PREMIUM_IS_ACTIVE;
-        }
-
-        if (joinerKeywords != null && joinerKeywords.length() != 0) {
-            String auto = settingsRepository.getSchedulerOnOffByChatId(chatId);
-            int theme = settingsRepository.getMessageTheme(chatId);
-            String onOffSchedulerRus = "/on";
-            if (auto.contains("on") || auto.contains("включён")) onOffSchedulerRus = "/off";
-
-            keywordsListKeyboard(chatId, String.format(
-                    listKeywordsText,
-                    joinerKeywords,
-                    "<b>" + setOnOffRus(auto, chatId) + " </b>" + onOffSchedulerRus,
-                    keywordsPeriod + " /interval",
-                    "<b>" + theme + "</b> /theme"
-            ));
+        if (keywords != null && keywords.length() != 0) {
+            keywordsListKeyboard(chatId, keywords);
         } else {
             addKeywordsKeyboard(chatId, setupKeywordsText);
         }
-    }
-
-    // Добавление ключевых слов
-    private boolean addKeyword(long chatId, Set<String> keywords) {
-        int counter = 0;
-        int isPremium = userRepository.isPremiumByChatId(chatId);
-        List<String> keywordsByChatId = keywordRepository.findKeywordsByChatId(chatId);
-        int currentKeywordsCount = keywordRepository.getKeywordsCountByChatId(chatId);
-        int totalKeywordsCount = currentKeywordsCount + keywords.size();
-
-        if (isPremium != 1 && totalKeywordsCount > Common.MAX_KEYWORDS_COUNT && chatId != OWNER_ID) {
-            sendMessage(chatId, premiumIsActive3);
-            return false;
-        }
-
-        if (totalKeywordsCount > Common.MAX_KEYWORDS_COUNT_PREMIUM) {
-            sendMessage(chatId, premiumIsActive4);
-            return false;
-        }
-
-        Keyword word;
-        for (String keyword : keywords) {
-            keyword = keyword.replace("\"", "")
-                    .trim()
-                    .toLowerCase();
-
-            if (keyword.length() >= 2 && keyword.length() <= 64) {
-                if (!keywordsByChatId.contains(keyword)) {
-                    word = new Keyword();
-                    word.setChatId(chatId);
-                    word.setKeyword(keyword);
-
-                    try {
-                        keywordRepository.save(word);
-                        counter++;
-                    } catch (Exception e) {
-                        if (e.getMessage().contains("ui_keywords_chat_id_link")) {
-                            log.info(wordIsExistsText + keyword);
-                        }
-                    }
-
-                } else {
-                    sendMessage(chatId, wordIsExistsText + keyword);
-                }
-            } else {
-                sendMessage(chatId, minWordLengthText);
-            }
-        }
-        if (counter != 0) {
-            sendMessage(chatId, wordsAddedText + " - " + counter + " ✔️");
-        } else {
-            sendMessage(chatId, wordsIsNotAddedText);
-        }
-        showKeywordsList(chatId);
-        return true;
     }
 
     // Изменение периода поиска
@@ -1005,7 +934,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 words.add("*");
             } else {
                 String[] nums = keywordNumbers.split(",");
-                String[] split = getKeywordsList(chatId).split("\n");
+                String[] split = keywordService.getKeywordsList(chatId).split("\n");
 
                 // Сопоставление
                 for (String num : nums) {
@@ -1850,7 +1779,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         buttons.put("JARO_WINKLER_ON", "On");
 
         String isActiveJw = settingsRepository.getJaroWinklerByChatId(chatId);
-        isActiveJw = setOnOffRus(isActiveJw, chatId);
+        String lang = settingsRepository.getLangByChatId(chatId);
+        isActiveJw = setOnOffRus(isActiveJw, lang);
 
         sendMessage(chatId, jaroWinklerSwitcherText + "<b>" + isActiveJw +
                 "</b>", InlineKeyboards.maker(buttons));
@@ -1865,8 +1795,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         int isPremium = userRepository.isPremiumByChatId(chatId);
 
         sets.ifPresentOrElse(x -> {
-                    x.setScheduler(setOnOffRus(x.getScheduler(), chatId));
-                    x.setExcluded(setOnOffRus(x.getExcluded(), chatId));
+                    x.setScheduler(Common.setOnOffRus(x.getScheduler(), lang));
+                    x.setExcluded(setOnOffRus(x.getExcluded(), lang));
 
                     String text = getSettingsText(x, lang, isPremium);
                     settingsKeyboard(chatId, text);
@@ -2199,15 +2129,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (IOException | TelegramApiException e) {
             log.error(e.getMessage());
         }
-    }
-
-    // Преобразование on/off в русские слова
-    private String setOnOffRus(String value, long chatId) {
-        String lang = settingsRepository.getLangByChatId(chatId);
-        if (lang.equals("ru")) {
-            value = value.equals("on") ? "включён" : "выключен";
-        }
-        return value;
     }
 
     // Кнопка отмены ввода слов

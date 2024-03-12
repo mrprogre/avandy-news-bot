@@ -34,6 +34,7 @@ public class Common {
     public static final String ICON_PREMIUM_IS_ACTIVE = "\uD83D\uDC8E";
     public static final String ICON_SMILE_UPSIDE_DOWN = "\uD83D\uDE43";
     public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
+    public static final String DONE = "done";
 
     // Compare dates to find news by period
     public static int compareDates(Date now, Date in, int minutes) {
@@ -264,6 +265,19 @@ public class Common {
 
     public static String minusOnOff(String text) {
         return text.replaceAll("[onf\\[\\] ]", "");
+    }
+
+
+    // Преобразование on/off в русские слова
+    public static String setOnOffRus(String value, String lang) {
+        if (lang.equals("ru")) {
+            value = value.equals("on") ? "включён" : "выключен";
+        }
+        return value;
+    }
+
+    public static boolean isDone(List<String> list) {
+        return list.get(list.size() - 1).equals(DONE);
     }
 
 }
