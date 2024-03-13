@@ -355,10 +355,9 @@ public class Text extends Common {
     }
 
     public static String getSettingsText(Settings settings, String lang, int isPremium) {
-        String premiumPeriod;
         String premiumSettings = "";
         String schedSettings = "";
-        String text, start, start1, start2, start24, startDefault, on1, on2, off1, off2, premium1, premium2,
+        String premiumPeriod, start, start1, start2, start24, startDefault, on1, on2, off1, off2, premium1, premium2,
                 settings1, autoSearch1, autoSearch2, autoSearch3, fullSearch1, change1, change2, filter1,
                 filter2, theme1, theme2;
 
@@ -414,7 +413,7 @@ public class Text extends Common {
         }
 
         if (settings.getScheduler().contains(on1) && isPremium != 1) {
-            text = switch (settings.getPeriod()) {
+            String text = switch (settings.getPeriod()) {
                 case "1h" -> start1;
                 case "2h" -> start2;
                 case "24h", "48h", "72h" -> start24;
