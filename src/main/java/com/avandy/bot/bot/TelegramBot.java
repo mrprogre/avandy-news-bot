@@ -353,7 +353,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 newsListTopSearchCounter.putIfAbsent(chatId, 0);
 
                 /* DEBUG */
-                log.warn("Callback: {} --- chat_id: {}, {}", callbackData, chatId, userRepository.findNameByChatId(chatId));
+                if (OWNER_ID != chatId) {
+                    log.warn("Callback: {} --- chat_id: {}, {}", callbackData, chatId,
+                            userRepository.findNameByChatId(chatId));
+                }
 
                 switch (callbackData) {
                     case "ADD_RSS" -> {
