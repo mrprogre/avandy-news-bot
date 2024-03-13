@@ -1598,7 +1598,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Кнопки для выбора периода поиска
     public void topPeriodsKeyboard(long chatId) {
-        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.maker(Buttons. getTopPeriod()));
+        sendMessage(chatId, chooseSearchDepthText, InlineKeyboards.maker(Buttons.getTopPeriod()));
     }
 
     // Кнопки для просмотра списка удалённых слов из Топ по страницам
@@ -1680,34 +1680,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Кнопки для раздела настроек (/settings)
     private void settingsKeyboard(long chatId, String text) {
-        String lang = settingsRepository.getLangByChatId(chatId);
-
-        if (lang.equals("ru")) {
-            Map<String, String> buttons = new LinkedHashMap<>();
-            buttons.put("GET_TOP", updateTopText2);
-            buttons.put("START_SEARCH", "» » »");
-            sendMessage(chatId, text, InlineKeyboards.maker(buttons));
-        } else {
-            boolean isOn = settingsRepository.getSchedulerOnOffByChatId(chatId).equals("on");
-            int isPremium = userRepository.isPremiumByChatId(chatId);
-
-            Map<String, String> buttons1 = new LinkedHashMap<>();
-            Map<String, String> buttons2 = new LinkedHashMap<>();
-            Map<String, String> buttons3 = new LinkedHashMap<>();
-            buttons1.put("SET_SCHEDULER", "1. " + autoSearchText);
-            buttons1.put("SET_PERIOD", "2. " + intervalText);
-            buttons2.put("SET_EXCLUDED", "3. " + exclusionText);
-            buttons2.put("SET_PERIOD_ALL", "4. " + intervalText);
-
-            if (isOn && isPremium != 1) {
-                buttons3.put("SCHEDULER_START", "5. " + startSettingsText);
-            } else if (isPremium == 1) {
-                buttons3.put("PREMIUM_SEARCH", "5. " + premiumSearchSettingsText);
-            }
-            buttons3.put("START_SEARCH", "» » »");
-
-            sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
-        }
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("GET_TOP", updateTopText2);
+        buttons.put("START_SEARCH", "» » »");
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
 
@@ -2042,7 +2018,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     void setThemeKeyboard(long chatId) {
         sendMessageWithPreview(chatId, String.format(messageThemeChooseText,
-                        settingsRepository.getMessageTheme(chatId)), InlineKeyboards.maker(Buttons.getThemes()));
+                settingsRepository.getMessageTheme(chatId)), InlineKeyboards.maker(Buttons.getThemes()));
     }
 
     // Дополнительная клавиатура с тремя видами поиска (с приветствием пользователя)

@@ -358,102 +358,128 @@ public class Text extends Common {
         String premiumPeriod;
         String premiumSettings = "";
         String schedSettings = "";
+        String text, start, start1, start2, start24, startDefault, on1, on2, off1, off2, premium1, premium2,
+                settings1, autoSearch1, autoSearch2, autoSearch3, fullSearch1, change1, change2, filter1,
+                filter2, theme1, theme2;
 
         if (lang.equals("ru")) {
-            if (settings.getScheduler().contains("включён") && isPremium != 1) {
-                String text = switch (settings.getPeriod()) {
-                    case "1h" -> "Запуск поиска каждый час\n";
-                    case "2h" -> "Запуск поиска каждые 2 часа\n";
-                    case "24h", "48h", "72h" -> "Запуск поиска один раз в сутки\n";
-                    default ->
-                            "Часы запуска: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
-                };
-                schedSettings = "<b>Старт</b> автопоиска: <b>" + settings.getStart() + "</b>\n" +
-                        "[изменить /change_time]\n" +
-                        "<pre>" + text + "</pre>";
-            }
-
-            String premiumRus = settings.getPremiumSearch();
-            String onOffPremiumRus = "включить /prem_on";
-            if (premiumRus.contains("on") || premiumRus.contains("включён")) onOffPremiumRus = "выключить /prem_off";
-
-            if (isPremium == 1) {
-                String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
-                premiumPeriod = "<b>" + period + "</b>";
-                String rus = settings.getPremiumSearch().equals("on") ? "<b>включён</b>" : "<b>выключен</b>";
-                premiumSettings = delimiterNews + "\n<b>Премиум поиск:</b> " + rus + "\n" +
-                        "[" + onOffPremiumRus + "]\n" +
-                        "<pre>Поиск производится каждые 2 минуты</pre>";
-            } else {
-                premiumPeriod = settings.getPeriod();
-            }
-
-            String schedulerRus = settings.getScheduler();
-            String onOffSchedulerRus = "включить /on";
-            if (schedulerRus.contains("on") || schedulerRus.contains("включён")) onOffSchedulerRus = "выключить /off";
-
-            String excludedRus = settings.getExcluded();
-            String onOffExcludedRus = "включить /filter_on";
-            if (excludedRus.contains("on") || excludedRus.contains("включён")) onOffExcludedRus = "выключить /filter_off";
-
-            return "<b>Настройки</b> " + ICON_SETTINGS + " \n" +
-                    delimiterNews + "\n" +
-                    "<b>Автопоиск</b> по словам: <b>" + minusOnOff(schedulerRus) + "</b> [" +
-                    onOffSchedulerRus + "]\n" +
-                    //delimiterNews + "\n" +
-                    "<b>Частота и интервал</b> автопоиска: <b>" + premiumPeriod + "</b> [изменить /interval]\n" +
-                    "<pre>В результатах поиска представлены новости за выбранный интервал</pre>\n" +
-                    schedSettings +
-                    premiumSettings +
-                    delimiterNews + "\n" +
-                    "<b>Полный поиск</b> новостей, интервал: <b>" + settings.getPeriodAll() + "</b> \n" +
-                    "[изменить /change_full]\n" +
-                    "<b>Фильтрация новостей</b>: <b>" +
-                    minusOnOff(settings.getExcluded()) + "</b> [" +
-                    onOffExcludedRus + "]\n" +
-                    "<pre>Новости, содержащие слова-исключения, не будут показаны</pre>" +
-                    delimiterNews + "\n" +
-                    "<b>Внешний вид</b> ленты новостей, тип: <b>" + settings.getMessageTheme() + "</b> \n" +
-                    "[выбрать другой тип /theme]";
+            start = "<b>Старт</b> автопоиска: <b>" + settings.getStart() + "</b>\n" +
+                    "[изменить /change_time]\n" +
+                    "<pre>%s</pre>";
+            start1 = "Запуск поиска каждый час\n";
+            start2 = "Запуск поиска каждые 2 часа\n";
+            start24 = "Запуск поиска один раз в сутки\n";
+            startDefault = "Часы запуска: <b>%s:00</b>\n";
+            on1 = "включён";
+            on2 = "включить";
+            off1 = "выключен";
+            off2 = "выключить";
+            premium1 = "Премиум поиск";
+            premium2 = "Поиск производится каждые 2 минуты";
+            settings1 = "Настройки";
+            autoSearch1 = "<b>Автопоиск</b> по словам";
+            autoSearch2 = "<b>Частота и интервал</b> автопоиска";
+            autoSearch3 = "В результатах поиска представлены новости за выбранный интервал";
+            change1 = "[изменить /interval]";
+            change2 = "изменить";
+            fullSearch1 = "<b>Полный поиск</b> новостей, интервал";
+            filter1 = "Фильтрация новостей";
+            filter2 = "Новости, содержащие слова-исключения, не будут показаны";
+            theme1 = "<b>Внешний вид</b> ленты новостей, тип";
+            theme2 = "выбрать другой тип";
         } else {
-
-            if (settings.getScheduler().contains("on") && isPremium != 1) {
-                String text = switch (settings.getPeriod()) {
-                    case "1h" -> " (launch every hour)\n";
-                    case "2h" -> " (launch every 2 hours)\n";
-                    case "24h", "48h", "72h" -> " (launch once a day)\n";
-                    default ->
-                            " (start time: <b>" + getTimeToExecute(settings.getStart(), settings.getPeriod()) + ":00</b>)\n";
-                };
-                schedSettings = delimiterNews + "\n" + "<b>Start</b> auto search by keywords: <b>" + settings.getStart() + "</b>" + text;
-            }
-
-            if (isPremium == 1) {
-                String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
-                premiumPeriod = "<b>" + period + "</b>, " + premiumIsActive;
-                premiumSettings = delimiterNews + "\n<b>Premium bot search: " + settings.getPremiumSearch() + "</b>\n" +
-                        "Enable or disable auto search every 2 minutes (will be launched in accordance with step 2)\n";
-            } else {
-                premiumPeriod = settings.getPeriod();
-            }
-
-            return "<b>Settings</b> " + ICON_SETTINGS + " \n" +
-                    "<b>Auto search by words: " + settings.getScheduler() + "</b>\n" +
-                    delimiterNews + "\n" +
-                    "<b>Auto search frequency: " + premiumPeriod + "</b>\n" +
-                    "The search period coincides with the search frequency and is equal to the current time minus <b>" + settings.getPeriod() + "</b>\n" +
-                    delimiterNews + "\n" +
-                    "<b>Excluding</b>: <b>" + settings.getExcluded() + "</b>\n" +
-                    "Excluding news that contains excluding terms\n" +
-                    delimiterNews + "\n" +
-                    "<b>Full search interval: " + settings.getPeriodAll() + "</b>\n" +
-                    schedSettings +
-                    premiumSettings +
-                    delimiterNews + "\n" +
-                    "Select the type of <b>appearance</b> messages /theme" + "\n" +
-                    delimiterNews + "\n" +
-                    "Parameters change after pressing buttons";
+            start = "<b>Start</b> auto search: <b>" + settings.getStart() + "</b> [/change_time]\n" +
+                    "<pre>%s</pre>";
+            start1 = "Launch every hour\n";
+            start2 = "Launch every 2 hours\n";
+            start24 = "Launch  once a day\n";
+            startDefault = "Start time: <b>%s:00</b>\n";
+            on1 = "on";
+            on2 = "turn";
+            off1 = "off";
+            off2 = "turn";
+            premium1 = "Premium bot search";
+            premium2 = "Enable or disable auto search every 2 minutes (will be launched in accordance with step 2)";
+            settings1 = "Settings";
+            autoSearch1 = "<b>Auto search</b> by words";
+            autoSearch2 = "<b>Frequency and interval</b> auto search";
+            autoSearch3 = "The search results show news for the selected interval";
+            change1 = "[change /interval]";
+            change2 = "change";
+            fullSearch1 = "<b>Full search</b> news, interval";
+            filter1 = "News filtering";
+            filter2 = "News containing exception words will not be shown";
+            theme1 = "<b>Appearance</b> news feed, type";
+            theme2 = "choose another type";
         }
+
+        if (settings.getScheduler().contains(on1) && isPremium != 1) {
+            text = switch (settings.getPeriod()) {
+                case "1h" -> start1;
+                case "2h" -> start2;
+                case "24h", "48h", "72h" -> start24;
+                default -> String.format(startDefault, getTimeToExecute(settings.getStart(), settings.getPeriod()));
+            };
+            schedSettings = String.format(start, text);
+        }
+
+        String premiumRus = settings.getPremiumSearch();
+        String onOffPremiumRus = on2 + " /prem_on";
+        if (premiumRus.contains("on") || premiumRus.contains(on1)) {
+            onOffPremiumRus = off2 + " /prem_off";
+            if (isPremium == 1) {
+                change1 = "";
+            }
+        }
+
+        if (isPremium == 1) {
+            String period = settings.getPremiumSearch().equals("on") ? "2 min" : settings.getPeriod();
+            premiumPeriod = "<b>" + period + "</b>";
+            String rus = settings.getPremiumSearch().equals("on") ? "<b>" + on1 + "</b>" : "<b>" + off1 + "</b>";
+            premiumSettings = delimiterNews + "\n<b>" + premium1 + ":</b> " + rus + "\n" +
+                    "[" + onOffPremiumRus + "]\n" +
+                    "<pre>" + premium2 + "</pre>";
+        } else {
+            premiumPeriod = settings.getPeriod();
+        }
+
+        String schedulerRus = settings.getScheduler();
+        String onOffSchedulerRus = on2 + " /on";
+        if (schedulerRus.contains("on") || schedulerRus.contains(on1)) onOffSchedulerRus = off2 + " /off";
+
+        String excludedRus = settings.getExcluded();
+        String onOffExcludedRus = on2 + " /filter_on";
+        if (excludedRus.contains("on") || excludedRus.contains(on1))
+            onOffExcludedRus = off2 + " /filter_off";
+
+        schedulerRus = minusOnOff(schedulerRus);
+        String exclRus = minusOnOff(settings.getExcluded());
+
+        return String.format("""
+                        <b>%s</b> %s\s
+                        %s
+                        %s: <b>%s</b> [%s]
+                        %s: <b>%s</b> %s
+                        <pre>%s</pre>
+                        %s%s%s
+                        %s: <b>%s</b>\s
+                        [%s /change_full]
+                        <b>%s</b>: <b>%s</b> [%s]
+                        <pre>%s</pre>%s
+                        %s: <b>%s</b>\s
+                        %s[ /theme]""",
+                settings1, ICON_SETTINGS,
+                delimiterNews,
+                autoSearch1, schedulerRus, onOffSchedulerRus,
+                autoSearch2, premiumPeriod, change1,
+                autoSearch3,
+                schedSettings, premiumSettings, delimiterNews,
+                fullSearch1, settings.getPeriodAll(),
+                change2,
+                filter1, exclRus, onOffExcludedRus,
+                filter2, delimiterNews,
+                theme1, settings.getMessageTheme(),
+                theme2);
     }
 
 }
