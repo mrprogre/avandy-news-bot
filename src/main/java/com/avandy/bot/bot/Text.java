@@ -451,8 +451,11 @@ public class Text extends Common {
         if (excludedRus.contains("on") || excludedRus.contains(on1))
             onOffExcludedRus = off2 + " /filter_off";
 
-        schedulerRus = minusOnOff(schedulerRus);
-        String exclRus = minusOnOff(settings.getExcluded());
+        String exclRus = settings.getExcluded();
+        if (lang.equals("ru")) {
+            schedulerRus = minusOnOff(schedulerRus);
+            exclRus = minusOnOff(exclRus);
+        }
 
         return String.format("""
                         <b>%s</b> %s\s
