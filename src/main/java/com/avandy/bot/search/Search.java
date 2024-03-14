@@ -162,17 +162,17 @@ public class Search implements SearchService {
         }
 
         totalNewsCounter = headlinesToShow.size();
-        // remove titles contains excluding terms
+
+        // Удаление заголовков, содержащих слова-исключения
         if (isAllSearch && settingsRepository.getExcludedOnOffByChatId(chatId).equals("on")) {
             List<String> allExcludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
 
             for (String word : allExcludedByChatId) {
-                String finalWord = Common.replaceSpecialSymbols(word);
-                headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(finalWord.toLowerCase()));
+                headlinesToShow.removeIf(x -> x.getTitle().toLowerCase().contains(word));
             }
         }
 
-        // Filtering out similar news: O(n²)
+        // Оставляем одну из нескольких похожих новостей O(n²)
         headlinesToShow.parallelStream()
                 .forEach(h1 -> headlinesToShow
                         .forEach(h2 -> {
