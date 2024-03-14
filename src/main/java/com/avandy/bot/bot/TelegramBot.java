@@ -238,35 +238,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 } else if (UserState.ADD_SOURCE.equals(userState)) {
                     String text = messageText.trim();
-                    if (!text.contains(",")) {
-                        sendMessage(chatId, noCommasText);
-                        return;
-                    }
-                    if (checkUserInput(chatId, text)) return;
-                    String[] words = text.split(",");
-                    String country = words[0].trim();
-                    String source = words[1].trim();
-                    String link = words[2].trim();
-                    String parseType = "rss";
+                    String status = addSource(chatId, userTelegramLanguageCode, text);
+                    showStatus(chatId, List.of(status));
 
-                    boolean isParsedJsoup = Common.checkRssJsoup(link);
-                    boolean isParsedRome = Common.checkRssRome(link);
-
-                    if (!isParsedRome && isParsedJsoup) parseType = "no-rss";
-                    log.warn("isParsedRome = " + isParsedRome + ", isParsedJsoup = " + isParsedJsoup); // DEBUG
-
-                    if (isParsedRome || isParsedJsoup) {
-                        Integer isExists = rssRepository.isExistsByChatId(link);
-                        if (isExists != null) {
-                            sendMessage(chatId, rssExistsText);
-                            return;
-                        }
-                        rssRepository.save(new RssList(chatId, country, source, link, 1, 100,
-                                new Timestamp(System.currentTimeMillis()), parseType, userTelegramLanguageCode));
-                        savedKeyboard(chatId, changesSavedText);
-                    } else {
-                        sendMessage(chatId, notSupportedRssText);
-                    }
                 } else if (UserState.DEL_SOURCE.equals(userState)) {
                     String source = messageText.trim().toLowerCase();
                     if (checkUserInput(chatId, source)) return;
@@ -354,7 +328,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                 /* DEBUG */
                 if (OWNER_ID != chatId) {
-                    log.warn("Callback: {} --- chat_id: {}, {}", callbackData, chatId,
+                    log.warn("Callback: {}, chat_id: {}, {}", callbackData, chatId,
                             userRepository.findNameByChatId(chatId));
                 }
 
@@ -704,10 +678,42 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+
     // Добавление ключевых слов для поиска
     private boolean addKeywords(Long chatId, String keywords) {
         showStatus(chatId, keywordsService.addKeywords(chatId, new HashSet<>(Arrays.asList(keywords.split(",")))));
         return true;
+    }
+
+    public String addSource(long chatId, String userTelegramLanguageCode, String text) {
+        if (!text.contains(",")) {
+            return noCommasText;
+        }
+        if (checkUserInput(chatId, text)) return ERROR;
+        String[] words = text.split(",");
+        String country = words[0].trim();
+        String source = words[1].trim();
+        String link = words[2].trim();
+        String parseType = "rss";
+
+        boolean isParsedJsoup = Common.checkRssJsoup(link);
+        boolean isParsedRome = Common.checkRssRome(link);
+
+        if (!isParsedRome && isParsedJsoup) parseType = "no-rss";
+        log.warn("isParsedRome = " + isParsedRome + ", isParsedJsoup = " + isParsedJsoup); // DEBUG
+
+        if (isParsedRome || isParsedJsoup) {
+            Integer isExists = rssRepository.isExistsByChatId(link);
+            if (isExists != null) {
+                return rssExistsText;
+            }
+            rssRepository.save(new RssList(chatId, country, source, link, 1, 100,
+                    new Timestamp(System.currentTimeMillis()), parseType, userTelegramLanguageCode));
+            savedKeyboard(chatId, changesSavedText);
+        } else {
+            return notSupportedRssText;
+        }
+        return DONE;
     }
 
     private void deleteSourceRss(long chatId, String source) {

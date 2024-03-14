@@ -19,7 +19,6 @@ public class Common {
     public static final double BOT_PRICE_ENG = 49.90;
     public static final int JARO_WINKLER_LEVEL = 85;
     public static final int TOP_TEN_SHOW_LIMIT = 20;
-    public static final int EXCLUDED_LIMIT = 100;
     public static final int LIMIT_FOR_BREAKING_INTO_PARTS = 50;
     public static final int MAX_KEYWORDS_COUNT_PREMIUM = 100;
     public static final int MAX_KEYWORDS_COUNT = 3;
@@ -35,6 +34,7 @@ public class Common {
     public static final String ICON_SMILE_UPSIDE_DOWN = "\uD83D\uDE43";
     public static final String REPLACE_ALL_TOP = "[\"}|]|\\[|]|,|\\.|:|«|!|\\?|»|\"|;]";
     public static final String DONE = "done";
+    public static final String ERROR = "error";
 
     // Compare dates to find news by period
     public static int compareDates(Date now, Date in, int minutes) {
