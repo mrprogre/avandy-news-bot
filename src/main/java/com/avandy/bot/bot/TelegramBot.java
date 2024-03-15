@@ -261,7 +261,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     /* Основные команды */
                     switch (messageText) {
                         case "/settings" -> new Thread(() -> getSettings(chatId)).start();
-                        case "/keywords" -> new Thread(() -> showKeywordsList(chatId)).start();
+                        case "/keywords", "/list_key" -> new Thread(() -> showKeywordsList(chatId)).start();
                         case "/search" -> new Thread(() -> initSearchesKeyboard(chatId)).start();
                         case "/info" -> new Thread(() -> infoKeyboard(chatId)).start();
                         case "/sources" -> new Thread(() -> sourcesKeyboard(chatId)).start();
@@ -284,7 +284,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                         case "/interval" -> keywordsChangePeriodKeyboard(chatId);
                         case "/change_time" -> startSearchTimeButtons(chatId);
 
+                        // Top 20
                         case "/interval_top" -> topPeriodsKeyboard(chatId);
+                        case "/list_top" -> getTopTenWordsList(chatId);
 
                         // Полный поиск
                         case "/interval_full" -> fullSearchPeriodChangeKeyboard(chatId);
@@ -315,7 +317,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                         // Misc
                         case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
-                        case "/excluding" -> getExcludedList(chatId);
+                        case "/excluding", "/list_ex" -> getExcludedList(chatId);
                         case "/delete" -> showYesNoOnDeleteUser(chatId);
                         case "/top" -> new Thread(() -> showTop(chatId)).start();
                         case "/premium" -> new Thread(() -> showYesNoGetPremium(chatId)).start();
