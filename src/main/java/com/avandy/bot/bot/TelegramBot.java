@@ -1835,7 +1835,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 cleanFullSearchHistoryText + "/clear \n" +
                 messageThemeChooseText2 + "/theme" +
                 delimiterNews +
-                excludeCategoryText + ":\n/sport /celebrity /negative /policy";
+                excludeCategoryText + "\n/sport /celebrity /negative /policy";
 
         String keywordsText = String.format("2" + initSearchTemplateText, keywordSearchText,
                 settingsRepository.getKeywordsPeriod(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
