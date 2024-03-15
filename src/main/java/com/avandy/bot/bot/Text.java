@@ -14,7 +14,7 @@ public class Text extends Common {
             excludedText, listKeywordsButtonText, updateTopText, updateTopText2, undefinedCommandText, changesSavedText,
             jaroWinklerSwitcherText, headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText,
             jaroWinklerText, wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText, addText2,
-            initSearchTemplateText, yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText,
+            yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText,
             startSettingsText, excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText,
             premiumText, startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
             getPremiumText, addInListText, delFromListText, removeAllText, sendMessageForDevText, searchNewsHeaderText,
@@ -31,12 +31,11 @@ public class Text extends Common {
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
             messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2, intervalText2,
-            excludeCategoryText;
+            excludeCategoryText, excludedListText2, intervalText3;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
             startText = "Начало работы с ботом";
-            initSearchTemplateText = ". %s%s\n<pre>Список: <b>%d</b> %s</pre>";
             searchNewsHeaderText = "Поиск новостей";
             greetingText = EmojiParser.parseToUnicode("Здравствуйте! :blush: \n" +
                     "Я могу найти для Вас важную информацию и убрать много лишней!");
@@ -88,10 +87,12 @@ public class Text extends Common {
             buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
             intervalText = "Интервал";
             intervalText2 = "Изменить интервал поиска";
+            intervalText3 = "Изменить интервал ";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
             startSettingsText = "Старт";
             excludedListText = "Удалённое";
+            excludedListText2 = "Удалённое из топа ";
             delFromTopText = "Удалить";
             top20ByPeriodText = "<b>Top 20 слов</b> за ";
             allowCommasAndNumbersText = "Укажите порядковый номер слова (разделять запятой)";
@@ -250,7 +251,6 @@ public class Text extends Common {
             getPremiumText = "Premium bot";
             premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b> /premium) " +
                     ICON_PREMIUM_IS_ACTIVE;
-            initSearchTemplateText = ". %s%s\n<pre>List: <b>%d</b> %s</pre>";
             searchNewsHeaderText = "Search news";
             greetingText = EmojiParser.parseToUnicode("Hello! :blush: \n" +
                     "I can find important information for you and hide a lot of unnecessary information!");
@@ -300,10 +300,12 @@ public class Text extends Common {
             buyButtonText = "Good buy! " + ICON_GOOD_BYE;
             intervalText = "Interval";
             intervalText2 = "Change search interval";
+            intervalText3 = "Change search interval";
             autoSearchText = "Auto search";
             exclusionText = "News exclusion";
             startSettingsText = "Start";
             excludedListText = "List of deleted";
+            excludedListText2 = "List of deleted ";
             delFromTopText = "Delete";
             updateTopText = "Update top";
             updateTopText2 = "Show top";
@@ -468,7 +470,7 @@ public class Text extends Common {
                         <pre>%s</pre>
                         %s%s%s
                         %s: <b>%s</b>\s
-                        [%s /change_full]
+                        [%s /interval_full]
                         <b>%s</b>: <b>%s</b> [%s]
                         <pre>%s</pre>%s
                         %s: <b>%s</b>\s

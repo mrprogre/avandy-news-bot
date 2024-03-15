@@ -284,8 +284,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                         case "/interval" -> keywordsChangePeriodKeyboard(chatId);
                         case "/change_time" -> startSearchTimeButtons(chatId);
 
+                        case "/interval_top" -> topPeriodsKeyboard(chatId);
+
                         // Полный поиск
-                        case "/change_full" -> fullSearchPeriodChangeKeyboard(chatId);
+                        case "/interval_full" -> fullSearchPeriodChangeKeyboard(chatId);
                         case "/filter_on" -> {
                             settingsRepository.updateExcluded("on", chatId);
                             savedKeyboard(chatId, String.format(changesSavedText2, "on"));
@@ -1829,50 +1831,38 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void initSearchesKeyboard(long chatId) {
         String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
 
-        String fullText = String.format("1" + initSearchTemplateText, searchWithFilterText,
-                settingsRepository.getFullSearchPeriod(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
-                searchWithFilter2Text + "\n") +
-                cleanFullSearchHistoryText + "/clear \n" +
-                messageThemeChooseText2 + "/theme" +
+        String fullText = "1. " +
+                searchWithFilterText + " " +
+                settingsRepository.getFullSearchPeriod(chatId) + "\n" +
+                intervalText3 + "/interval_full \n" +
+                listExcludedText +  " /list_ex \n" +
+                cleanFullSearchHistoryText + "/clear" +
                 delimiterNews +
                 excludeCategoryText + "\n/sport /celebrity /negative /policy";
+        String topText = "2. " + top20Text2 + settingsRepository.getTopPeriod(chatId) + "\n" +
+                intervalText3 + "/interval_top \n" +
+                excludedListText2 + "/list_top";
+        String keywordsText = "3. " + keywordSearchText + settingsRepository.getKeywordsPeriod(chatId) + "\n" +
+                intervalText3 + "/interval \n" +
+                listKeywordsButtonText + " /list_key";
 
-        String keywordsText = String.format("2" + initSearchTemplateText, keywordSearchText,
-                settingsRepository.getKeywordsPeriod(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
-                keywordSearch2Text);
-
-        String topText = String.format("3" + initSearchTemplateText, top20Text2,
-                settingsRepository.getTopPeriod(chatId), topRepository.deleteFromTopTenCount(chatId),
-                removedFromTopText);
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
                 delimiterNews +
                 fullText +
                 delimiterNews +
-                keywordsText +
+                topText +
                 delimiterNews +
-                topText;
+                keywordsText+
+                delimiterNews +
+                messageThemeChooseText2 + "/theme";
 
-        Map<String, String> buttons1 = new LinkedHashMap<>();
-        Map<String, String> buttons2 = new LinkedHashMap<>();
-        Map<String, String> buttons3 = new LinkedHashMap<>();
+        Map<String, String> buttons = new LinkedHashMap<>();
+        buttons.put("FIND_ALL", fullSearchText);
+        buttons.put("GET_TOP", updateTopText2);
+        buttons.put("FIND_BY_KEYWORDS", keywordsSearchText);
 
-        // Full search
-        //buttons1.put("SET_PERIOD_ALL", intervalText);
-        buttons1.put("LIST_EXCLUDED", listText2);
-        buttons1.put("FIND_ALL", fullSearchText);
-
-        // Keywords search
-        //buttons2.put("SET_PERIOD", intervalText);
-        buttons2.put("LIST_KEYWORDS", listText2);
-        buttons2.put("FIND_BY_KEYWORDS", keywordsSearchText);
-
-        // Top 20
-        //buttons3.put("SET_PERIOD_TOP", intervalText);
-        buttons3.put("LIST_TOP", listText2);
-        buttons3.put("GET_TOP", updateTopText2);
-
-        sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, null, null));
+        sendMessage(chatId, text, InlineKeyboards.maker(buttons));
     }
 
     // Отправка сообщения стандартная
