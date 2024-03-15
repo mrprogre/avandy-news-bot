@@ -1857,7 +1857,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 delimiterNews +
                 keywordsText+
                 delimiterNews +
-                messageThemeChooseText2 + "<b>/theme</b>";
+                messageThemeChooseText2 + "/theme";
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("FIND_ALL", fullSearchText);
