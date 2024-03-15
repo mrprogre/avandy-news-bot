@@ -1836,17 +1836,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         String fullText = "1. " +
                 searchWithFilterText +
                 settingsRepository.getFullSearchPeriod(chatId) + "\n" +
-                intervalText3 + " /interval_full\n" +
-                listExcludedText +  " /list_ex\n" +
-                cleanFullSearchHistoryText + "/clear" +
+                intervalText3 + "  <b>/interval_full</b>\n" +
+                listExcludedText +  "   <b>/list_ex</b>\n" +
+                cleanFullSearchHistoryText + "   <b>/clear</b>" +
                 delimiterNews +
-                excludeCategoryText + "\n/sport /celebrity /negative /policy";
+                excludeCategoryText + "\n<b>/sport\n/celebrity\n/negative\n/policy</b>";
         String topText = "2. " + top20Text2 + settingsRepository.getTopPeriod(chatId) + "\n" +
-                intervalText3 + " /interval_top\n" +
-                excludedListText2 + "/list_top";
+                intervalText3 + "  <b>/interval_top</b>\n" +
+                excludedListText2 + "   <b>/list_top</b>";
         String keywordsText = "3. " + keywordSearchText + settingsRepository.getKeywordsPeriod(chatId) + "\n" +
-                intervalText3 + " /interval\n" +
-                listKeywordsButtonText + " /list_key";
+                intervalText3 + "  <b>/interval</b>\n" +
+                listKeywordsButtonText + "     <b>/list_key</b>";
 
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
@@ -1857,7 +1857,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 delimiterNews +
                 keywordsText+
                 delimiterNews +
-                messageThemeChooseText2 + "/theme";
+                messageThemeChooseText2 + "<b>/theme</b>";
 
         Map<String, String> buttons = new LinkedHashMap<>();
         buttons.put("FIND_ALL", fullSearchText);
