@@ -87,7 +87,7 @@ public class Text extends Common {
             buyButtonText = "Пока, друг! " + ICON_GOOD_BYE;
             intervalText = "Интервал";
             intervalText2 = "Изменить интервал поиска";
-            intervalText3 = "Изменить интервал ";
+            intervalText3 = "Изменить интервал";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
             startSettingsText = "Старт";
@@ -223,7 +223,7 @@ public class Text extends Common {
             delSourceInfoText = "Delete <b>your</b> source by its name";
             addSourceText = "Add RSS";
             delSourceText = "Delete";
-            cleanFullSearchHistoryText = "clear browsing history ";
+            cleanFullSearchHistoryText = "Clear browsing history ";
             sendPaymentText = "Send transfer confirmation";
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";

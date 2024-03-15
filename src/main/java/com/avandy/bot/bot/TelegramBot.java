@@ -1832,18 +1832,18 @@ public class TelegramBot extends TelegramLongPollingBot {
         String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
 
         String fullText = "1. " +
-                searchWithFilterText + " " +
+                searchWithFilterText +
                 settingsRepository.getFullSearchPeriod(chatId) + "\n" +
-                intervalText3 + "/interval_full \n" +
-                listExcludedText +  " /list_ex \n" +
+                intervalText3 + " /interval_full\n" +
+                listExcludedText +  " /list_ex\n" +
                 cleanFullSearchHistoryText + "/clear" +
                 delimiterNews +
                 excludeCategoryText + "\n/sport /celebrity /negative /policy";
         String topText = "2. " + top20Text2 + settingsRepository.getTopPeriod(chatId) + "\n" +
-                intervalText3 + "/interval_top \n" +
+                intervalText3 + " /interval_top\n" +
                 excludedListText2 + "/list_top";
         String keywordsText = "3. " + keywordSearchText + settingsRepository.getKeywordsPeriod(chatId) + "\n" +
-                intervalText3 + "/interval \n" +
+                intervalText3 + " /interval\n" +
                 listKeywordsButtonText + " /list_key";
 
 
