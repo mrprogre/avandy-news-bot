@@ -30,7 +30,8 @@ public class Text extends Common {
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText, listText3,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
-            messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2, intervalText2;
+            messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2, intervalText2,
+            excludeCategoryText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -194,7 +195,9 @@ public class Text extends Common {
                     Запуск поиска раз в %s
                     Внешний вид новостей: %s
                     - - - - - - - - - - - - - - - - - - - - - - - -""";
+            excludeCategoryText = "Исключить категорию новостей:";
         } else {
+            excludeCategoryText = "Exclude news category:";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -

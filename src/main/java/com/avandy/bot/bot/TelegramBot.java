@@ -80,6 +80,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final ExcludingTermsRepository excludingTermsRepository;
     private final KeywordsService keywordsService;
     private final ExcludingTermsService excludingTermsService;
+    private final CategoryRepository categoryRepository;
     private final int offset = 60;
     private final int searchOffset = 5;
     private final int topSearchOffset = 3;
@@ -90,7 +91,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                        SearchService searchService, UserRepository userRepository, KeywordRepository keywordRepository,
                        SettingsRepository settingsRepository, ExcludingTermsRepository excludingTermsRepository,
                        RssRepository rssRepository, TopTenRepository topRepository,
-                       ShowedNewsRepository showedNewsRepository, KeywordsService keywordsService, ExcludingTermsService excludingTermsService) {
+                       ShowedNewsRepository showedNewsRepository, KeywordsService keywordsService,
+                       ExcludingTermsService excludingTermsService, CategoryRepository categoryRepository) {
         super(botToken);
         this.config = config;
         this.searchService = searchService;
@@ -103,6 +105,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.showedNewsRepository = showedNewsRepository;
         this.keywordsService = keywordsService;
         this.excludingTermsService = excludingTermsService;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -218,7 +221,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                     if (checkUserInput(chatId, exclude)) return;
                     String[] words = exclude.split(",");
                     addExclude(chatId, words);
-                    getExcludedList(chatId);
 
                     // Удаление слов-исключений
                 } else if (UserState.DEL_EXCLUDED.equals(userState)) {
@@ -302,6 +304,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                             settingsRepository.updatePremiumSearch("off", chatId);
                             savedKeyboard(chatId, String.format(changesSavedText2, "off"));
                         }
+
+                        // Категории
+                        case "/sport" -> addExclude(chatId, categoryRepository.getWords("sport"));
+                        case "/celebrity" -> addExclude(chatId, categoryRepository.getWords("celebrity"));
+                        case "/negative" -> addExclude(chatId, categoryRepository.getWords("negative"));
+                        case "/policy" -> addExclude(chatId, categoryRepository.getWords("policy"));
 
                         // Misc
                         case "/start" -> startActions(update, chatId, userTelegramLanguageCode);
@@ -1145,6 +1153,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void addExclude(long chatId, String[] list) {
         List<String> messages = excludingTermsService.addExclude(chatId, list);
         showStatus(chatId, messages);
+        getExcludedList(chatId);
     }
 
     // Удаление слов-исключений
@@ -1818,11 +1827,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     // Кнопки всех видов поиска (/search)
     private void initSearchesKeyboard(long chatId) {
+        String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
+
         String fullText = String.format("1" + initSearchTemplateText, searchWithFilterText,
                 settingsRepository.getFullSearchPeriod(chatId), excludingTermsRepository.getExcludedCountByChatId(chatId),
                 searchWithFilter2Text + "\n") +
                 cleanFullSearchHistoryText + "/clear \n" +
-                messageThemeChooseText2 + "/theme ";
+                messageThemeChooseText2 + "/theme" +
+                delimiterNews +
+                excludeCategoryText + "\n/sport /celebrity /negative /policy";
 
         String keywordsText = String.format("2" + initSearchTemplateText, keywordSearchText,
                 settingsRepository.getKeywordsPeriod(chatId), keywordRepository.getKeywordsCountByChatId(chatId),
@@ -1831,8 +1844,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         String topText = String.format("3" + initSearchTemplateText, top20Text2,
                 settingsRepository.getTopPeriod(chatId), topRepository.deleteFromTopTenCount(chatId),
                 removedFromTopText);
-
-        String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
                 delimiterNews +
