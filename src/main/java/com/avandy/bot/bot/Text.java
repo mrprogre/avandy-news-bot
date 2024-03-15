@@ -196,7 +196,7 @@ public class Text extends Common {
                     Запуск поиска раз в %s
                     Внешний вид новостей: %s
                     - - - - - - - - - - - - - - - - - - - - - - - -""";
-            excludeCategoryText = "Исключить категорию новостей";
+            excludeCategoryText = "Исключить новости с тематикой";
         } else {
             excludeCategoryText = "Exclude news category";
             listKeywordsText = """

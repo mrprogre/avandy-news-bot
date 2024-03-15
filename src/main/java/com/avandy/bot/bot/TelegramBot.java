@@ -1836,17 +1836,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         String fullText = "1. " +
                 searchWithFilterText +
                 settingsRepository.getFullSearchPeriod(chatId) + "\n" +
-                intervalText3 + "  <b>/interval_full</b>\n" +
-                listExcludedText +  "   <b>/list_ex</b>\n" +
-                cleanFullSearchHistoryText + "   <b>/clear</b>" +
+                intervalText3 + " /interval_full\n" +
+                listExcludedText +  "  /list_ex\n" +
+                cleanFullSearchHistoryText + "  /clear" +
                 delimiterNews +
-                excludeCategoryText + "\n<b>/sport\n/celebrity\n/negative\n/policy</b>";
+                excludeCategoryText + "\n/sport\n/celebrity\n/negative\n/policy";
         String topText = "2. " + top20Text2 + settingsRepository.getTopPeriod(chatId) + "\n" +
-                intervalText3 + "  <b>/interval_top</b>\n" +
-                excludedListText2 + "   <b>/list_top</b>";
+                intervalText3 + " /interval_top\n" +
+                excludedListText2 + "  /list_top";
         String keywordsText = "3. " + keywordSearchText + settingsRepository.getKeywordsPeriod(chatId) + "\n" +
-                intervalText3 + "  <b>/interval</b>\n" +
-                listKeywordsButtonText + "     <b>/list_key</b>";
+                intervalText3 + " /interval\n" +
+                listKeywordsButtonText + "    /list_key";
 
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
