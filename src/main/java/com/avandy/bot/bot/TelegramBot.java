@@ -1833,18 +1833,18 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void initSearchesKeyboard(long chatId) {
         String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
 
-        String fullText = "1. " +
+        String fullText = "<b>1. " +
                 searchWithFilterText +
-                settingsRepository.getFullSearchPeriod(chatId) + "\n" +
+                settingsRepository.getFullSearchPeriod(chatId) + "</b>\n" +
                 intervalText3 + " /interval_full\n" +
                 listExcludedText +  "  /list_ex\n" +
                 cleanFullSearchHistoryText + "  /clear" +
                 delimiterNews +
-                excludeCategoryText + "\n/sport\n/celebrity\n/negative\n/policy";
-        String topText = "2. " + top20Text2 + settingsRepository.getTopPeriod(chatId) + "\n" +
+                "<b>" + excludeCategoryText + "</b>\n/sport\n/celebrity\n/negative\n/policy";
+        String topText = "<b>2. " + top20Text2 + settingsRepository.getTopPeriod(chatId) + "</b>\n" +
                 intervalText3 + " /interval_top\n" +
                 excludedListText2 + "  /list_top";
-        String keywordsText = "3. " + keywordSearchText + settingsRepository.getKeywordsPeriod(chatId) + "\n" +
+        String keywordsText = "<b>3. " + keywordSearchText + settingsRepository.getKeywordsPeriod(chatId) + "</b>\n" +
                 intervalText3 + " /interval\n" +
                 listKeywordsButtonText + "    /list_key";
 

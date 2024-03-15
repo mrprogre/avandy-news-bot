@@ -47,7 +47,7 @@ public class Text extends Common {
             listKeywordsButtonText = "Слова для поиска";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
-            top20Text2 = "<b>Top 20</b> слов за ";
+            top20Text2 = "Top 20 слов за ";
             listExcludedText = "Слова-исключения";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
@@ -109,9 +109,9 @@ public class Text extends Common {
             removeFromTopTenListText = "Введите слова для удаления (разделять запятой)";
             rssSourcesText = "<b>Источники новостей</b> (RSS формат)";
             rssSourcesText2 = "Источники новостей";
-            searchWithFilterText = "<b>Полный поиск</b> за ";
+            searchWithFilterText = "Полный поиск за ";
             searchWithFilter2Text = "слов-исключений";
-            keywordSearchText = "Поиск <b>по словам</b> за ";
+            keywordSearchText = "Поиск по словам за ";
             keywordSearch2Text = "(слова и фразы)";
             cancelButtonText = "Отменить";
             foundNewsText = "Найдено";
@@ -262,7 +262,7 @@ public class Text extends Common {
             listKeywordsButtonText = "Keywords";
             findSelectText = "Search types";
             top20Text = "Frequently used words by period";
-            top20Text2 = "<b>Top 20</b> words in ";
+            top20Text2 = "Top 20 words in ";
             listExcludedText = "Excluding terms";
             deleteUserText = "Delete user data";
             addText = "Add";
@@ -324,9 +324,9 @@ public class Text extends Common {
             removeFromTopTenListText = "Enter words to delete (separated by comma)";
             rssSourcesText = "<b>News sources</b> (RSS format)";
             rssSourcesText2 = "News sources";
-            searchWithFilterText = "<b>Full search</b> in ";
+            searchWithFilterText = "Full search in ";
             searchWithFilter2Text = "excluding terms";
-            keywordSearchText = "Search by <b>keywords</b> in ";
+            keywordSearchText = "Search by keywords in ";
             keywordSearch2Text = "(words and phrases)";
             cancelButtonText = "Cancel";
             foundNewsText = "Found";
