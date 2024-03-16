@@ -1840,7 +1840,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 listExcludedText +  "  /list_ex\n" +
                 cleanFullSearchHistoryText + "  /clear" +
                 delimiterNews +
-                "<pre>" + excludeCategoryText + " [premium]</pre>\n" +
+                "<pre>" + excludeCategoryText + "</pre>\n" +
                 "/sport [" + categoryRepository.getWordsCountByCategory("sport") + "]\n" +
                 "/celebrity [" + categoryRepository.getWordsCountByCategory("celebrity") + "]\n" +
                 "/negative [" + categoryRepository.getWordsCountByCategory("negative") + "]\n" +
