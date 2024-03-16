@@ -1840,7 +1840,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 listExcludedText +  "  /list_ex\n" +
                 cleanFullSearchHistoryText + "  /clear" +
                 delimiterNews +
-                "<b>" + excludeCategoryText + "</b>\n/sport\n/celebrity\n/negative\n/policy";
+                "<b>" + excludeCategoryText + "</b> [premium]\n/sport\n/celebrity\n/negative\n/policy";
         String topText = "<b>2. " + top20Text2 + settingsRepository.getTopPeriod(chatId) + "</b>\n" +
                 intervalText3 + " /interval_top\n" +
                 excludedListText2 + "  /list_top";
