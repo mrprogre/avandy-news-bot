@@ -29,7 +29,7 @@ public class Text extends Common {
             historyClearText, addSourceText, delSourceText, addSourceInfoText, sendIdeaText2, saveText2,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText, listText3,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
-            listText2, minWordLengthText2, premiumIsActive5, startText, rssSourcesText2, fullSearchText2,
+            listText2, minWordLengthText2, startText, rssSourcesText2, fullSearchText2,
             messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2, intervalText2,
             excludeCategoryText, excludedListText2, intervalText3;
 
@@ -141,14 +141,18 @@ public class Text extends Common {
                     Текущий статус:\s""";
             jaroWinklerText = "Окончания";
             getPremiumText = "Премиум бот";
-            getPremiumYesOrNowText = "На тарифе <b>Premium bot</b>\n" +
+            getPremiumYesOrNowText = "На тарифе <b>Premium bot</b> \uD83D\uDC8E \n" +
                     "1. Поиск по словам производится каждые <b>2 минуты</b>. " +
                     "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b> (можно отключить и поставить другой интервал рассылки);\n" +
                     "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + " слов</b> для поиска по словам (до " +
-                    MAX_KEYWORDS_COUNT_PREMIUM + ") и <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> для полного поиска;\n" +
+                    MAX_KEYWORDS_COUNT_PREMIUM + ");\n" +
                     "3. Удаление/добавление <b>источников</b> новостей " +
                     "(если источник предоставляет новости в формате <b>RSS</b>).\n\n" +
-                    "Оплатить <b>" + BOT_PRICE_RUS + "</b> рублей за год? \uD83D\uDC8E";
+                    "<b>Стоимость подписки</b>\n  " +
+                    "<b>1</b> месяц         <b>" + BOT_PRICE_RUS_1M + "</b> руб.\n  " +
+                    "<b>6</b> месяцев    <b>" + BOT_PRICE_RUS_6M + "</b> руб.\n  " +
+                    "<b>12</b> месяцев  <b>" + BOT_PRICE_RUS_YEAR + "</b> руб.\n" +
+                    "Оплатить?";
             getPremiumRequestText = """
                     1. <a href="https://qr.nspk.ru/AS1A0047UDL2QR108KLRR4844KTLRSH6?type=01&bank=100000000284&crc=D835">Ссылка на оплату через СБП</a>.
                     В ближайшие 12 часов после отправки подтверждения платежа Вам будут подключены премиум возможности бота.
@@ -158,7 +162,6 @@ public class Text extends Common {
             premiumIsActive2 = "Premium bot активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление <b>более " + MAX_KEYWORDS_COUNT + " слов</b> возможно в /premium режиме";
             premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
-            premiumIsActive5 = "Добавление <b>более " + MAX_EXCL_TERMS_COUNT + " слов-исключений</b> возможно в /premium режиме";
             yesButtonText = """
                     Добавьте <b>слова или фразы</b> по которым я буду искать для Вас новости (максимум 3 для начала). При добавлении помните, что СМИ пишут заголовки в максимально простой форме. Не усложняйте!
                     - - - - - - - - - - - - - - - - - - - - - - - -
@@ -234,20 +237,20 @@ public class Text extends Common {
                     You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
                     - - - - - - - - - - - - - - - - - - - - - - - -
                     Click the <b>Add keywords</b> button or see what the media are writing about now by clicking on <b>Top 20</b>""";
-            premiumIsActive5 = "Adding <b>more than " + MAX_EXCL_TERMS_COUNT + " exclusion terms</b> is possible in /premium mode";
             premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive3 = "Adding <b>more than " + MAX_KEYWORDS_COUNT + " keywords</b> is possible in /premium mode";
             premiumIsActive2 = "Premium bot activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;
             getPremiumRequestText = "<a href=\"paypal.me/avandyelectronics\">Paypal link</a>";
-            getPremiumYesOrNowText = "On the <b>Premium bot</b> tariff:\n" +
+            getPremiumYesOrNowText = "On the <b>Premium bot</b> tariff \uD83D\uDC8E \n" +
                     "1. News search by keywords is performed every <b>2 minutes</b>. " +
                     "So you <b>will be the first</b> to receive the <b>most up-to-date information</b> (can be disabled);\n" +
                     "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords (up to " +
-                    MAX_KEYWORDS_COUNT_PREMIUM + " words) and <b>more than " + MAX_EXCL_TERMS_COUNT + " excluding terms</b> for full search;\n" +
+                    MAX_KEYWORDS_COUNT_PREMIUM + " words);\n" +
                     "3. Ability to add <b>personal news sources</b> (if the source provides <b>RSS</b> format) " +
                     "and removing default sources.\n\n" +
-                    "Pay for a Premium bot subscription <b>" + BOT_PRICE_ENG + "$</b> per year \uD83D\uDC8E";
+                    "Pay for a Premium bot subscription <b>" + BOT_PRICE_ENG_YEAR + "$</b> per year or <b>" +
+                    BOT_PRICE_ENG_1M + "$</b> per 1 month";
             getPremiumText = "Premium bot";
             premiumText = " (for a <b>premium account</b>, the search starts <b>every 2 minutes</b> /premium) " +
                     ICON_PREMIUM_IS_ACTIVE;

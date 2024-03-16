@@ -2,8 +2,6 @@ package com.avandy.bot.service;
 
 import com.avandy.bot.model.ExcludingTerm;
 import com.avandy.bot.repository.ExcludingTermsRepository;
-import com.avandy.bot.repository.UserRepository;
-import com.avandy.bot.utils.Common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +19,6 @@ import static com.avandy.bot.bot.Text.*;
 public class ExcludingTermsService {
     @Value("${bot.owner}")
     public long OWNER_ID;
-    private final UserRepository userRepository;
     private final ExcludingTermsRepository excludingTermsRepository;
     private static final int OFFSET = 60;
 
@@ -29,14 +26,7 @@ public class ExcludingTermsService {
     public List<String> addExclude(long chatId, String[] list) {
         List<String> messages = new ArrayList<>();
         int counter = 0;
-        int isPremium = userRepository.isPremiumByChatId(chatId);
         List<String> excludedByChatId = excludingTermsRepository.findExcludedByChatId(chatId);
-        int total = excludedByChatId.size() + list.length;
-
-        if (isPremium != 1 && total > Common.MAX_EXCL_TERMS_COUNT && chatId != OWNER_ID) {
-            messages.add(premiumIsActive5);
-            return messages;
-        }
 
         ExcludingTerm excluded;
         for (String word : list) {

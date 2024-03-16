@@ -15,14 +15,16 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Common {
-    public static final int BOT_PRICE_RUS = 1800;
-    public static final double BOT_PRICE_ENG = 49.90;
+    public static final int BOT_PRICE_RUS_YEAR = 1800;
+    public static final int BOT_PRICE_RUS_6M = 1000;
+    public static final int BOT_PRICE_RUS_1M = 250;
+    public static final double BOT_PRICE_ENG_YEAR = 49.90;
+    public static final double BOT_PRICE_ENG_1M = 6.90;
     public static final int JARO_WINKLER_LEVEL = 85;
     public static final int TOP_TEN_SHOW_LIMIT = 20;
     public static final int LIMIT_FOR_BREAKING_INTO_PARTS = 50;
     public static final int MAX_KEYWORDS_COUNT_PREMIUM = 100;
     public static final int MAX_KEYWORDS_COUNT = 3;
-    public static final int MAX_EXCL_TERMS_COUNT = 10;
     public static final String ERROR_TEXT = "Error occurred: ";
     public static final String ICON_SEARCH = "\uD83C\uDFB2";
     public static final String ICON_NEWS_FOUNDED = "\uD83C\uDF3F";
