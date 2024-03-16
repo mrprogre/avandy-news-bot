@@ -1832,25 +1832,36 @@ public class TelegramBot extends TelegramLongPollingBot {
     // Кнопки всех видов поиска (/search)
     private void initSearchesKeyboard(long chatId) {
         String delimiterNews = "\n- - - - - - - - - - - - - - - - - - - - - - - -\n";
+        String lang = settingsRepository.getLangByChatId(chatId);
+
+        String fullSearchPeriod = settingsRepository.getFullSearchPeriod(chatId);
+        String topPeriod = settingsRepository.getTopPeriod(chatId);
+        String keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
+
+        if (lang.equals("ru")) {
+            fullSearchPeriod = fullSearchPeriod.replace("h", " ч.");
+            topPeriod = topPeriod.replace("h", " ч.");
+            keywordsPeriod = keywordsPeriod.replace("h", " ч.");
+        }
 
         String fullText = "<b>1. " +
                 searchWithFilterText +
-                settingsRepository.getFullSearchPeriod(chatId) + "</b>\n" +
+                fullSearchPeriod + "</b>\n" +
                 intervalText3 + " /interval_full\n" +
                 listExcludedText +  "  /list_ex\n" +
                 cleanFullSearchHistoryText + "  /clear" +
                 delimiterNews +
                 "<pre>" + excludeCategoryText + "</pre>\n" +
-                "/sport [" + categoryRepository.getWordsCountByCategory("sport") + "]\n" +
-                "/celebrity [" + categoryRepository.getWordsCountByCategory("celebrity") + "]\n" +
-                "/negative [" + categoryRepository.getWordsCountByCategory("negative") + "]\n" +
-                "/policy [" + categoryRepository.getWordsCountByCategory("policy") + "]";
+                "  /sport (" + categoryRepository.getWordsCountByCategory("sport") + wordsText + ")\n" +
+                "  /celebrity (" + categoryRepository.getWordsCountByCategory("celebrity") + ")\n" +
+                "  /negative (" + categoryRepository.getWordsCountByCategory("negative") + ")\n" +
+                "  /policy (" + categoryRepository.getWordsCountByCategory("policy") + ")";
 
-        String topText = "<b>2. " + top20Text2 + settingsRepository.getTopPeriod(chatId) + "</b>\n" +
+        String topText = "<b>2. " + top20Text2 + topPeriod + "</b>\n" +
                 intervalText3 + " /interval_top\n" +
                 excludedListText2 + "  /list_top";
 
-        String keywordsText = "<b>3. " + keywordSearchText + settingsRepository.getKeywordsPeriod(chatId) + "</b>\n" +
+        String keywordsText = "<b>3. " + keywordSearchText + keywordsPeriod + "</b>\n" +
                 intervalText3 + " /interval\n" +
                 listKeywordsButtonText + "    /list_key";
 

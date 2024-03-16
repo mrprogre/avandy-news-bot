@@ -29,7 +29,7 @@ public class Text extends Common {
             historyClearText, addSourceText, delSourceText, addSourceInfoText, sendIdeaText2, saveText2,
             premiumAddSourcesText, notSupportedRssText, rssExistsText, delSourceInfoText, deleteText, listText3,
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
-            listText2, minWordLengthText2, startText, rssSourcesText2, fullSearchText2,
+            listText2, minWordLengthText2, startText, rssSourcesText2, fullSearchText2, wordsText,
             messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2, intervalText2,
             excludeCategoryText, excludedListText2, intervalText3;
 
@@ -199,9 +199,11 @@ public class Text extends Common {
                     Запуск поиска раз в %s
                     Внешний вид новостей: %s
                     - - - - - - - - - - - - - - - - - - - - - - - -""";
-            excludeCategoryText = "Добавить слова-исключения по категориям для фильтрации новостей";
+            excludeCategoryText = "Добавить слова-исключения по категориям для фильтрации новостей при полном поиске";
+            wordsText = " слов";
         } else {
-            excludeCategoryText = "Add excluding terms by category";
+            wordsText = " words";
+            excludeCategoryText = "Add excluding terms by category to filter news in a full search";
             listKeywordsText = """
                     <b>Keywords</b>
                     - - - - - - - - - - - - - - - - - - - - - - - -
