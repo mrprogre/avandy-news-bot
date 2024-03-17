@@ -162,12 +162,13 @@ public class Text extends Common {
             premiumIsActive2 = "Premium bot активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление <b>более " + MAX_KEYWORDS_COUNT + " слов</b> возможно в /premium режиме";
             premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
-            yesButtonText = """
-                    Добавьте <b>слова или фразы</b> по которым я буду искать для Вас новости (максимум 3 для начала). При добавлении помните, что СМИ пишут заголовки в максимально простой форме. Не усложняйте!
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Нажмите кнопку <b>Добавить</b> или посмотрите о чём сейчас пишут СМИ, нажав на <b>Top 20</b>
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    <b>Видеоинструкция</b> на <a href="https://youtu.be/HPAk8GPHes4">youtube</a>""";
+            yesButtonText = "Добавьте <b>слова или фразы</b> по которым я буду искать для Вас новости " +
+                    "(максимум " + MAX_KEYWORDS_COUNT + " для начала). " +
+                    "При добавлении помните, что СМИ пишут заголовки в максимально простой форме. Не усложняйте!\n" +
+                    "- - - - - - - - - - - - - - - - - - - - - - - -\n" +
+                    "Нажмите кнопку <b>Добавить</b> или посмотрите о чём сейчас пишут СМИ, нажав на <b>Top 20</b>\n" +
+                    "- - - - - - - - - - - - - - - - - - - - - - - -\n" +
+                    "<b>Видеоинструкция</b> на <a href=\"https://youtu.be/HPAk8GPHes4\">youtube</a>";
             inputExceptionText = "Бот ожидал ввода текста. Для продолжения работы нажмите повторно ";
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
@@ -233,12 +234,11 @@ public class Text extends Common {
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
             inputExceptionText2 = "The bot was waiting for text input. To continue, repeat the command";
-            yesButtonText = """
-                    The first thing to do is add <b>keywords or phrases</b> (maximum 3 to start)
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    You can also watch the <b>video</b> on <a href="https://youtu.be/HPAk8GPHes4">youtube</a>
-                    - - - - - - - - - - - - - - - - - - - - - - - -
-                    Click the <b>Add keywords</b> button or see what the media are writing about now by clicking on <b>Top 20</b>""";
+            yesButtonText = "The first thing to do is add <b>keywords or phrases</b> (maximum " + MAX_KEYWORDS_COUNT + " to start)\n" +
+                    "- - - - - - - - - - - - - - - - - - - - - - - -\n" +
+                    "You can also watch the <b>video</b> on <a href=\"https://youtu.be/HPAk8GPHes4\">youtube</a>\n" +
+                    "- - - - - - - - - - - - - - - - - - - - - - - -\n" +
+                    "Click the <b>Add keywords</b> button or see what the media are writing about now by clicking on <b>Top 20</b>";
             premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
             premiumIsActive3 = "Adding <b>more than " + MAX_KEYWORDS_COUNT + " keywords</b> is possible in /premium mode";
             premiumIsActive2 = "Premium bot activated until %s " + ICON_PREMIUM_IS_ACTIVE;
