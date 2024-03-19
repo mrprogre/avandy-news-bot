@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 public class Common {
     public static final int MAX_KEYWORDS_COUNT = 2;
     public static final int MAX_KEYWORDS_COUNT_PREMIUM = 20;
+    public static final String CASHBACK = "20%";
     public static final int BOT_PRICE_RUS_YEAR = 1800;
     public static final int BOT_PRICE_RUS_6M = 1000;
     public static final int BOT_PRICE_RUS_1M = 250;

@@ -366,7 +366,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     case "GET_PREMIUM" -> showYesNoGetPremium(chatId);
                     case "YES_PREMIUM" -> {
-                        sendMessage(OWNER_ID, String.format(">>> Хочет премиум: %d, %s. Проверить оплату!", chatId,
+                        sendMessage(OWNER_ID, String.format("»»» Хочет премиум: %d, %s. Проверить оплату!", chatId,
                                 userRepository.findNameByChatId(chatId)));
                         //sendMessage(chatId, getPremiumRequestText);
                         sendPaymentPremium(chatId, getPremiumRequestText);
@@ -481,7 +481,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         cancelKeyboard(chatId, delFromListText + "\n* - " + removeAllText);
                     }
 
-                    case "START_SEARCH", "DELETE_NO", "NO_PREMIUM" -> initSearchesKeyboard(chatId);
+                    case "START_SEARCH", "DELETE_NO" -> initSearchesKeyboard(chatId);
 
                     /* FULL SEARCH */
                     case "FIND_ALL" -> new Thread(() -> fullSearch(chatId)).start();
@@ -1745,9 +1745,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             sendMessage(chatId, String.format(premiumIsActive2, premiumExpire));
         } else {
             Map<String, String> buttons = new LinkedHashMap<>();
-            buttons.put("NO_PREMIUM", noText);
-            buttons.put("YES_PREMIUM", yesText);
-            sendMessage(chatId, getPremiumYesOrNowText, InlineKeyboards.maker(buttons));
+            buttons.put("YES_PREMIUM", payText);
+            sendMessage(chatId, getPremiumYesOrNowText + friendText + "<b>" + chatId + "</b>", InlineKeyboards.maker(buttons));
         }
     }
 
@@ -1772,11 +1771,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         if (userRepository.isUserExistsByChatId(message.getChatId()) == 0) {
             userRepository.save(user);
-            log.info(">>>  Добавлен новый пользователь: {}, {}, {}", user.getChatId(), user.getFirstName(), user.getUserName());
+            log.info("»»» Добавлен новый пользователь: {}, {}, {}", user.getChatId(), user.getFirstName(), user.getUserName());
             addSettingsByDefault(message.getChatId());
         } else if (userRepository.isActive(message.getChatId()) == 0) {
             userRepository.updateIsActive(1, message.getChatId());
-            log.info(">>> Пользователь снова активен: {}, {}, {}", user.getChatId(), user.getFirstName(), user.getUserName());
+            log.info("»»» Пользователь снова активен: {}, {}, {}", user.getChatId(), user.getFirstName(), user.getUserName());
         }
     }
 
