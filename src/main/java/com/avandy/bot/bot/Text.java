@@ -149,7 +149,7 @@ public class Text extends Common {
             premiumIsActive = "активирован премиум " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive2 = "Premium bot активирован до %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive3 = "Добавление <b>более " + MAX_KEYWORDS_COUNT + " слов</b> возможно в /premium режиме";
-            premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_PREMIUM;
+            premiumIsActive4 = "Максимальное количество слов - " + MAX_KEYWORDS_COUNT_ALL;
             yesButtonText = "Добавьте <b>слова или фразы</b> по которым я буду искать для Вас новости " +
                     "(максимум " + MAX_KEYWORDS_COUNT + " для начала). " +
                     "При добавлении помните, что СМИ пишут заголовки в максимально простой форме. Не усложняйте!\n" +
@@ -192,24 +192,27 @@ public class Text extends Common {
             wordsText = " слов";
             payText = "Оплатить";
             getPremiumYesOrNowText = "На тарифе <b>Premium bot</b> \uD83D\uDC8E \n" +
-                    "1. Поиск по словам производится каждые <b>2 минуты</b>. " +
-                    "Так Вы <b>первым</b> будете получать <b>самую актуальную информацию</b> (можно отключить и поставить другой интервал рассылки);\n" +
-                    "2. Можно добавить <b>более " + MAX_KEYWORDS_COUNT + " слов</b> для поиска по словам (до " +
-                    MAX_KEYWORDS_COUNT_PREMIUM + ");\n" +
-                    "3. Удаление/добавление <b>источников</b> новостей " +
-                    "(если источник предоставляет новости в формате <b>RSS</b>).\n\n" +
+                    "<code>" +
+                    "1. Поиск по словам производится автоматически каждые 2 минуты (по умолчанию). " +
+                    "Так Вы будете первым получать самую актуальную информацию! " +
+                    "Интервал между поисками Вы можете изменить в настройках.\n" +
+                    "2. Для поиска по своим интересам Вы можете задать до " + MAX_KEYWORDS_COUNT_ALL + " ключевых слов.\n" +
+                    "3. Ваше преимущество - возможность добавить дополнительные источники новостей, " +
+                    "если они поставляются в формате RSS.\n\n" +
+                    "Такая гибкость настроек позволит Вам иметь свой неповторимый источник новостей!\n\n" +
+                    "</code>" +
                     "<b>Стоимость подписки</b>\n  " +
                     "<b>1</b> месяц         <b>" + BOT_PRICE_RUS_1M + "</b> руб.\n  " +
                     "<b>6</b> месяцев    <b>" + BOT_PRICE_RUS_6M + "</b> руб.\n  " +
                     "<b>12</b> месяцев  <b>" + BOT_PRICE_RUS_YEAR + "</b> руб.\n\n";
-            friendText = "Получи кешбэк <b>" + CASHBACK + "</b> от покупки друга. Твой постоянный код приглашения: ";
+            friendText = "Получи кешбэк на карту <b>" + CASHBACK + "</b> от покупки друга. Твой постоянный код приглашения (отправь его другу): ";
         } else {
             friendText = "Get cashback <b>" + CASHBACK + "</b> from a friend's purchase. Your permanent invitation code: ";
             getPremiumYesOrNowText = "On the <b>Premium bot</b> tariff \uD83D\uDC8E \n" +
                     "1. News search by keywords is performed every <b>2 minutes</b>. " +
                     "So you <b>will be the first</b> to receive the <b>most up-to-date information</b> (can be disabled);\n" +
                     "2. You can add <b>more than " + MAX_KEYWORDS_COUNT + "</b> keywords (up to " +
-                    MAX_KEYWORDS_COUNT_PREMIUM + " words);\n" +
+                    MAX_KEYWORDS_COUNT_ALL + " words);\n" +
                     "3. Ability to add <b>personal news sources</b> (if the source provides <b>RSS</b> format) " +
                     "and removing default sources.\n\n" +
                     "Premium bot subscription <b>" + BOT_PRICE_ENG_YEAR + "$</b> per year or <b>" +
@@ -251,7 +254,7 @@ public class Text extends Common {
                     "You can also watch the <b>video</b> on <a href=\"https://youtu.be/HPAk8GPHes4\">youtube</a>\n" +
                     "- - - - - - - - - - - - - - - - - - - - - - - -\n" +
                     "Click the <b>Add keywords</b> button or see what the media are writing about now by clicking on <b>Top 20</b>";
-            premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_PREMIUM;
+            premiumIsActive4 = "Maximum number of keywords - " + MAX_KEYWORDS_COUNT_ALL;
             premiumIsActive3 = "Adding <b>more than " + MAX_KEYWORDS_COUNT + " keywords</b> is possible in /premium mode";
             premiumIsActive2 = "Premium bot activated until %s " + ICON_PREMIUM_IS_ACTIVE;
             premiumIsActive = "premium is active " + ICON_PREMIUM_IS_ACTIVE;

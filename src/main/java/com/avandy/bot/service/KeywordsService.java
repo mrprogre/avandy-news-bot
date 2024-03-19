@@ -39,7 +39,7 @@ public class KeywordsService {
             return messages;
         }
 
-        if (totalKeywordsCount > Common.MAX_KEYWORDS_COUNT_PREMIUM) {
+        if (totalKeywordsCount > Common.MAX_KEYWORDS_COUNT_ALL) {
             messages.add(premiumIsActive4);
             return messages;
         }

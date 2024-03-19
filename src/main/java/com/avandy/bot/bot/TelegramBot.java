@@ -1746,7 +1746,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             Map<String, String> buttons = new LinkedHashMap<>();
             buttons.put("YES_PREMIUM", payText);
-            sendMessage(chatId, getPremiumYesOrNowText + friendText + "<b>" + (chatId + 20240110) + "</b>",
+            sendMessage(chatId, getPremiumYesOrNowText + friendText + "<code>" + (chatId + 20240110) + "</code>",
                     InlineKeyboards.maker(buttons));
         }
     }
