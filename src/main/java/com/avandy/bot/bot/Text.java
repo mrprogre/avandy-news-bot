@@ -14,7 +14,7 @@ public class Text extends Common {
             excludedText, listKeywordsButtonText, updateTopText, updateTopText2, undefinedCommandText, changesSavedText,
             jaroWinklerSwitcherText, headlinesNotFound, setupKeywordsText, minWordLengthText, deleteAllWordsText,
             jaroWinklerText, wordIsExistsText, wordsIsNotAddedText, wordsAddedText, aboutDeveloperText, addText2,
-            yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, friendText,
+            yesButtonText, buyButtonText, intervalText, autoSearchText, exclusionText, friendText, searchText3,
             startSettingsText, excludedListText, delFromTopText, top20ByPeriodText, allowCommasAndNumbersText,
             premiumText, startSearchBeforeText, keywordsSearchText, fullSearchText, chooseSearchStartText,
             getPremiumText, addInListText, delFromListText, removeAllText, sendMessageForDevText, searchNewsHeaderText,
@@ -57,6 +57,7 @@ public class Text extends Common {
             excludeWordText2 = "Добавить слова-исключения";
             searchText = "Поиск";
             searchText2 = "Искать снова";
+            searchText3 = "Поиск за сутки";
             excludedText = "Исключённое";
             updateTopText = "Обновить";
             updateTopText2 = "Top 20";
@@ -283,6 +284,7 @@ public class Text extends Common {
             excludeWordText2 = "Add excluding terms";
             searchText = "Search";
             searchText2 = "Search again";
+            searchText3 = "Search in 24 hours";
             excludedText = "Excluded";
             undefinedCommandText = "What to do? " + ICON_SMILE_UPSIDE_DOWN;
             saveText = "Save";

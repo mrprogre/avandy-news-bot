@@ -30,7 +30,7 @@ public class Search implements SearchService {
     @Override
     public LinkedList<Headline> start(Long chatId, String searchType) {
         boolean isAllSearch = searchType.equals("all");
-        boolean isKeywordAutoSearch = searchType.equals("keywords");
+        boolean isKeywordAutoSearch = searchType.startsWith("keywords");
         boolean isTopSearch = searchType.equals("top");
         boolean isSearchByOneWordFromTop = !isAllSearch && !isKeywordAutoSearch && !isTopSearch;
         Optional<Settings> settings = settingsRepository.findById(chatId).stream().findFirst();
@@ -90,7 +90,11 @@ public class Search implements SearchService {
             List<String> keywords = keywordRepository.findKeywordsByChatId(chatId);
             settings.ifPresentOrElse(value -> periodMinutes = Common.timeMapper(value.getPeriod()),
                     () -> periodMinutes = 600);
+
             String period = periodMinutes + " minutes";
+            if (searchType.contains("24")) {
+                period = "24 hours";
+            }
 
             Set<NewsList> newsList;
             for (String keyword : keywords) {

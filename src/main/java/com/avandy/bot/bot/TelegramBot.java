@@ -250,7 +250,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     // Поиск по трём кнопкам меню
                 } else if (messageText.equals("По словам") || messageText.equals("Keywords")) {
-                    new Thread(() -> findNewsByKeywordsManual(chatId)).start();
+                    new Thread(() -> findNewsByKeywordsManual(chatId, "-1")).start();
 
                 } else if (messageText.equals("Top 20") || messageText.equals("Show top")) {
                     new Thread(() -> showTop(chatId)).start();
@@ -470,7 +470,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                     }
 
                     /* KEYWORDS */
-                    case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywordsManual(chatId)).start();
+                    case "FIND_BY_KEYWORDS" -> new Thread(() -> findNewsByKeywordsManual(chatId, "-1")).start();
+                    case "FIND_BY_KEYWORDS24" -> new Thread(() -> findNewsByKeywordsManual(chatId, "24")).start();
                     case "LIST_KEYWORDS" -> showKeywordsList(chatId);
                     case "ADD_KEYWORD" -> {
                         userStates.put(chatId, UserState.ADD_KEYWORDS);
@@ -781,7 +782,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     /* KEYWORDS */
     // Ручной поиск по ключевым словам
-    public void findNewsByKeywordsManual(long chatId) {
+    public void findNewsByKeywordsManual(long chatId, String mode) {
         String nameByChatId = userRepository.findNameByChatId(chatId);
 
         // DEBUG
@@ -796,10 +797,22 @@ public class TelegramBot extends TelegramLongPollingBot {
             return;
         }
 
-        getReplyKeyboard(chatId, String.format(searchByKeywordsStartText, settingsRepository.getKeywordsPeriod(chatId)));
+        String keywordsPeriod;
+        if (mode.equals("24")) {
+            keywordsPeriod = "24h";
+        } else {
+            keywordsPeriod = settingsRepository.getKeywordsPeriod(chatId);
+        }
+
+        getReplyKeyboard(chatId, String.format(searchByKeywordsStartText, keywordsPeriod));
 
         // Search
-        List<Headline> headlines = searchService.start(chatId, "keywords");
+        List<Headline> headlines;
+        if (mode.equals("24")) {
+            headlines = searchService.start(chatId, "keywords24");
+        } else {
+            headlines = searchService.start(chatId, "keywords");
+        }
 
         int counterParts = 1;
         if (headlines.size() > 0) {
@@ -1050,8 +1063,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         buttons1.put("SET_PERIOD", intervalText2);
         buttons2.put("LIST_KEYWORDS", listText3);
-        buttons3.put("FIND_BY_KEYWORDS", searchText2);
-        buttons4.put("START_SEARCH", findSelectText);
+        buttons3.put("START_SEARCH", findSelectText);
+        buttons4.put("FIND_BY_KEYWORDS", searchText2);
+        buttons4.put("FIND_BY_KEYWORDS24", searchText3);
 
         sendMessage(chatId, text, InlineKeyboards.maker(buttons1, buttons2, buttons3, buttons4, null));
     }
