@@ -1941,7 +1941,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             Message execute = execute(message);
             return execute.getMessageId();
         } catch (TelegramApiException e) {
-            if (e.getMessage().contains("bot was blocked by the user")) {
+            if (e.getMessage().contains("blocked") || e.getMessage().contains("deactivated")) {
                 userRepository.updateIsActive(0, Long.parseLong(message.getChatId()));
                 log.info(String.format("Пользователь chat_id: %s заблокировал бота", message.getChatId()));
             } else {
