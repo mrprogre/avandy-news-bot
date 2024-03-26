@@ -709,6 +709,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         String link = words[2].trim();
         String parseType = "rss";
 
+        if (country.toLowerCase().contains("росси") || country.equalsIgnoreCase("рф")) {
+            userTelegramLanguageCode = "ru";
+        }
+
+
         boolean isParsedJsoup = Common.checkRssJsoup(link);
         boolean isParsedRome = Common.checkRssRome(link);
 

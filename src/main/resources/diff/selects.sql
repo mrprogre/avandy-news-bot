@@ -43,7 +43,7 @@ WHERE pub_date >= current_date;
 -- Новости по источнику
 select *
 from news_list
-where source = 'EL PAÍS'
+where source = 'АиФ'
   and pub_date > (current_timestamp - cast('2 hours' as interval));
 
 -- Количество новостей, сохранённых за последние 6 часов
