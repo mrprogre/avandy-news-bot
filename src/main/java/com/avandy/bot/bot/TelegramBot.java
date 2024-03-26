@@ -301,10 +301,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                         case "/fast_excl" -> {
                             String text = excludeCategoryText + "\n" +
-                                            "  /sport        [" + categoryRepository.getCount("sport") + wordsText + "]\n" +
-                                            "  /celebrity  [" + categoryRepository.getCount("celebrity") + celebrityText + "]\n" +
-                                            "  /negative  [" + categoryRepository.getCount("negative") + negativeText + "]\n" +
-                                            "  /policy       [" + categoryRepository.getCount("policy") + policyText + "]";
+                                            "  /sport        [<b>" + categoryRepository.getCount("sport") + "</b>" + wordsText + "]\n" +
+                                            "  /celebrity  [<b>" + categoryRepository.getCount("celebrity") + "</b>" + celebrityText + "]\n" +
+                                            "  /negative  [<b>" + categoryRepository.getCount("negative") + "</b>" + negativeText + "]\n" +
+                                            "  /policy       [<b>" + categoryRepository.getCount("policy") + "</b>" + policyText + "]";
 
                             sendMessage(chatId, text);
                         }
