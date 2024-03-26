@@ -51,7 +51,7 @@ public class Text extends Common {
             top20Text = "Часто употребляемые слова";
             top20Text2 = "Top 20 слов за ";
             listExcludedText = "Слова-исключения";
-            listExcludedText2 = "Слова-исключения     ";
+            listExcludedText2 = "Слова-исключения      ";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
             addText2 = "Добавить слова";
@@ -92,7 +92,7 @@ public class Text extends Common {
             intervalText = "Интервал";
             intervalText2 = "Изменить интервал поиска";
             intervalText3 = "Изменить интервал";
-            intervalText4 = "Изменить интервал    ";
+            intervalText4 = "Изменить интервал     ";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
             startSettingsText = "Старт";
