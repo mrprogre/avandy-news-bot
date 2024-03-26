@@ -299,6 +299,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                             savedKeyboard(chatId, String.format(changesSavedText2, "off"));
                         }
 
+                        case "/fast_excl" -> {
+                            String text = excludeCategoryText + "\n" +
+                                            "  /sport        [" + categoryRepository.getCount("sport") + wordsText + "]\n" +
+                                            "  /celebrity  [" + categoryRepository.getCount("celebrity") + celebrityText + "]\n" +
+                                            "  /negative  [" + categoryRepository.getCount("negative") + negativeText + "]\n" +
+                                            "  /policy       [" + categoryRepository.getCount("policy") + policyText + "]";
+
+                            sendMessage(chatId, text);
+                        }
+
                         // Премиум
                         case "/prem_on" -> {
                             settingsRepository.updatePremiumSearch("on", chatId);
@@ -1868,23 +1878,18 @@ public class TelegramBot extends TelegramLongPollingBot {
         String fullText = "<b>1. " +
                 searchWithFilterText +
                 fullSearchPeriod + "</b>\n" +
-                intervalText3 + " /interval_full\n" +
-                listExcludedText +  "  /list_ex\n" +
-                cleanFullSearchHistoryText + "  /clear" +
-                delimiterNews +
-                "<pre>" + excludeCategoryText + "</pre>\n" +
-                "  /sport (" + categoryRepository.getWordsCountByCategory("sport") + wordsText + ")\n" +
-                "  /celebrity (" + categoryRepository.getWordsCountByCategory("celebrity") + ")\n" +
-                "  /negative (" + categoryRepository.getWordsCountByCategory("negative") + ")\n" +
-                "  /policy (" + categoryRepository.getWordsCountByCategory("policy") + ")";
+                intervalText4 + "/interval_full\n" +
+                listExcludedText2 + "/list_ex\n" +
+                fastExcludeText + "/fast_excl\n" +
+                cleanFullSearchHistoryText + "/clear";
 
         String topText = "<b>2. " + top20Text2 + topPeriod + "</b>\n" +
-                intervalText3 + " /interval_top\n" +
-                excludedListText2 + "  /list_top";
+                intervalText4 + "/interval_top\n" +
+                excludedListText2 + "/list_top";
 
         String keywordsText = "<b>3. " + keywordSearchText + keywordsPeriod + "</b>\n" +
-                intervalText3 + " /interval\n" +
-                listKeywordsButtonText + "    /list_key";
+                intervalText4 + "/interval\n" +
+                listKeywordsButtonText2 + "/list_key";
 
 
         String text = "<b>" + searchNewsHeaderText + "</b> " + Common.ICON_SEARCH +
@@ -1893,7 +1898,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 delimiterNews +
                 topText +
                 delimiterNews +
-                keywordsText+
+                keywordsText +
                 delimiterNews +
                 messageThemeChooseText2 + "/theme";
 

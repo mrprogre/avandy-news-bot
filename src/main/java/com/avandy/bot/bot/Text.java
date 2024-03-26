@@ -31,7 +31,8 @@ public class Text extends Common {
             rssNameNotExistsText, messageThemeChooseText, noCommasText, changesSavedText2, changesSavedText3,
             listText2, minWordLengthText2, startText, rssSourcesText2, fullSearchText2, wordsText, payText,
             messageThemeChooseText2, personalSourcesText, saveText, findNewsText, findNewsText2, intervalText2,
-            excludeCategoryText, excludedListText2, intervalText3;
+            excludeCategoryText, excludedListText2, intervalText3, fastExcludeText, intervalText4, listExcludedText2,
+            listKeywordsButtonText2, celebrityText, negativeText, policyText;
 
     public static void setInterfaceLanguage(String lang) {
         if (lang != null && lang.equals("ru")) {
@@ -45,10 +46,12 @@ public class Text extends Common {
             infoText = "Информация и подписка";
             settingText = "Настройки";
             listKeywordsButtonText = "Слова для поиска";
+            listKeywordsButtonText2 = "Слова для поиска       ";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
             top20Text2 = "Top 20 слов за ";
             listExcludedText = "Слова-исключения";
+            listExcludedText2 = "Слова-исключения     ";
             deleteUserText = "Удалить данные пользователя";
             addText = "Добавить";
             addText2 = "Добавить слова";
@@ -89,11 +92,12 @@ public class Text extends Common {
             intervalText = "Интервал";
             intervalText2 = "Изменить интервал поиска";
             intervalText3 = "Изменить интервал";
+            intervalText4 = "Изменить интервал    ";
             autoSearchText = "Автопоиск";
             exclusionText = "Исключение";
             startSettingsText = "Старт";
             excludedListText = "Удалённое";
-            excludedListText2 = "Удалённое из топа ";
+            excludedListText2 = "Удалённое из топа      ";
             delFromTopText = "Удалить";
             top20ByPeriodText = "<b>Top 20 слов</b> за ";
             allowCommasAndNumbersText = "Укажите порядковый номер слова (разделять запятой)";
@@ -162,7 +166,7 @@ public class Text extends Common {
             inputExceptionText2 = "Бот ожидал ввода текста. Для продолжения работы повторите команду";
             premiumSearchSettingsText = "Премиум поиск";
             sendPaymentText = "Отправить скриншот с оплатой";
-            cleanFullSearchHistoryText = "Очистить историю ";
+            cleanFullSearchHistoryText = "Очистить историю      ";
             addSourceText = "Добавить RSS";
             delSourceText = "Удалить";
             addSourceInfoText = "Введите <b>страну</b> источника, его <b>название</b> и <b>веб ссылку на XML</b> " +
@@ -207,7 +211,15 @@ public class Text extends Common {
                     "<b>6</b> месяцев    <b>" + BOT_PRICE_RUS_6M + "</b> руб.\n  " +
                     "<b>12</b> месяцев  <b>" + BOT_PRICE_RUS_YEAR + "</b> руб.\n\n";
             friendText = "Получи кешбэк на карту <b>" + CASHBACK + "</b> от покупки друга. Твой постоянный код приглашения (отправь его другу): ";
+            fastExcludeText = "Быстрое исключение ";
+            celebrityText = " знаменитости";
+            negativeText = " негативные слова";
+            policyText = " политика";
         } else {
+            celebrityText = " various celebrities";
+            negativeText = " negative words";
+            policyText = " policy";
+            fastExcludeText = "Batch word exclusion    ";
             friendText = "Get cashback <b>" + CASHBACK + "</b> from a friend's purchase. Your permanent invitation code: ";
             getPremiumYesOrNowText = "On the <b>Premium bot</b> tariff \uD83D\uDC8E \n" +
                     "1. News search by keywords is performed every <b>2 minutes</b>. " +
@@ -234,7 +246,7 @@ public class Text extends Common {
             personalSourcesText = "Personal sources";
             noCommasText = "Country, name and link must be separated by commas";
             messageThemeChooseText = "Select a message appearance option. Current theme: %s";
-            messageThemeChooseText2 = "News appearance ";
+            messageThemeChooseText2 = "News appearance         ";
             rssNameNotExistsText = "There is no source with this name";
             rssExistsText = "This source is already in the list";
             notSupportedRssText = "This source is not supported";
@@ -245,7 +257,7 @@ public class Text extends Common {
             delSourceInfoText = "Delete <b>your</b> source by its name";
             addSourceText = "Add RSS";
             delSourceText = "Delete";
-            cleanFullSearchHistoryText = "Clear browsing history ";
+            cleanFullSearchHistoryText = "Clear browsing history  ";
             sendPaymentText = "Send transfer confirmation";
             premiumSearchSettingsText = "Premium search";
             inputExceptionText = "The bot was waiting for text to be entered. To continue, click again ";
@@ -272,10 +284,12 @@ public class Text extends Common {
             infoText = "App info and premium";
             settingText = "Settings";
             listKeywordsButtonText = "Keywords";
+            listKeywordsButtonText2 = "Keywords                        ";
             findSelectText = "Search types";
             top20Text = "Frequently used words by period";
             top20Text2 = "Top 20 words in ";
             listExcludedText = "Excluding terms";
+            listExcludedText2 = "Excluding terms             ";
             deleteUserText = "Delete user data";
             addText = "Add";
             addText2 = "Add words";
@@ -314,11 +328,12 @@ public class Text extends Common {
             intervalText = "Interval";
             intervalText2 = "Change search interval";
             intervalText3 = "Change search interval";
+            intervalText4 = "Change search interval ";
             autoSearchText = "Auto search";
             exclusionText = "News exclusion";
             startSettingsText = "Start";
             excludedListText = "List of deleted";
-            excludedListText2 = "List of deleted ";
+            excludedListText2 = "List of deleted                ";
             delFromTopText = "Delete";
             updateTopText = "Update top";
             updateTopText2 = "Show top";

@@ -10,6 +10,6 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     String [] getWords(String category);
 
     @Query(value = "select count(word) from category where category = :category", nativeQuery = true)
-    int getWordsCountByCategory(String category);
+    int getCount(String category);
 
 }
