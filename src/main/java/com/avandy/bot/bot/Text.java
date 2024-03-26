@@ -46,7 +46,7 @@ public class Text extends Common {
             infoText = "Информация и подписка";
             settingText = "Настройки";
             listKeywordsButtonText = "Слова для поиска";
-            listKeywordsButtonText2 = "Слова для поиска       ";
+            listKeywordsButtonText2 = "Слова для поиска        ";
             findSelectText = "Выбрать тип поиска";
             top20Text = "Часто употребляемые слова";
             top20Text2 = "Top 20 слов за ";
@@ -97,7 +97,7 @@ public class Text extends Common {
             exclusionText = "Исключение";
             startSettingsText = "Старт";
             excludedListText = "Удалённое";
-            excludedListText2 = "Удалённое из топа      ";
+            excludedListText2 = "Удалённое из топа       ";
             delFromTopText = "Удалить";
             top20ByPeriodText = "<b>Top 20 слов</b> за ";
             allowCommasAndNumbersText = "Укажите порядковый номер слова (разделять запятой)";
